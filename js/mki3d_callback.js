@@ -10,30 +10,30 @@ mki3d.callback.canvasOnKeyDown = function (e){
     {
     case 38: // up
     case 73: // I
-	// up();
-	mki3d.viewRotateUp(mki3d.data.view, rotStep);
+	mki3d.action.up();
+	//mki3d.action.viewRotateUp( rotStep);
 	break;
     case 40: // down
     case 75: // K
-	// down();
-	mki3d.viewRotateUp(mki3d.data.view, -rotStep);
+	mki3d.action.down();
+	// mki3d.action.viewRotateUp(-rotStep);
 	break;
     case 37: // left
     case 74:// J
-	// left();
-	mki3d.viewRotateRight(mki3d.data.view, -rotStep);
+	mki3d.action.left();
+	// mki3d.action.viewRotateRight(-rotStep);
 	break;
     case 39:// right
     case 76: // L
-	// right();
-	mki3d.viewRotateRight(mki3d.data.view, rotStep);
+	mki3d.action.right();
+	// mki3d.action.viewRotateRight( rotStep);
 	break;
     case 70: // F
-	forward();
+	// mki3d.action.forward();
 	break;
     case 66: // B
     case 86: // V
-	back();
+	// mki3d.action.back();
 	break;
     case 32: // space
 	break;
@@ -59,7 +59,6 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	  break;
 	*/
     }
-    mki3d.redraw();
 };
 
 

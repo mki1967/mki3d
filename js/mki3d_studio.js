@@ -58,18 +58,6 @@ mki3d.shadeFactor= function ( triangle, light) {
 /* find versors corresponding to Up and Right arrow keys */
 // ...
 
-/* view manipulations */
-
-mki3d.viewRotateUp = function( view, alpha) {
-    view.rotationMatrix= mki3d.matrixRotatedYZ(view.rotationMatrix, alpha );
-    mki3d.setModelViewMatrix();
-}
-
-mki3d.viewRotateRight = function( view, alpha) {
-    view.rotationMatrix= mki3d.matrixRotatedXZ(view.rotationMatrix, alpha );
-    mki3d.setModelViewMatrix();
-}
-
 
 /* general redraw function */
 
@@ -107,11 +95,11 @@ mki3d.loadCursor= function (){
     var gl = mki3d.gl.context;
     var buf = mki3d.gl.buffers.cursor;
 
-    console.log(buf);
+//    console.log(buf);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
-    console.log( segments ); /////
+ //   console.log( segments ); /////
 
 
     var colors = [];
@@ -125,7 +113,7 @@ mki3d.loadCursor= function (){
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
-    console.log( colors ); /////
+//    console.log( colors ); /////
      
     buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length; // + ... markers, plane indicator ...
     buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
@@ -192,12 +180,8 @@ mki3d.setModelViewMatrix = function () {
 }
 
 
-
-
-// do przerobienia
-
 mki3d.drawGraph = function (graph) {
-    console.log(graph); // test
+//    console.log(graph); // test
 
     var gl= mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
@@ -216,3 +200,7 @@ mki3d.drawGraph = function (graph) {
 
 }
 
+
+mki3d.message = function ( messageText ) {
+    mki3d.html.divUpperMessage.innerHTML = messageText;
+}
