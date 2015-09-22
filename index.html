@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MKI 3D RAPID MODELER</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+
+    <script src="js/mki3d_constants.js"></script>
+    <script src="js/mki3d.js"></script>
+    <script src="js/mki3d_algebra.js"></script>
+    <script src="js/mki3d_data.js"></script>
+    <script src="js/mki3d_studio.js"></script>
+    <script src="js/mki3d_html.js"></script>
+    <script src="js/mki3d_gl.js"></script>
+    <script src="js/mki3d_callback.js"></script>
+
+
+    <!---
+	<div> You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </div>
+	-->
+
+    <div id="divMainMenu">
+      <h2>Main Menu screen:</h2>
+      <dl>
+	<dt>File</dt>
+	<dd>
+	  <button id="loadButton">Load</button>
+	  <button id="saveButton">Save</button>
+	</dd>
+      </dl>
+    </div>
+
+    <div id="divHelp" display="none">
+      <h2>Help screen:</h2>
+      <p>
+	<h3> Key presses on the canvas: </h3>
+	<dl>
+	  <dt>'H'</dt>
+	  <dd>This help screen</dd>
+	  <dt> 'B', 'F',  Arrow Keys</dt>
+	  <dd> Depending on the STEERING_MODE, either: move cursor or rotate or move the screen</dd>
+	</dl>
+      </p>
+      <p>
+	<h3> General description </h3>
+	The designed <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
+        Each <em>segment</em> is defined by a pair of <em>points</em>. 
+        Each <em>triangle</em> is defined by a triple of <em>points</em>. 
+        Each <em>point</em> has position in (x,y,z) coordinates and a color (r,g,b).
+        Each <em>point</em> belongs to a single <em>set</em> of points.
+        The <em>sets</em> are indexed by natural numbers.
+      </p>
+    </div>
+
+    <div id="divCanvas" style="position: relative;">
+      <!-- <canvas id="canvasId" width="640" height="400"  style="border:0px; margin: 0px; padding: 0px;" > -->
+      <canvas id="canvasId" style="border:0px; margin: 0px; padding: 0px;" >
+	Your browser does not support the canvas element.
+      </canvas>
+       <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
+	UPPER MESSAGE 
+      </div>
+   </div>
+  </body>
+</html>

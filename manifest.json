@@ -1,0 +1,38 @@
+{
+    "manifest_version": 2,
+    "name": "mki3d",
+    "short_name": "MKI 3D",
+    "description": "Rapid designing of simple 3D shapes on webgl",
+    "version": "0.0.0",
+    "minimum_chrome_version": "38",
+    "author": "Marcin Kik mki1967@gmail.com",
+    "offline_enabled": true,
+    "icons": {
+	"16": "assets/mki_icon_16.png",
+	"128": "assets/mki_icon_128.png",
+	"48": "assets/mki_icon_48.png"
+    },
+
+    "app": {
+	"background": {
+	    "scripts": ["background.js"]
+	}
+    },
+
+    "requirements": {
+	"3D": {
+	    "features": ["webgl"]
+	}
+    },
+    "permissions": [
+	{"fileSystem": ["write", "retainEntries", "directory"]},
+	"storage"
+    ],
+    "file_handlers": {
+	"text": {
+	    "types": [
+		"text/*"
+	    ]
+	}
+    }
+}
