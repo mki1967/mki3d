@@ -39,6 +39,7 @@ mki3d.data.cursor.position = [0,0,0]; // position in the model space
 mki3d.data.cursor.marker1 = null;
 mki3d.data.cursor.marker2 = null;
 mki3d.data.cursor.color = [0.8,0.8,0.8]; // white
+mki3d.data.cursor.step = 1; // initial value 
 
 
 mki3d.data.clipMaxVector = [MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS];

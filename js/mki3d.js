@@ -17,7 +17,8 @@ window.onload= function(){
     mki3d.callback.onWindowResize();
     mki3d.setProjectionMatrix();
     mki3d.setModelViewMatrix();
-    mki3d.html.divUpperMessage.innerHTML = "Press 'H' for help.";
+    mki3d.action.init(); // mki3d.action requires initialization
+    mki3d.html.divUpperMessage.innerHTML += "  (Press 'H' for help.)";
     mki3d.redraw();
     window.onkeydown=mki3d.callback.canvasOnKeyDown;
 }

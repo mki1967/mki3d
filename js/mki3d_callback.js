@@ -29,13 +29,16 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	// mki3d.action.viewRotateRight( rotStep);
 	break;
     case 70: // F
-	// mki3d.action.forward();
+	mki3d.action.forward();
 	break;
     case 66: // B
     case 86: // V
-	// mki3d.action.back();
+	mki3d.action.back();
 	break;
     case 32: // space
+	break;
+    case 65: // A
+	mki3d.action.nextMode();
 	break;
 	/*
 	  case 77: // M
@@ -52,7 +55,6 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	  case 46: // Delete
 	  case 51: // #
 	  case 83: // S
-	  case 65: // A
 	  case 56: // *
 	  case 88: // X
 	  case 74: // J

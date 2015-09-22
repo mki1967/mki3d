@@ -75,7 +75,9 @@ mki3d.redraw = function() {
 /* load cursor to its GL buffer */
 
 mki3d.loadCursor= function (){
-    var cPos = mki3d.data.cursor.position;
+    var cPos = mki3d.vectorClone(mki3d.data.cursor.position);
+    var step=  mki3d.data.cursor.step;
+    mki3d.vectorScale( cPos, step, step, step);
     var cCol = mki3d.data.cursor.color;
     var segments = [];
     var i,j;
