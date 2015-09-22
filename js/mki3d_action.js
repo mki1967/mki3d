@@ -24,7 +24,7 @@ mki3d.action.mode = mki3d.action.modes[mki3d.action.modeIdx]; // default startin
 /* action of switching the mode */
 
 mki3d.action.nextMode= function() {
-/* slect next mode from mki3d.action.modes */
+    /* slect next mode from mki3d.action.modes */
     mki3d.action.modeIdx = (mki3d.action.modeIdx + 1) % mki3d.action.modes.length;
     mki3d.action.mode = mki3d.action.modes[mki3d.action.modeIdx];
     mki3d.action.setModeActions();
@@ -35,59 +35,59 @@ mki3d.action.nextMode= function() {
 /* ROTATE */
 
 mki3d.action.upRotate = function(){
-	mki3d.action.viewRotateUp( mki3d.action.rotationStep);
+    mki3d.action.viewRotateUp( mki3d.action.rotationStep);
 }
 
 mki3d.action.downRotate = function(){
-	mki3d.action.viewRotateUp( -mki3d.action.rotationStep);
+    mki3d.action.viewRotateUp( -mki3d.action.rotationStep);
 }
 
 mki3d.action.rightRotate = function(){
-	mki3d.action.viewRotateRight( mki3d.action.rotationStep);
+    mki3d.action.viewRotateRight( mki3d.action.rotationStep);
 }
 
 mki3d.action.leftRotate = function(){
-	mki3d.action.viewRotateRight( -mki3d.action.rotationStep);
+    mki3d.action.viewRotateRight( -mki3d.action.rotationStep);
 }
 
 mki3d.action.forwardRotate = function(){
-	mki3d.action.viewRotateForward( mki3d.action.rotationStep);
+    mki3d.action.viewRotateForward( mki3d.action.rotationStep);
 }
 
 mki3d.action.backRotate = function(){
-	mki3d.action.viewRotateForward( -mki3d.action.rotationStep);
+    mki3d.action.viewRotateForward( -mki3d.action.rotationStep);
 }
 
 /* CURSOR */
 
 mki3d.action.upCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove(0, mki3d.data.cursor.step, 0);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove(0, mki3d.data.cursor.step, 0);
 }
 
 mki3d.action.downCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove(0, -mki3d.data.cursor.step, 0);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove(0, -mki3d.data.cursor.step, 0);
 }
 
 mki3d.action.rightCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove(mki3d.data.cursor.step, 0, 0);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove(mki3d.data.cursor.step, 0, 0);
 }
 
 mki3d.action.leftCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove(-mki3d.data.cursor.step, 0, 0);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove(-mki3d.data.cursor.step, 0, 0);
 }
 
 mki3d.action.forwardCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove( 0, 0, mki3d.data.cursor.step);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove( 0, 0, mki3d.data.cursor.step);
 }
 
 mki3d.action.backCursor = function(){
-        /* temporary: fixed directons ... */
-	mki3d.action.cursorMove( 0, 0, -mki3d.data.cursor.step);
+    /* temporary: fixed directons ... */
+    mki3d.action.cursorMove( 0, 0, -mki3d.data.cursor.step);
 }
 
 
@@ -105,6 +105,9 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.forward = mki3d.action.forwardRotate;
 	mki3d.action.back = mki3d.action.backRotate;
 	// ...
+	mki3d.data.view.focusPoint = mki3d.vectorClone( mki3d.data.cursor.position );
+	mki3d.setModelViewMatrix();
+        mki3d.redraw();
 	break;
     case mki3d.action.CURSOR_MODE:
 	mki3d.action.up = mki3d.action.upCursor;
@@ -159,5 +162,14 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     mki3d.vectorMove(cursor.position, dx, dy, dz);
     mki3d.loadCursor();
     mki3d.redraw();
-    mki3d.message( "CURSOR = "+cursor.position );
+    mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
+}
+
+
+
+/* display help */
+mki3d.action.help = function() {
+    mki3d.html.hideAllDivs();
+    mki3d.html.showDiv(mki3d.html.divHelp);
+    window.onkeydown = mki3d.callback.helpOnKeyDown;
 }
