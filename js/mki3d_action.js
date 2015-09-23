@@ -156,6 +156,14 @@ mki3d.action.viewRotateForward = function(alpha) {
 }
 
 
+mki3d.action.viewAlignRotation = function() {
+    view = mki3d.data.view;
+    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    view.rotationMatrix= mki3d.matrixTransposed( mki3d.tmp.versorsMatrix );
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+} 
+
 /* cursor manipulations */
 
 mki3d.action.cursorMove = function( dx, dy, dz ) {

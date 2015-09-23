@@ -14,6 +14,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     switch(code)
     {
+    case 32: // space
+	mki3d.action.viewAlignRotation();
+	break;
     case 38: // up
     case 73: // I
 	mki3d.action.up();
@@ -41,14 +44,13 @@ mki3d.callback.canvasOnKeyDown = function (e){
     case 86: // V
 	mki3d.action.back();
 	break;
-    case 32: // space
-	break;
     case 65: // A
 	mki3d.action.nextMode();
 	break;
     case 72: // H
 	mki3d.action.help();
 	break;
+
 	/*
 	  case 77: // M
 	  case 82: // R
