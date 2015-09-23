@@ -67,6 +67,7 @@ mki3d.redraw = function() {
 
     gl.clearColor(bg[0], bg[1], bg[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    mki3d.loadCursor(); /// 
     mki3d.drawGraph( mki3d.gl.buffers.cursor );
 }
 
@@ -92,12 +93,27 @@ mki3d.loadCursor= function (){
             segments.push(point[2]);
 	}
     }
-    // TO DO:  ... markers, plane indicator ...
+    // append plane makers
+    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    for( i=0 ; i<MKI3D_PLANE_MARKER.length; i++) {
+	for(j=0; j<2; j++){
+	    point = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , MKI3D_PLANE_MARKER[i][j]);
+            mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
+            segments.push(point[0]);
+            segments.push(point[1]);
+            segments.push(point[2]);
+	}
+    }
+
+
+
+    // TO DO:  ... markers,
+
+
 
     var gl = mki3d.gl.context;
     var buf = mki3d.gl.buffers.cursor;
 
-    //    console.log(buf);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
@@ -105,19 +121,19 @@ mki3d.loadCursor= function (){
 
 
     var colors = [];
-    for( i=0 ; i<2*MKI3D_CURSOR_SHAPE.length; i++) {
+    for( i=0 ; i<2*(MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length); i++) {
         colors.push(cCol[0]);
         colors.push(cCol[1]);
         colors.push(cCol[2]);
     }
-    // TO DO:  ... markers, plane indicator ...
+    // TO DO:  ... markers, 
     
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
     //    console.log( colors ); /////
     
-    buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length; // + ... markers, plane indicator ...
+    buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length; // + ... markers
     buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
 }
 
@@ -136,14 +152,6 @@ mki3d.setProjectionMatrix = function () {
 				    0, yy,  0,  0,
 				    0,  0, zz, wz,
 				    0,  0, zw,  0 );
-    /*
-      var pMatrix = mki3d.gl.matrix4( 
-      1, 0, 0,  0,
-      0, 1, 0,  0,
-      0, 0, 1,  0,
-      0, 0, 0,  1 
-      );
-    */
 
     gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, pMatrix);
 }
@@ -169,14 +177,6 @@ mki3d.setModelViewMatrix = function () {
 	rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
         0,                 0,         0,                                        1 );
     
-    /*
-      var mvMatrix = mki3d.gl.matrix4( 
-      1, 0, 0,  0,
-      0, 1, 0,  0,
-      0, 0, 1,  0,
-      0, 0, 0,  1 
-      );
-    */
     gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, mvMatrix);
 
 }

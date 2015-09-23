@@ -171,7 +171,7 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
     cursor = mki3d.data.cursor;
     mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);
-    mki3d.loadCursor();
+    // mki3d.loadCursor(); // -- is in redraw()
     mki3d.redraw();
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
 }
