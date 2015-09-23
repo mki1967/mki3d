@@ -96,6 +96,7 @@ mki3d.action.backCursor = function(){
 
 mki3d.action.setModeActions= function(){
     /* sets actions for current mki3d.action.mode */
+    mki3d.message("ACTION MODE: "+mki3d.action.mode );
     switch(mki3d.action.mode){
     case mki3d.action.ROTATE_MODE:
 	mki3d.action.up = mki3d.action.upRotate;
@@ -117,10 +118,10 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.forward = mki3d.action.forwardCursor;
 	mki3d.action.back = mki3d.action.backCursor;
 	// ...
+	mki3d.messageAppend(" (CURSOR = "+JSON.stringify(mki3d.data.cursor.position)+")" );
 	break;
     }
 
-    mki3d.message("Current mode: "+mki3d.action.mode );
 }
 
 mki3d.action.init= function() {
@@ -158,8 +159,10 @@ mki3d.action.viewRotateForward = function(alpha) {
 /* cursor manipulations */
 
 mki3d.action.cursorMove = function( dx, dy, dz ) {
+    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
     cursor = mki3d.data.cursor;
-    mki3d.vectorMove(cursor.position, dx, dy, dz);
+    mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);
     mki3d.loadCursor();
     mki3d.redraw();
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );

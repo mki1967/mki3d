@@ -5,6 +5,10 @@
 var mki3d = {}; 
 
 
+/* mki3d.tmp -- temporary data created when needed */
+mki3d.tmp = {}
+
+
 
 
 

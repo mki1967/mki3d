@@ -97,11 +97,11 @@ mki3d.loadCursor= function (){
     var gl = mki3d.gl.context;
     var buf = mki3d.gl.buffers.cursor;
 
-//    console.log(buf);
+    //    console.log(buf);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
- //   console.log( segments ); /////
+    //   console.log( segments ); /////
 
 
     var colors = [];
@@ -115,8 +115,8 @@ mki3d.loadCursor= function (){
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
-//    console.log( colors ); /////
-     
+    //    console.log( colors ); /////
+    
     buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length; // + ... markers, plane indicator ...
     buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
 }
@@ -136,14 +136,14 @@ mki3d.setProjectionMatrix = function () {
 				    0, yy,  0,  0,
 				    0,  0, zz, wz,
 				    0,  0, zw,  0 );
-/*
-    var pMatrix = mki3d.gl.matrix4( 
-	1, 0, 0,  0,
-	0, 1, 0,  0,
-	0, 0, 1,  0,
-	0, 0, 0,  1 
-    );
-*/
+    /*
+      var pMatrix = mki3d.gl.matrix4( 
+      1, 0, 0,  0,
+      0, 1, 0,  0,
+      0, 0, 1,  0,
+      0, 0, 0,  1 
+      );
+    */
 
     gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, pMatrix);
 }
@@ -169,21 +169,21 @@ mki3d.setModelViewMatrix = function () {
 	rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
         0,                 0,         0,                                        1 );
     
-/*
-    var mvMatrix = mki3d.gl.matrix4( 
-	1, 0, 0,  0,
-	0, 1, 0,  0,
-	0, 0, 1,  0,
-	0, 0, 0,  1 
-    );
-*/
+    /*
+      var mvMatrix = mki3d.gl.matrix4( 
+      1, 0, 0,  0,
+      0, 1, 0,  0,
+      0, 0, 1,  0,
+      0, 0, 0,  1 
+      );
+    */
     gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, mvMatrix);
 
 }
 
 
 mki3d.drawGraph = function (graph) {
-//    console.log(graph); // test
+    //    console.log(graph); // test
 
     var gl= mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
@@ -206,3 +206,71 @@ mki3d.drawGraph = function (graph) {
 mki3d.message = function ( messageText ) {
     mki3d.html.divUpperMessage.innerHTML = messageText;
 }
+
+mki3d.messageAppend = function ( messageText ) {
+    mki3d.html.divUpperMessage.innerHTML += messageText;
+}
+
+/* (re)creation of tmp data */
+
+mki3d.makeVersorsMatrix = function() {
+
+    // console.log("TEST : makeVersorsMatrix "); 
+
+    var rot = mki3d.data.view.rotationMatrix;
+
+    var imageXYZRows = [ { img : mki3d.matrixColumn(rot, 0), idx : 0 , row: [1,0,0] },
+			 { img : mki3d.matrixColumn(rot, 1), idx : 1 , row: [0,1,0] },
+			 { img : mki3d.matrixColumn(rot, 2), idx : 2 , row: [0,0,1] }];
+
+    var spMaxAbs, spNext, tmp; 
+
+    /* Move best image for Right key to imageXYZRows[0]  */
+
+    spMaxAbs = mki3d.scalarProduct( imageXYZRows[0].img, [1,0,0] );
+    spNext   = mki3d.scalarProduct( imageXYZRows[1].img, [1,0,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[0];
+	imageXYZRows[0] = imageXYZRows[1];
+        imageXYZRows[1] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [1,0,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[0];
+	imageXYZRows[0] = imageXYZRows[2];
+        imageXYZRows[2] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    /* set direction */
+    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[0].row, -1, -1, -1); 
+
+    /* Move best image for Up key to  imageXYZRows[1] */
+
+    spMaxAbs = mki3d.scalarProduct( imageXYZRows[1].img, [0,1,0] );
+    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [0,1,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[1];
+	imageXYZRows[1] = imageXYZRows[2];
+        imageXYZRows[2] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    /* set direction */
+    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[1].row, -1, -1, -1); 
+
+    /* set direction of the last versor */
+    if(mki3d.scalarProduct( imageXYZRows[2].img, [0,0,1] )<0) mki3d.vectorScale( imageXYZRows[2].row, -1, -1, -1); 
+
+    /* set the versorsMatrix */
+
+    var alignedMatrix = [ imageXYZRows[0].row,
+			  imageXYZRows[1].row,
+			  imageXYZRows[2].row ];
+    mki3d.tmp.versorsMatrix = mki3d.matrixTransposed(alignedMatrix); // reverse of the alignedMatrix
+    mki3d.tmp.versorsMatrix.input = rot;
+}
+
+mki3d.invalidVersorsMatrix= function(){
+    if(!mki3d.tmp.versorsMatrix) return true;
+    return mki3d.tmp.versorsMatrix.input !== mki3d.data.view.rotationMatrix;
+} 
