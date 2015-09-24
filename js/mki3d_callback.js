@@ -8,6 +8,23 @@ mki3d.callback.helpOnKeyDown = function (e){
     window.onkeydown = mki3d.callback.canvasOnKeyDown;
 }
 
+mki3d.callback.mainMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 13: // enter
+        // mki3d.action.enter();
+	break;
+    }
+
+    // temporary escape to canvas
+    mki3d.html.hideAllDivs();
+    mki3d.html.showDiv(mki3d.html.divCanvas);
+    mki3d.action.setModeActions(); // reset current mode and message
+    window.onkeydown = mki3d.callback.canvasOnKeyDown;
+}
+
 mki3d.callback.canvasOnKeyDown = function (e){
     // var code=e.keyCode? e.keyCode : e.charCode;
     const rotStep = Math.PI / 36; // 5 degrees 
@@ -55,6 +72,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	break;
     case 72: // H
 	mki3d.action.help();
+	break;
+    case 81: // Q
+	mki3d.action.mainMenu();
 	break;
 
 	/*

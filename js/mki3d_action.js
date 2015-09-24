@@ -166,6 +166,7 @@ mki3d.action.setModeActions= function(){
 }
 
 
+
 /* initialisation of actions */
 
 mki3d.action.init= function() {
@@ -228,3 +229,10 @@ mki3d.action.help = function() {
     mki3d.html.showDiv(mki3d.html.divHelp);
     window.onkeydown = mki3d.callback.helpOnKeyDown;
 }
+
+/* menu actions */
+mki3d.action.mainMenu = function(){
+    mki3d.message( mki3d.html.divMainMenu.innerHTML );
+    window.onkeydown = mki3d.callback.mainMenuOnKeyDown;
+}
+

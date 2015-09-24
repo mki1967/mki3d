@@ -24,16 +24,6 @@
 	<div> You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </div>
 	-->
 
-    <div id="divMainMenu">
-      <h2>Main Menu screen:</h2>
-      <dl>
-	<dt>File</dt>
-	<dd>
-	  <button id="loadButton">Load</button>
-	  <button id="saveButton">Save</button>
-	</dd>
-      </dl>
-    </div>
 
     <div id="divHelp" display="none">
       <h2>Help screen:</h2>
@@ -41,24 +31,40 @@
 	<h3> Key presses on the canvas: </h3>
 	<dl>
 	  <dt>'H'</dt>
-	  <dd>This help screen</dd>
+	  <dd> - This help screen</dd>
+	  <dt>'Q'</dt>
+	  <dd> - Main menu</dd>
 	  <dt> Arrow Keys, 'F', 'B','V'</dt>
-	  <dd> Depending on the MODE, either: move cursor or rotate the screen</dd>
+	  <dd> - Depending on the MODE, either: move cursor or rotate the screen</dd>
 	  <dt>'A'</dt>
-	  <dd>Switch action MODE</dd>
+	  <dd> - Switch action MODE</dd>
 	  <dt>Space</dt>
-	  <dd>Align view rotation to right angles</dd>
+	  <dd> - Align view rotation to right angles</dd>
 	</dl>
       </p>
       <p>
 	<h3> General description </h3>
-	The designed <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
+	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
         Each <em>segment</em> is defined by a pair of <em>points</em>. 
         Each <em>triangle</em> is defined by a triple of <em>points</em>. 
         Each <em>point</em> has position in (x,y,z) coordinates and a color (r,g,b).
-        Each <em>point</em> belongs to a single <em>set</em> of points.
+        Each <em>point</em> belongs to a single <em>set</em>.
         The <em>sets</em> are indexed by natural numbers.
       </p>
+    </div>
+
+    <div id="divMainMenu" display="none">
+      <h2>Main Menu:</h2>
+      <dl>
+	<dt>'F'</dt>
+	<dd> - FILE [...]</dd>
+	<dt>'C'</dt>
+	<dd> - CURSOR [...]</dd>
+	<dt>'S'</dt>
+	<dd> - SUBSET [...]</dd>
+	<dt>'D'</dt>
+	<dd> - DATA [...]</dd>
+      </dl>
     </div>
 
     <div id="divCanvas" style="position: relative;">
@@ -66,9 +72,9 @@
       <canvas id="canvasId" style="border:0px; margin: 0px; padding: 0px;" >
 	Your browser does not support the canvas element.
       </canvas>
-       <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
+      <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
 	UPPER MESSAGE 
       </div>
-   </div>
+    </div>
   </body>
 </html>

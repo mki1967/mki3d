@@ -27,6 +27,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divHelp= mki3d.html.registerDiv('#divHelp');
     mki3d.html.divMainMenu= mki3d.html.registerDiv('#divMainMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
+
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
