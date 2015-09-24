@@ -58,6 +58,47 @@ mki3d.action.backRotate = function(){
     mki3d.action.viewRotateForward( -mki3d.action.rotationStep);
 }
 
+/* editing actions */
+
+mki3d.action.enter = function(){ 
+    var p = mki3d.data.cursor.position;
+    var c = mki3d.data.cursor.color;
+    var point = mki3d.newPoint( p[0], p[1], p[2],  
+				c[0], c[1], c[2] ,  
+				mki3d.data.set.current );
+    var cursor = mki3d.data.cursor;
+
+    mki3d.message("ENTER: ");
+    if(cursor.marker1 === null) {
+	// enter the first endpoint
+	cursor.marker1 =  point;
+    } else { // mki3d.data.cursor.marker1 is not null
+	if(cursor.marker2 === null) { // enter segment
+	    mki3d.modelInsertElement( mki3d.data.model.segments, 
+				      mki3d.newSegment( cursor.marker1, point ) );
+	    mki3d.messageAppend(" SEGMENT INSERTED");
+	    cursor.marker1 = point;
+	} else { // enter triangle
+	    mki3d.modelInsertElement( mki3d.data.model.Triangles, 
+				      mki3d.newTriangle( cursor.marker1, cursor.marker2, point ) );
+	    mki3d.messageAppend(" TRIANGLE INSERTED");
+	    cursor.marker1 = point;
+	    cursor.marker2 = null;
+	}
+    }
+
+mki3d.messageAppend("<br> MARKER1 ="+ JSON.stringify(mki3d.data.cursor.marker1) );
+
+mki3d.redraw();
+};
+
+mki3d.action.escape = function(){ 
+    mki3d.data.cursor.marker1=null;
+    mki3d.data.cursor.marker2=null;
+    mki3d.message("MARKERS CANCELED");
+    mki3d.redraw();
+}
+
 /* CURSOR */
 
 mki3d.action.upCursor = function(){
@@ -158,7 +199,7 @@ mki3d.action.viewRotateForward = function(alpha) {
 
 mki3d.action.viewAlignRotation = function() {
     view = mki3d.data.view;
-    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    mki3d.tmp.refreshVersorsMatrix();
     view.rotationMatrix= mki3d.matrixTransposed( mki3d.tmp.versorsMatrix );
     mki3d.setModelViewMatrix();
     mki3d.redraw();
@@ -167,7 +208,7 @@ mki3d.action.viewAlignRotation = function() {
 /* cursor manipulations */
 
 mki3d.action.cursorMove = function( dx, dy, dz ) {
-    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    mki3d.tmp.refreshVersorsMatrix();
     var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
     cursor = mki3d.data.cursor;
     mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);

@@ -30,15 +30,13 @@ mki3d.data.projection.zNear = MKI3D_PROJECTION_Z_NEAR;
 mki3d.data.projection.zFar  = MKI3D_PROJECTION_Z_FAR;
 mki3d.data.projection.zoomY = MKI3D_PROJECTION_ZOOM_Y;
 
-
-
 mki3d.data.backgroundColor = [0,0,0]; // black
 
 mki3d.data.cursor = {};
 mki3d.data.cursor.position = [0,0,0]; // position in the model space 
 mki3d.data.cursor.marker1 = null;
 mki3d.data.cursor.marker2 = null;
-mki3d.data.cursor.color = [0.8,0.8,0.8]; // white
+mki3d.data.cursor.color = [1,1,1]; // white
 mki3d.data.cursor.step = 1; // initial value 
 
 
@@ -49,3 +47,6 @@ mki3d.data.light = {};
 mki3d.data.light.vector = [0,0,1]; 
 // mki3d.data.light.serialNumber = 0;
 mki3d.data.light.ambientFraction = 0.3; // the rest is diffuse fraction
+
+mki3d.data.set = {};
+mki3d.data.set.current = 0; // current set index

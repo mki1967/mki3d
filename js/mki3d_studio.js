@@ -31,7 +31,7 @@ mki3d.newTriangle = function ( point1, point2, point3 ){
 /* An element is either a segment or a triangle.
    areEqual( el1, el2 )  tests equality of two elements  */
 
-mki3d.areEqual= function( element1, element2 ){
+mki3d.areEqualElements = function( element1, element2 ){
     element1.sort( mki3d.pointCompare );
     element2.sort( mki3d.pointCompare );
     if( element1.length != element2.length ) return false;
@@ -40,6 +40,22 @@ mki3d.areEqual= function( element1, element2 ){
 	if( mki3d.pointCompare(element1[i], element2[i]) != 0 ) return false;
     return true;
 }
+
+/* updating the model */
+
+mki3d.modelInsertElement = function(array, element) {
+    /* either replaces equal or adds new element to the array */
+    var i;
+    for( i=0; i< array.length; i++) {
+	if(mki3d.areEqualElements( array[i], element )) { // found!
+	    array[i]= element; // replace
+	    return; // finished!
+	}
+    }
+    // not found
+    array.push(element);
+}
+
 
 /* shading */
 
@@ -94,7 +110,7 @@ mki3d.loadCursor= function (){
 	}
     }
     // append plane makers
-    if( mki3d.invalidVersorsMatrix() ) mki3d.makeVersorsMatrix();
+    mki3d.tmp.refreshVersorsMatrix();
     for( i=0 ; i<MKI3D_PLANE_MARKER.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , MKI3D_PLANE_MARKER[i][j]);
@@ -105,21 +121,6 @@ mki3d.loadCursor= function (){
 	}
     }
 
-
-
-    // TO DO:  ... markers,
-
-
-
-    var gl = mki3d.gl.context;
-    var buf = mki3d.gl.buffers.cursor;
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
-    //   console.log( segments ); /////
-
-
     var colors = [];
     for( i=0 ; i<2*(MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length); i++) {
         colors.push(cCol[0]);
@@ -128,12 +129,42 @@ mki3d.loadCursor= function (){
     }
     // TO DO:  ... markers, 
     
+    var marker1 = mki3d.data.cursor.marker1;
+    if( marker1 !== null ) {
+        // push marker
+        segments.push( marker1.position[0] );
+        segments.push( marker1.position[1] );
+        segments.push( marker1.position[2] );
+        colors.push( marker1.color[0] );
+        colors.push( marker1.color[1] );
+        colors.push( marker1.color[2] );
+        // push cursor
+        segments.push(cPos[0]);
+        segments.push(cPos[1]);
+        segments.push(cPos[2]);
+        colors.push(cCol[0]);
+        colors.push(cCol[1]);
+        colors.push(cCol[2]);
+    }
+
+
+    // load segments and colors to GL buffers
+
+    var gl = mki3d.gl.context;
+    var buf = mki3d.gl.buffers.cursor;
+
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
     //    console.log( colors ); /////
     
-    buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length; // + ... markers
+    // buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length; // + ... markers
+    buf.nrOfSegments =  segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
+    // TO DO: triangles
     buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
 }
 
@@ -211,66 +242,3 @@ mki3d.messageAppend = function ( messageText ) {
     mki3d.html.divUpperMessage.innerHTML += messageText;
 }
 
-/* (re)creation of tmp data */
-
-mki3d.makeVersorsMatrix = function() {
-
-    // console.log("TEST : makeVersorsMatrix "); 
-
-    var rot = mki3d.data.view.rotationMatrix;
-
-    var imageXYZRows = [ { img : mki3d.matrixColumn(rot, 0), idx : 0 , row: [1,0,0] },
-			 { img : mki3d.matrixColumn(rot, 1), idx : 1 , row: [0,1,0] },
-			 { img : mki3d.matrixColumn(rot, 2), idx : 2 , row: [0,0,1] }];
-
-    var spMaxAbs, spNext, tmp; 
-
-    /* Move best image for Right key to imageXYZRows[0]  */
-
-    spMaxAbs = mki3d.scalarProduct( imageXYZRows[0].img, [1,0,0] );
-    spNext   = mki3d.scalarProduct( imageXYZRows[1].img, [1,0,0] );
-    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
-	tmp = imageXYZRows[0];
-	imageXYZRows[0] = imageXYZRows[1];
-        imageXYZRows[1] = tmp;
-        spMaxAbs=spNext; // new record
-    } 
-    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [1,0,0] );
-    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
-	tmp = imageXYZRows[0];
-	imageXYZRows[0] = imageXYZRows[2];
-        imageXYZRows[2] = tmp;
-        spMaxAbs=spNext; // new record
-    } 
-    /* set direction */
-    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[0].row, -1, -1, -1); 
-
-    /* Move best image for Up key to  imageXYZRows[1] */
-
-    spMaxAbs = mki3d.scalarProduct( imageXYZRows[1].img, [0,1,0] );
-    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [0,1,0] );
-    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
-	tmp = imageXYZRows[1];
-	imageXYZRows[1] = imageXYZRows[2];
-        imageXYZRows[2] = tmp;
-        spMaxAbs=spNext; // new record
-    } 
-    /* set direction */
-    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[1].row, -1, -1, -1); 
-
-    /* set direction of the last versor */
-    if(mki3d.scalarProduct( imageXYZRows[2].img, [0,0,1] )<0) mki3d.vectorScale( imageXYZRows[2].row, -1, -1, -1); 
-
-    /* set the versorsMatrix */
-
-    var alignedMatrix = [ imageXYZRows[0].row,
-			  imageXYZRows[1].row,
-			  imageXYZRows[2].row ];
-    mki3d.tmp.versorsMatrix = mki3d.matrixTransposed(alignedMatrix); // reverse of the alignedMatrix
-    mki3d.tmp.versorsMatrix.input = rot;
-}
-
-mki3d.invalidVersorsMatrix= function(){
-    if(!mki3d.tmp.versorsMatrix) return true;
-    return mki3d.tmp.versorsMatrix.input !== mki3d.data.view.rotationMatrix;
-} 

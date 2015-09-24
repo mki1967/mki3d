@@ -29,6 +29,7 @@ mki3d.gl.initGL= function(canvas) {
     gl.viewportHeight = canvas.height;
     mki3d.gl.context = gl;
     mki3d.gl.buffers.cursor = mki3d.gl.newBuffers( MKI3D_CURSOR_MAX_SEGMENTS , MKI3D_CURSOR_MAX_TRIANGLES );
+    mki3d.gl.buffers.model = mki3d.gl.newBuffers( MKI3D_MODEL_MAX_SEGMENTS , MKI3D_MODEL_MAX_TRIANGLES );
     mki3d.gl.initShaderProgram();
     mki3d.loadCursor();
 }

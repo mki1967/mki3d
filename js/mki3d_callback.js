@@ -14,6 +14,12 @@ mki3d.callback.canvasOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     switch(code)
     {
+    case 13: // enter
+        mki3d.action.enter();
+	break;
+    case 27: // escape
+        mki3d.action.escape();
+	break;
     case 32: // space
 	mki3d.action.viewAlignRotation();
 	break;
@@ -58,9 +64,7 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	  case 69: // E
 	  case 191: // ?
 	  case 68: // D
-	  case 13: // enter
 	  case 187: // +
-	  case 27: // escape
 	  case 189: // -
 	  case 86: // V
 	  case 46: // Delete
