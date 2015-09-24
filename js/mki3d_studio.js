@@ -83,11 +83,53 @@ mki3d.redraw = function() {
 
     gl.clearColor(bg[0], bg[1], bg[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
     mki3d.loadCursor(); /// 
     mki3d.drawGraph( mki3d.gl.buffers.cursor );
+
+    mki3d.loadModel();
+    mki3d.drawGraph( mki3d.gl.buffers.model );
+
 }
 
+/* load model to its GL buffer */
 
+mki3d.loadModel= function (){
+    var model = mki3d.data.model;
+
+    var segments = [];
+    var segmentsColors = [];
+
+    var i,j;
+    for(i=0; i<model.segments.length; i++){
+	for(j=0; j<2; j++){
+	    segments.push(model.segments[i][j].position[0]);
+	    segments.push(model.segments[i][j].position[1]);
+	    segments.push(model.segments[i][j].position[2]);
+	    segmentsColors.push(model.segments[i][j].color[0]);
+	    segmentsColors.push(model.segments[i][j].color[1]);
+	    segmentsColors.push(model.segments[i][j].color[2]);
+	}
+    }
+
+    // load segments and colors to GL buffers
+
+    var gl = mki3d.gl.context;
+    var buf = mki3d.gl.buffers.model;
+
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segments ), gl.DYNAMIC_DRAW );
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( segmentsColors ), gl.DYNAMIC_DRAW );
+
+    buf.nrOfSegments =  segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
+    // TO DO: triangles
+    buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
+
+}
 
 /* load cursor to its GL buffer */
 
@@ -103,10 +145,10 @@ mki3d.loadCursor= function (){
     for( i=0 ; i<MKI3D_CURSOR_SHAPE.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.vectorClone(MKI3D_CURSOR_SHAPE[i][j]);
-            mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
-            segments.push(point[0]);
-            segments.push(point[1]);
-            segments.push(point[2]);
+	    mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
+	    segments.push(point[0]);
+	    segments.push(point[1]);
+	    segments.push(point[2]);
 	}
     }
     // append plane makers
@@ -114,10 +156,10 @@ mki3d.loadCursor= function (){
     for( i=0 ; i<MKI3D_PLANE_MARKER.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , MKI3D_PLANE_MARKER[i][j]);
-            mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
-            segments.push(point[0]);
-            segments.push(point[1]);
-            segments.push(point[2]);
+	    mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
+	    segments.push(point[0]);
+	    segments.push(point[1]);
+	    segments.push(point[2]);
 	}
     }
 
@@ -159,14 +201,16 @@ mki3d.loadCursor= function (){
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
-    //    console.log( colors ); /////
-    
-    // buf.nrOfSegments = MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length; // + ... markers
+
     buf.nrOfSegments =  segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
 
     // TO DO: triangles
     buf.nrOfTriangles = 0;   // + ... markers, plane indicator ...
 }
+
+
+
+
 
 /* load projection to GL uPMatrix */
 mki3d.setProjectionMatrix = function () {

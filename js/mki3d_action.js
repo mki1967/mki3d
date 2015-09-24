@@ -165,6 +165,9 @@ mki3d.action.setModeActions= function(){
 
 }
 
+
+/* initialisation of actions */
+
 mki3d.action.init= function() {
     mki3d.action.setModeActions(); // set the actions for initial mode
 }
