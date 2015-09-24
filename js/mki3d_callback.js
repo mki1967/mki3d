@@ -3,9 +3,24 @@
 mki3d.callback = {};
 
 mki3d.callback.helpOnKeyDown = function (e){
-    mki3d.html.hideAllDivs();
-    mki3d.html.showDiv(mki3d.html.divCanvas);
-    window.onkeydown = mki3d.callback.canvasOnKeyDown;
+    mki3d.action.escapeToCanvas();
+}
+
+mki3d.callback.colorMenuOnKeyDown = function (e){
+    var color = null;
+    var code= e.which || e.keyCode;
+    if( "0".charCodeAt(0) <= code && code <= "7".charCodeAt(0)) { 
+	var id = "#ddColor"+String.fromCharCode( code );
+	var ddColor = document.querySelector(id);
+	if(ddColor !== null ) {
+	    color = JSON.parse(ddColor.innerHTML);
+	}
+    }
+    // ...
+    if(color !== null && mki3d.tmp.colorMenuOutput!== null ){
+        mki3d.vectorSet(mki3d.tmp.colorMenuOutput, color[0], color[1], color[2]);
+    }
+    mki3d.action.escapeToCanvas();
 }
 
 mki3d.callback.mainMenuOnKeyDown = function (e){
@@ -13,16 +28,30 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
-    case 13: // enter
-        // mki3d.action.enter();
+    case 67: // C
+	mki3d.action.cursorMenu(); /// for tests ...
 	break;
-    }
+	
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
+}
 
-    // temporary escape to canvas
-    mki3d.html.hideAllDivs();
-    mki3d.html.showDiv(mki3d.html.divCanvas);
-    mki3d.action.setModeActions(); // reset current mode and message
-    window.onkeydown = mki3d.callback.canvasOnKeyDown;
+mki3d.callback.cursorMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 67: // C
+        mki3d.tmp.colorMenuOutput = mki3d.data.cursor.color; // reference to the object
+	mki3d.action.colorMenu(); /// for tests ...
+	break;
+	
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
 }
 
 mki3d.callback.canvasOnKeyDown = function (e){

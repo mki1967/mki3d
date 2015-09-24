@@ -231,8 +231,27 @@ mki3d.action.help = function() {
 }
 
 /* menu actions */
+
+mki3d.action.escapeToCanvas = function(){
+	mki3d.html.hideAllDivs();
+	mki3d.html.showDiv(mki3d.html.divCanvas);
+	mki3d.action.setModeActions(); // reset current mode and message
+        mki3d.redraw();
+	window.onkeydown = mki3d.callback.canvasOnKeyDown;
+}
+
 mki3d.action.mainMenu = function(){
     mki3d.message( mki3d.html.divMainMenu.innerHTML );
     window.onkeydown = mki3d.callback.mainMenuOnKeyDown;
+}
+
+mki3d.action.colorMenu = function(){
+    mki3d.message( mki3d.html.divColorMenu.innerHTML );
+    window.onkeydown = mki3d.callback.colorMenuOnKeyDown; ////// temporary
+}
+
+mki3d.action.cursorMenu = function(){
+    mki3d.message( mki3d.html.divCursorMenu.innerHTML );
+    window.onkeydown = mki3d.callback.cursorMenuOnKeyDown; ////// temporary
 }
 
