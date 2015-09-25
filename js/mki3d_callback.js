@@ -126,6 +126,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
     case 81: // Q
 	mki3d.action.mainMenu();
 	break;
+    case 84: // T
+	mki3d.action.toggleMarker2();
+	break;
 
 	/*
 	  case 77: // M

@@ -73,23 +73,34 @@ mki3d.action.enter = function(){
 	// enter the first endpoint
 	cursor.marker1 =  point;
     } else { // mki3d.data.cursor.marker1 is not null
-	if(cursor.marker2 === null) { // enter segment
-	    mki3d.modelInsertElement( mki3d.data.model.segments, 
-				      mki3d.newSegment( cursor.marker1, point ) );
-	    mki3d.messageAppend(" SEGMENT INSERTED");
-	    cursor.marker1 = point;
-	} else { // enter triangle
-	    mki3d.modelInsertElement( mki3d.data.model.Triangles, 
-				      mki3d.newTriangle( cursor.marker1, cursor.marker2, point ) );
-	    mki3d.messageAppend(" TRIANGLE INSERTED");
-	    cursor.marker1 = point;
-	    cursor.marker2 = null;
+	if(cursor.marker2 === null) { 
+	    if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) { // enter segment
+		mki3d.modelInsertElement( mki3d.data.model.segments, 
+					  mki3d.newSegment( cursor.marker1, point ) );
+		mki3d.messageAppend(" SEGMENT INSERTED");
+		cursor.marker1 = point;
+	    } else
+		mki3d.messageAppend("DEGENERATE SEGMENT -- not inserted");
+	} else {
+	    var normal = mki3d.normalToPlane( cursor.marker1.position, cursor.marker2.position, point.position );
+	    if( 
+		mki3d.scalarProduct( normal, normal ) != 0 
+ 	    ) { // enter triangle 
+		mki3d.modelInsertElement( mki3d.data.model.triangles, 
+					  mki3d.newTriangle( cursor.marker1, cursor.marker2, point ) );
+		mki3d.messageAppend(" TRIANGLE INSERTED");
+		cursor.marker1 = point;
+		cursor.marker2 = null;
+	    } else 
+		mki3d.messageAppend("DEGENERATE TRIANGLE -- not inserted");	
 	}
     }
 
-mki3d.messageAppend("<br> MARKER1 ="+ JSON.stringify(mki3d.data.cursor.marker1) );
+    mki3d.messageAppend("<br> MARKER1 ="+ JSON.stringify(mki3d.data.cursor.marker1)+
+			"<br> MARKER2 ="+ JSON.stringify(mki3d.data.cursor.marker2) 
+		       );
 
-mki3d.redraw();
+    mki3d.redraw();
 };
 
 mki3d.action.escape = function(){ 
@@ -98,6 +109,36 @@ mki3d.action.escape = function(){
     mki3d.message("MARKERS CANCELED");
     mki3d.redraw();
 }
+
+mki3d.action.toggleMarker2 = function(){
+    mki3d.message("TOGGLE MARKER2: ");
+    var p = mki3d.data.cursor.position;
+    var c = mki3d.data.cursor.color;
+    var point = mki3d.newPoint( p[0], p[1], p[2],  
+				c[0], c[1], c[2] ,  
+				mki3d.data.set.current );
+    var cursor = mki3d.data.cursor;
+    if(mki3d.data.cursor.marker1 === null ) {
+	mki3d.messageAppend("First you have to set MARKER1 with Enter.");
+        return;
+    }
+
+    if(mki3d.data.cursor.marker2 === null ) {
+       if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) {
+	   mki3d.data.cursor.marker2 = point;
+       }
+    } else {
+	   mki3d.data.cursor.marker2 = null;
+    }
+
+    mki3d.messageAppend("<br> MARKER1 ="+ JSON.stringify(mki3d.data.cursor.marker1)+
+			"<br> MARKER2 ="+ JSON.stringify(mki3d.data.cursor.marker2) 
+		       );
+
+    mki3d.redraw();
+}
+
+
 
 /* CURSOR */
 
@@ -233,11 +274,11 @@ mki3d.action.help = function() {
 /* menu actions */
 
 mki3d.action.escapeToCanvas = function(){
-	mki3d.html.hideAllDivs();
-	mki3d.html.showDiv(mki3d.html.divCanvas);
-	mki3d.action.setModeActions(); // reset current mode and message
-        mki3d.redraw();
-	window.onkeydown = mki3d.callback.canvasOnKeyDown;
+    mki3d.html.hideAllDivs();
+    mki3d.html.showDiv(mki3d.html.divCanvas);
+    mki3d.action.setModeActions(); // reset current mode and message
+    mki3d.redraw();
+    window.onkeydown = mki3d.callback.canvasOnKeyDown;
 }
 
 mki3d.action.mainMenu = function(){

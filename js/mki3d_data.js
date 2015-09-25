@@ -46,7 +46,7 @@ mki3d.data.clipMinVector = [-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX
 mki3d.data.light = {};
 mki3d.data.light.vector = [0,0,1]; 
 // mki3d.data.light.serialNumber = 0;
-mki3d.data.light.ambientFraction = 0.3; // the rest is diffuse fraction
+mki3d.data.light.ambientFraction = 0.2; // the rest is diffuse fraction
 
 mki3d.data.set = {};
 mki3d.data.set.current = 0; // current set index

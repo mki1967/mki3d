@@ -58,7 +58,8 @@ mki3d.vectorNormalized = function (v) {
     var len= mki3d.vectorLength(v);
     if(len==0) return [0,0,0]; // normalized zero vector :-(
     var vn= mki3d.vectorClone(v);
-    mki3d.vercorScale(1/len);
+    var s =1/len; 
+    mki3d.vectorScale(vn,  s,s,s);
     return vn;
 };
 
