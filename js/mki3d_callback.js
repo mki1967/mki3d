@@ -6,6 +6,7 @@ mki3d.callback.helpOnKeyDown = function (e){
     mki3d.action.escapeToCanvas();
 }
 
+
 mki3d.callback.colorMenuOnKeyDown = function (e){
     var color = null;
     var code= e.which || e.keyCode;
@@ -54,12 +55,32 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
     };
 }
 
+mki3d.callback.canvasOnKeyUp = function (e){
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+    case 16: // shift
+        mki3d.action.mode = mki3d.action.ROTATE_MODE;
+	mki3d.action.modeIdx = 0;
+	mki3d.action.setModeActions();
+        window.onkeyup = null; 
+	break;
+    }
+
+}
+
 mki3d.callback.canvasOnKeyDown = function (e){
     // var code=e.keyCode? e.keyCode : e.charCode;
     const rotStep = Math.PI / 36; // 5 degrees 
     var code= e.which || e.keyCode;
     switch(code)
     {
+    case 16: // shift
+        window.onkeyup = mki3d.callback.canvasOnKeyUp; 
+	mki3d.action.mode = mki3d.action.CURSOR_MODE;
+	mki3d.action.modeIdx = 0;
+	mki3d.action.setModeActions();
+	break;
     case 13: // enter
         mki3d.action.enter();
 	break;

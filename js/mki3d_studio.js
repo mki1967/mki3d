@@ -1,4 +1,4 @@
-/* functions and procedures for manipulating mki3d.data */
+/** functions and procedures for manipulating mki3d.data **/
 
 
 
@@ -81,14 +81,17 @@ mki3d.redraw = function() {
     var gl = mki3d.gl.context;
     var bg = mki3d.data.backgroundColor;
 
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+
     gl.clearColor(bg[0], bg[1], bg[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mki3d.loadCursor(); /// 
-    mki3d.drawGraph( mki3d.gl.buffers.cursor );
-
     mki3d.loadModel();
     mki3d.drawGraph( mki3d.gl.buffers.model );
+
+    mki3d.loadCursor();
+    mki3d.drawGraph( mki3d.gl.buffers.cursor );
 
 }
 

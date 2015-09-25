@@ -4,8 +4,8 @@ mki3d.action = {};
 
 /** some constants **/
 /* mode constants */
-mki3d.action.ROTATE_MODE = "ROTATE MODE";
-mki3d.action.CURSOR_MODE = "CURSOR MODE";
+mki3d.action.ROTATE_MODE = "ROTATE";
+mki3d.action.CURSOR_MODE = "CURSOR";
 
 /* rotation step */
 mki3d.action.rotationStep = Math.PI / 36; // 5 degrees 
@@ -137,7 +137,7 @@ mki3d.action.backCursor = function(){
 
 mki3d.action.setModeActions= function(){
     /* sets actions for current mki3d.action.mode */
-    mki3d.message("ACTION MODE: "+mki3d.action.mode );
+    mki3d.message("MODE: <strong>"+mki3d.action.mode+"</strong>" );
     switch(mki3d.action.mode){
     case mki3d.action.ROTATE_MODE:
 	mki3d.action.up = mki3d.action.upRotate;
