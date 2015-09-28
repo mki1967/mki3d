@@ -28,6 +28,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divMainMenu= mki3d.html.registerDiv('#divMainMenu');
     mki3d.html.divColorMenu= mki3d.html.registerDiv('#divColorMenu');
     mki3d.html.divCursorMenu= mki3d.html.registerDiv('#divCursorMenu');
+    mki3d.html.divFileMenu= mki3d.html.registerDiv('#divFileMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');

@@ -296,3 +296,8 @@ mki3d.action.cursorMenu = function(){
     window.onkeydown = mki3d.callback.cursorMenuOnKeyDown; ////// temporary
 }
 
+mki3d.action.fileMenu = function(){
+    mki3d.message( mki3d.html.divFileMenu.innerHTML );
+    window.onkeydown = mki3d.callback.fileMenuOnKeyDown; ////// temporary
+}
+

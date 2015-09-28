@@ -32,6 +32,9 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
     case 67: // C
 	mki3d.action.cursorMenu(); /// for tests ...
 	break;
+    case 70: // C
+	mki3d.action.fileMenu(); /// for tests ...
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();
@@ -47,6 +50,27 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
     case 67: // C
         mki3d.tmp.colorMenuOutput = mki3d.data.cursor.color; // reference to the object
 	mki3d.action.colorMenu(); /// for tests ...
+	break;
+	
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
+}
+
+mki3d.callback.fileMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 76: // L
+	// LOAD
+	mki3d.file.startLoading();
+	break;
+	
+    case 83: // S
+	// SAVE
+        mki3d.file.startSaving();
 	break;
 	
     default:
