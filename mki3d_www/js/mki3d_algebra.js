@@ -44,7 +44,7 @@ mki3d.scalarProduct= function( v, w ) {
     return v[0]*w[0]+v[1]*w[1]+v[2]*w[2];
 };
 
-mki3d.vectorProduct= function( a, b ) {
+mki3d.vectorProduct= function( a, b ) { // cross product
     return [ a[1]*b[2]-a[2]*b[1],
              a[2]*b[0]-a[0]*b[2],
              a[0]*b[1]-a[1]*b[0]  ];
@@ -86,13 +86,47 @@ mki3d.matrixClone = function( m ) {
 	     mki3d.vectorClone( m[2] ) ];
 };
 
-/*
-mki3d.matrixScale = function( m ) {
-    mki3d.vectorScale( m[0] );
-    mki3d.vectorScale( m[1] );
-    mki3d.vectorScale( m[2] );
-};
-*/ 
+
+mki3d.matrixScale = function( m, s ) {
+    mki3d.vectorScale( m[0], s,s,s );
+    mki3d.vectorScale( m[1], s,s,s );
+    mki3d.vectorScale( m[2], s,s,s );
+}; 
+
+
+mki3d.matrixDeterminant = function(m)
+{
+return    m[0][2]*( m[1][0]*m[2][1]-m[2][0]*m[1][1] )
+         -m[1][2]*( m[0][0]*m[2][1]-m[0][1]*m[2][0] )
+         +m[2][2]*( m[0][0]*m[1][1]-m[0][1]*m[1][0] );
+
+}
+
+mki3d.matrixInverse= function( m ){
+    var det = mki3d.matrixDeterminant(m);
+
+    if(det == 0) {
+	console.log(m);
+	Throw ("mki3d.matrixInverse: non-invertible matrix");
+    }
+
+    var s= 1/det;
+  
+    var r= [ 
+            mki3d.vectorProduct( mki3d.matrixColumn( m, 1),  mki3d.matrixColumn( m, 2) ),
+            mki3d.vectorProduct( mki3d.matrixColumn( m, 2),  mki3d.matrixColumn( m, 0) ),
+            mki3d.vectorProduct( mki3d.matrixColumn( m, 0),  mki3d.matrixColumn( m, 1) ) 
+    ];
+ 
+
+    mki3d.vectorScale( r[0],  s, s, s );
+    mki3d.vectorScale( r[1],  s, s,s );
+    mki3d.vectorScale( r[2],  s, s, s );
+
+    // console.log( mki3d.matrixProduct( m, r) ); // for tests
+    return r;
+}
+
 
 mki3d.matrixColumn = function ( matrix, i ){
     return [ matrix[0][i], matrix[1][i], matrix[2][i] ];

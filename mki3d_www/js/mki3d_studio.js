@@ -70,6 +70,18 @@ mki3d.shadeFactor= function ( triangle, light) {
 }
 
 
+mki3d.setLight = function() {
+var r= mki3d.matrixInverse( mki3d.data.view.rotationMatrix );
+var l= mki3d.matrixVectorProduct(r, [0,0,1]); // basic light direction is [0,0,1]
+// console.log(l); ////////
+mki3d.data.light.vector = l; 
+var i;
+var triangles = mki3d.data.model.triangles;
+for( i=0 ; i<triangles.length; i++) 
+    triangles[i].shade=mki3d.shadeFactor(triangles[i], mki3d.data.light); 
+}
+
+
 
 /* find versors corresponding to Up and Right arrow keys */
 // ...

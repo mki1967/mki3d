@@ -124,11 +124,11 @@ mki3d.action.toggleMarker2 = function(){
     }
 
     if(mki3d.data.cursor.marker2 === null ) {
-       if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) {
-	   mki3d.data.cursor.marker2 = point;
-       }
+	if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) {
+	    mki3d.data.cursor.marker2 = point;
+	}
     } else {
-	   mki3d.data.cursor.marker2 = null;
+	mki3d.data.cursor.marker2 = null;
     }
 
     mki3d.messageAppend("<br> MARKER1 ="+ JSON.stringify(mki3d.data.cursor.marker1)+
@@ -262,7 +262,12 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
 }
 
+/* light */
 
+mki3d.action.setLight = function(){
+    mki3d.setLight();
+    mki3d.redraw();
+}
 
 /* display help */
 mki3d.action.help = function() {
@@ -299,5 +304,10 @@ mki3d.action.cursorMenu = function(){
 mki3d.action.fileMenu = function(){
     mki3d.message( mki3d.html.divFileMenu.innerHTML );
     window.onkeydown = mki3d.callback.fileMenuOnKeyDown; ////// temporary
+}
+
+mki3d.action.dataMenu = function(){
+    mki3d.message( mki3d.html.divDataMenu.innerHTML );
+    window.onkeydown = mki3d.callback.dataMenuOnKeyDown; ////// temporary
 }
 

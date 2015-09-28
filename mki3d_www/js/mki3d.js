@@ -17,7 +17,7 @@ window.onload= function(){
 	mki3d.data = JSON.parse(localStorage.mki3dDataAutosave);
         console.log("reloaded autosave");
     }
-*/
+
 	chrome.storage.local.set({'mki3dData': JSON.stringify(mki3d.data)}, function() {
 	    console.log("mki3d: autosaved.");
 	});
@@ -26,6 +26,7 @@ window.onload= function(){
         console.log("TEST2");
 	console.log(obj);
     });
+*/
 
     mki3d.html.initObjects();
     mki3d.gl.initGL( mki3d.html.canvas );
