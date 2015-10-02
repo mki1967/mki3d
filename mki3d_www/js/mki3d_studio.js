@@ -1,6 +1,8 @@
 /** functions and procedures for manipulating mki3d.data **/
 
-
+mki3d.modelChange = function() {
+mki3d.tmp.modelChanged = true;
+}
 
 mki3d.newPoint = function ( x, y, z,  r, g, b , setIdx ){
     return { position: [x,y,z], color: [r,g,b], set: setIdx };
@@ -83,9 +85,19 @@ for( i=0 ; i<triangles.length; i++)
 
 
 
-/* find versors corresponding to Up and Right arrow keys */
-// ...
+/* clipping */
 
+mki3d.setDataClipping= function (){
+    var v= mki3d.data.clipMaxVector;
+    mki3d.gl.setClipMax(v[0], v[1], v[2]);
+    v= mki3d.data.clipMinVector;
+    mki3d.gl.setClipMin(v[0], v[1], v[2]);
+}
+
+mki3d.unsetClipping= function () {
+    mki3d.gl.setClipMax(MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS);
+    mki3d.gl.setClipMin(-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS);
+}
 
 /* general redraw function */
 
@@ -100,7 +112,9 @@ mki3d.redraw = function() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     mki3d.loadModel();
+    mki3d.setDataClipping()
     mki3d.drawGraph( mki3d.gl.buffers.model );
+    mki3d.unsetClipping();
 
     mki3d.loadCursor();
     mki3d.drawGraph( mki3d.gl.buffers.cursor );

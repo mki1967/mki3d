@@ -39,6 +39,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	mki3d.action.fileMenu(); /// for tests ...
 	break;
 	
+    case 88: // X
+	mki3d.action.clipMenu(); /// for tests ...
+	break;
+	
     default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
@@ -96,6 +100,55 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
 	// temporary escape to canvas
     };
 }
+
+mki3d.callback.clipMenuOnKeyDown =function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 38: // up
+    case 73: // I
+	mki3d.action.upClip();
+	//mki3d.action.viewRotateUp( rotStep);
+	break;
+    case 40: // down
+    case 75: // K
+	mki3d.action.downClip();
+	// mki3d.action.viewRotateUp(-rotStep);
+	break;
+    case 37: // left
+    case 74:// J
+	mki3d.action.leftClip();
+	// mki3d.action.viewRotateRight(-rotStep);
+	break;
+    case 39:// right
+    case 76: // L
+	mki3d.action.rightClip();
+	// mki3d.action.viewRotateRight( rotStep);
+	break;
+    case 70: // F
+	mki3d.action.forwardClip();
+	break;
+    case 66: // B
+    case 86: // V
+	mki3d.action.backClip();
+	break;
+
+    case 82: // R
+	mki3d.action.unclip();
+	break;
+
+    default:
+    };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br> CLIP MIN = "+ JSON.stringify(mki3d.data.clipMinVector)+
+			"<br> CLIP MAX = "+ JSON.stringify(mki3d.data.clipMaxVector)
+		       );
+			
+	// temporary escape to canvas
+} 
+
+
 
 mki3d.callback.canvasOnKeyUp = function (e){
     var code= e.which || e.keyCode;

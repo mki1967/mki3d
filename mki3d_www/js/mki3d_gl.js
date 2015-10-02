@@ -7,15 +7,26 @@ attribute vec4 aVertexColor; \
 uniform mat4 uMVMatrix; \
 uniform mat4 uPMatrix; \
 varying vec4 vColor; \
+varying vec3 vPosition;\
 void main(void) { \
 gl_Position =   uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0); \
 vColor = aVertexColor; \
+vPosition = aVertexPosition; \
 }";
 
 mki3d.gl.fragmentShaderSource = " \
 precision mediump float; \
+uniform vec3 uClipMax; \
+uniform vec3 uClipMin; \
 varying vec4 vColor; \
+varying vec3 vPosition;\
 void main(void) { \
+if( vPosition.x > uClipMax.x ) discard; \
+if( vPosition.y > uClipMax.y ) discard; \
+if( vPosition.z > uClipMax.z ) discard; \
+if( vPosition.x < uClipMin.x ) discard; \
+if( vPosition.y < uClipMin.y ) discard; \
+if( vPosition.z < uClipMin.z ) discard; \
 gl_FragColor = vColor; \
 }";
 
@@ -105,6 +116,10 @@ mki3d.gl.initShaderProgram= function(){
 
     shaderProgram.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.uMVMatrix = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+    shaderProgram.uClipMax = gl.getUniformLocation(shaderProgram, "uClipMax");
+    shaderProgram.uClipMin = gl.getUniformLocation(shaderProgram, "uClipMin");
+
     mki3d.gl.shaderProgram = shaderProgram;
 }
 
@@ -122,6 +137,14 @@ mki3d.gl.matrix4 = function (  xx, yx, zx, wx,
                                yx, yy, yz, yw,
                                zx, zy, zz, zw,
                                wx, wy, wz, ww ] );
+}
+
+mki3d.gl.setClipMax= function ( x, y, z) {
+        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMax,  x,y,z  );
+}
+
+mki3d.gl.setClipMin= function ( x, y, z) {
+        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMin,  x,y,z  );
 }
 
 ///////////////// niżej - do przerobienia

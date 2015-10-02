@@ -75,24 +75,28 @@ mki3d.action.enter = function(){
     } else { // mki3d.data.cursor.marker1 is not null
 	if(cursor.marker2 === null) { 
 	    if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) { // enter segment
-		mki3d.modelInsertElement( mki3d.data.model.segments, 
-					  mki3d.newSegment( cursor.marker1, point ) );
-		mki3d.messageAppend(" SEGMENT INSERTED");
+		var seg = mki3d.newSegment( cursor.marker1, point );
+		mki3d.modelInsertElement( mki3d.data.model.segments, seg);
+                mki3d.modelChange();
+		mki3d.messageAppend(" SEGMENT "+JSON.stringify(seg)
+				    +" INSERTED.<br>NR OF SEGMENTS: "+mki3d.data.model.segments.length);
 		cursor.marker1 = point;
 	    } else
-		mki3d.messageAppend("DEGENERATE SEGMENT -- not inserted");
+		mki3d.messageAppend("DEGENERATE SEGMENT "+JSON.stringify(seg)+" -- not inserted");
 	} else {
 	    var normal = mki3d.normalToPlane( cursor.marker1.position, cursor.marker2.position, point.position );
 	    if( 
 		mki3d.scalarProduct( normal, normal ) != 0 
  	    ) { // enter triangle 
-		mki3d.modelInsertElement( mki3d.data.model.triangles, 
-					  mki3d.newTriangle( cursor.marker1, cursor.marker2, point ) );
-		mki3d.messageAppend(" TRIANGLE INSERTED");
+		var tr = mki3d.newTriangle( cursor.marker1, cursor.marker2, point );
+		mki3d.modelInsertElement( mki3d.data.model.triangles, tr);
+                mki3d.modelChange();
+		mki3d.messageAppend(" TRIANGLE "+JSON.stringify(tr)
+				    +" INSERTED. <br>NR OF TRIANGLES: "+mki3d.data.model.triangles.length);
 		cursor.marker1 = point;
 		cursor.marker2 = null;
 	    } else 
-		mki3d.messageAppend("DEGENERATE TRIANGLE -- not inserted");	
+		mki3d.messageAppend("DEGENERATE TRIANGLE "+JSON.stringify(tr)+"-- not inserted");	
 	}
     }
 
@@ -170,6 +174,38 @@ mki3d.action.forwardCursor = function(){
 mki3d.action.backCursor = function(){
     /* temporary: fixed directons ... */
     mki3d.action.cursorMove( 0, 0, -mki3d.data.cursor.step);
+}
+
+/* CLIP */
+
+mki3d.action.upClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip(0,1, 0);
+}
+
+mki3d.action.downClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip(0, -1, 0);
+}
+
+mki3d.action.rightClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip(1, 0, 0);
+}
+
+mki3d.action.leftClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip(-1, 0, 0);
+}
+
+mki3d.action.forwardClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip( 0, 0,1);
+}
+
+mki3d.action.backClip = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.clip( 0, 0, -1);
 }
 
 
@@ -262,10 +298,44 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
 }
 
+/* clipping */
+
+mki3d.action.clip = function ( dx, dy, dz ) {
+    mki3d.tmp.refreshVersorsMatrix();
+    var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
+    var i;
+    for(i=0; i<3; i++) { // toggle clippings
+	if( d[i] > 0 ) {
+	    if(  mki3d.data.clipMinVector[i] == -MKI3D_MAX_CLIP_ABS ){   
+		mki3d.data.clipMinVector[i]= mki3d.data.cursor.position[i];
+	    } 
+	    else { 
+		mki3d.data.clipMinVector[i]= -MKI3D_MAX_CLIP_ABS;
+	    }
+	}
+	if( d[i] < 0 ) {
+	    if(  mki3d.data.clipMaxVector[i] == MKI3D_MAX_CLIP_ABS ){
+		mki3d.data.clipMaxVector[i]= mki3d.data.cursor.position[i];
+	    }
+	    else {
+		mki3d.data.clipMaxVector[i]= MKI3D_MAX_CLIP_ABS;
+	    }
+	}
+    }
+    mki3d.redraw();
+}
+
+mki3d.action.unclip = function (){
+    mki3d.data.clipMaxVector = [MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS];
+    mki3d.data.clipMinVector = [-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS];
+    mki3d.redraw();
+}
+
 /* light */
 
 mki3d.action.setLight = function(){
     mki3d.setLight();
+    mki3d.message("LIGHT ="+JSON.stringify(mki3d.data.light.vector));
     mki3d.redraw();
 }
 
@@ -298,16 +368,21 @@ mki3d.action.colorMenu = function(){
 
 mki3d.action.cursorMenu = function(){
     mki3d.message( mki3d.html.divCursorMenu.innerHTML );
-    window.onkeydown = mki3d.callback.cursorMenuOnKeyDown; ////// temporary
+    window.onkeydown = mki3d.callback.cursorMenuOnKeyDown;
 }
 
 mki3d.action.fileMenu = function(){
     mki3d.message( mki3d.html.divFileMenu.innerHTML );
-    window.onkeydown = mki3d.callback.fileMenuOnKeyDown; ////// temporary
+    window.onkeydown = mki3d.callback.fileMenuOnKeyDown;
 }
 
 mki3d.action.dataMenu = function(){
     mki3d.message( mki3d.html.divDataMenu.innerHTML );
-    window.onkeydown = mki3d.callback.dataMenuOnKeyDown; ////// temporary
+    window.onkeydown = mki3d.callback.dataMenuOnKeyDown;
+}
+
+mki3d.action.clipMenu = function(){
+    mki3d.message( mki3d.html.divDataMenu.innerHTML );
+    window.onkeydown = mki3d.callback.clipMenuOnKeyDown;
 }
 
