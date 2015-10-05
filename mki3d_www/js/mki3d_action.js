@@ -280,7 +280,7 @@ mki3d.action.viewRotateForward = function(alpha) {
 
 mki3d.action.viewAlignRotation = function() {
     view = mki3d.data.view;
-    mki3d.tmp.refreshVersorsMatrix();
+    mki3d.tmpRefreshVersorsMatrix();
     view.rotationMatrix= mki3d.matrixTransposed( mki3d.tmp.versorsMatrix );
     mki3d.setModelViewMatrix();
     mki3d.redraw();
@@ -289,7 +289,7 @@ mki3d.action.viewAlignRotation = function() {
 /* cursor manipulations */
 
 mki3d.action.cursorMove = function( dx, dy, dz ) {
-    mki3d.tmp.refreshVersorsMatrix();
+    mki3d.tmpRefreshVersorsMatrix();
     var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
     cursor = mki3d.data.cursor;
     mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);
@@ -301,7 +301,7 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
 /* clipping */
 
 mki3d.action.clip = function ( dx, dy, dz ) {
-    mki3d.tmp.refreshVersorsMatrix();
+    mki3d.tmpRefreshVersorsMatrix();
     var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
     var i;
     for(i=0; i<3; i++) { // toggle clippings

@@ -2,10 +2,17 @@
 mki3d.tmp = {};
 
 
+/** Functions for manipulations on mki3d.tmp **/
+
+/* cancel all mki3d.tmp data */
+mki3d.tmpCancel = function() {
+    mki3d.tmp = {}; 
+}
+
 
 /* (re)creation of tmp data */
 
-mki3d.tmp.makeVersorsMatrix = function() {
+mki3d.tmpMakeVersorsMatrix = function() {
 
     // console.log("TEST : makeVersorsMatrix "); 
 
@@ -62,12 +69,24 @@ mki3d.tmp.makeVersorsMatrix = function() {
     mki3d.tmp.versorsMatrix.input = rot;
 };
 
-mki3d.tmp.invalidVersorsMatrix= function(){
+mki3d.tmpInvalidVersorsMatrix= function(){
     if(!mki3d.tmp.versorsMatrix) return true;
     return mki3d.tmp.versorsMatrix.input !== mki3d.data.view.rotationMatrix;
 }; 
 
-mki3d.tmp.refreshVersorsMatrix= function(){
-    if( mki3d.tmp.invalidVersorsMatrix() ) mki3d.tmp.makeVersorsMatrix();
+mki3d.tmpRefreshVersorsMatrix= function(){
+    if( mki3d.tmpInvalidVersorsMatrix() ) mki3d.tmpMakeVersorsMatrix();
 };
 
+/* Cheks for existence of mki3d.display.model. 
+If it does not exist then it is created from original mki3d.data.model */
+mki3d.tmpRefreshDisplayModel= function(){
+    if( !mki3d.tmp.display ) mki3d.tmp.display = {};
+    if( !mki3d.tmp.display.model ) mki3d.tmp.display.model = mki3d.data.model;
+}
+
+/* refsets mki3d.display.model to original mki3d.data.model */
+mki3d.tmpResetDisplayModel= function(){
+    mki3d.tmpRefreshDisplayModel();
+    if( mki3d.tmp.display.model !== mki3d.data.model ) mki3d.tmp.display.model = mki3d.data.model;
+}

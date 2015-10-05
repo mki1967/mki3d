@@ -56,6 +56,7 @@ mki3d.file.loadingEndHandler = function (loader){
     if(loader.loadedObject) {
 	console.log(loader.loadedObject); // for tests ...
 	mki3d.data = loader.loadedObject; // dangerous !!!
+        mki3d.tmpCancel();
 	mki3d.action.escapeToCanvas(); 
     }
 } 

@@ -126,7 +126,10 @@ mki3d.redraw = function() {
 mki3d.loadModel= function (){
     var gl = mki3d.gl.context;
     var buf = mki3d.gl.buffers.model;
-    var model = mki3d.data.model;
+
+    mki3d.tmpRefreshDisplayModel();
+    // var model = mki3d.data.model;
+    var model = mki3d.tmp.display.model;
 
     var elements = [];
     var elementsColors = [];
@@ -208,7 +211,7 @@ mki3d.loadCursor= function (){
 	}
     }
     // append plane makers
-    mki3d.tmp.refreshVersorsMatrix();
+    mki3d.tmpRefreshVersorsMatrix();
     for( i=0 ; i<MKI3D_PLANE_MARKER.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , MKI3D_PLANE_MARKER[i][j]);
