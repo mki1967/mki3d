@@ -382,7 +382,7 @@ mki3d.action.dataMenu = function(){
 }
 
 mki3d.action.clipMenu = function(){
-    mki3d.message( mki3d.html.divDataMenu.innerHTML );
+    mki3d.message( mki3d.html.divClipMenu.innerHTML );
     window.onkeydown = mki3d.callback.clipMenuOnKeyDown;
 }
 
