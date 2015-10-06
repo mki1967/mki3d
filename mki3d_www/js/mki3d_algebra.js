@@ -38,11 +38,14 @@ mki3d.vectorScale = function(v, sx, sy, sz ) {
 };
 
 
-
-
 mki3d.scalarProduct= function( v, w ) {
     return v[0]*w[0]+v[1]*w[1]+v[2]*w[2];
 };
+
+mki3d.distanceSquare = function(v, w) {
+    var a=[ v[0]-w[0], v[1]-w[1], v[2]-w[2] ];
+    return mki3d.scalarProduct( a,a);
+}
 
 mki3d.vectorProduct= function( a, b ) { // cross product
     return [ a[1]*b[2]-a[2]*b[1],

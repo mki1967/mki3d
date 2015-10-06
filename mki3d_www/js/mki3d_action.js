@@ -298,6 +298,28 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
 }
 
+
+mki3d.action.cursorMoveToNearestEndpoint = function() {
+    var sPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.segments );
+    var tPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.triangles );
+    var found=sPoint;
+    if( found === null ) found = tPoint;
+    if( found === null ) return; // sPoint == tPoint == null
+    // here: found != null
+    if( found !== tPoint && tPoint !== null) {
+	if( mki3d.distanceSquare(mki3d.data.cursor.position, tPoint.position ) <
+	    mki3d.distanceSquare(mki3d.data.cursor.position, found.position )
+	  ) 
+	    found = tPoint;
+	}
+    // here: found != null and found is nearest endpoint
+    mki3d.vectorSet( 
+	mki3d.data.cursor.position, 
+	found.position[0], found.position[1], found.position[2] 
+		   );
+    mki3d.redraw();
+}
+
 /* clipping */
 
 mki3d.action.clip = function ( dx, dy, dz ) {

@@ -43,6 +43,28 @@ mki3d.areEqualElements = function( element1, element2 ){
     return true;
 }
 
+/* For position pos find nearest endpoint of an element */
+
+mki3d.findNearestEndpoint = function( pos, arrayOfElements ) {
+    if(!arrayOfElements) return null;
+    if(arrayOfElements.length == 0) return null;
+    var found = arrayOfElements[0][0];
+    var minDist = mki3d.distanceSquare(pos, found.position);
+    var i,j;
+    for( i=0; i<arrayOfElements.length; i++)
+	for(j=0; j<arrayOfElements[i].length; j++) {
+	    var next = arrayOfElements[i][j];
+	    var ds = mki3d.distanceSquare(pos, next.position);
+	    if( ds < minDist ) {
+		minDist=ds;
+		found=next;
+	    }
+	}
+    return found;
+}
+
+
+
 /* updating the model */
 
 mki3d.modelInsertElement = function(array, element) {

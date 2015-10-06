@@ -59,6 +59,11 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	mki3d.action.colorMenu(); /// for tests ...
 	break;
 	
+    case 74: // J
+	mki3d.action.cursorMoveToNearestEndpoint ();
+	mki3d.action.escapeToCanvas();
+	break;
+	
     default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
