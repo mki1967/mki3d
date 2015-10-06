@@ -56,7 +56,7 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
     {
     case 67: // C
         mki3d.tmp.colorMenuOutput = mki3d.data.cursor.color; // reference to the object
-	mki3d.action.colorMenu(); /// for tests ...
+	mki3d.action.colorMenu(); 
 	break;
 	
     case 74: // J
@@ -96,6 +96,10 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
+    case 66: // B
+        mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
+	mki3d.action.colorMenu(); 
+	break;
     case 76: // L
 	// LIGHT
 	mki3d.action.setLight();

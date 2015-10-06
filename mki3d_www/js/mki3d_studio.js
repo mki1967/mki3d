@@ -350,7 +350,6 @@ mki3d.setProjectionMatrix = function () {
 
 /* load model view  to GL uMVMatrix */
 mki3d.setModelViewMatrix = function () {
-    var projection = mki3d.data.projection;
     var gl = mki3d.gl.context;
     var mov = mki3d.vectorClone( mki3d.data.view.focusPoint);
     mki3d.vectorScale( mov, -1, -1, -1);
