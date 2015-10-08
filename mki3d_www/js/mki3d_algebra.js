@@ -8,6 +8,7 @@ mki3d.vectorClone= function (v){
     return [v[0],v[1],v[2]]; 
 };
 
+/* lexicographic ordering */
 mki3d.vectorCompare = function( v, w ){
     var cmp=0;
     cmp= w[0]-v[0];
@@ -17,6 +18,11 @@ mki3d.vectorCompare = function( v, w ){
     cmp= w[2]-v[2];
     return cmp;
 };
+
+
+mki3d.vectorProductOrdered = function( v, w){
+    return v[0]<w[0] && v[1]<w[1] && v[2]<w[2];
+}
 
 /* Set elements of the existing vector v */
 mki3d.vectorSet = function(v, x,y,z ) {

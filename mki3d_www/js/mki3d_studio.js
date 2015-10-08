@@ -1,7 +1,7 @@
 /** functions and procedures for manipulating mki3d.data **/
 
 mki3d.modelChange = function() {
-mki3d.tmp.modelChanged = true;
+    mki3d.tmp.modelChanged = true;
 }
 
 mki3d.newPoint = function ( x, y, z,  r, g, b , setIdx ){
@@ -95,14 +95,14 @@ mki3d.shadeFactor= function ( triangle, light) {
 
 
 mki3d.setLight = function() {
-var r= mki3d.matrixInverse( mki3d.data.view.rotationMatrix );
-var l= mki3d.matrixVectorProduct(r, [0,0,1]); // basic light direction is [0,0,1]
-// console.log(l); ////////
-mki3d.data.light.vector = l; 
-var i;
-var triangles = mki3d.data.model.triangles;
-for( i=0 ; i<triangles.length; i++) 
-    triangles[i].shade=mki3d.shadeFactor(triangles[i], mki3d.data.light); 
+    var r= mki3d.matrixInverse( mki3d.data.view.rotationMatrix );
+    var l= mki3d.matrixVectorProduct(r, [0,0,1]); // basic light direction is [0,0,1]
+    // console.log(l); ////////
+    mki3d.data.light.vector = l; 
+    var i;
+    var triangles = mki3d.data.model.triangles;
+    for( i=0 ; i<triangles.length; i++) 
+	triangles[i].shade=mki3d.shadeFactor(triangles[i], mki3d.data.light); 
 }
 
 
@@ -141,6 +141,12 @@ mki3d.redraw = function() {
     mki3d.loadCursor();
     mki3d.drawGraph( mki3d.gl.buffers.cursor );
 
+    /*   // for tests
+	 mki3d.drawPoints( MKI3D_SELECTED_POINT,  
+	 mki3d.elementEndpointsInBox( mki3d.data.model.segments, mki3d.data.clipMinVector, mki3d.data.clipMaxVector ),
+	 mki3d.gl.buffers.selectedPoint
+	 );
+    */
 }
 
 /* load model to its GL buffer */
@@ -217,7 +223,6 @@ mki3d.loadCursor= function (){
 
     var cPos = mki3d.vectorClone(mki3d.data.cursor.position);
     var step=  mki3d.data.cursor.step;
-    mki3d.vectorScale( cPos, step, step, step);
     var cCol = mki3d.data.cursor.color;
     var segments = [];
     var i,j;
@@ -226,6 +231,7 @@ mki3d.loadCursor= function (){
     for( i=0 ; i<MKI3D_CURSOR_SHAPE.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.vectorClone(MKI3D_CURSOR_SHAPE[i][j]);
+	    mki3d.vectorScale( point, step, step, step);
 	    mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
 	    segments.push(point[0]);
 	    segments.push(point[1]);
@@ -391,6 +397,86 @@ mki3d.drawGraph = function (graph) {
     gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
     gl.drawArrays(gl.LINES, 0, 2*graph.nrOfSegments);
 
+}
+
+
+// ...
+mki3d.drawPoints = function( pointShape, points, buf ) {
+    if( !points || points.length == 0) return; 
+    var gl = mki3d.gl.context;
+    var shaderProgram = mki3d.gl.shaderProgram;
+    var buf = mki3d.gl.buffers.cursor;
+
+    var cPos = mki3d.vectorClone(mki3d.data.cursor.position);
+    var step=  mki3d.data.cursor.step;
+    var cCol = mki3d.data.cursor.color;
+
+    var revMatrix = mki3d.matrixInverse( mki3d.data.view.rotationMatrix );
+    var segments = [];
+    var i,j;
+    var point;
+    // load the shape of the point
+    for( i=0 ; i<pointShape.length; i++) {
+	for(j=0; j<2; j++){
+	    // point = mki3d.vectorClone(pointShape[i][j]);
+	    point = mki3d.matrixVectorProduct(revMatrix, pointShape[i][j]);
+	    mki3d.vectorScale( point, step, step, step); /* points as scaled according to the cursor */
+	    segments.push(point[0]);
+	    segments.push(point[1]);
+	    segments.push(point[2]);
+	}
+    }
+
+    var colors = [];
+    for( i=0 ; i < 2*(pointShape.length); i++) {
+        colors.push(cCol[0]);
+        colors.push(cCol[1]);
+        colors.push(cCol[2]);
+    }
+    
+    /* draw each point -- segments moved by point position */
+    for(i=0; i<points.length; i++) {
+	var pos= points[i].position;
+        var movedShape=[];
+        for(j=0; j<segments.length; j++) {
+	    movedShape.push(segments[j]+pos[ j%3 ] );
+	}
+
+	// load movedShape and colors to GL buffers
+
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( movedShape ), gl.DYNAMIC_DRAW );
+	
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
+
+	buf.nrOfSegments =  segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
+
+	// draw lines only
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments );
+	gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
+	gl.drawArrays(gl.LINES, 0, 2*buf.nrOfSegments);
+	
+    }
+    
+    // ...
+}
+
+/* return array of references to the endpoints in the box */
+mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
+    var selected=[];
+    var i,j;
+    for(i=0; i<elements.length; i++) 
+	for(j=0; j<elements[i].length; j++)
+	    if( mki3d.vectorProductOrdered(boxMin, elements[i][j].position) &&
+		mki3d.vectorProductOrdered( elements[i][j].position, boxMax)
+	      )
+		selected.push(elements[i][j]);
+    return selected;
 }
 
 
