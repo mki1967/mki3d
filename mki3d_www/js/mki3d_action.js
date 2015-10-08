@@ -408,3 +408,8 @@ mki3d.action.clipMenu = function(){
     window.onkeydown = mki3d.callback.clipMenuOnKeyDown;
 }
 
+mki3d.action.selectionMenu = function(){
+    mki3d.message( mki3d.html.divSelectionMenu.innerHTML );
+    window.onkeydown = mki3d.callback.selectionMenuOnKeyDown;
+}
+

@@ -42,6 +42,9 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
     case 88: // X
 	mki3d.action.clipMenu(); /// for tests ...
 	break;
+    case 83: // S
+	mki3d.action.selectionMenu();
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();
@@ -158,6 +161,26 @@ mki3d.callback.clipMenuOnKeyDown =function (e){
 } 
 
 
+mki3d.callback.selectionMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 82: // R
+	mki3d.tmp.selected=null;
+	break;
+
+	// ... add remaining cases	
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
+    mki3d.action.escapeToCanvas();
+    // temporary escape to canvas
+}
+
+
+/* CANVAS */
 
 mki3d.callback.canvasOnKeyUp = function (e){
     var code= e.which || e.keyCode;
@@ -246,7 +269,6 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	  case 86: // V
 	  case 46: // Delete
 	  case 51: // #
-	  case 83: // S
 	  case 56: // *
 	  case 88: // X
 	  case 74: // J
