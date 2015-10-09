@@ -21,7 +21,7 @@ mki3d.vectorCompare = function( v, w ){
 
 
 mki3d.vectorProductOrdered = function( v, w){
-    return v[0]<w[0] && v[1]<w[1] && v[2]<w[2];
+    return v[0]<=w[0] && v[1]<=w[1] && v[2]<=w[2];
 }
 
 /* Set elements of the existing vector v */

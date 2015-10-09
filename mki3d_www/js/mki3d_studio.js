@@ -141,6 +141,8 @@ mki3d.redraw = function() {
     mki3d.loadCursor();
     mki3d.drawGraph( mki3d.gl.buffers.cursor );
 
+    if(mki3d.tmp.selected)  
+	mki3d.drawPoints( MKI3D_SELECTED_POINT, mki3d.tmp.selected, mki3d.gl.buffers.selectedPoint );
     /*   // for tests
 	 mki3d.drawPoints( MKI3D_SELECTED_POINT,  
 	 mki3d.elementEndpointsInBox( mki3d.data.model.segments, mki3d.data.clipMinVector, mki3d.data.clipMaxVector ),
@@ -468,6 +470,10 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 
 /* return array of references to the endpoints in the box */
 mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
+console.log(boxMin);
+console.log(boxMax);
+console.log(elements);
+
     var selected=[];
     var i,j;
     for(i=0; i<elements.length; i++) 
@@ -476,6 +482,7 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
 		mki3d.vectorProductOrdered( elements[i][j].position, boxMax)
 	      )
 		selected.push(elements[i][j]);
+console.log(selected);
     return selected;
 }
 

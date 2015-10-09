@@ -361,6 +361,58 @@ mki3d.action.setLight = function(){
     mki3d.redraw();
 }
 
+/* selections */
+
+mki3d.action.selectByCursor= function(){
+    var i;
+    var cursor= mki3d.data.cursor;
+
+    if(!mki3d.tmp.selected) mki3d.tmp.selected=[];
+
+    var points = mki3d.elementEndpointsInBox(
+	mki3d.data.model.segments,
+	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
+	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
+    );
+   
+    for(i=0; i<points.length; i++) 
+	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
+            (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
+            (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
+	  )
+	    mki3d.tmp.selected.push( points[i] );
+
+    points = mki3d.elementEndpointsInBox(
+	mki3d.data.model.triangles,
+	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
+	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
+    );
+   
+    for(i=0; i<points.length; i++) 
+	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
+            (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
+            (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
+	  )
+	    mki3d.tmp.selected.push( points[i] );
+
+}
+
+mki3d.action.selectInClipBox= function(){
+    if(!mki3d.tmp.selected) mki3d.tmp.selected=[];
+    var points = mki3d.elementEndpointsInBox(
+	mki3d.data.model.segments,
+	mki3d.data.clipMinVector,
+	mki3d.data.clipMaxVector
+    );
+    mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+    points = mki3d.elementEndpointsInBox(
+	mki3d.data.model.triangles,
+	mki3d.data.clipMinVector,
+	mki3d.data.clipMaxVector
+    );
+    mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+}
+
 /* display help */
 mki3d.action.help = function() {
     mki3d.html.hideAllDivs();

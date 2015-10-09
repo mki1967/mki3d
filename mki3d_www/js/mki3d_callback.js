@@ -167,15 +167,22 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     switch(code)
     {
     case 82: // R
-	mki3d.tmp.selected=null;
+	mki3d.tmp.selected=[];
 	break;
-
+    case 88: // X
+	mki3d.action.selectInClipBox();
+	break;
+    case 67: // C
+	mki3d.action.selectByCursor();
+	break;
 	// ... add remaining cases	
     default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
     };
     mki3d.action.escapeToCanvas();
+    if(mki3d.tmp.selected)
+	mki3d.messageAppend("<br> SELECTED ENDPOINTS: "+mki3d.tmp.selected.length);
     // temporary escape to canvas
 }
 
