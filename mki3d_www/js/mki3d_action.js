@@ -146,6 +146,19 @@ mki3d.action.toggleMarker2 = function(){
 
 /* CURSOR */
 
+mki3d.action.cursorScaleUp = function() {
+    if( 2*mki3d.data.cursor.step*mki3d.data.view.scale > 4 ) return; // upper bound 
+    mki3d.data.cursor.step = 2*mki3d.data.cursor.step ;
+    mki3d.redraw();
+}
+
+mki3d.action.cursorScaleDown = function() {
+    if( mki3d.data.cursor.step*mki3d.data.view.scale/2 < 1/4 ) return; // upper bound 
+    mki3d.data.cursor.step = 2*mki3d.data.cursor.step ;
+    mki3d.redraw();
+}
+
+
 mki3d.action.upCursor = function(){
     /* temporary: fixed directons ... */
     mki3d.action.cursorMove(0, mki3d.data.cursor.step, 0);
@@ -362,6 +375,11 @@ mki3d.action.setLight = function(){
 }
 
 /* selections */
+mki3d.action.cancelSelection= function(){
+    mki3d.cleanElementEndpointsFromKey(mki3d.data.model.segments, 'selected');
+    mki3d.cleanElementEndpointsFromKey(mki3d.data.model.triangles, 'selected');
+    mki3d.tmp.selected=[];
+}
 
 mki3d.action.selectByCursor= function(){
     var i;
@@ -379,9 +397,10 @@ mki3d.action.selectByCursor= function(){
 	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
             (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
             (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
-	  )
+	  ) {
+	    points[i].selected=true;
 	    mki3d.tmp.selected.push( points[i] );
-
+	}
     points = mki3d.elementEndpointsInBox(
 	mki3d.data.model.triangles,
 	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
@@ -392,25 +411,83 @@ mki3d.action.selectByCursor= function(){
 	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
             (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
             (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
-	  )
+	  ) {
+	    points[i].selected=true;
 	    mki3d.tmp.selected.push( points[i] );
-
+	}
 }
 
 mki3d.action.selectInClipBox= function(){
     if(!mki3d.tmp.selected) mki3d.tmp.selected=[];
+    var i;
     var points = mki3d.elementEndpointsInBox(
 	mki3d.data.model.segments,
 	mki3d.data.clipMinVector,
 	mki3d.data.clipMaxVector
     );
+    for(i=0; i<points.length; i++) points[i].selected=true;
     mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+
     points = mki3d.elementEndpointsInBox(
 	mki3d.data.model.triangles,
 	mki3d.data.clipMinVector,
 	mki3d.data.clipMaxVector
     );
+    for(i=0; i<points.length; i++) points[i].selected=true;
     mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+}
+
+/* view */
+
+mki3d.action.cancelVisibilityRestrictions= function() {
+    mki3d.tmpResetDisplayModel();
+    mki3d.redraw();
+}
+
+mki3d.action.viewSelectedSegments = function() {
+    mki3d.tmp.display = {};
+    mki3d.tmp.display.model = {};
+    mki3d.tmp.display.model.segments = [];
+    mki3d.tmp.display.model.triangles = [];
+    if(!mki3d.tmp.selected) return; // nothing selected
+    var i;
+    for(i=0; i<mki3d.data.model.segments.length; i++)
+	if(mki3d.data.model.segments[i][0].selected &&
+	   mki3d.data.model.segments[i][1].selected )
+	    mki3d.tmp.display.model.segments.push(mki3d.data.model.segments[i]);
+    mki3d.redraw();
+}
+
+mki3d.action.viewSelectedTriangles = function() {
+    mki3d.tmp.display = {};
+    mki3d.tmp.display.model = {};
+    mki3d.tmp.display.model.segments = [];
+    mki3d.tmp.display.model.triangles = [];
+    if(!mki3d.tmp.selected) return; // nothing selected
+    var i;
+    for(i=0; i<mki3d.data.model.triangles.length; i++)
+	if(mki3d.data.model.triangles[i][0].selected &&
+	   mki3d.data.model.triangles[i][1].selected &&
+	   mki3d.data.model.triangles[i][2].selected )
+	    mki3d.tmp.display.model.triangles.push(mki3d.data.model.triangles[i]);
+    mki3d.redraw();
+}
+
+
+
+
+mki3d.action.viewScaleUp = function() {
+    if( 2*mki3d.data.view.scale > MKI3D_MAX_SCALE ) return; // upper bound 
+    mki3d.data.view.scale = 2*mki3d.data.view.scale;
+    mki3d.data.cursor.step = 1/ mki3d.data.view.scale;
+    mki3d.redraw();
+}
+
+mki3d.action.viewScaleDown = function() {
+    if( mki3d.data.view.scale/2 < MKI3D_MIN_SCALE ) return; // upper bound 
+    mki3d.data.view.scale = mki3d.data.view.scale/2;
+    mki3d.data.cursor.step = 1/ mki3d.data.view.scale;
+    mki3d.redraw();
 }
 
 /* display help */
@@ -463,5 +540,10 @@ mki3d.action.clipMenu = function(){
 mki3d.action.selectionMenu = function(){
     mki3d.message( mki3d.html.divSelectionMenu.innerHTML );
     window.onkeydown = mki3d.callback.selectionMenuOnKeyDown;
+}
+
+mki3d.action.viewMenu = function(){
+    mki3d.message( mki3d.html.divViewMenu.innerHTML );
+    window.onkeydown = mki3d.callback.viewMenuOnKeyDown;
 }
 

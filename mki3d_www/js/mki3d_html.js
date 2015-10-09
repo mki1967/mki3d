@@ -32,6 +32,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divDataMenu= mki3d.html.registerDiv('#divDataMenu');
     mki3d.html.divClipMenu= mki3d.html.registerDiv('#divClipMenu');
     mki3d.html.divSelectionMenu= mki3d.html.registerDiv('#divSelectionMenu');
+    mki3d.html.divViewMenu= mki3d.html.registerDiv('#divViewMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');

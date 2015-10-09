@@ -45,6 +45,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
     case 83: // S
 	mki3d.action.selectionMenu();
 	break;
+
+    case 86: // V
+	mki3d.action.viewMenu();
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();
@@ -167,7 +171,7 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     switch(code)
     {
     case 82: // R
-	mki3d.tmp.selected=[];
+	mki3d.action.cancelSelection();
 	break;
     case 88: // X
 	mki3d.action.selectInClipBox();
@@ -183,6 +187,45 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     mki3d.action.escapeToCanvas();
     if(mki3d.tmp.selected)
 	mki3d.messageAppend("<br> SELECTED ENDPOINTS: "+mki3d.tmp.selected.length);
+    // temporary escape to canvas
+}
+
+mki3d.callback.viewMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 50: // 2
+	mki3d.action.viewSelectedSegments();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED SEGMENTS.");
+	break; 
+    case 51: // 3
+	mki3d.action.viewSelectedTriangles();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED TRIANGLES.");
+	break; 
+    case 67: // C
+	mki3d.action.cancelVisibilityRestrictions();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW RESTRICTIONS CANCELED.");
+	break;
+    case 85: // U
+	mki3d.action.viewScaleUp();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
+			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	break;
+    case 68: // D
+	mki3d.action.viewScaleDown();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
+			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	break;
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
     // temporary escape to canvas
 }
 

@@ -8,6 +8,10 @@ mki3d.file.suggestedName = "noname.mki3d";
 
 mki3d.file.startSaving = function () {
     var saver = {};
+
+    /* clean data from temporratry markers */
+    mki3d.action.cancelSelection();
+
     var myObjectString = JSON.stringify(mki3d.data);
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
     saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName  };

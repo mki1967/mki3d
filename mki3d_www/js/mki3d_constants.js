@@ -19,7 +19,9 @@ const MKI3D_MIN_TRIANGLE = 1e-20;
 /* upper limit for absoloute value of clipping coordinate */
 const MKI3D_MAX_CLIP_ABS = 1e+20;
 
-
+/* upper and lower bounds on the scale */
+const MKI3D_MAX_SCALE = 1024.0; 
+const MKI3D_MIN_SCALE = 1/ MKI3D_MAX_SCALE;
 
 /* Initial view parameters */
 

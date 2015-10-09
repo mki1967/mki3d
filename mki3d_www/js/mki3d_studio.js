@@ -245,6 +245,7 @@ mki3d.loadCursor= function (){
     for( i=0 ; i<MKI3D_PLANE_MARKER.length; i++) {
 	for(j=0; j<2; j++){
 	    point = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , MKI3D_PLANE_MARKER[i][j]);
+	    mki3d.vectorScale( point, step, step, step);
 	    mki3d.vectorMove(point, cPos[0], cPos[1], cPos[2]);
 	    segments.push(point[0]);
 	    segments.push(point[1]);
@@ -470,10 +471,6 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 
 /* return array of references to the endpoints in the box */
 mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
-console.log(boxMin);
-console.log(boxMax);
-console.log(elements);
-
     var selected=[];
     var i,j;
     for(i=0; i<elements.length; i++) 
@@ -482,10 +479,15 @@ console.log(elements);
 		mki3d.vectorProductOrdered( elements[i][j].position, boxMax)
 	      )
 		selected.push(elements[i][j]);
-console.log(selected);
     return selected;
 }
 
+mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
+    var i,j;
+    for(i=0; i<elements.length; i++) 
+	for(j=0; j<elements[i].length; j++)
+            delete elements[i][j][key];
+}
 
 mki3d.message = function ( messageText ) {
     mki3d.html.divUpperMessage.innerHTML = messageText;
