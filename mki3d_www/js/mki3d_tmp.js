@@ -90,3 +90,24 @@ mki3d.tmpResetDisplayModel= function(){
     mki3d.tmpRefreshDisplayModel();
     if( mki3d.tmp.display.model !== mki3d.data.model ) mki3d.tmp.display.model = mki3d.data.model;
 }
+
+
+/* rebuilds tmp.selected table */
+
+mki3d.tmpAddSelectedFromElements= function(elements){
+    var points = mki3d.elementEndpointsInBox(
+        elements,
+	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
+	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
+    );
+    var i;
+    for( i=0; i<points.length; i++ ) {
+	if(points[i].selected) mki3d.tmp.selected.push(points[i]);
+    }
+} 
+
+mki3d.tmpRebuildSelected = function(){
+    mki3d.tmp.selected =[];
+    mki3d.tmpAddSelectedFromElements(mki3d.data.model.segments);
+    mki3d.tmpAddSelectedFromElements(mki3d.data.model.triangles);
+}

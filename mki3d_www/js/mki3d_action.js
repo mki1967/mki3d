@@ -6,6 +6,7 @@ mki3d.action = {};
 /* mode constants */
 mki3d.action.ROTATE_MODE = "ROTATE";
 mki3d.action.CURSOR_MODE = "CURSOR";
+mki3d.action.SELECTED_MODE = "SELECTED";
 
 /* rotation step */
 mki3d.action.rotationStep = Math.PI / 36; // 5 degrees 
@@ -14,12 +15,68 @@ mki3d.action.rotationStep = Math.PI / 36; // 5 degrees
 
 mki3d.action.modes = [
     mki3d.action.ROTATE_MODE,
-    mki3d.action.CURSOR_MODE
+    mki3d.action.CURSOR_MODE,
+    mki3d.action.SELECTED_MODE
 ];
 
 mki3d.action.modeIdx = 0;
 
 mki3d.action.mode = mki3d.action.modes[mki3d.action.modeIdx]; // default starting mode
+
+
+/* setting actions for the mode */
+
+mki3d.action.setModeActions= function(){
+    /* sets actions for current mki3d.action.mode */
+    mki3d.message("MODE: <strong>"+mki3d.action.mode+"</strong>" );
+    switch(mki3d.action.mode){
+    case mki3d.action.ROTATE_MODE:
+	mki3d.action.up = mki3d.action.upRotate;
+	mki3d.action.down = mki3d.action.downRotate;
+	mki3d.action.right = mki3d.action.rightRotate;
+	mki3d.action.left = mki3d.action.leftRotate;
+	mki3d.action.forward = mki3d.action.forwardRotate;
+	mki3d.action.back = mki3d.action.backRotate;
+	// ...
+	mki3d.data.view.focusPoint = mki3d.vectorClone( mki3d.data.cursor.position );
+	mki3d.setModelViewMatrix();
+        mki3d.redraw();
+	break;
+    case mki3d.action.CURSOR_MODE:
+	mki3d.action.up = mki3d.action.upCursor;
+	mki3d.action.down = mki3d.action.downCursor;
+	mki3d.action.right = mki3d.action.rightCursor;
+	mki3d.action.left = mki3d.action.leftCursor;
+	mki3d.action.forward = mki3d.action.forwardCursor;
+	mki3d.action.back = mki3d.action.backCursor;
+	// ...
+	mki3d.messageAppend(" (CURSOR = "+JSON.stringify(mki3d.data.cursor.position)+")" );
+	break;
+    case mki3d.action.SELECTED_MODE:
+	mki3d.action.up = mki3d.action.upSelected;
+	mki3d.action.down = mki3d.action.downSelected;
+	mki3d.action.right = mki3d.action.rightSelected;
+	mki3d.action.left = mki3d.action.leftSelected;
+	mki3d.action.forward = mki3d.action.forwardSelected;
+	mki3d.action.back = mki3d.action.backSelected;
+	// ...
+	if(!mki3d.tmp.selected)
+	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	else
+	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
+	break;
+    }
+
+}
+
+/* initialisation of actions */
+
+mki3d.action.init= function() {
+    mki3d.action.setModeActions(); // set the actions for initial mode
+}
+
+
+
 
 /* action of switching the mode */
 
@@ -189,6 +246,65 @@ mki3d.action.backCursor = function(){
     mki3d.action.cursorMove( 0, 0, -mki3d.data.cursor.step);
 }
 
+/* cursor manipulations */
+
+mki3d.action.cursorMove = function( dx, dy, dz ) {
+    mki3d.tmpRefreshVersorsMatrix();
+    var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
+    cursor = mki3d.data.cursor;
+    mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);
+    // mki3d.loadCursor(); // -- is in redraw()
+    mki3d.redraw();
+    mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
+}
+
+/* selection manipulations */
+
+mki3d.action.selectedMove = function( dx, dy, dz ) {
+    if( !mki3d.tmp.selected ) return; // nothing to be moved
+    mki3d.tmpRefreshVersorsMatrix();
+    var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
+    selected =mki3d.tmp.selected;
+    var i;
+    for(i=0; i<selected.length; i++){
+	mki3d.vectorMove(selected[i].position, d[0], d[1], d[2]);
+    }
+    mki3d.redraw();
+    mki3d.message( "SELECTED ENDPOINTS MOVED BY: "+JSON.stringify(d) );
+}
+
+
+mki3d.action.upSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove(0, mki3d.data.cursor.step, 0);
+}
+
+mki3d.action.downSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove(0, -mki3d.data.cursor.step, 0);
+}
+
+mki3d.action.rightSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove(mki3d.data.cursor.step, 0, 0);
+}
+
+mki3d.action.leftSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove(-mki3d.data.cursor.step, 0, 0);
+}
+
+mki3d.action.forwardSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove( 0, 0, mki3d.data.cursor.step);
+}
+
+mki3d.action.backSelected = function(){
+    /* temporary: fixed directons ... */
+    mki3d.action.selectedMove( 0, 0, -mki3d.data.cursor.step);
+}
+
+
 /* CLIP */
 
 mki3d.action.upClip = function(){
@@ -219,48 +335,6 @@ mki3d.action.forwardClip = function(){
 mki3d.action.backClip = function(){
     /* temporary: fixed directons ... */
     mki3d.action.clip( 0, 0, -1);
-}
-
-
-
-/* setting actions for the mode */
-
-mki3d.action.setModeActions= function(){
-    /* sets actions for current mki3d.action.mode */
-    mki3d.message("MODE: <strong>"+mki3d.action.mode+"</strong>" );
-    switch(mki3d.action.mode){
-    case mki3d.action.ROTATE_MODE:
-	mki3d.action.up = mki3d.action.upRotate;
-	mki3d.action.down = mki3d.action.downRotate;
-	mki3d.action.right = mki3d.action.rightRotate;
-	mki3d.action.left = mki3d.action.leftRotate;
-	mki3d.action.forward = mki3d.action.forwardRotate;
-	mki3d.action.back = mki3d.action.backRotate;
-	// ...
-	mki3d.data.view.focusPoint = mki3d.vectorClone( mki3d.data.cursor.position );
-	mki3d.setModelViewMatrix();
-        mki3d.redraw();
-	break;
-    case mki3d.action.CURSOR_MODE:
-	mki3d.action.up = mki3d.action.upCursor;
-	mki3d.action.down = mki3d.action.downCursor;
-	mki3d.action.right = mki3d.action.rightCursor;
-	mki3d.action.left = mki3d.action.leftCursor;
-	mki3d.action.forward = mki3d.action.forwardCursor;
-	mki3d.action.back = mki3d.action.backCursor;
-	// ...
-	mki3d.messageAppend(" (CURSOR = "+JSON.stringify(mki3d.data.cursor.position)+")" );
-	break;
-    }
-
-}
-
-
-
-/* initialisation of actions */
-
-mki3d.action.init= function() {
-    mki3d.action.setModeActions(); // set the actions for initial mode
 }
 
 
@@ -298,18 +372,6 @@ mki3d.action.viewAlignRotation = function() {
     mki3d.setModelViewMatrix();
     mki3d.redraw();
 } 
-
-/* cursor manipulations */
-
-mki3d.action.cursorMove = function( dx, dy, dz ) {
-    mki3d.tmpRefreshVersorsMatrix();
-    var d = mki3d.matrixVectorProduct( mki3d.tmp.versorsMatrix , [dx,dy,dz] );
-    cursor = mki3d.data.cursor;
-    mki3d.vectorMove(cursor.position, d[0], d[1], d[2]);
-    // mki3d.loadCursor(); // -- is in redraw()
-    mki3d.redraw();
-    mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
-}
 
 
 mki3d.action.cursorMoveToNearestEndpoint = function() {
@@ -381,6 +443,8 @@ mki3d.action.cancelSelection= function(){
     mki3d.tmp.selected=[];
 }
 
+
+
 mki3d.action.selectByCursor= function(){
     var i;
     var cursor= mki3d.data.cursor;
@@ -399,7 +463,7 @@ mki3d.action.selectByCursor= function(){
             (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
 	  ) {
 	    points[i].selected=true;
-	    mki3d.tmp.selected.push( points[i] );
+	    // mki3d.tmp.selected.push( points[i] );
 	}
     points = mki3d.elementEndpointsInBox(
 	mki3d.data.model.triangles,
@@ -413,8 +477,9 @@ mki3d.action.selectByCursor= function(){
             (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
 	  ) {
 	    points[i].selected=true;
-	    mki3d.tmp.selected.push( points[i] );
+	    // mki3d.tmp.selected.push( points[i] );
 	}
+    mki3d.tmpRebuildSelected();
 }
 
 mki3d.action.selectInClipBox= function(){
@@ -426,7 +491,7 @@ mki3d.action.selectInClipBox= function(){
 	mki3d.data.clipMaxVector
     );
     for(i=0; i<points.length; i++) points[i].selected=true;
-    mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+    // mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
 
     points = mki3d.elementEndpointsInBox(
 	mki3d.data.model.triangles,
@@ -434,7 +499,8 @@ mki3d.action.selectInClipBox= function(){
 	mki3d.data.clipMaxVector
     );
     for(i=0; i<points.length; i++) points[i].selected=true;
-    mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+    // mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+    mki3d.tmpRebuildSelected();
 }
 
 /* view */
