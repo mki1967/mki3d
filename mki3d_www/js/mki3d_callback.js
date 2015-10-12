@@ -103,6 +103,16 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
+    case 50: // 2
+	mki3d.action.paintSelectedSegments();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	break; 
+    case 51: // 3
+	mki3d.action.paintSelectedTriangles();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.");
+	break; 
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
 	mki3d.action.colorMenu(); 

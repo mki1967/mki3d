@@ -428,6 +428,20 @@ mki3d.action.unclip = function (){
     mki3d.redraw();
 }
 
+/* data */
+
+mki3d.action.paintSelectedSegments = function(){
+    var sel = mki3d.getSelectedElements(mki3d.data.model.segments);
+    mki3d.paintElements( sel );
+    mki3d.redraw();
+}
+
+mki3d.action.paintSelectedTriangles = function(){
+    var sel = mki3d.getSelectedElements(mki3d.data.model.triangles);
+    mki3d.paintElements( sel );
+    mki3d.redraw();
+}
+
 /* light */
 
 mki3d.action.setLight = function(){

@@ -500,6 +500,8 @@ mki3d.getSelectedElements= function( elements ){
 }
  
 
+
+
 /* clean temporary keys from elements */
 
 mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
@@ -509,7 +511,14 @@ mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
             delete elements[i][j][key];
 }
 
+/* painting elements with cursor color */
+mki3d.paintElements = function(elements){
+    for(i=0; i<elements.length; i++) {
+	for( j=0; j<elements[i].length; j++ )
+	    elements[i][j].color = mki3d.vectorClone(mki3d.data.cursor.color);
+    }
 
+}
 
 
 
