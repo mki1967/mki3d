@@ -510,17 +510,20 @@ mki3d.action.cancelVisibilityRestrictions= function() {
     mki3d.redraw();
 }
 
+mki3d.action.viewSelectedElements = function() {
+    mki3d.tmp.display = {};
+    mki3d.tmp.display.model = {};
+    mki3d.tmp.display.model.segments = mki3d.getSelectedElements(mki3d.data.model.segments);
+    mki3d.tmp.display.model.triangles = mki3d.getSelectedElements(mki3d.data.model.triangles);
+    mki3d.redraw();
+}
+
+
 mki3d.action.viewSelectedSegments = function() {
     mki3d.tmp.display = {};
     mki3d.tmp.display.model = {};
-    mki3d.tmp.display.model.segments = [];
+    mki3d.tmp.display.model.segments = mki3d.getSelectedElements(mki3d.data.model.segments);
     mki3d.tmp.display.model.triangles = [];
-    if(!mki3d.tmp.selected) return; // nothing selected
-    var i;
-    for(i=0; i<mki3d.data.model.segments.length; i++)
-	if(mki3d.data.model.segments[i][0].selected &&
-	   mki3d.data.model.segments[i][1].selected )
-	    mki3d.tmp.display.model.segments.push(mki3d.data.model.segments[i]);
     mki3d.redraw();
 }
 
@@ -528,14 +531,7 @@ mki3d.action.viewSelectedTriangles = function() {
     mki3d.tmp.display = {};
     mki3d.tmp.display.model = {};
     mki3d.tmp.display.model.segments = [];
-    mki3d.tmp.display.model.triangles = [];
-    if(!mki3d.tmp.selected) return; // nothing selected
-    var i;
-    for(i=0; i<mki3d.data.model.triangles.length; i++)
-	if(mki3d.data.model.triangles[i][0].selected &&
-	   mki3d.data.model.triangles[i][1].selected &&
-	   mki3d.data.model.triangles[i][2].selected )
-	    mki3d.tmp.display.model.triangles.push(mki3d.data.model.triangles[i]);
+    mki3d.tmp.display.model.triangles = mki3d.getSelectedElements(mki3d.data.model.triangles);
     mki3d.redraw();
 }
 

@@ -387,19 +387,22 @@ mki3d.drawGraph = function (graph) {
 
     var gl= mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
-    /* draw triangles */
-    gl.bindBuffer(gl.ARRAY_BUFFER, graph.triangles );
-    gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, graph.trianglesColors);
-    gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 3*graph.nrOfTriangles);
-    /* draw lines - after triangles */
-    gl.bindBuffer(gl.ARRAY_BUFFER, graph.segments );
-    gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, graph.segmentsColors);
-    gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.LINES, 0, 2*graph.nrOfSegments);
-
+    if(graph.triangles){
+	/* draw triangles */
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.triangles );
+	gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.trianglesColors);
+	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+	gl.drawArrays(gl.TRIANGLES, 0, 3*graph.nrOfTriangles);
+    }
+    if(graph.segments){
+	/* draw lines - after triangles */
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.segments );
+	gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.segmentsColors);
+	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
+	gl.drawArrays(gl.LINES, 0, 2*graph.nrOfSegments);
+    }
 }
 
 
@@ -482,12 +485,35 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
     return selected;
 }
 
+/* get array of elements with all endpoints selected from the input */
+mki3d.getSelectedElements= function( elements ){
+    if(!mki3d.tmp.selected) return []; // nothing selected
+    var out=[];
+    var i,j;
+    for(i=0; i<elements.length; i++) {
+	var test = true;
+	for( j=0; j<elements[i].length; j++ )
+	    if(!elements[i][j].selected) test = false;
+	if(test) out.push( elements[i] );
+    }
+    return out;
+}
+ 
+
+/* clean temporary keys from elements */
+
 mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
     var i,j;
     for(i=0; i<elements.length; i++) 
 	for(j=0; j<elements[i].length; j++)
             delete elements[i][j][key];
 }
+
+
+
+
+
+/* messages */
 
 mki3d.message = function ( messageText ) {
     mki3d.html.divUpperMessage.innerHTML = messageText;

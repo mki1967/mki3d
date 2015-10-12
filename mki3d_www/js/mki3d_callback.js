@@ -195,6 +195,11 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
+    case 49: // 1
+	mki3d.action.viewSelectedElements();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED ELEMENTS.");
+	break; 
     case 50: // 2
 	mki3d.action.viewSelectedSegments();
 	mki3d.action.escapeToCanvas();
