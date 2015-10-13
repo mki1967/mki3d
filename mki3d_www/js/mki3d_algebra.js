@@ -9,13 +9,13 @@ mki3d.vectorClone= function (v){
 };
 
 /* lexicographic ordering */
-mki3d.vectorCompare = function( v, w ){
+mki3d.vectorCompare = function( v1, v2 ){
     var cmp=0;
-    cmp= w[0]-v[0];
+    cmp= v1[0]-v2[0];
     if(cmp != 0) return cmp;
-    cmp= w[1]-v[1];
+    cmp= v1[1]-v2[1];
     if(cmp != 0) return cmp;
-    cmp= w[2]-v[2];
+    cmp= v1[2]-v2[2];
     return cmp;
 };
 

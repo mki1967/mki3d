@@ -11,6 +11,10 @@ mki3d.file.startSaving = function () {
 
     /* clean data from temporratry markers */
     mki3d.action.cancelSelection();
+    /* unique-sort elements of the model */
+    mki3d.modelSortUnique();
+
+
 
     var myObjectString = JSON.stringify(mki3d.data);
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 

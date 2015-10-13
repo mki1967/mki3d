@@ -8,10 +8,11 @@ mki3d.newPoint = function ( x, y, z,  r, g, b , setIdx ){
     return { position: [x,y,z], color: [r,g,b], set: setIdx };
 }
 
+/* compare points: first compare set index, then positions */
 mki3d.pointCompare= function( point1, point2 ){
-    var cmp= mki3d.vectorCompare( point1.position , point2.position );
+    var cmp = point1.set-point2.set;
     if(cmp != 0 ) return cmp;
-    return point2.set-point1.set;
+    return mki3d.vectorCompare( point1.position , point2.position );
     // curently the color is ignored
 }
 
@@ -30,8 +31,21 @@ mki3d.newTriangle = function ( point1, point2, point3 ){
     return points; 
 }
 
+/* compare elements of the same type: either segments or triangles */
+mki3d.elementCompare = function(e1, e2){
+    var i;
+    var cmp=0;
+    for( i=0 ; i<e1.length; i++) {
+	cmp = mki3d.pointCompare(e1[i], e2[i])
+	if( cmp != 0 ) return cmp;
+    }
+    return cmp; // should be cmp == 0
+}
+
+
 /* An element is either a segment or a triangle.
    areEqual( el1, el2 )  tests equality of two elements  */
+
 
 mki3d.areEqualElements = function( element1, element2 ){
     element1.sort( mki3d.pointCompare );
@@ -498,9 +512,33 @@ mki3d.getSelectedElements= function( elements ){
     }
     return out;
 }
- 
 
 
+
+/* sort the elements and remove duplicates in the model */
+
+mki3d.elementsSortedUnique= function(elements){
+    elements.sort(mki3d.elementCompare);
+    var out=[];
+    if(elements.length == 0) return out;
+    out.push( elements[0] );
+    var i;
+    for(i=1; i<elements.length; i++) {
+	if(mki3d.elementCompare( elements[i-1], elements[i] ) != 0 ){
+	    out.push(elements[i]);
+	}
+	else { // for tests
+	    console.log(elements[i-1]);
+	    console.log(elements[i]);
+	}
+    }
+    return out;
+}
+
+mki3d.modelSortUnique= function(){
+    mki3d.data.model.segments = mki3d.elementsSortedUnique(mki3d.data.model.segments);
+    mki3d.data.model.triangles = mki3d.elementsSortedUnique(mki3d.data.model.triangles);
+}
 
 /* clean temporary keys from elements */
 
