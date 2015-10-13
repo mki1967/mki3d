@@ -8,6 +8,17 @@ mki3d.newPoint = function ( x, y, z,  r, g, b , setIdx ){
     return { position: [x,y,z], color: [r,g,b], set: setIdx };
 }
 
+mki3d.pointClone= function( p ) { // return clone of point p
+return mki3d.newPoint(  p.position[0],
+			p.position[1],
+			p.position[2],
+			p.color[0],
+			p.color[1],
+			p.color[2],
+			p.setIdx 
+		     );
+}
+
 /* compare points: first compare set index, then positions */
 mki3d.pointCompare= function( point1, point2 ){
     var cmp = point1.set-point2.set;
@@ -19,14 +30,17 @@ mki3d.pointCompare= function( point1, point2 ){
 
 /* segment is a sorted array of two points */
 mki3d.newSegment = function ( point1, point2 ){
-    var points= [point1, point2];
+    var points= [mki3d.pointClone(point1), 
+		 mki3d.pointClone(point2)];
     points.sort( mki3d.pointCompare );
     return points; 
 }
 
 /* triangle is a sorted array of three points */
 mki3d.newTriangle = function ( point1, point2, point3 ){
-    var points= [point1, point2, point3];
+    var points= [mki3d.pointClone(point1),
+		 mki3d.pointClone(point2),  
+		 mki3d.pointClone(point3)];
     points.sort( mki3d.pointCompare );
     return points; 
 }
@@ -499,20 +513,38 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
     return selected;
 }
 
+/* element is selected if all its endpoints are selected */
+
+mki3d.elementSelected= function( element ) {
+    var j;
+    for( j=0; j<element.length; j++ )
+	if(!element[j].selected) return false;
+    return true;
+}
+
 /* get array of elements with all endpoints selected from the input */
+
 mki3d.getSelectedElements= function( elements ){
     if(!mki3d.tmp.selected) return []; // nothing selected
     var out=[];
     var i,j;
     for(i=0; i<elements.length; i++) {
-	var test = true;
-	for( j=0; j<elements[i].length; j++ )
-	    if(!elements[i][j].selected) test = false;
-	if(test) out.push( elements[i] );
+	if( mki3d.elementSelected(elements[i]) ) out.push( elements[i] );
     }
     return out;
 }
 
+/* get the not selected elements */
+
+mki3d.getNotSelectedElements= function( elements ) {
+    if(!mki3d.tmp.selected) return elements; // nothing selected
+    var out=[];
+    var i,j;
+    for(i=0; i<elements.length; i++) {
+	if( !mki3d.elementSelected(elements[i]) ) out.push( elements[i] );
+    }
+    return out;
+}
 
 
 /* sort the elements and remove duplicates in the model */
@@ -557,6 +589,7 @@ mki3d.paintElements = function(elements){
     }
 
 }
+
 
 
 

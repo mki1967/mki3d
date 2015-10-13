@@ -113,6 +113,16 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend("<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.");
 	break; 
+    case 52: // 4
+	mki3d.action.deleteSelectedSegments();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> SELECTED SEGMENTS DELETED.");
+	break; 
+    case 53: // 5
+	mki3d.action.deleteSelectedTriangles();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> SELECTED TRIANGLES DELETED.");
+	break; 
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
 	mki3d.action.colorMenu(); 

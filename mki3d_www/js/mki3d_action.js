@@ -442,6 +442,17 @@ mki3d.action.paintSelectedTriangles = function(){
     mki3d.redraw();
 }
 
+
+mki3d.action.deleteSelectedSegments = function(){
+    mki3d.data.model.segments = mki3d.getNotSelectedElements( mki3d.data.model.segments );
+    mki3d.redraw();
+}
+
+mki3d.action.deleteSelectedTriangles = function(){
+    mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles );
+    mki3d.redraw();
+}
+
 /* light */
 
 mki3d.action.setLight = function(){
