@@ -15,7 +15,7 @@ return mki3d.newPoint(  p.position[0],
 			p.color[0],
 			p.color[1],
 			p.color[2],
-			p.setIdx 
+			p.set 
 		     );
 }
 
