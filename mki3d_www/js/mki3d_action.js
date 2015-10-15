@@ -76,7 +76,14 @@ mki3d.action.init= function() {
 }
 
 
-
+/* action of switching the set index */
+mki3d.action.nextSetIndex= function() {
+    mki3d.compressSetIndexes( mki3d.data );
+    console.log(mki3d.data);
+    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+    mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
+    mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
+}
 
 /* action of switching the mode */
 
@@ -257,6 +264,7 @@ mki3d.action.cursorMove = function( dx, dy, dz ) {
     mki3d.redraw();
     mki3d.message( "CURSOR = "+JSON.stringify(cursor.position) );
 }
+
 
 /* selection manipulations */
 
@@ -527,6 +535,19 @@ mki3d.action.selectInClipBox= function(){
     // mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
     mki3d.tmpRebuildSelected();
 }
+
+mki3d.action.selectCurrentSet= function(){
+    var model = mki3d.data.model;
+    var elements = model.segments.concat(model.triangles);
+    var i,j;
+    for(i=0; i<elements.length; i++) 
+	for(j=0; j<elements[i].length; j++){
+	    if(elements[i][j].set == mki3d.data.set.current ) elements[i][j].selected=true;
+	}
+    mki3d.tmpRebuildSelected();
+}
+
+
 
 /* view */
 

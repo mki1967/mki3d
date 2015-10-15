@@ -199,6 +199,9 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     case 67: // C
 	mki3d.action.selectByCursor();
 	break;
+    case 83: // S
+	mki3d.action.selectCurrentSet();
+	break;
 	// ... add remaining cases	
     default:
 	mki3d.action.escapeToCanvas();
@@ -331,9 +334,11 @@ mki3d.callback.canvasOnKeyDown = function (e){
     case 84: // T
 	mki3d.action.toggleMarker2();
 	break;
+    case 78: // N
+        mki3d.action.nextSetIndex();
+	break;
 
 	/*
-	  case 77: // M
 	  case 82: // R
 	  case 81: // Q
 	  case 69: // E
