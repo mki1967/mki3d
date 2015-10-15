@@ -98,6 +98,23 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
     };
 }
 
+mki3d.callback.dataCopyMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	mki3d.action.copySelected();
+	mki3d.action.escapeToCanvas();
+        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
+	break;
+    default:
+	mki3d.action.escapeToCanvas();
+	// temporary escape to canvas
+    };
+}
+
+
 mki3d.callback.dataMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     // TO DO
@@ -130,6 +147,9 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     case 76: // L
 	// LIGHT
 	mki3d.action.setLight();
+	break;
+    case 67: // C
+	mki3d.action.dataCopyMenu();
 	break;
     default:
 	mki3d.action.escapeToCanvas();

@@ -30,6 +30,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divCursorMenu= mki3d.html.registerDiv('#divCursorMenu');
     mki3d.html.divFileMenu= mki3d.html.registerDiv('#divFileMenu');
     mki3d.html.divDataMenu= mki3d.html.registerDiv('#divDataMenu');
+    mki3d.html.divDataCopyMenu= mki3d.html.registerDiv('#divDataCopyMenu');
     mki3d.html.divClipMenu= mki3d.html.registerDiv('#divClipMenu');
     mki3d.html.divSelectionMenu= mki3d.html.registerDiv('#divSelectionMenu');
     mki3d.html.divViewMenu= mki3d.html.registerDiv('#divViewMenu');

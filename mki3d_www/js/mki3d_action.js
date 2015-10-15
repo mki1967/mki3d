@@ -461,6 +461,22 @@ mki3d.action.deleteSelectedTriangles = function(){
     mki3d.redraw();
 }
 
+
+
+mki3d.action.copySelected = function(){
+    mki3d.compressSetIndexes(mki3d.data);
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+
+    /* copy segments */
+    var copy = mki3d.copyOfSelected( mki3d.data.model.segments, newIdx );
+    mki3d.data.model.segments = mki3d.data.model.segments.concat(copy);
+    /* copy triangles */
+    copy = mki3d.copyOfSelected( mki3d.data.model.triangles, newIdx );
+    mki3d.data.model.triangles = mki3d.data.model.triangles.concat(copy);
+
+    mki3d.data.set.current=newIdx;
+}
+
 /* light */
 
 mki3d.action.setLight = function(){
@@ -638,6 +654,11 @@ mki3d.action.fileMenu = function(){
 mki3d.action.dataMenu = function(){
     mki3d.message( mki3d.html.divDataMenu.innerHTML );
     window.onkeydown = mki3d.callback.dataMenuOnKeyDown;
+}
+
+mki3d.action.dataCopyMenu = function(){
+    mki3d.message( mki3d.html.divDataCopyMenu.innerHTML );
+    window.onkeydown = mki3d.callback.dataCopyMenuOnKeyDown;
 }
 
 mki3d.action.clipMenu = function(){

@@ -45,6 +45,47 @@ mki3d.newTriangle = function ( point1, point2, point3 ){
     return points; 
 }
 
+
+/* make disjoint clone of the element */
+mki3d.elementClone = function ( element ) {
+    var points=[];
+    var i;
+    for(i=0; i<element.length; i++)
+	points.push( mki3d.pointClone( element[i] ) );
+    return points;
+}
+
+/* make disjoint clone of the elements' array */
+mki3d.elementArrayClone = function( elementArray ){
+    var out =[];
+    var i;
+    for(i=0; i< elementArray.length; i++) 
+	out.push(mki3d.elementClone(elementArray[i]));
+    return out;
+}
+
+
+/* place all endpoints of element in set setIdx */
+mki3d.elementPlaceInSet = function( element, setIdx ) {
+    var i;
+    for(i=0; i<element.length; i++) element[i].set = setIdx;    
+}
+
+/* Place the elements' array in the set setIdx */
+mki3d.elementArrayPlaceInSet = function( elementArray, setIdx ){
+    var i;
+    for(i=0; i<elementArray.length; i++) 
+	mki3d.elementPlaceInSet(elementArray[i], setIdx);
+}
+
+mki3d.copyOfSelected= function( elements, setIdx ){
+    var copy= mki3d.elementArrayClone( mki3d.getSelectedElements(elements) );
+    mki3d.elementArrayPlaceInSet(copy, setIdx );
+    return copy;
+}
+
+
+
 /* compare elements of the same type: either segments or triangles */
 mki3d.elementCompare = function(e1, e2){
     var i;
