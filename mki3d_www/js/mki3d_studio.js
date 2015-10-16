@@ -84,7 +84,33 @@ mki3d.copyOfSelected= function( elements, setIdx ){
     return copy;
 }
 
+/* Returns glue segments to set setIdx, for all endpoints.  */
+mki3d.glueSegmentsOfEndpoints = function( endpoints, setIdx ){
+    var out=[];
+    var i;
+    for(i=0; i<endpoints.length; i++){
+	out.push( mki3d.newSegment(endpoints[i],endpoints[i]) );
+	out[out.length-1][1].set=setIdx; // the second endpoint in set setIdx
+	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+    }
+    return out;
+}
 
+/* Returns glue triangles to set setIdx, for all segments.  */
+mki3d.glueTrianglesOfSegments = function( segments, setIdx ){
+    var out=[];
+    var i;
+    for(i=0; i<segments.length; i++){
+	out.push( mki3d.newTriangle(segments[i][0],segments[i][0],segments[i][1]) );
+	out[out.length-1][0].set=setIdx; // one doubled endpoint in set setIdx
+	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+	out.push( mki3d.newTriangle(segments[i][0],segments[i][1],segments[i][1]) );
+	out[out.length-1][0].set=setIdx; 
+	out[out.length-1][1].set=setIdx; // two different endpoints in set setIdx
+	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+    }
+    return out;
+}
 
 /* compare elements of the same type: either segments or triangles */
 mki3d.elementCompare = function(e1, e2){
@@ -151,6 +177,13 @@ mki3d.modelInsertElement = function(array, element) {
 
 
 /* shading */
+
+mki3d.cancelShades = function() {
+    var triangles=mki3d.data.model.triangles;
+    var i;
+    for(i=0; i<triangles.length; i++)
+	triangles[i].shade=null;
+}
 
 /* shadeFactor is computed for triangles */
 /* Color of the triangle is scaled by the shade factor before placing it into buffer of colors */
@@ -541,6 +574,17 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
     // ...
 }
 
+/* return array of endpoints of elements */
+
+mki3d.getElementsEndpoints= function(elements){
+    var out=[];
+    var i,j;
+    for(i=0; i<elements.length; i++) 
+	for(j=0; j<elements[i].length; j++)
+		out.push(elements[i][j]);
+    return out;
+}
+
 /* return array of references to the endpoints in the box */
 mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
     var selected=[];
@@ -553,6 +597,9 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
 		selected.push(elements[i][j]);
     return selected;
 }
+
+
+
 
 /* element is selected if all its endpoints are selected */
 

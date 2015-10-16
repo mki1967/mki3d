@@ -72,3 +72,27 @@ mki3d.currentSetStatistics= function(data) {
     msg+= "<br> MAXIMAL NON-EMPTY SET INDEX IS: "+mki3d.getMaxSetIndex( data.model );
     return msg;
 }
+
+
+mki3d.isElementInSet = function(element, setIdx) {
+var i;
+for(i=0; i<element.length; i++)
+    if(element[i].set != setIdx) return false;
+return true;
+}
+
+mki3d.elementsInSet = function( elements, setIdx) {
+var out=[];
+var i;
+for(i=0; i<elements.length; i++)
+    if(mki3d.isElementInSet(elements[i], setIdx)) out.push(elements[i]);
+return out;
+}
+
+
+mki3d.createInSetModel = function(setIdx){
+var model={};
+model.segments= mki3d.elementsInSet( mki3d.data.model.segments, setIdx);
+model.triangles= mki3d.elementsInSet( mki3d.data.model.triangles, setIdx);
+return model;
+};

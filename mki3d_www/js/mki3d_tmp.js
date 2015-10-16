@@ -95,11 +95,7 @@ mki3d.tmpResetDisplayModel= function(){
 /* rebuilds tmp.selected table */
 
 mki3d.tmpAddSelectedFromElements= function(elements){
-    var points = mki3d.elementEndpointsInBox(
-        elements,
-	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
-	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
-    );
+    var points = mki3d.getElementsEndpoints( elements );
     var i;
     for( i=0; i<points.length; i++ ) {
 	if(points[i].selected) mki3d.tmp.selected.push(points[i]);

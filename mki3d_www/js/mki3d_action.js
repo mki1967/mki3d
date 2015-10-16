@@ -78,11 +78,23 @@ mki3d.action.init= function() {
 
 /* action of switching the set index */
 mki3d.action.nextSetIndex= function() {
-    mki3d.compressSetIndexes( mki3d.data );
-    console.log(mki3d.data);
-    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
-    mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
-    mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
+    if(!mki3d.tmp.nextSetDisplayModelBackup){
+	mki3d.compressSetIndexes( mki3d.data );
+	console.log(mki3d.data);
+	var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+	mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
+	mki3d.tmp.nextSetDisplayModelBackup= mki3d.tmp.display.model;
+	mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
+	mki3d.redraw();
+	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
+	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCLUDED ELEMENTS (PRESS 'N' AGAIN TO RESTORE PREVIOUS DISPLAY.)");
+    }  else {
+	mki3d.tmp.display.model=mki3d.tmp.nextSetDisplayModelBackup;
+	mki3d.tmp.nextSetDisplayModelBackup=null;
+	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
+	mki3d.messageAppend("<br>(PRESS 'N' AGAIN TO CHANGE CURRENT SET.)");
+	mki3d.redraw();
+    }
 }
 
 /* action of switching the mode */
@@ -277,6 +289,8 @@ mki3d.action.selectedMove = function( dx, dy, dz ) {
     for(i=0; i<selected.length; i++){
 	mki3d.vectorMove(selected[i].position, d[0], d[1], d[2]);
     }
+
+    mki3d.cancelShades();
     mki3d.redraw();
     mki3d.message( "SELECTED ENDPOINTS MOVED BY: "+JSON.stringify(d) );
 }
@@ -476,6 +490,21 @@ mki3d.action.copySelected = function(){
 
     mki3d.data.set.current=newIdx;
 }
+
+/* glue selected segments' endpoints with current set */
+mki3d.action.glueSegments = function(){
+    var endpoints = mki3d.getElementsEndpoints(mki3d.getSelectedElements(mki3d.data.model.segments));
+    var glues = mki3d.glueSegmentsOfEndpoints( endpoints, mki3d.data.set.current);
+    mki3d.data.model.segments = mki3d.data.model.segments.concat(glues);
+}
+
+/* glue selected segments with current set */
+mki3d.action.glueTriangles = function(){
+    var segs = mki3d.getSelectedElements(mki3d.data.model.segments);
+    var glues = mki3d.glueTrianglesOfSegments( segs, mki3d.data.set.current);
+    mki3d.data.model.triangles = mki3d.data.model.triangles.concat(glues);
+}
+
 
 /* light */
 
