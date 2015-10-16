@@ -56,7 +56,7 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	  <dt> Arrow Keys, 'F', 'B','V'</dt>
 	  <dd> - Depending on the MODE, either: move cursor, selected endpoints,  or rotate the screen</dd>
 	  <dt>'A'</dt>
-	  <dd> - Switch action MODE</dd>
+	  <dd> - Switch action MODE (either rotate, move cursor, or move selected endpoints)</dd>
 	  <dt>'N'</dt>
 	  <dd> - Change current SET INDEX</dd>
 	  <dt>Shift</dt>
@@ -68,19 +68,46 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	  </dd>
 	  <dt>Space</dt>
 	  <dd> - Align view rotation to right angles</dd>
+	  <dt>Enter</dt>
+	  <dd> - Depending on markers:
+	    <ul>
+	      <li> if MARKER1 is not set, then set MARKER1 </li>
+	      <li> if only MARKER1 is set, then insert segment between MARKER1 and CURSOR 
+		and set MARKER1 to CURSOR 
+	      </li>
+	      <li> if MARKER1 and MARKER2 are both set, then insert triangle between MARKER1, MARKER2, and CURSOR
+		and set MARKER1 to CURSOR and cancel MARKER2
+	      </li>
+	    </ul> 
+	  </dd>
+	  <dt>Escape</dt>
+	  <dd> - Cancel both markers </dd>
+	  <dt>'T'</dt>
+	  <dd> - Toggle MARKER2 (either set it to CURSOR or cancel it) </dd>
 	</dl>
       </p>
+      
+      <h3>About</h3>
+      <p> 
+	MKI3D RAPID MODELER by Marcin Kik mki1967@gmail.com. 
+	The project is hosted on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> 
+      </p>
+
+      <h3> General description </h3>
       <p>
-	<h3> General description </h3>
 	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
         Each <em>segment</em> is defined by a pair of <em>points</em>. 
         Each <em>triangle</em> is defined by a triple of <em>points</em>. 
         Each <em>point</em> has position in (x,y,z) coordinates and a color (r,g,b).
         Each <em>point</em> belongs to a single <em>set</em>.
         The <em>sets</em> are indexed by natural numbers.
+        Element is <em>in</em> a set if all its endpoints are in the set.
+        Element is <em>glue element</em> its endpoints are different sets.
+
+	Endpoints can be <em>selected</em>.
+	Element is <em>selected</em> if all its endpoints are selected.
       </p>
 
-      <p> You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </p>
     </div>
 
     <div id="divMainMenu" display="none">
@@ -159,7 +186,7 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	<dt>'5'</dt>
 	<dd> - DELETE SELECTED TRIANGLES </dd>
 	<dt>'C'</dt>
-	<dd> - COPY  SUBMENU ... </dd>
+	<dd> - COPY  SUB-MENU ... </dd>
       </dl>
     </div>
 
@@ -169,11 +196,11 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	<dt>'0'</dt>
 	<dd> - COPY SELECTED ELEMENTS TO A NEW SET  </dd>
  	<dt>'1'</dt>
-	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS' ENPOINTS </dd>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS' ENDPOINTS </dd>
  	<dt>'2'</dt>
 	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS </dd>
  	<dt>'3'</dt>
-	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS AND SEGMENTS' ENPOINTS </dd>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS AND SEGMENTS' EN-POINTS </dd>
       </dl>
     </div>
 
