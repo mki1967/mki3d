@@ -87,8 +87,13 @@ mki3d.action.nextSetIndex= function() {
 	mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
 	mki3d.redraw();
 	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
-	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCLUDED ELEMENTS (PRESS 'N' AGAIN TO RESTORE PREVIOUS DISPLAY.)");
-    }  else {
+	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCLUDED ELEMENTS (PRESS 'N' AGAIN TO DISPLAY ALL INCIDENT ELEMENTS.)");
+    } else if(mki3d.tmp.display.model.inSet) {
+	mki3d.tmp.display.model=mki3d.createIncidentToSetModel(mki3d.data.set.current);
+	mki3d.redraw();
+	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
+	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCIDENT ELEMENTS (PRESS 'N' AGAIN TO RESTORE PREVIOUS DISPLAY.)");
+    } else {
 	mki3d.tmp.display.model=mki3d.tmp.nextSetDisplayModelBackup;
 	mki3d.tmp.nextSetDisplayModelBackup=null;
 	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );

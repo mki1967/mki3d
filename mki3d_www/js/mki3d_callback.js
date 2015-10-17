@@ -276,16 +276,19 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
 	mki3d.action.viewSelectedElements();
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED ELEMENTS.");
+	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
 	break; 
     case 50: // 2
 	mki3d.action.viewSelectedSegments();
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED SEGMENTS.");
+	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
 	break; 
     case 51: // 3
 	mki3d.action.viewSelectedTriangles();
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED TRIANGLES.");
+	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
 	break; 
     case 67: // C
 	mki3d.action.cancelVisibilityRestrictions();
