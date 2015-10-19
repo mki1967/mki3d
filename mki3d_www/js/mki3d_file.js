@@ -44,13 +44,47 @@ mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
     writableEntry.createWriter(function(writer){ mki3d.file.writerCallback(writer,saver); });	
 }
 
+/* function waitForIO from: 
+https://github.com/GoogleChrome/chrome-app-samples/blob/master/samples/filesystem-access/js/app.js
+*/ 
+
+function waitForIO(writer, callback) {
+  // set a watchdog to avoid eventual locking:
+  var start = Date.now();
+  // wait for a few seconds
+  var reentrant = function() {
+    if (writer.readyState===writer.WRITING && Date.now()-start<4000) {
+      setTimeout(reentrant, 100);
+      return;
+    }
+    if (writer.readyState===writer.WRITING) {
+      console.error("Write operation taking too long, aborting!"+
+        " (current writer readyState is "+writer.readyState+")");
+      writer.abort();
+    } 
+    else {
+      callback();
+    }
+  };
+  setTimeout(reentrant, 100);
+}
+
+
 
 mki3d.file.writerCallback= function (writer, saver) {
     saver.writer=writer;
     writer.onerror = saver.errorHandler;
     writer.onwriteend = saver.writeEndHandler;
+    writer.truncate(saver.blob.size);
+/*
     writer.seek(0);
     writer.write(saver.blob);
+*/
+    waitForIO(writer, function() {
+        writer.seek(0);
+        writer.write(saver.blob);
+    });
+
 }
 
 mki3d.file.savingEndHandler=   function (saver){
