@@ -154,6 +154,11 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
+    case 48: //0 
+	mki3d.action.paintSelectedEndpoints();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	break; 
     case 50: // 2
 	mki3d.action.paintSelectedSegments();
 	mki3d.action.escapeToCanvas();
@@ -261,6 +266,12 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
 	break;
     case 51: // 3
 	mki3d.action.extendSelectionByIncident(mki3d.data.model.triangles);
+	break;
+    case 52: // 4
+	mki3d.action.unselect(mki3d.data.model.segments);
+	break;
+    case 53: // 5
+	mki3d.action.unselect(mki3d.data.model.triangles);
 	break;
 	// ... add remaining cases	
     default:

@@ -456,6 +456,10 @@ mki3d.action.unclip = function (){
 }
 
 /* data */
+mki3d.action.paintSelectedEndpoints = function(){
+    if(!mki3d.tmp.selected) return;
+    mki3d.paintEndpoints(mki3d.tmp.selected);
+}
 
 mki3d.action.paintSelectedSegments = function(){
     var sel = mki3d.getSelectedElements(mki3d.data.model.segments);
@@ -526,7 +530,10 @@ mki3d.action.cancelSelection= function(){
     mki3d.tmp.selected=[];
 }
 
-
+mki3d.action.unselect= function(elements){
+    mki3d.cleanElementEndpointsFromKey(elements, 'selected');
+    mki3d.tmpRebuildSelected();
+}
 
 mki3d.action.selectByCursor= function(){
     var i;

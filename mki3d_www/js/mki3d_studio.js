@@ -9,14 +9,14 @@ mki3d.newPoint = function ( x, y, z,  r, g, b , setIdx ){
 }
 
 mki3d.pointClone= function( p ) { // return clone of point p
-return mki3d.newPoint(  p.position[0],
-			p.position[1],
-			p.position[2],
-			p.color[0],
-			p.color[1],
-			p.color[2],
-			p.set 
-		     );
+    return mki3d.newPoint(  p.position[0],
+			    p.position[1],
+			    p.position[2],
+			    p.color[0],
+			    p.color[1],
+			    p.color[2],
+			    p.set 
+			 );
 }
 
 /* compare points: first compare set index, then positions */
@@ -535,7 +535,7 @@ mki3d.getElementsEndpoints= function(elements){
     var i,j;
     for(i=0; i<elements.length; i++) 
 	for(j=0; j<elements[i].length; j++)
-		out.push(elements[i][j]);
+	    out.push(elements[i][j]);
     return out;
 }
 
@@ -667,6 +667,13 @@ mki3d.paintElements = function(elements){
 	    elements[i][j].color = mki3d.vectorClone(mki3d.data.cursor.color);
     }
 
+}
+
+/* painting endpoints with cursor color */
+mki3d.paintEndpoints = function(endpoints){
+    var j;
+    for( j=0; j<endpoints.length; j++ )
+	endpoints[j].color = mki3d.vectorClone(mki3d.data.cursor.color);
 }
 
 
