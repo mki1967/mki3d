@@ -597,6 +597,15 @@ mki3d.action.selectCurrentSet= function(){
     mki3d.tmpRebuildSelected();
 }
 
+/* extend selection by remaining endpoints of incident elements */
+mki3d.action.extendSelectionByIncident= function(elements){
+    var incident= mki3d.getIncidentToSelectedElements( elements );
+    var i;
+    for(i =0 ; i<incident.length; i++) mki3d.selectElement(incident[i]);
+    mki3d.tmpRebuildSelected();
+    mki3d.redraw();    
+}
+
 
 
 /* view */

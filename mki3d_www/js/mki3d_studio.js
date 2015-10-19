@@ -65,52 +65,6 @@ mki3d.elementArrayClone = function( elementArray ){
 }
 
 
-/* place all endpoints of element in set setIdx */
-mki3d.elementPlaceInSet = function( element, setIdx ) {
-    var i;
-    for(i=0; i<element.length; i++) element[i].set = setIdx;    
-}
-
-/* Place the elements' array in the set setIdx */
-mki3d.elementArrayPlaceInSet = function( elementArray, setIdx ){
-    var i;
-    for(i=0; i<elementArray.length; i++) 
-	mki3d.elementPlaceInSet(elementArray[i], setIdx);
-}
-
-mki3d.copyOfSelected= function( elements, setIdx ){
-    var copy= mki3d.elementArrayClone( mki3d.getSelectedElements(elements) );
-    mki3d.elementArrayPlaceInSet(copy, setIdx );
-    return copy;
-}
-
-/* Returns glue segments to set setIdx, for all endpoints.  */
-mki3d.glueSegmentsOfEndpoints = function( endpoints, setIdx ){
-    var out=[];
-    var i;
-    for(i=0; i<endpoints.length; i++){
-	out.push( mki3d.newSegment(endpoints[i],endpoints[i]) );
-	out[out.length-1][1].set=setIdx; // the second endpoint in set setIdx
-	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-    }
-    return out;
-}
-
-/* Returns glue triangles to set setIdx, for all segments.  */
-mki3d.glueTrianglesOfSegments = function( segments, setIdx ){
-    var out=[];
-    var i;
-    for(i=0; i<segments.length; i++){
-	out.push( mki3d.newTriangle(segments[i][0],segments[i][0],segments[i][1]) );
-	out[out.length-1][0].set=setIdx; // one doubled endpoint in set setIdx
-	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-	out.push( mki3d.newTriangle(segments[i][0],segments[i][1],segments[i][1]) );
-	out[out.length-1][0].set=setIdx; 
-	out[out.length-1][1].set=setIdx; // two different endpoints in set setIdx
-	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-    }
-    return out;
-}
 
 /* compare elements of the same type: either segments or triangles */
 mki3d.elementCompare = function(e1, e2){
@@ -599,6 +553,14 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
 }
 
 
+/* select */
+
+/* select all endpoints of the element */
+mki3d.selectElement= function( element ) {
+    var j;
+    for( j=0; j<element.length; j++ ) element[j].selected=true;
+    return true;
+}
 
 
 /* element is selected if all its endpoints are selected */
@@ -610,12 +572,21 @@ mki3d.elementSelected= function( element ) {
     return true;
 }
 
+/* element is incident to selected if at least one of its endpoints is selected */
+
+mki3d.elementIncidentToSelected= function( element ) {
+    var j;
+    for( j=0; j<element.length; j++ )
+	if(element[j].selected) return true;
+    return false;
+}
+
 /* get array of elements with all endpoints selected from the input */
 
 mki3d.getSelectedElements= function( elements ){
     if(!mki3d.tmp.selected) return []; // nothing selected
     var out=[];
-    var i,j;
+    var i;
     for(i=0; i<elements.length; i++) {
 	if( mki3d.elementSelected(elements[i]) ) out.push( elements[i] );
     }
@@ -632,6 +603,26 @@ mki3d.getNotSelectedElements= function( elements ) {
 	if( !mki3d.elementSelected(elements[i]) ) out.push( elements[i] );
     }
     return out;
+}
+
+/* get the elements incident to selected */
+
+mki3d.getIncidentToSelectedElements= function( elements ){
+    if(!mki3d.tmp.selected) return []; // nothing selected
+    var out=[];
+    var i;
+    for(i=0; i<elements.length; i++) {
+	if( mki3d.elementIncidentToSelected(elements[i]) ) out.push( elements[i] );
+    }
+    return out;
+}
+
+
+/* get the array of the clones of selected elements from the elements */
+mki3d.copyOfSelected= function( elements, setIdx ){
+    var copy= mki3d.elementArrayClone( mki3d.getSelectedElements(elements) );
+    mki3d.elementArrayPlaceInSet(copy, setIdx );
+    return copy;
 }
 
 
@@ -677,8 +668,6 @@ mki3d.paintElements = function(elements){
     }
 
 }
-
-
 
 
 /* messages */

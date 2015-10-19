@@ -41,7 +41,6 @@ mki3d.data.cursor.step = 1; // initial value
 
 
 mki3d.data.clipMaxVector = [MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS];
-// mki3d.data.clipMaxVector = [9 , 9, 9]; // for tests
 mki3d.data.clipMinVector = [-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS];
 
 mki3d.data.light = {};

@@ -87,26 +87,32 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	</dl>
       </p>
       
+      <h3> General description </h3>
+      <p>
+	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
+        Each <em>segment</em> is defined by a pair of <em>points</em> (<em> endpoints</em> of the segment). 
+        Each <em>triangle</em> is defined by a triple of <em>points</em> (<em> endpoints</em> of the triangle). 
+        Each <em>point</em> has position in (x,y,z) coordinates and a color (red,green,blue).
+        Each <em>point</em> belongs to a single <em>set</em>.
+        The <em>sets</em> are indexed by natural numbers.
+	The set index numbers are assigned automatically to the endpoints,
+	and the program tries to keep the indexes of non-empty sets to be consecutive numbers
+	starting from zero.
+        Element is <em>in</em> a set if all its endpoints are in the set.
+	Element is <em>incident to</em> a set if at least one of its endpoints is in the set.
+        Element is <em>glue element</em> if its endpoints are different sets.
+	Glue element is incident to more than one set it is not in any set.
+
+	Endpoints can be <em>selected</em>.
+	Element is <em>selected</em> if all its endpoints are selected.
+      </p>
+
       <h3>About</h3>
       <p> 
 	MKI3D RAPID MODELER by Marcin Kik mki1967@gmail.com. 
 	The project is hosted on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> 
       </p>
 
-      <h3> General description </h3>
-      <p>
-	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
-        Each <em>segment</em> is defined by a pair of <em>points</em>. 
-        Each <em>triangle</em> is defined by a triple of <em>points</em>. 
-        Each <em>point</em> has position in (x,y,z) coordinates and a color (r,g,b).
-        Each <em>point</em> belongs to a single <em>set</em>.
-        The <em>sets</em> are indexed by natural numbers.
-        Element is <em>in</em> a set if all its endpoints are in the set.
-        Element is <em>glue element</em> its endpoints are different sets.
-
-	Endpoints can be <em>selected</em>.
-	Element is <em>selected</em> if all its endpoints are selected.
-      </p>
 
     </div>
 
@@ -200,7 +206,7 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
  	<dt>'2'</dt>
 	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS </dd>
  	<dt>'3'</dt>
-	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS AND SEGMENTS' EN-POINTS </dd>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS AND SEGMENTS' ENDPOINTS </dd>
       </dl>
     </div>
 
@@ -225,6 +231,10 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	<dd> - ADD ENDPOINTS INCIDENT TO CURSOR AND MARKERS  </dd>
 	<dt>'S'</dt>
 	<dd> - ADD ENDPOINTS FROM THE CURRENT SET  </dd>
+	<dt>'2'</dt>
+	<dd> - ADD ALL ENDPOINTS OF SEGMENTS INCIDENT TO SELECTION </dd>
+	<dt>'3'</dt>
+	<dd> - ADD ALL ENDPOINTS OF TRIANGLES INCIDENT TO SELECTION </dd>
 	<dt>'R'</dt>
 	<dd> - CANCEL ALL SELECTIONS  </dd>
       </dl>
