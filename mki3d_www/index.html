@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html>
-<!--
-MKI 3D RAPID MODELER
-Copyright (C) 2015  Marcin Kik mki1967@gmail.com 
-    The JavaScript code in this page is free software: you can
-    redistribute it and/or modify it under the terms of the GNU
-    General Public License (GNU GPL) as published by the Free Software
-    Foundation, either version 3 of the License, or (at your option)
-    any later version.  The code is distributed WITHOUT ANY WARRANTY;
-    without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+<html id="htmlId">
+  <!--
+      MKI 3D RAPID MODELER
+      Copyright (C) 2015  Marcin Kik mki1967@gmail.com 
+      The JavaScript code in this page is free software: you can
+      redistribute it and/or modify it under the terms of the GNU
+      General Public License (GNU GPL) as published by the Free Software
+      Foundation, either version 3 of the License, or (at your option)
+      any later version.  The code is distributed WITHOUT ANY WARRANTY;
+      without even the implied warranty of MERCHANTABILITY or FITNESS
+      FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
 
-    As additional permission under GNU GPL version 3 section 7, you
-    may distribute non-source (e.g., minimized or compacted) forms of
-    that code without the copy of the GNU GPL normally required by
-    section 4, provided you include this license notice and a URL
-    through which recipients can access the Corresponding Source.
--->
+      As additional permission under GNU GPL version 3 section 7, you
+      may distribute non-source (e.g., minimized or compacted) forms of
+      that code without the copy of the GNU GPL normally required by
+      section 4, provided you include this license notice and a URL
+      through which recipients can access the Corresponding Source.
+    -->
   <head>
     <title>MKI 3D RAPID MODELER</title>
     <link rel="stylesheet" href="styles.css">
@@ -44,8 +44,9 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	-->
 
 
-    <div id="divHelp" display="none">
+    <div id="divHelp" display="none"  style="overflow-y: auto;">
       <h2>Help screen:</h2>
+      <p> (Press 'Q' or Escape to return to the canvas.) </p>
       <p>
 	<h3> Key presses on the canvas: </h3>
 	<dl>
@@ -87,6 +88,7 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	</dl>
       </p>
       
+
       <h3> General description </h3>
       <p>
 	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
@@ -100,13 +102,78 @@ Copyright (C) 2015  Marcin Kik mki1967@gmail.com
 	starting from zero.
         Element is <em>in</em> a set if all its endpoints are in the set.
 	Element is <em>incident to</em> a set if at least one of its endpoints is in the set.
-        Element is <em>glue element</em> if its endpoints are different sets.
-	Glue element is incident to more than one set it is not in any set.
+        Element is <em>glue element</em> if its endpoints are in different sets.
+	Glue element is incident to more than one set and it is not in any set.
 
 	Endpoints can be <em>selected</em>.
 	Element is <em>selected</em> if all its endpoints are selected.
       </p>
 
+      <h3> Some Usage Hints </h3>
+      <ul>
+	<li>
+          Press the Shift key to move the cursor with the Arrows and 'B' (i.e. back), 'F' (i.e. forward) keys.
+	</li>
+	<li>
+          Release the Shift key to rotate the model around the cursor with the arrows and 'B', 'F'.
+          (Focus point - the center of the screen - is set to the cursor position.)
+	</li>
+	<li>
+	  Use Space to align rotation rotation to right angles.
+	</li>
+        <li>
+          To insert segment lines:
+	  <ol>
+	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the second endpoint and press Enter to insert the segment 
+	      and to set MARKER1 at the new position, </li>
+            <li> and so on - continue with the next endpoints.</li>
+	  </ol>
+          To stop inserting lines, press Escape to reset markers.
+        </li>
+        <li> 
+         To insert a triangle:
+	  <ol>
+	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the second endpoint and press 'T' to set MARKER2, </li>
+            <li> move the cursor to the third endpoint and press Enter to insert the triangle. 
+                 (This also sets MARKER1, so you can continue inserting segments or triangles.)
+	    </li>
+	  </ol>
+
+	</li>
+	<li> 
+          The light consists of directional fraction and small ambient fraction. 
+	  To set directional light for triangles' shading, rotate the model and press 'QDL' sequence of keys.
+          Directional light is set perpendicular to the screen (in both directions).
+	</li>
+	<li>
+	  The color of inserted endpoint is the color of the cursor.
+          The selected endpoints can be painted with current cursor color.
+          If endpoints of the element have different colors, 
+	  the colors inside the element are interpolated.
+	</li>
+	<li>
+          You can limit visibility by clipping - the key sequences 'QX...'
+	</li>
+	<li>
+	  You can select endpoints - the key sequences 'QS ...'
+	</li>
+	<li>
+	  You may use selection to limit visibility (in 'QV' sub-menu) or 
+	  manipulate selected endpoints (in 'QD' sub-menu)
+	</li>
+	<li>
+	  Sets can be used for grouping endpoints.
+	  Use 'N' in canvas mode to cycle through the sets inspecting their included and incident elements.
+          (The last set in the cycle is always empty - stop at it if you want the following endpoints to be 
+            in a new set.)
+	  You also create a new set when you are making a copy of selected elements ('QDC...').
+          After creation of a copy, the selection is switched to this new copy.
+          Thus the action of moving selected endpoints moves the new copy.
+	</li>
+      </ul>
+      
       <h3>About</h3>
       <p> 
 	MKI3D RAPID MODELER by Marcin Kik mki1967@gmail.com. 

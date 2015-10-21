@@ -667,6 +667,7 @@ mki3d.action.viewScaleDown = function() {
 /* display help */
 mki3d.action.help = function() {
     mki3d.html.hideAllDivs();
+    mki3d.html.html.style.overflowY="auto";
     mki3d.html.showDiv(mki3d.html.divHelp);
     window.onkeydown = mki3d.callback.helpOnKeyDown;
 }

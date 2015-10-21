@@ -3,7 +3,15 @@
 mki3d.callback = {};
 
 mki3d.callback.helpOnKeyDown = function (e){
-    mki3d.action.escapeToCanvas();
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+    case 27: // Esc
+    case 81: // Q
+	mki3d.html.html.style.overflowY="";
+	mki3d.action.escapeToCanvas();
+	break;
+    }
 }
 
 
