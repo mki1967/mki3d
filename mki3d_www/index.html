@@ -46,9 +46,19 @@
 
     <div id="divHelp" display="none"  style="overflow-y: auto;">
       <h2>Help screen:</h2>
+
       <p> (Press 'Q' or Escape to return to the canvas.) </p>
+
+      <h3> Warnings: </h3>    
+
       <p>
-	<h3> Key presses on the canvas: </h3>
+	Data protection mechanisms such as 'undo' or 'autosave' are still not implemented.
+	User operations are irreversible without warnings.
+	The best strategy is frequent saving of your data in a file. 
+      </p>
+
+      <h3> Key presses on the canvas: </h3>
+      <p>
 	<dl>
 	  <dt>'H'</dt>
 	  <dd> - This help screen</dd>
@@ -132,12 +142,12 @@
           To stop inserting lines, press Escape to reset markers.
         </li>
         <li> 
-         To insert a triangle:
+          To insert a triangle:
 	  <ol>
 	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
 	    <li> move the cursor to the second endpoint and press 'T' to set MARKER2, </li>
             <li> move the cursor to the third endpoint and press Enter to insert the triangle. 
-                 (This also sets MARKER1, so you can continue inserting segments or triangles.)
+              (This also sets MARKER1, so you can continue inserting segments or triangles.)
 	    </li>
 	  </ol>
 
@@ -167,10 +177,13 @@
 	  Sets can be used for grouping endpoints.
 	  Use 'N' in canvas mode to cycle through the sets inspecting their included and incident elements.
           (The last set in the cycle is always empty - stop at it if you want the following endpoints to be 
-            in a new set.)
+          in a new set.)
 	  You also create a new set when you are making a copy of selected elements ('QDC...').
           After creation of a copy, the selection is switched to this new copy.
           Thus the action of moving selected endpoints moves the new copy.
+	</li>
+	<li>
+	  DO NOT FORGET TO SAVE YOUR DATA (key sequence: 'QFS')
 	</li>
       </ul>
       
