@@ -115,7 +115,7 @@ mki3d.matrixInverse= function( m ){
     var det = mki3d.matrixDeterminant(m);
 
     if(det == 0) {
-	console.log(m);
+	// console.log(m);
 	Throw ("mki3d.matrixInverse: non-invertible matrix");
     }
 

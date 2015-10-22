@@ -20,10 +20,10 @@ mki3d.file.startSaving = function () {
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
     saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName  };
     saver.errorHandler = function(e) { console.error(e); }; 
-//    saver.savingEndHandler= savingEndHandler;
+    //    saver.savingEndHandler= savingEndHandler;
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
-	console.log("e"); // for tests..
+	// console.log(e); // for tests..
 	mki3d.file.savingEndHandler(saver); 
     };
     chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
@@ -37,7 +37,7 @@ mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
 	return;
     }
     chrome.fileSystem.getDisplayPath(writableEntry, function (displayPath) { 
-	console.log(displayPath);  
+	// console.log(displayPath);  
         mki3d.file.suggestedName= displayPath;
     }
 				    );
@@ -45,28 +45,28 @@ mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
 }
 
 /* function waitForIO from: 
-https://github.com/GoogleChrome/chrome-app-samples/blob/master/samples/filesystem-access/js/app.js
+   https://github.com/GoogleChrome/chrome-app-samples/blob/master/samples/filesystem-access/js/app.js
 */ 
 
 function waitForIO(writer, callback) {
-  // set a watchdog to avoid eventual locking:
-  var start = Date.now();
-  // wait for a few seconds
-  var reentrant = function() {
-    if (writer.readyState===writer.WRITING && Date.now()-start<4000) {
-      setTimeout(reentrant, 100);
-      return;
-    }
-    if (writer.readyState===writer.WRITING) {
-      console.error("Write operation taking too long, aborting!"+
-        " (current writer readyState is "+writer.readyState+")");
-      writer.abort();
-    } 
-    else {
-      callback();
-    }
-  };
-  setTimeout(reentrant, 100);
+    // set a watchdog to avoid eventual locking:
+    var start = Date.now();
+    // wait for a few seconds
+    var reentrant = function() {
+	if (writer.readyState===writer.WRITING && Date.now()-start<4000) {
+	    setTimeout(reentrant, 100);
+	    return;
+	}
+	if (writer.readyState===writer.WRITING) {
+	    console.error("Write operation taking too long, aborting!"+
+			  " (current writer readyState is "+writer.readyState+")");
+	    writer.abort();
+	} 
+	else {
+	    callback();
+	}
+    };
+    setTimeout(reentrant, 100);
 }
 
 
@@ -76,10 +76,10 @@ mki3d.file.writerCallback= function (writer, saver) {
     writer.onerror = saver.errorHandler;
     writer.onwriteend = saver.writeEndHandler;
     writer.truncate(saver.blob.size);
-/*
-    writer.seek(0);
-    writer.write(saver.blob);
-*/
+    /*
+      writer.seek(0);
+      writer.write(saver.blob);
+    */
     waitForIO(writer, function() {
         writer.seek(0);
         writer.write(saver.blob);
@@ -88,15 +88,15 @@ mki3d.file.writerCallback= function (writer, saver) {
 }
 
 mki3d.file.savingEndHandler=   function (saver){
-    console.log(saver); // for tests ...
+    // console.log(saver); // for tests ...
     mki3d.action.escapeToCanvas();
-   } 
+} 
 
 /* LOADING */
 
 mki3d.file.loadingEndHandler = function (loader){
     if(loader.loadedObject) {
-	console.log(loader.loadedObject); // for tests ...
+	// console.log(loader.loadedObject); // for tests ...
 	mki3d.data = loader.loadedObject; // dangerous !!!
         mki3d.tmpCancel();
 	mki3d.action.escapeToCanvas(); 
@@ -119,7 +119,7 @@ mki3d.file.startLoading = function ( ) {
     };
 
     loader.loadEndHandler = function(e) { 
-	console.log(e);  // for tests ...
+	// console.log(e);  // for tests ...
 	mki3d.file.loadingEndHandler(loader); // process load
     }
     loader.errorHandler = function(e) { console.error(e); }; 
@@ -138,9 +138,9 @@ mki3d.file.loadChooseEntryCallback = function (theEntry, loader) {
 	loader.loadingEndHandler( loader );
 	return;
     }
-////
+    ////
     chrome.fileSystem.getDisplayPath(theEntry, function (displayPath) { 
-	console.log(displayPath);  
+	// console.log(displayPath);  
         mki3d.file.suggestedName= displayPath;
     }
 				    );
@@ -157,39 +157,3 @@ mki3d.file.loadFileCallback = function (file, loader) {
 
     reader.readAsText(file);
 }
-
-
-
-// do przerobienia ...
-
-
-
-/** startLoading initiates the process of choosing and loading of the file by the user.
-    Its argument loadEndHandler should be a funtcion with one parameter that is a load object.
-    This function is called after the process of loading is finished.
-    If load is successful, then load object contains a field loadedObject that contains the object loaded from
-    the file.
-    Example loadingEndHandler :
-    
-**/
-
-
-
-
-
-/**
-   mySaveStart( myObject, mySuggestedName, saveEndHandler)  initiates the process of choosing the file by the user 
-   and saving myObject in the file.
-   Its argument writeEndHandler should be a funtcion with one parameter that is a saver object.
-   This function is called after the process of saving is finished.
-
-   Example saveEndHandler :
-   
-   function saveEndHandler(saver){
-   console.log(saver); // for tests ...
-   } 
-**/
-
-
-
-

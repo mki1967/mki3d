@@ -80,7 +80,7 @@ mki3d.action.init= function() {
 mki3d.action.nextSetIndex= function() {
     if(!mki3d.tmp.nextSetDisplayModelBackup){
 	mki3d.compressSetIndexes( mki3d.data );
-	console.log(mki3d.data);
+	// console.log(mki3d.data);
 	var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
 	mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
 	mki3d.tmp.nextSetDisplayModelBackup= mki3d.tmp.display.model;

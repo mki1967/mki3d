@@ -357,7 +357,7 @@ mki3d.loadCursor= function (){
         var point = mki3d.newPoint( cPos[0], cPos[1], cPos[2],  cCol[0], cCol[1], cCol[2], mki3d.data.set.current );
         var triangle = mki3d.newTriangle( marker1, marker2, point );
 	var shade = mki3d.shadeFactor( triangle, light);
-        console.log(shade);
+        // console.log(shade);
         // push marker 1
         triangles.push( marker1.position[0] );
         triangles.push( marker1.position[1] );
@@ -638,10 +638,12 @@ mki3d.elementsSortedUnique= function(elements){
 	if(mki3d.elementCompare( elements[i-1], elements[i] ) != 0 ){
 	    out.push(elements[i]);
 	}
-	else { // for tests
-	    console.log(elements[i-1]);
-	    console.log(elements[i]);
-	}
+	/*
+	  else { // for tests
+	  console.log(elements[i-1]);
+	  console.log(elements[i]);
+	  }
+	*/
     }
     return out;
 }
