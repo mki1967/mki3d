@@ -7,6 +7,10 @@ Project can be found on: https://github.com/mki1967/mki3d
 MKI 3D RAPID MODELER is a keyboard-driven Chrome application 
 for creating simple 3D models consisting of colored line segments and triangles.
 
+<a target="_blank" href="https://chrome.google.com/webstore/detail/mki3d/bmoccdhfglkopghfkecppindffakhcbe">
+Link for installation from Chrome Web Store.
+</a>
+
 The program evolves towards the functionality of 
 https://github.com/mki1967/et-edit
 However, the underlying data structures, file formats,
