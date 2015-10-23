@@ -160,13 +160,25 @@ mki3d.glueTrianglesOfSegments = function( segments, setIdx ){
     var out=[];
     var i;
     for(i=0; i<segments.length; i++){
-	out.push( mki3d.newTriangle(segments[i][0],segments[i][0],segments[i][1]) );
-	out[out.length-1][0].set=setIdx; // one doubled endpoint in set setIdx
-	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-	out.push( mki3d.newTriangle(segments[i][0],segments[i][1],segments[i][1]) );
-	out[out.length-1][0].set=setIdx; 
-	out[out.length-1][1].set=setIdx; // two different endpoints in set setIdx
-	out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+        var clone0= mki3d.pointClone(segments[i][0]);
+	clone0.set= setIdx;
+	out.push( mki3d.newTriangle(clone0 ,segments[i][0],segments[i][1]) ); // sorts endpoints
+	/* old - buggy - code 
+	   out.push( mki3d.newTriangle(segments[i][0],segments[i][0],segments[i][1]) ); // tutaj przestawia !!!
+	   out[out.length-1][0].set=setIdx; // one doubled endpoint in set setIdx
+	   out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+	*/
+        clone0 = mki3d.pointClone(segments[i][0]); // another clone of segments[i][0]
+        var clone1 = mki3d.pointClone(segments[i][1]); 
+        clone0.set= setIdx;
+	clone1.set= setIdx;
+	out.push( mki3d.newTriangle(clone0,clone1,segments[i][1]) );// sorts endpoints
+        /* old - buggy - code 
+      	   out.push( mki3d.newTriangle(segments[i][0],segments[i][1],segments[i][1]) );// tutaj przestawia !!!
+	   out[out.length-1][0].set=setIdx; 
+	   out[out.length-1][1].set=setIdx; // two different endpoints in set setIdx
+	   out[out.length-1].sort(mki3d.pointCompare); // repair sorting
+	*/
     }
     return out;
 }
