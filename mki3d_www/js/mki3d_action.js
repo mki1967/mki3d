@@ -535,6 +535,20 @@ mki3d.action.unselect= function(elements){
     mki3d.tmpRebuildSelected();
 }
 
+mki3d.action.extractSelectedToNewSet= function(){
+    if(!mki3d.tmp.selected) {
+	return ("NOTHING SELECTED!");
+    } 
+    var newIdx= mki3d.getMaxSetIndex( mki3d.data.model )+1;
+    mki3d.data.set.current=newIdx;
+    var i;
+    for(i=0; i<mki3d.tmp.selected.length; i++)
+	mki3d.tmp.selected[i].set=newIdx;
+    mki3d.compressSetIndexes(mki3d.data);
+    return ("THE "+mki3d.tmp.selected.length+" SELECTED POINTS ARE NOW IN THE NEW SET: "+mki3d.data.set.current);
+}
+
+
 mki3d.action.selectByCursor= function(){
     var i;
     var cursor= mki3d.data.cursor;
@@ -619,6 +633,7 @@ mki3d.action.extendSelectionByIncident= function(elements){
 
 mki3d.action.cancelVisibilityRestrictions= function() {
     mki3d.tmpResetDisplayModel();
+    mki3d.action.unclip(); // clipping is also a view restriction
     mki3d.redraw();
 }
 

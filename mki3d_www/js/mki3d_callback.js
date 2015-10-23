@@ -254,9 +254,13 @@ mki3d.callback.clipMenuOnKeyDown =function (e){
 /* selection */
 mki3d.callback.selectionMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
+    case 69: // E
+	actionMessage=mki3d.action.extractSelectedToNewSet();
+	break;
     case 82: // R
 	mki3d.action.cancelSelection();
 	break;
@@ -288,7 +292,7 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     };
     mki3d.action.escapeToCanvas();
     if(mki3d.tmp.selected)
-	mki3d.messageAppend("<br> SELECTED ENDPOINTS: "+mki3d.tmp.selected.length);
+	mki3d.messageAppend("<br>"+actionMessage+"<br> SELECTED ENDPOINTS: "+mki3d.tmp.selected.length);
     // temporary escape to canvas
 }
 
