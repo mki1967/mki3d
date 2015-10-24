@@ -476,11 +476,13 @@ mki3d.action.paintSelectedTriangles = function(){
 
 mki3d.action.deleteSelectedSegments = function(){
     mki3d.data.model.segments = mki3d.getNotSelectedElements( mki3d.data.model.segments );
+    mki3d.action.cancelVisibilityRestrictions();
     mki3d.redraw();
 }
 
 mki3d.action.deleteSelectedTriangles = function(){
     mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles );
+    mki3d.action.cancelVisibilityRestrictions();
     mki3d.redraw();
 }
 
@@ -498,6 +500,7 @@ mki3d.action.copySelected = function(){
     mki3d.data.model.triangles = mki3d.data.model.triangles.concat(copy);
 
     mki3d.data.set.current=newIdx;
+    mki3d.action.cancelVisibilityRestrictions();
 }
 
 /* glue selected segments' endpoints with current set */

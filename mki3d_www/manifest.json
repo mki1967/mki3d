@@ -3,7 +3,7 @@
     "name": "mki3d",
     "short_name": "MKI 3D",
     "description": "Rapid designing of simple 3D shapes from colored segments and triangles",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "minimum_chrome_version": "38",
     "author": "Marcin Kik mki1967@gmail.com",
     "offline_enabled": true,
