@@ -425,10 +425,7 @@ mki3d.action.cursorMoveToNearestEndpoint = function() {
 */
 
 /*New version */
-mki3d.action.cursorMoveToNearestEndpoint = function() {
-    var endpoints= mki3d.getEndpointsOfElements( 
-	mki3d.data.model.segments.concat(mki3d.data.model.triangles)
-    );
+mki3d.action.cursorMoveToNearestEndpoint = function( endpoints ) {
     var found= mki3d.findNearestEndpoint( mki3d.data.cursor.position,
 					  endpoints
 					);
