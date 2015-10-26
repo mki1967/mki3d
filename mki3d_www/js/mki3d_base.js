@@ -87,14 +87,17 @@ mki3d.areEqualElements = function( element1, element2 ){
     return true;
 }
 
-/* clean temporary keys from elements */
+/* get array of endpoints of the elements */
 
-mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
+mki3d.getEndpointsOfElements = function(elements){
+    var out=[];
     var i,j;
-    for(i=0; i<elements.length; i++) 
+    for(i=0; i<elements.length; i++)
 	for(j=0; j<elements[i].length; j++)
-            delete elements[i][j][key];
+	    out.push(elements[i][j]);
+    return out;
 }
+
 
 /* select */
 
@@ -167,6 +170,18 @@ mki3d.copyOfSelected= function( elements, setIdx ){
     var copy= mki3d.elementArrayClone( mki3d.getSelectedElements(elements) );
     mki3d.elementArrayPlaceInSet(copy, setIdx );
     return copy;
+}
+
+
+/* cleaning elements */
+
+/* clean temporary keys from elements */
+
+mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
+    var i,j;
+    for(i=0; i<elements.length; i++) 
+	for(j=0; j<elements[i].length; j++)
+            delete elements[i][j][key];
 }
 
 /* sort the elements and remove duplicates in the model */

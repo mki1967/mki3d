@@ -400,6 +400,7 @@ mki3d.action.viewAlignRotation = function() {
     mki3d.redraw();
 } 
 
+/* old version:
 
 mki3d.action.cursorMoveToNearestEndpoint = function() {
     var sPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.segments );
@@ -421,6 +422,26 @@ mki3d.action.cursorMoveToNearestEndpoint = function() {
 		   );
     mki3d.redraw();
 }
+*/
+
+/*New version */
+mki3d.action.cursorMoveToNearestEndpoint = function() {
+    var endpoints= mki3d.getEndpointsOfElements( 
+	mki3d.data.model.segments.concat(mki3d.data.model.triangles)
+    );
+    var found= mki3d.findNearestEndpoint( mki3d.data.cursor.position,
+					  endpoints
+					);
+    if( found === null) return "NO ENPOINT FOUND";
+    mki3d.vectorSet( 
+	mki3d.data.cursor.position, 
+	found.position[0], found.position[1], found.position[2] 
+    );
+    mki3d.redraw();
+    return "CURSOR JUMPED TO POSITION: " + JSON.stringify(mki3d.data.cursor.position);
+}
+
+
 
 /* clipping */
 

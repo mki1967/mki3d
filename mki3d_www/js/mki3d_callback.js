@@ -65,6 +65,7 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.cursorMenuOnKeyDown = function (e){
+    var actionMessage="";
     var code= e.which || e.keyCode;
     // TO DO
     switch(code)
@@ -75,8 +76,9 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	break;
 	
     case 74: // J
-	mki3d.action.cursorMoveToNearestEndpoint ();
+	actionMessage=mki3d.action.cursorMoveToNearestEndpoint ();
 	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br>"+actionMessage);
 	break;
 	
     default:
