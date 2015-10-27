@@ -493,8 +493,12 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
 
 
 mki3d.modelSortUnique= function(){
+    /* old
     mki3d.data.model.segments = mki3d.elementsSortedUnique(mki3d.data.model.segments);
     mki3d.data.model.triangles = mki3d.elementsSortedUnique(mki3d.data.model.triangles);
+    */
+    mki3d.data.model.segments = mki3d.uniqueSorted(mki3d.data.model.segments, mki3d.elementCompare);
+    mki3d.data.model.triangles = mki3d.uniqueSorted(mki3d.data.model.triangles, mki3d.elementCompare);
 }
 
 

@@ -184,17 +184,19 @@ mki3d.cleanElementEndpointsFromKey = function ( elements, key ) {
             delete elements[i][j][key];
 }
 
-/* sort the elements and remove duplicates in the model */
+/* sort the elements and remove duplicates  */
 
-mki3d.elementsSortedUnique= function(elements){
-    elements.sort(mki3d.elementCompare);
+/* sort the array and remove duplicates using compare function */
+
+mki3d.uniqueSorted= function(array, compare){
+    array.sort(compare);
     var out=[];
-    if(elements.length == 0) return out;
-    out.push( elements[0] );
+    if(array.length == 0) return out;
+    out.push( array[0] );
     var i;
-    for(i=1; i<elements.length; i++) {
-	if(mki3d.elementCompare( elements[i-1], elements[i] ) != 0 ){
-	    out.push(elements[i]);
+    for(i=1; i<array.length; i++) {
+	if(compare( array[i-1], array[i] ) != 0 ){
+	    out.push(array[i]);
 	}
 	/*
 	  else { // for tests
