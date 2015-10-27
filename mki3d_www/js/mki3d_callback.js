@@ -16,6 +16,7 @@ mki3d.callback.helpOnKeyDown = function (e){
 
 
 mki3d.callback.colorMenuOnKeyDown = function (e){
+    var actionMessage="";
     var color = null;
     var code= e.which || e.keyCode;
     if( "0".charCodeAt(0) <= code && code <= "7".charCodeAt(0)) { 
@@ -24,12 +25,42 @@ mki3d.callback.colorMenuOnKeyDown = function (e){
 	if(ddColor !== null ) {
 	    color = JSON.parse(ddColor.innerHTML);
 	}
+	if(color !== null && mki3d.tmp.colorMenuOutput!== null ){
+            mki3d.vectorSet(mki3d.tmp.colorMenuOutput, color[0], color[1], color[2]);
+	}
+    } else
+	switch(code)
+    {
+    case 69: // E
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 0, -1.0 / 256);
+	break;
+    case 82: // R
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 0, +1.0 / 256);
+	break;
+    case 70: // F
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 1, -1.0 / 256);
+	break;
+    case 71: // G
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 1, +1.0 / 256);
+	break;
+    case 86: // V
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 2, -1.0 / 256);
+	break;
+    case 66: // B
+	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 2, +1.0 / 256);
+	break;
+    case 27: // Esc
+    case 81: // Q
+	actionMessage="COLOR SET TO: "+JSON.stringify(mki3d.tmp.colorMenuOutput);
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br>"+actionMessage);
+	break;
     }
+    
     // ...
-    if(color !== null && mki3d.tmp.colorMenuOutput!== null ){
-        mki3d.vectorSet(mki3d.tmp.colorMenuOutput, color[0], color[1], color[2]);
-    }
-    mki3d.action.escapeToCanvas();
+    mki3d.redraw();
+    // mki3d.message("COLOR SET TO: "+JSON.stringify(mki3d.tmp.colorMenuOutput));
+    // mki3d.action.escapeToCanvas();
 }
 
 mki3d.callback.mainMenuOnKeyDown = function (e){
@@ -258,8 +289,8 @@ mki3d.callback.clipMenuOnKeyDown =function (e){
     mki3d.messageAppend("<br> CLIP MIN = "+ JSON.stringify(mki3d.data.clipMinVector)+
 			"<br> CLIP MAX = "+ JSON.stringify(mki3d.data.clipMaxVector)
 		       );
-			
-	// temporary escape to canvas
+    
+    // temporary escape to canvas
 } 
 
 /* selection */

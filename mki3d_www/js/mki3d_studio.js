@@ -7,23 +7,23 @@ mki3d.modelChange = function() {
 
 /* For position pos find nearest endpoint of an element 
 
-mki3d.findNearestEndpoint = function( pos, arrayOfElements ) {
-    if(!arrayOfElements) return null;
-    if(arrayOfElements.length == 0) return null;
-    var found = arrayOfElements[0][0];
-    var minDist = mki3d.distanceSquare(pos, found.position);
-    var i,j;
-    for( i=0; i<arrayOfElements.length; i++)
-	for(j=0; j<arrayOfElements[i].length; j++) {
-	    var next = arrayOfElements[i][j];
-	    var ds = mki3d.distanceSquare(pos, next.position);
-	    if( ds < minDist ) {
-		minDist=ds;
-		found=next;
-	    }
-	}
-    return found;
-}
+   mki3d.findNearestEndpoint = function( pos, arrayOfElements ) {
+   if(!arrayOfElements) return null;
+   if(arrayOfElements.length == 0) return null;
+   var found = arrayOfElements[0][0];
+   var minDist = mki3d.distanceSquare(pos, found.position);
+   var i,j;
+   for( i=0; i<arrayOfElements.length; i++)
+   for(j=0; j<arrayOfElements[i].length; j++) {
+   var next = arrayOfElements[i][j];
+   var ds = mki3d.distanceSquare(pos, next.position);
+   if( ds < minDist ) {
+   minDist=ds;
+   found=next;
+   }
+   }
+   return found;
+   }
 
 */
 
@@ -38,10 +38,10 @@ mki3d.findNearestEndpoint = function( pos, endpoints ) {
     for( i=0; i<endpoints.length; i++){
 	var next = endpoints[i];
 	var ds = mki3d.distanceSquare(pos, next.position);
-	    if( ds < minDist ) {
-		minDist=ds;
-		found=next;
-	    }
+	if( ds < minDist ) {
+	    minDist=ds;
+	    found=next;
+	}
     }
     return found;
 }
@@ -514,6 +514,12 @@ mki3d.paintEndpoints = function(endpoints){
 	endpoints[j].color = mki3d.vectorClone(mki3d.data.cursor.color);
 }
 
+/* updating color component within the range [0,1] */
+mki3d.updateColorComponent= function(  color, rgbIdx, delta ){
+    // color is an array of length 3
+    // rgbIdx is in range 0..2
+    color[rgbIdx]= Math.min(1, Math.max(0, color[rgbIdx]+delta));
+}
 
 /* messages */
 
