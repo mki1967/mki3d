@@ -402,26 +402,26 @@ mki3d.action.viewAlignRotation = function() {
 
 /* old version:
 
-mki3d.action.cursorMoveToNearestEndpoint = function() {
-    var sPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.segments );
-    var tPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.triangles );
-    var found=sPoint;
-    if( found === null ) found = tPoint;
-    if( found === null ) return; // sPoint == tPoint == null
-    // here: found != null
-    if( found !== tPoint && tPoint !== null) {
-	if( mki3d.distanceSquare(mki3d.data.cursor.position, tPoint.position ) <
-	    mki3d.distanceSquare(mki3d.data.cursor.position, found.position )
-	  ) 
-	    found = tPoint;
-	}
-    // here: found != null and found is nearest endpoint
-    mki3d.vectorSet( 
-	mki3d.data.cursor.position, 
-	found.position[0], found.position[1], found.position[2] 
-		   );
-    mki3d.redraw();
-}
+   mki3d.action.cursorMoveToNearestEndpoint = function() {
+   var sPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.segments );
+   var tPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.triangles );
+   var found=sPoint;
+   if( found === null ) found = tPoint;
+   if( found === null ) return; // sPoint == tPoint == null
+   // here: found != null
+   if( found !== tPoint && tPoint !== null) {
+   if( mki3d.distanceSquare(mki3d.data.cursor.position, tPoint.position ) <
+   mki3d.distanceSquare(mki3d.data.cursor.position, found.position )
+   ) 
+   found = tPoint;
+   }
+   // here: found != null and found is nearest endpoint
+   mki3d.vectorSet( 
+   mki3d.data.cursor.position, 
+   found.position[0], found.position[1], found.position[2] 
+   );
+   mki3d.redraw();
+   }
 */
 
 /*New version */
@@ -581,7 +581,7 @@ mki3d.action.selectByCursor= function(){
 	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
 	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
     );
-   
+    
     for(i=0; i<points.length; i++) 
 	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
             (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
@@ -595,7 +595,7 @@ mki3d.action.selectByCursor= function(){
 	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
 	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
     );
-   
+    
     for(i=0; i<points.length; i++) 
 	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
             (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
@@ -724,6 +724,14 @@ mki3d.action.mainMenu = function(){
 }
 
 mki3d.action.colorMenu = function(){
+    mki3d.tmp.selectedColors=[];
+    var i;
+    if(mki3d.tmp.selected)
+	for(i=0;i<mki3d.tmp.selected.length;i++)
+	    mki3d.tmp.selectedColors.push(mki3d.tmp.selected[i].color);
+    mki3d.tmp.selectedColors= mki3d.uniqueSorted(mki3d.tmp.selectedColors, mki3d.vectorCompare);
+    mki3d.tmp.selectedColors.index=mki3d.tmp.selectedColors.length;
+
     mki3d.message( mki3d.html.divColorMenu.innerHTML );
     window.onkeydown = mki3d.callback.colorMenuOnKeyDown; ////// temporary
 }

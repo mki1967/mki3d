@@ -49,6 +49,14 @@ mki3d.callback.colorMenuOnKeyDown = function (e){
     case 66: // B
 	mki3d.updateColorComponent(mki3d.tmp.colorMenuOutput, 2, +1.0 / 256);
 	break;
+    case 78: // N
+	//...
+	if(mki3d.tmp.selectedColors.length >= 1){
+	    mki3d.tmp.selectedColors.index= (mki3d.tmp.selectedColors.index+1)%mki3d.tmp.selectedColors.length;
+	    color=mki3d.tmp.selectedColors[mki3d.tmp.selectedColors.index];
+            mki3d.vectorSet(mki3d.tmp.colorMenuOutput, color[0], color[1], color[2]);	    
+	}
+	break;
     case 27: // Esc
     case 81: // Q
 	actionMessage="COLOR SET TO: "+JSON.stringify(mki3d.tmp.colorMenuOutput);
