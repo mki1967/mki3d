@@ -393,6 +393,26 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
     // temporary escape to canvas
 }
 
+mki3d.callback.actionMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+    case 82: // R
+	mki3d.action.mode = mki3d.action.ROTATE_MODE;
+	break;
+    case 67: // C
+	mki3d.action.mode = mki3d.action.CURSOR_MODE;
+	break;
+    case 83: // S
+	mki3d.action.mode = mki3d.action.SELECTED_MODE;
+	break;
+    default:
+	// temporary escape to canvas
+    };
+    mki3d.action.escapeToCanvas();
+    mki3d.action.setModeActions();
+}
 
 /* CANVAS */
 
@@ -459,7 +479,8 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	mki3d.action.back();
 	break;
     case 65: // A
-	mki3d.action.nextMode();
+	// old : mki3d.action.nextMode();
+	mki3d.action.actionMenu();
 	break;
     case 72: // H
 	mki3d.action.help();

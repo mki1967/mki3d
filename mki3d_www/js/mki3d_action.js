@@ -771,3 +771,8 @@ mki3d.action.viewMenu = function(){
     window.onkeydown = mki3d.callback.viewMenuOnKeyDown;
 }
 
+mki3d.action.actionMenu = function(){
+    mki3d.message( mki3d.html.divActionMenu.innerHTML );
+    window.onkeydown = mki3d.callback.actionMenuOnKeyDown;
+}
+
