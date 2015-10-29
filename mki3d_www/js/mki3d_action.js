@@ -472,7 +472,7 @@ mki3d.action.rotate90 = function( myIn, myOut ){
 	}
     } 
 
-    mki3d.rotateEndpointsArround( mki3d.tmp.selected, rotation, cursor.position );
+    mki3d.rotateEndpointsArround( mki3d.tmp.selected, rotation, mki3d.data.cursor.position );
     mki3d.redraw();
 }
 
@@ -496,7 +496,7 @@ mki3d.action.mirror= function( myDirection ) {
     var v = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
 					     myDirection );
     var scale = [1-2*Math.abs(v[0]), 1-2*Math.abs(v[1]), 1-2*Math.abs(v[2])]; // set -1 on one coordinate and 1 on the remaining
-    mki3d.scaleEndpointsArround( mki3d.tmp.selected, scale, cursor.position );
+    mki3d.scaleEndpointsArround( mki3d.tmp.selected, scale, mki3d.data.cursor.position );
     mki3d.redraw();    
 }
 
@@ -803,6 +803,7 @@ mki3d.action.viewScaleUp = function() {
     if( 2*mki3d.data.view.scale > MKI3D_MAX_SCALE ) return; // upper bound 
     mki3d.data.view.scale = 2*mki3d.data.view.scale;
     mki3d.data.cursor.step = 1/ mki3d.data.view.scale;
+    mki3d.setModelViewMatrix();
     mki3d.redraw();
 }
 
@@ -810,6 +811,7 @@ mki3d.action.viewScaleDown = function() {
     if( mki3d.data.view.scale/2 < MKI3D_MIN_SCALE ) return; // upper bound 
     mki3d.data.view.scale = mki3d.data.view.scale/2;
     mki3d.data.cursor.step = 1/ mki3d.data.view.scale;
+    mki3d.setModelViewMatrix();
     mki3d.redraw();
 }
 
