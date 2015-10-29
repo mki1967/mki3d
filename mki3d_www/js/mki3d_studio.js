@@ -5,27 +5,6 @@ mki3d.modelChange = function() {
 }
 
 
-/* For position pos find nearest endpoint of an element 
-
-   mki3d.findNearestEndpoint = function( pos, arrayOfElements ) {
-   if(!arrayOfElements) return null;
-   if(arrayOfElements.length == 0) return null;
-   var found = arrayOfElements[0][0];
-   var minDist = mki3d.distanceSquare(pos, found.position);
-   var i,j;
-   for( i=0; i<arrayOfElements.length; i++)
-   for(j=0; j<arrayOfElements[i].length; j++) {
-   var next = arrayOfElements[i][j];
-   var ds = mki3d.distanceSquare(pos, next.position);
-   if( ds < minDist ) {
-   minDist=ds;
-   found=next;
-   }
-   }
-   return found;
-   }
-
-*/
 
 /* New version: For position pos find nearest endpoint from array of endpoints */
 
@@ -487,16 +466,10 @@ mki3d.elementEndpointsInBox = function (elements, boxMin, boxMax) {
 }
 
 
-/* select */
 
-
-
+/* clean data model */
 
 mki3d.modelSortUnique= function(){
-    /* old
-    mki3d.data.model.segments = mki3d.elementsSortedUnique(mki3d.data.model.segments);
-    mki3d.data.model.triangles = mki3d.elementsSortedUnique(mki3d.data.model.triangles);
-    */
     mki3d.data.model.segments = mki3d.uniqueSorted(mki3d.data.model.segments, mki3d.elementCompare);
     mki3d.data.model.triangles = mki3d.uniqueSorted(mki3d.data.model.triangles, mki3d.elementCompare);
 }
@@ -535,3 +508,15 @@ mki3d.messageAppend = function ( messageText ) {
     mki3d.html.divUpperMessage.innerHTML += messageText;
 }
 
+/* Transformations of endpoins positions (constructive methods) */
+
+mki3d.rotateEndpointsArround= function( endpoints, rotation, fixedPoint ){
+    var i;
+    for(i=0; i<endpoints.length; i++) {
+	var v= endpoints[i].position; // reference to the position of endpoints[i]
+	mki3d.vectorMove(v, -fixedPoint[0], -fixedPoint[1], -fixedPoint[2]);
+	var w = mki3d.matrixVectorProduct( rotation, v);
+        mki3d.vectorMove(w,  fixedPoint[0], fixedPoint[1], fixedPoint[2]);
+        mki3d.vectorSet(v, w[0], w[1], w[2]);
+    }
+}

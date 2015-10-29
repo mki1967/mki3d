@@ -7,6 +7,7 @@ mki3d.action = {};
 mki3d.action.ROTATE_MODE = "ROTATE";
 mki3d.action.CURSOR_MODE = "CURSOR";
 mki3d.action.SELECTED_MODE = "SELECTED";
+mki3d.action.SELECTED_ROTATE_MODE = "SELECTED_ROTATE";
 
 /* rotation step */
 mki3d.action.rotationStep = Math.PI / 36; // 5 degrees 
@@ -65,6 +66,20 @@ mki3d.action.setModeActions= function(){
 	else
 	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
 	break;
+    case mki3d.action.SELECTED_ROTATE_MODE:
+	mki3d.action.up = mki3d.action.rotate90Up;
+	mki3d.action.down = mki3d.action.rotate90Down;
+	mki3d.action.right = mki3d.action.rotate90Right;
+	mki3d.action.left = mki3d.action.rotate90Left;
+	mki3d.action.forward = mki3d.action.rotate90Forward;
+	mki3d.action.back = mki3d.action.rotate90Back;
+	// ...
+	if(!mki3d.tmp.selected)
+	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	else
+	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
+	break;
+
     }
 
 }
@@ -365,7 +380,88 @@ mki3d.action.backClip = function(){
 }
 
 
+/* select 90-degrees rotations */
+mki3d.ROTATION_90_UP      = [ [  1,  0,  0],
+			      [  0,  0, -1],
+			      [  0,  1,  0]  ];
 
+mki3d.ROTATION_90_DOWN    = [ [  1,  0,  0],
+		 	      [  0,  0,  1],
+			      [  0, -1,  0]  ];
+
+mki3d.ROTATION_90_LEFT    = [ [  0,  0, -1],
+		 	      [  0,  1,  0],
+			      [  1,  0,  0]  ];
+
+mki3d.ROTATION_90_RIGHT   = [ [  0,  0,  1],
+		 	      [  0,  1,  0],
+			      [ -1,  0,  0]  ];
+
+mki3d.ROTATION_90_BACK    = [ [  0, -1,  0],
+		 	      [  1,  0,  0],
+			      [  0,  0,  1]  ];
+
+mki3d.ROTATION_90_FORWARD = [ [  0,  1,  0],
+		 	      [ -1,  0,  0],
+			      [  0,  0,  1]  ];
+
+mki3d.ROTATIONS_90 = [
+    mki3d.ROTATION_90_UP,
+    mki3d.ROTATION_90_DOWN,
+    mki3d.ROTATION_90_LEFT,
+    mki3d.ROTATION_90_RIGHT,
+    mki3d.ROTATION_90_BACK,
+    mki3d.ROTATION_90_FORWARD
+];
+
+
+
+mki3d.action.rotate90Up = function(){
+    mki3d.action.rotate90( [0,0,-1], [0,1,0]); 
+}
+
+mki3d.action.rotate90Down = function(){
+    mki3d.action.rotate90( [0,0,-1],  [0,-1,0]); 
+}
+
+mki3d.action.rotate90Left = function(){
+    mki3d.action.rotate90( [0,0,1],  [1,0,0]); 
+}
+
+mki3d.action.rotate90Right = function(){
+    mki3d.action.rotate90( [0,0,1], [-1,0,0]); 
+}
+
+mki3d.action.rotate90Back = function(){
+    mki3d.action.rotate90([1,0,0], [0,1,0]); 
+}
+
+mki3d.action.rotate90Forward = function(){
+    mki3d.action.rotate90([1,0,0], [0,-1,0]); 
+}
+
+
+
+mki3d.action.rotate90 = function( myIn, myOut ){
+    if(!mki3d.tmp.selected) return; // nothing selected
+    mki3d.tmpRefreshVersorsMatrix();
+    var vIn = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
+					     myIn );
+    var vOut = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
+					     myOut );
+    var rotation=null;
+    var i;
+    for(i=0; i<mki3d.ROTATIONS_90.length; i++) {
+        var out=mki3d.matrixVectorProduct(mki3d.ROTATIONS_90[i], vIn);
+	if( mki3d.vectorCompare(out, vOut) == 0 ) {
+	    rotation= mki3d.ROTATIONS_90[i];
+	    break;
+	}
+    } 
+
+    mki3d.rotateEndpointsArround( mki3d.tmp.selected, rotation, cursor.position );
+    mki3d.redraw();
+}
 
 
 /* view manipulations */
@@ -400,31 +496,11 @@ mki3d.action.viewAlignRotation = function() {
     mki3d.redraw();
 } 
 
-/* old version:
 
-   mki3d.action.cursorMoveToNearestEndpoint = function() {
-   var sPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.segments );
-   var tPoint = mki3d.findNearestEndpoint( mki3d.data.cursor.position, mki3d.data.model.triangles );
-   var found=sPoint;
-   if( found === null ) found = tPoint;
-   if( found === null ) return; // sPoint == tPoint == null
-   // here: found != null
-   if( found !== tPoint && tPoint !== null) {
-   if( mki3d.distanceSquare(mki3d.data.cursor.position, tPoint.position ) <
-   mki3d.distanceSquare(mki3d.data.cursor.position, found.position )
-   ) 
-   found = tPoint;
-   }
-   // here: found != null and found is nearest endpoint
-   mki3d.vectorSet( 
-   mki3d.data.cursor.position, 
-   found.position[0], found.position[1], found.position[2] 
-   );
-   mki3d.redraw();
-   }
-*/
 
-/*New version */
+
+/* cursor jumping to endpoints */
+
 mki3d.action.cursorMoveToNearestEndpoint = function( endpoints ) {
     var found= mki3d.findNearestEndpoint( mki3d.data.cursor.position,
 					  endpoints
