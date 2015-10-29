@@ -473,6 +473,7 @@ mki3d.action.rotate90 = function( myIn, myOut ){
     } 
 
     mki3d.rotateEndpointsArround( mki3d.tmp.selected, rotation, mki3d.data.cursor.position );
+    mki3d.cancelShades();
     mki3d.redraw();
 }
 
@@ -497,6 +498,7 @@ mki3d.action.mirror= function( myDirection ) {
 					     myDirection );
     var scale = [1-2*Math.abs(v[0]), 1-2*Math.abs(v[1]), 1-2*Math.abs(v[2])]; // set -1 on one coordinate and 1 on the remaining
     mki3d.scaleEndpointsArround( mki3d.tmp.selected, scale, mki3d.data.cursor.position );
+    mki3d.cancelShades();
     mki3d.redraw();    
 }
 
