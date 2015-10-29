@@ -520,3 +520,13 @@ mki3d.rotateEndpointsArround= function( endpoints, rotation, fixedPoint ){
         mki3d.vectorSet(v, w[0], w[1], w[2]);
     }
 }
+
+mki3d.scaleEndpointsArround= function( endpoints, vectorScale, fixedPoint ){
+    var i;
+    for(i=0; i<endpoints.length; i++) {
+	var v= endpoints[i].position; // reference to the position of endpoints[i]
+	mki3d.vectorMove(v, -fixedPoint[0], -fixedPoint[1], -fixedPoint[2]);
+        mki3d.vectorScale( v, vectorScale[0], vectorScale[1], vectorScale[2]);
+        mki3d.vectorMove(v,  fixedPoint[0], fixedPoint[1], fixedPoint[2]);
+    }
+}

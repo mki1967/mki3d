@@ -6,9 +6,9 @@ mki3d.action = {};
 /* mode constants */
 mki3d.action.ROTATE_MODE = "ROTATE";
 mki3d.action.CURSOR_MODE = "CURSOR";
-mki3d.action.SELECTED_MODE = "SELECTED";
+mki3d.action.SELECTED_MODE = "SELECTED_MOVE";
 mki3d.action.SELECTED_ROTATE_MODE = "SELECTED_ROTATE";
-
+mki3d.action.SELECTED_MIRROR_MODE = "SELECTED_MIRROR";
 /* rotation step */
 mki3d.action.rotationStep = Math.PI / 36; // 5 degrees 
 
@@ -73,6 +73,19 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.left = mki3d.action.rotate90Left;
 	mki3d.action.forward = mki3d.action.rotate90Forward;
 	mki3d.action.back = mki3d.action.rotate90Back;
+	// ...
+	if(!mki3d.tmp.selected)
+	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	else
+	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
+	break;
+    case mki3d.action.SELECTED_MIRROR_MODE:
+	mki3d.action.up = mki3d.action.mirrorY;
+	mki3d.action.down = mki3d.action.mirrorY;
+	mki3d.action.right = mki3d.action.mirrorX;
+	mki3d.action.left = mki3d.action.mirrorX;
+	mki3d.action.forward = mki3d.action.mirrorZ;
+	mki3d.action.back = mki3d.action.mirrorZ;
 	// ...
 	if(!mki3d.tmp.selected)
 	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
@@ -461,6 +474,30 @@ mki3d.action.rotate90 = function( myIn, myOut ){
 
     mki3d.rotateEndpointsArround( mki3d.tmp.selected, rotation, cursor.position );
     mki3d.redraw();
+}
+
+/* mirror actions */
+
+mki3d.action.mirrorX= function() {
+    mki3d.action.mirror([1,0,0]);
+}
+
+mki3d.action.mirrorY= function() {
+    mki3d.action.mirror([0,1,0]);
+}
+
+mki3d.action.mirrorZ= function() {
+    mki3d.action.mirror([0,0,1]);
+}
+
+mki3d.action.mirror= function( myDirection ) {
+    if(!mki3d.tmp.selected) return; // nothing selected
+    mki3d.tmpRefreshVersorsMatrix();
+    var v = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
+					     myDirection );
+    var scale = [1-2*Math.abs(v[0]), 1-2*Math.abs(v[1]), 1-2*Math.abs(v[2])]; // set -1 on one coordinate and 1 on the remaining
+    mki3d.scaleEndpointsArround( mki3d.tmp.selected, scale, cursor.position );
+    mki3d.redraw();    
 }
 
 

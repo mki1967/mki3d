@@ -410,6 +410,9 @@ mki3d.callback.actionMenuOnKeyDown = function (e){
     case 76: // L
 	mki3d.action.mode = mki3d.action.SELECTED_ROTATE_MODE;
 	break;
+    case 77: // M
+	mki3d.action.mode = mki3d.action.SELECTED_MIRROR_MODE;
+	break;
     default:
 	// temporary escape to canvas
     };
