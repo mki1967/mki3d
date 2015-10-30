@@ -53,7 +53,7 @@
       <h3> Warnings: </h3>    
 
       <p>
-	Data protection mechanisms such as 'undo' or 'autosave' are still not implemented.
+	Data protection mechanisms such as 'undo' or 'auto-save' are still not implemented.
 	User operations are irreversible without warnings.
 	The best strategy is frequent saving of your data in a file. 
       </p>
@@ -63,20 +63,20 @@
 	<dl>
 	  <dt>'H'</dt>
 	  <dd> - This help screen</dd>
-	  <dt>'Q'</dt>
-	  <dd> - Main menu</dd>
-	  <dt> Arrow Keys, 'F', 'B','V'</dt>
-	  <dd> - Depending on the MODE, either: move cursor, selected endpoints,  or rotate the screen</dd>
 	  <dt>'A'</dt>
-	  <dd> - Switch action MODE (either rotate, move cursor, or move selected endpoints)</dd>
-	  <dt>'N'</dt>
-	  <dd> - Change current SET INDEX</dd>
+	  <dd> - Switch ACTION MODE (either rotate, move cursor, or actions on selected endpoints)</dd>
 	  <dt>Shift</dt>
-	  <dd> - Switch action MODE to: 
+	  <dd> - Switch ACTION MODE to: 
 	    <ul>
 	      <li> CURSOR moving - when pressed </li>
 	      <li> ROTATION - when released </li>
 	    </ul>
+	  <dt> Arrow Keys, 'F', 'B','V'</dt>
+	  <dd> - Depending on the ACTION MODE, either: move cursor, rotate the screen, or manipulate selected endpoints</dd>
+	  <dt>'Q'</dt>
+	  <dd> - Main menu (contains many sub-menus)</dd>
+	  <dt>'N'</dt>
+	  <dd> - Changing current SET INDEX , displaying its included and incident elements</dd>
 	  </dd>
 	  <dt>Space</dt>
 	  <dd> - Align view rotation to right angles</dd>
@@ -123,7 +123,8 @@
       <h3> Some Usage Hints </h3>
       <ul>
 	<li>
-          Press the Shift key to move the cursor with the Arrows and 'B' (i.e. back), 'F' (i.e. forward) keys.
+          Press the Shift key to move the cursor with the Arrows ,'B' 'V' (i.e. back), and 'F' (i.e. forward) keys.
+	  (Instead of Arrow keys you may also use the 'I','J','K','L' keys.)
 	</li>
 	<li>
           Release the Shift key to rotate the model around the cursor with the arrows and 'B', 'F'.
@@ -135,12 +136,12 @@
         <li>
           To insert segment lines:
 	  <ol>
-	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
-	    <li> move the cursor to the second endpoint and press Enter to insert the segment 
+	    <li> move the cursor to the position of its first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the position of its second endpoint and press Enter to insert the segment 
 	      and to set MARKER1 at the new position, </li>
-            <li> and so on - continue with the next endpoints.</li>
+            <li> and so on - continue with the following segments' endpoints.</li>
 	  </ol>
-          To stop inserting lines, press Escape to reset markers.
+          To stop inserting lines, press Escape key to cancel markers.
         </li>
         <li> 
           To insert a triangle:
@@ -169,6 +170,7 @@
 	</li>
 	<li>
 	  You can select endpoints - the key sequences 'QS ...'
+          (Note that you can either add new endpoints to selection or remove all selection.) 
 	</li>
 	<li>
 	  You may use selection to limit visibility (in 'QV' sub-menu) or 
@@ -181,10 +183,20 @@
           in a new set.)
 	  You also create a new set when you are making a copy of selected elements ('QDC...').
           After creation of a copy, the selection is switched to this new copy.
-          Thus the action of moving selected endpoints moves the new copy.
+          Thus the actions on selected endpoints are applied on the new copy.
 	</li>
 	<li>
 	  To cancel view restrictions use 'QVC' sequence.
+	</li>
+	<li>
+	  You can change the color of the cursor ('QCC') or of the background ('QDB').
+	  Cursor color is used for the created endpoints (unless they are copies of other endpoints) and
+	  for painting. 
+          You can set one of the seven predefined colors. 
+	  You can also fine-tune each of the RGB components separately with the pairs of keys: 'E'-'R', 'F'-'G', and 'V'-'B'.
+          To use already used color, select the endpoints and, in the Color Menu, use 'N' to cycle trough the colors of the
+          selected endpoints.
+          Leave the color menu by pressing either 'Q' or Escape key.
 	</li>
 	<li>
 	  DO NOT FORGET TO SAVE YOUR DATA (key sequence: 'QFS')
@@ -372,7 +384,7 @@
 	<dt>'S'</dt>
 	<dd> - SELECTION MOVE</dd>
 	<dt>'L'</dt>
-	<dd> - RIGHT ANGLE SELECTION ROTATE AROUD THE CURSOR</dd>
+	<dd> - RIGHT ANGLE SELECTION ROTATE AROUND THE CURSOR</dd>
 	<dt>'M'</dt>
 	<dd> - MIRROR REFLECTION BY CURSOR PLANES </dd>
       </dl>

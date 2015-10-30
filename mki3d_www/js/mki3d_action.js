@@ -28,6 +28,7 @@ mki3d.action.mode = mki3d.action.modes[mki3d.action.modeIdx]; // default startin
 /* setting actions for the mode */
 
 mki3d.action.setModeActions= function(){
+var nothingSelectedWarning= "<br>NOTHING SELECTED !!! (YOU MAY USE Shift KEY TO LEAVE SELECTION MODES)"
     /* sets actions for current mki3d.action.mode */
     mki3d.message("MODE: <strong>"+mki3d.action.mode+"</strong>" );
     switch(mki3d.action.mode){
@@ -62,7 +63,7 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.back = mki3d.action.backSelected;
 	// ...
 	if(!mki3d.tmp.selected)
-	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	    mki3d.messageAppend(nothingSelectedWarning);
 	else
 	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
 	break;
@@ -75,7 +76,7 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.back = mki3d.action.rotate90Back;
 	// ...
 	if(!mki3d.tmp.selected)
-	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	    mki3d.messageAppend(nothingSelectedWarning);
 	else
 	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
 	break;
@@ -88,7 +89,7 @@ mki3d.action.setModeActions= function(){
 	mki3d.action.back = mki3d.action.mirrorZ;
 	// ...
 	if(!mki3d.tmp.selected)
-	    mki3d.messageAppend("  -- NOTHING SELECTED !!!");
+	    mki3d.messageAppend(nothingSelectedWarning);
 	else
 	    mki3d.messageAppend(" (NUMBER OF SELECTED POINTS = "+JSON.stringify(mki3d.tmp.selected.length)+")" );
 	break;
