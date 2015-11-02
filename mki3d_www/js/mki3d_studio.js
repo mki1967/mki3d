@@ -146,7 +146,10 @@ mki3d.loadModel= function (){
     }
 
     // load segments and colors to GL buffers
-
+    /* for export */
+    mki3d.tmp.exported={};
+    mki3d.tmp.exported.segments= elements;
+    mki3d.tmp.exported.segmentsColors= elementsColors;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );
@@ -155,6 +158,7 @@ mki3d.loadModel= function (){
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elementsColors ), gl.DYNAMIC_DRAW );
 
     buf.nrOfSegments =  elements.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
 
     // TO DO: triangles
 
@@ -176,6 +180,9 @@ mki3d.loadModel= function (){
 
     // load segments and colors to GL buffers
 
+    /* for export */
+    mki3d.tmp.exported.triangles= elements;
+    mki3d.tmp.exported.trianglesColors= elementsColors;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );

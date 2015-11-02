@@ -149,6 +149,10 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 	// SAVE
         mki3d.file.startSaving();
 	break;
+    case 69: // E
+	// EXPORT
+        mki3d.file.startExporting();
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();

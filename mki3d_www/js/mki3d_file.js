@@ -4,6 +4,34 @@ mki3d.file = {};
 
 mki3d.file.suggestedName = "noname.mki3d";
 
+/* EXPORTING */
+
+mki3d.file.startExporting = function () {
+    var saver = {};
+
+    /* clean data from temporratry markers */
+    mki3d.action.cancelSelection();
+    /* unique-sort elements of the model */
+    mki3d.modelSortUnique();
+
+    mki3d.loadModel(); // refresh mki3d.tmp.exported
+
+
+
+    var myObjectString = JSON.stringify(mki3d.tmp.exported);
+    saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
+    saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.replace(".mki3d",".json")  };
+    saver.errorHandler = function(e) { console.error(e); }; 
+    //    saver.savingEndHandler= savingEndHandler;
+    saver.savingEndHandler= mki3d.file.savingEndHandler;
+    saver.writeEndHandler =   function(e){
+	// console.log(e); // for tests..
+	mki3d.file.savingEndHandler(saver); 
+    };
+    chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+}
+
+
 /* SAVING */
 
 mki3d.file.startSaving = function () {
