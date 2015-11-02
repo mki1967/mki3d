@@ -538,28 +538,3 @@ mki3d.callback.onWindowResize = function () {
     mki3d.redraw();
 };
 
-// niżej - do przerobienia
-
-
-function onWindowResize() {
-
-    stopIntervalAction();
-
-    var wth = parseInt(window.innerWidth)-10;
-    var hth = parseInt(window.innerHeight)-10;
-    var canvas = document.getElementById("canvasId");
-
-    canvas.setAttribute("width", ''+wth);
-    canvas.setAttribute("height", ''+hth);
-    gl.viewportWidth = wth;
-    gl.viewportHeight = hth;
-    projection.screenX=wth;
-    projection.screenY=hth;
-
-    pMatrix= projectionMatrix(projection);
-
-    gl.viewport(0,0,wth,hth);
-    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-    drawScene();
-
-}
