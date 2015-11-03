@@ -579,6 +579,19 @@ mki3d.setModelViewMatrix = function () {
 
 }
 
+mki3d.setDataClipping= function (){
+    var v= mki3d.data.clipMaxVector;
+    mki3d.gl.setClipMax(v[0], v[1], v[2]);
+    v= mki3d.data.clipMinVector;
+    mki3d.gl.setClipMin(v[0], v[1], v[2]);
+}
+
+mki3d.unsetClipping= function () {
+    mki3d.gl.setClipMax(MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS);
+    mki3d.gl.setClipMin(-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS);
+}
+
+
 
 /* general redraw function */
 
@@ -593,7 +606,8 @@ mki3d.redraw = function() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // mki3d.loadModel();
-    // mki3d.setDataClipping()
+    mki3d.setDataClipping()
+   // mki3d.unsetClipping();
 
     var buf = mki3d.gl.buffers.model;
     // load segments and colors to GL buffers
@@ -624,7 +638,6 @@ mki3d.redraw = function() {
 
     // draw the model
     mki3d.drawGraph( buf );
-    // mki3d.unsetClipping();
 
 }
 
