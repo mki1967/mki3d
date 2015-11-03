@@ -523,7 +523,7 @@ mki3d.drawGraph = function (graph) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, graph.triangles );
 	gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
 	gl.bindBuffer(gl.ARRAY_BUFFER, graph.trianglesColors);
-	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.TRIANGLES, 0, 3*graph.nrOfTriangles);
     }
     if(graph.segments){
