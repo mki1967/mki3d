@@ -1,5 +1,6 @@
 /* updating example from: http://www.w3schools.com/json/json_http.asp */
 
+/*
 var url = "./example.mki3d";
 
 var xmlhttp = new XMLHttpRequest();
@@ -16,17 +17,8 @@ xmlhttp.send();                   // odkomentowac pozniej
 function myFunction(data) {
 mki3d.data=data;
 mki3d.redraw();
-/*
-    var out = "";
-    var i;
-    for(i = 0; i < arr.length; i++) {
-        out += '<a href="' + arr[i].url + '">' + 
-        arr[i].display + '</a><br>';
-    }
-    document.getElementById("id01").innerHTML = out;
-*/
 }
-
+*/
 
 /***  snipetts from mki3d scripts ***/
 
@@ -87,9 +79,9 @@ window.onload= function(){
     // mki3d.setModelViewMatrix();
     // mki3d.action.init(); // mki3d.action requires initialization
     // mki3d.html.divUpperMessage.innerHTML += "  (Press 'H' for help.)";
-    // mki3d.redraw();
     // window.onkeydown=mki3d.callback.canvasOnKeyDown;
     mki3d.callback.onWindowResize();
+    mki3d.redraw();
 }
 
 
@@ -600,9 +592,38 @@ mki3d.redraw = function() {
     gl.clearColor(bg[0], bg[1], bg[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mki3d.loadModel();
+    // mki3d.loadModel();
     // mki3d.setDataClipping()
-    mki3d.drawGraph( mki3d.gl.buffers.model );
+
+    var buf = mki3d.gl.buffers.model;
+    // load segments and colors to GL buffers
+    var elements=mki3d.exported.segments;
+    var elementsColors = mki3d.exported.segmentsColors;
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elementsColors ), gl.DYNAMIC_DRAW );
+
+    buf.nrOfSegments =  elements.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
+    // load triangles and colors to GL buffers
+    elements=mki3d.exported.triangles;
+    elementsColors = mki3d.exported.trianglesColors;
+
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.trianglesColors);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elementsColors ), gl.DYNAMIC_DRAW );
+
+    buf.nrOfTriangles =  elements.length/(3*MKI3D_VERTEX_POSITION_SIZE); 
+
+
+    // draw the model
+    mki3d.drawGraph( buf );
     // mki3d.unsetClipping();
 
 }
@@ -661,7 +682,7 @@ mki3d.loadModel= function (){
 	}
     }
 
-    // load segments and colors to GL buffers
+    // load triangles and colors to GL buffers
 
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
