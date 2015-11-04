@@ -1,3 +1,21 @@
+/*
+  
+  mki3d_view
+
+  Copyright (C) 2013  Marcin Kik mki1967@gmail.com
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 /***  snipetts from mki3d scripts ***/
 
 
@@ -253,11 +271,13 @@ mki3d.matrixRotatedYZ= function(matrix, alpha ){
 
 mki3d.html = {};
 mki3d.html.divsArray= []; /* array of <div> objects */
+mki3d.html.directionButtonArray= []; /* array of direction buttons */
+mki3d.html.actionButtonArray= []; /* array of action buttons */
 
-mki3d.html.registerDiv = function( selectorString ) {
-    divObject = document.querySelector(selectorString);
-    mki3d.html.divsArray.push(divObject);
-    return divObject;
+mki3d.html.registerInArray = function( selectorString, array ) {
+    htmlObject = document.querySelector(selectorString);
+    array.push(htmlObject);
+    return htmlObject;
 }
 
 mki3d.html.hideAllDivs = function() {
@@ -274,11 +294,34 @@ mki3d.html.showDiv = function(divObject) {
 
 mki3d.html.initObjects= function() {
     mki3d.html.html=document.querySelector('#htmlId');
-    mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
+    mki3d.html.divCanvas= mki3d.html.registerInArray('#divCanvas', mki3d.html.divsArray);
+
+    /* Register direction buttons */
+    mki3d.html.leftButton= mki3d.html.registerInArray('#leftButton', mki3d.html.directionButtonArray);
+    mki3d.html.leftButton.onclick = mki3d.action.leftRotate;
+    console.log( mki3d.html.leftButton );
+    mki3d.html.rightButton= mki3d.html.registerInArray('#rightButton', mki3d.html.directionButtonArray);
+    mki3d.html.upButton= mki3d.html.registerInArray('#upButton', mki3d.html.directionButtonArray);
+    mki3d.html.downButton= mki3d.html.registerInArray('#downButton', mki3d.html.directionButtonArray);
+    mki3d.html.backButton= mki3d.html.registerInArray('#backButton', mki3d.html.directionButtonArray);
+    mki3d.html.forwardButton= mki3d.html.registerInArray('#forwardButton', mki3d.html.directionButtonArray);
+
+    /* Register action buttons */
+    mki3d.html.rotateButton= mki3d.html.registerInArray('#rotateButton', mki3d.html.actionButtonArray);
+    mki3d.html.moveButton= mki3d.html.registerInArray('#moveButton', mki3d.html.actionButtonArray);
+    mki3d.html.scaleUpButton= mki3d.html.registerInArray('#scaleUpButton', mki3d.html.actionButtonArray);
+    mki3d.html.scaleDownButton= mki3d.html.registerInArray('#scaleDownButton', mki3d.html.actionButtonArray);
+    mki3d.html.alignButton= mki3d.html.registerInArray('#alignButton', mki3d.html.actionButtonArray);
+    mki3d.html.resetButton= mki3d.html.registerInArray('#resetButton', mki3d.html.actionButtonArray);
+    mki3d.html.helpButton= mki3d.html.registerInArray('#helpButton', mki3d.html.actionButtonArray);
+
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
+
+    console.log( mki3d.html.divUpperMessage );
+    
 
     mki3d.html.canvas= document.querySelector("#canvasId");
 }
@@ -627,4 +670,70 @@ mki3d.data.backgroundColor = [0,0,0]; // black
 mki3d.data.clipMaxVector = [MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS];
 mki3d.data.clipMinVector = [-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS];
 
+
+/** from mki3d_action.js **/
+
+
+
+/* ROTATE */
+mki3d.action = {};
+/* rotation step */
+mki3d.action.rotationStep = Math.PI / 36; // 5 degrees 
+
+
+mki3d.action.upRotate = function(){
+    mki3d.action.viewRotateUp( mki3d.action.rotationStep);
+}
+
+mki3d.action.downRotate = function(){
+    mki3d.action.viewRotateUp( -mki3d.action.rotationStep);
+}
+
+mki3d.action.rightRotate = function(){
+    mki3d.action.viewRotateRight( mki3d.action.rotationStep);
+}
+
+mki3d.action.leftRotate = function(){
+    mki3d.action.viewRotateRight( -mki3d.action.rotationStep);
+}
+
+mki3d.action.forwardRotate = function(){
+    mki3d.action.viewRotateForward( mki3d.action.rotationStep);
+}
+
+mki3d.action.backRotate = function(){
+    mki3d.action.viewRotateForward( -mki3d.action.rotationStep);
+}
+
+/* view manipulations */
+
+mki3d.action.viewRotateUp = function(alpha) {
+    view = mki3d.data.view;
+    view.rotationMatrix= mki3d.matrixRotatedYZ(view.rotationMatrix, alpha );
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+}
+
+mki3d.action.viewRotateRight = function(alpha) {
+    view = mki3d.data.view;
+    view.rotationMatrix= mki3d.matrixRotatedXZ(view.rotationMatrix, alpha );
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+}
+
+mki3d.action.viewRotateForward = function(alpha) {
+    view = mki3d.data.view;
+    view.rotationMatrix= mki3d.matrixRotatedXY(view.rotationMatrix, -alpha );
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+}
+
+
+mki3d.action.viewAlignRotation = function() {
+    view = mki3d.data.view;
+    mki3d.tmpRefreshVersorsMatrix();
+    view.rotationMatrix= mki3d.matrixTransposed( mki3d.tmp.versorsMatrix );
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+} 
 
