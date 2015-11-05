@@ -346,7 +346,7 @@ mki3d.actionSetOnClickClosure = function( buttonIdxIn,  callback ){
 }
 
 mki3d.buttonMoveCallback= function( buttonIdx ) {
-    // mki3d.actionIdx=mki3d.MOVE_ACTION_IDX;   // uncomment later ...
+    mki3d.actionIdx=mki3d.MOVE_ACTION_IDX;   // uncomment later ...
     mki3d.html.setStyleKeys(mki3d.html.actionButtonArray, "color", mki3d.DEFAULT_COLOR);
     mki3d.html.actionButtonArray[buttonIdx].style.color= mki3d.ACTION_ACTIVE_COLOR; 
 }
@@ -366,37 +366,49 @@ mki3d.html.initObjects= function() {
     mki3d.html.leftButton= mki3d.html.registerInArray('#leftButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1,
     mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx,
-										    [mki3d.action.leftRotate]
+										    [mki3d.action.leftRotate,
+										     mki3d.moveLeft
+										    ]
 										   );
 
     mki3d.html.rightButton= mki3d.html.registerInArray('#rightButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
     mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.rightRotate]
+										     [mki3d.action.rightRotate,
+										      mki3d.moveRight
+										     ]
 										    );
 
     mki3d.html.upButton= mki3d.html.registerInArray('#upButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
     mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.upRotate]
+										     [mki3d.action.upRotate,
+										      mki3d.moveUp
+										     ]
 										    );
 
     mki3d.html.downButton= mki3d.html.registerInArray('#downButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
     mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.downRotate]
+										     [mki3d.action.downRotate,
+										      mki3d.moveDown
+										     ]
 										    );
 
     mki3d.html.backButton= mki3d.html.registerInArray('#backButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
     mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.backRotate]
+										     [mki3d.action.backRotate,
+										      mki3d.moveBack
+										     ]
 										    );
 
     mki3d.html.forwardButton= mki3d.html.registerInArray('#forwardButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
     mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.forwardRotate]
+										     [mki3d.action.forwardRotate,
+										      mki3d.moveForward
+										     ]
 										    );
 
 
@@ -413,8 +425,20 @@ mki3d.html.initObjects= function() {
 									       mki3d.buttonMoveCallback
 									      );
     mki3d.html.scaleUpButton= mki3d.html.registerInArray('#scaleUpButton', mki3d.html.actionButtonArray);
+    idx = mki3d.html.actionButtonArray.length-1, 
+    mki3d.html.actionButtonArray[idx].onclick  = mki3d.actionSetOnClickClosure(idx,
+									       mki3d.scaleUpCallback
+									      );
     mki3d.html.scaleDownButton= mki3d.html.registerInArray('#scaleDownButton', mki3d.html.actionButtonArray);
+    idx = mki3d.html.actionButtonArray.length-1, 
+    mki3d.html.actionButtonArray[idx].onclick  = mki3d.actionSetOnClickClosure(idx,
+									       mki3d.scaleDownCallback
+									      );
     mki3d.html.alignButton= mki3d.html.registerInArray('#alignButton', mki3d.html.actionButtonArray);
+    idx = mki3d.html.actionButtonArray.length-1, 
+    mki3d.html.actionButtonArray[idx].onclick  = mki3d.actionSetOnClickClosure(idx,
+									       mki3d.action.viewAlignRotation
+									      );
     mki3d.html.resetButton= mki3d.html.registerInArray('#resetButton', mki3d.html.actionButtonArray);
     mki3d.html.helpButton= mki3d.html.registerInArray('#helpButton', mki3d.html.actionButtonArray);
 
@@ -429,6 +453,23 @@ mki3d.html.initObjects= function() {
     mki3d.html.canvas= document.querySelector("#canvasId");
 }
 
+
+/* scaling callbacks */
+
+mki3d.MAX_SCALE= 128; // power of two
+mki3d.MIN_SCALE= 1/mki3d.MAX_SCALE;
+
+mki3d.scaleUpCallback= function( buttonIdx ) {
+    var view=mki3d.data.view;
+    view.scale= Math.min(mki3d.MAX_SCALE, 2*view.scale);
+    mki3d.redraw();
+} 
+
+mki3d.scaleDownCallback= function( buttonIdx ) {
+    var view=mki3d.data.view;
+    view.scale= Math.max(mki3d.MIN_SCALE, view.scale/2);
+    mki3d.redraw();
+} 
 
 
 /** from mki3d_gl.js **/
@@ -840,6 +881,117 @@ mki3d.action.viewAlignRotation = function() {
     mki3d.redraw();
 } 
 
+/* moving focus point in obervers coordinates */
+
+mki3d.moveFocusPoint= function( vector ){
+    var view= mki3d.data.view;
+    var rs=1/view.scale;
+    mki3d.vectorScale(vector, rs, rs, rs);
+    var matrix= mki3d.matrixInverse(view.rotationMatrix);
+    var v= mki3d.matrixVectorProduct(matrix, vector);
+    mki3d.vectorMove(view.focusPoint, v[0], v[1], v[2]);
+    mki3d.setModelViewMatrix();
+    mki3d.redraw();
+}
+
+
+
+/* direction callbacks for MOVE */
+
+mki3d.MOVE_STEP=0.5;
+
+mki3d.moveLeft = function() {
+    mki3d.moveFocusPoint([mki3d.MOVE_STEP,0,0]);
+}
+
+mki3d.moveRight = function() {
+    mki3d.moveFocusPoint([-mki3d.MOVE_STEP,0,0]);
+}
+
+mki3d.moveUp = function() {
+    mki3d.moveFocusPoint([0,-mki3d.MOVE_STEP,0]);
+}
+
+mki3d.moveDown = function() {
+    mki3d.moveFocusPoint([0,mki3d.MOVE_STEP,0]);
+}
+
+mki3d.moveForward = function() {
+    mki3d.moveFocusPoint([0,0,-mki3d.MOVE_STEP]);
+}
+
+mki3d.moveBack = function() {
+    mki3d.moveFocusPoint([0,0,mki3d.MOVE_STEP]);
+}
+
 /** from mki3d_tmp.js **/
 
 mki3d.tmp={};
+
+/* (re)creation of tmp data */
+
+mki3d.tmpMakeVersorsMatrix = function() {
+
+    // console.log("TEST : makeVersorsMatrix "); 
+
+    var rot = mki3d.data.view.rotationMatrix;
+
+    var imageXYZRows = [ { img : mki3d.matrixColumn(rot, 0), idx : 0 , row: [1,0,0] },
+			 { img : mki3d.matrixColumn(rot, 1), idx : 1 , row: [0,1,0] },
+			 { img : mki3d.matrixColumn(rot, 2), idx : 2 , row: [0,0,1] }];
+
+    var spMaxAbs, spNext, tmp; 
+
+    /* Move best image for Right key to imageXYZRows[0]  */
+
+    spMaxAbs = mki3d.scalarProduct( imageXYZRows[0].img, [1,0,0] );
+    spNext   = mki3d.scalarProduct( imageXYZRows[1].img, [1,0,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[0];
+	imageXYZRows[0] = imageXYZRows[1];
+        imageXYZRows[1] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [1,0,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[0];
+	imageXYZRows[0] = imageXYZRows[2];
+        imageXYZRows[2] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    /* set direction */
+    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[0].row, -1, -1, -1); 
+
+    /* Move best image for Up key to  imageXYZRows[1] */
+
+    spMaxAbs = mki3d.scalarProduct( imageXYZRows[1].img, [0,1,0] );
+    spNext   = mki3d.scalarProduct( imageXYZRows[2].img, [0,1,0] );
+    if( Math.abs(spMaxAbs) < Math.abs(spNext) ) { // swap 
+	tmp = imageXYZRows[1];
+	imageXYZRows[1] = imageXYZRows[2];
+        imageXYZRows[2] = tmp;
+        spMaxAbs=spNext; // new record
+    } 
+    /* set direction */
+    if(spMaxAbs < 0 ) mki3d.vectorScale( imageXYZRows[1].row, -1, -1, -1); 
+
+    /* set direction of the last versor */
+    if(mki3d.scalarProduct( imageXYZRows[2].img, [0,0,1] )<0) mki3d.vectorScale( imageXYZRows[2].row, -1, -1, -1); 
+
+    /* set the versorsMatrix */
+
+    var alignedMatrix = [ imageXYZRows[0].row,
+			  imageXYZRows[1].row,
+			  imageXYZRows[2].row ];
+    mki3d.tmp.versorsMatrix = mki3d.matrixTransposed(alignedMatrix); // reverse of the alignedMatrix
+    mki3d.tmp.versorsMatrix.input = rot;
+};
+
+mki3d.tmpInvalidVersorsMatrix= function(){
+    if(!mki3d.tmp.versorsMatrix) return true;
+    return mki3d.tmp.versorsMatrix.input !== mki3d.data.view.rotationMatrix;
+}; 
+
+mki3d.tmpRefreshVersorsMatrix= function(){
+    if( mki3d.tmpInvalidVersorsMatrix() ) mki3d.tmpMakeVersorsMatrix();
+};
