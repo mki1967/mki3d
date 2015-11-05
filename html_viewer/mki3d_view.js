@@ -177,9 +177,9 @@ mki3d.matrixScale = function( m, s ) {
 
 mki3d.matrixDeterminant = function(m)
 {
-return    m[0][2]*( m[1][0]*m[2][1]-m[2][0]*m[1][1] )
-         -m[1][2]*( m[0][0]*m[2][1]-m[0][1]*m[2][0] )
-         +m[2][2]*( m[0][0]*m[1][1]-m[0][1]*m[1][0] );
+    return    m[0][2]*( m[1][0]*m[2][1]-m[2][0]*m[1][1] )
+        -m[1][2]*( m[0][0]*m[2][1]-m[0][1]*m[2][0] )
+        +m[2][2]*( m[0][0]*m[1][1]-m[0][1]*m[1][0] );
 
 }
 
@@ -192,13 +192,13 @@ mki3d.matrixInverse= function( m ){
     }
 
     var s= 1/det;
-  
+    
     var r= [ 
-            mki3d.vectorProduct( mki3d.matrixColumn( m, 1),  mki3d.matrixColumn( m, 2) ),
-            mki3d.vectorProduct( mki3d.matrixColumn( m, 2),  mki3d.matrixColumn( m, 0) ),
-            mki3d.vectorProduct( mki3d.matrixColumn( m, 0),  mki3d.matrixColumn( m, 1) ) 
+        mki3d.vectorProduct( mki3d.matrixColumn( m, 1),  mki3d.matrixColumn( m, 2) ),
+        mki3d.vectorProduct( mki3d.matrixColumn( m, 2),  mki3d.matrixColumn( m, 0) ),
+        mki3d.vectorProduct( mki3d.matrixColumn( m, 0),  mki3d.matrixColumn( m, 1) ) 
     ];
- 
+    
 
     mki3d.vectorScale( r[0],  s, s, s );
     mki3d.vectorScale( r[1],  s, s,s );
@@ -291,24 +291,127 @@ mki3d.html.showDiv = function(divObject) {
 }
 
 
+mki3d.ROTATE_ACTION_IDX=0;
+mki3d.MOVE_ACTION_IDX=1;
+
+mki3d.DEFAULT_COLOR = "black";
+mki3d.DIRECTION_ACTIVE_COLOR= "red";
+mki3d.ACTION_ACTIVE_COLOR= "blue";
+
+
+mki3d.ACTION_INTERVAL=50; // 50 ms
+
+mki3d.actionIdx=mki3d.ROTATE_ACTION_IDX;
+
+mki3d.stopIntervalAction =function(){
+    if(!mki3d.tmp.intervalAction) return; // nothing to stop
+    window.clearInterval(mki3d.tmp.intervalAction);
+    mki3d.tmp.intervalAction=null;
+    mki3d.html.setStyleKeys(mki3d.html.directionButtonArray, "color", mki3d.DEFAULT_COLOR);
+}
+
+mki3d.html.setStyleKeys= function( array, key, value){
+    var i;
+    for(i=0; i<array.length; i++) {
+	array[i].style[key]=value;
+    }
+
+}
+
+mki3d.directionSetOnClickClosure = function( buttonIdxIn,  actionArrayIn ){
+    var idx= buttonIdxIn;
+    mki3d.html.directionButtonArray[idx].mki3dAction=actionArrayIn;
+
+    return function(){
+	if(!mki3d.tmp.intervalAction) {
+	    mki3d.tmp.intervalAction=window.setInterval(
+		mki3d.html.directionButtonArray[idx].mki3dAction[mki3d.actionIdx],
+		mki3d.ACTION_INTERVAL
+	    );
+	    mki3d.html.directionButtonArray[idx].style.color= mki3d.DIRECTION_ACTIVE_COLOR; 
+	} else {
+	    mki3d.stopIntervalAction();
+	}
+
+    }
+}
+
+
+mki3d.actionSetOnClickClosure = function( buttonIdxIn,  callback ){
+    var idx= buttonIdxIn;
+    return function(){
+	mki3d.stopIntervalAction();
+	callback(idx);
+    }
+}
+
+mki3d.buttonMoveCallback= function( buttonIdx ) {
+    // mki3d.actionIdx=mki3d.MOVE_ACTION_IDX;   // uncomment later ...
+    mki3d.html.setStyleKeys(mki3d.html.actionButtonArray, "color", mki3d.DEFAULT_COLOR);
+    mki3d.html.actionButtonArray[buttonIdx].style.color= mki3d.ACTION_ACTIVE_COLOR; 
+}
+
+mki3d.buttonRotateCallback= function( buttonIdx ) {
+    mki3d.actionIdx=mki3d.ROTATE_ACTION_IDX;   
+    mki3d.html.setStyleKeys(mki3d.html.actionButtonArray, "color", mki3d.DEFAULT_COLOR);
+    mki3d.html.actionButtonArray[buttonIdx].style.color= mki3d.ACTION_ACTIVE_COLOR; 
+}
 
 mki3d.html.initObjects= function() {
     mki3d.html.html=document.querySelector('#htmlId');
     mki3d.html.divCanvas= mki3d.html.registerInArray('#divCanvas', mki3d.html.divsArray);
 
+    var idx;
     /* Register direction buttons */
     mki3d.html.leftButton= mki3d.html.registerInArray('#leftButton', mki3d.html.directionButtonArray);
-    mki3d.html.leftButton.onclick = mki3d.action.leftRotate;
-    console.log( mki3d.html.leftButton );
+    idx = mki3d.html.directionButtonArray.length-1,
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx,
+										    [mki3d.action.leftRotate]
+										   );
+
     mki3d.html.rightButton= mki3d.html.registerInArray('#rightButton', mki3d.html.directionButtonArray);
+    idx = mki3d.html.directionButtonArray.length-1, 
+    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
+										     [mki3d.action.rightRotate]
+										    );
+
     mki3d.html.upButton= mki3d.html.registerInArray('#upButton', mki3d.html.directionButtonArray);
+    idx = mki3d.html.directionButtonArray.length-1, 
+    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
+										     [mki3d.action.upRotate]
+										    );
+
     mki3d.html.downButton= mki3d.html.registerInArray('#downButton', mki3d.html.directionButtonArray);
+    idx = mki3d.html.directionButtonArray.length-1, 
+    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
+										     [mki3d.action.downRotate]
+										    );
+
     mki3d.html.backButton= mki3d.html.registerInArray('#backButton', mki3d.html.directionButtonArray);
+    idx = mki3d.html.directionButtonArray.length-1, 
+    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
+										     [mki3d.action.backRotate]
+										    );
+
     mki3d.html.forwardButton= mki3d.html.registerInArray('#forwardButton', mki3d.html.directionButtonArray);
+    idx = mki3d.html.directionButtonArray.length-1, 
+    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
+										     [mki3d.action.forwardRotate]
+										    );
+
 
     /* Register action buttons */
     mki3d.html.rotateButton= mki3d.html.registerInArray('#rotateButton', mki3d.html.actionButtonArray);
+    idx = mki3d.html.actionButtonArray.length-1, 
+    mki3d.html.actionButtonArray[idx].onclick  = mki3d.actionSetOnClickClosure(idx,
+									       mki3d.buttonRotateCallback
+									      );
+
     mki3d.html.moveButton= mki3d.html.registerInArray('#moveButton', mki3d.html.actionButtonArray);
+    idx = mki3d.html.actionButtonArray.length-1, 
+    mki3d.html.actionButtonArray[idx].onclick  = mki3d.actionSetOnClickClosure(idx,
+									       mki3d.buttonMoveCallback
+									      );
     mki3d.html.scaleUpButton= mki3d.html.registerInArray('#scaleUpButton', mki3d.html.actionButtonArray);
     mki3d.html.scaleDownButton= mki3d.html.registerInArray('#scaleDownButton', mki3d.html.actionButtonArray);
     mki3d.html.alignButton= mki3d.html.registerInArray('#alignButton', mki3d.html.actionButtonArray);
@@ -457,11 +560,11 @@ mki3d.gl.matrix4 = function (  xx, yx, zx, wx,
 }
 
 mki3d.gl.setClipMax= function ( x, y, z) {
-        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMax,  x,y,z  );
+    mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMax,  x,y,z  );
 }
 
 mki3d.gl.setClipMin= function ( x, y, z) {
-        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMin,  x,y,z  );
+    mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMin,  x,y,z  );
 }
 
 
@@ -647,10 +750,10 @@ mki3d.data = {};
 
 /* view describes transformation of the model before its projection. 
    The model undergoes the following transformations:               
-      - move by -focusPoint
-      - rotate by rotationMatrix
-      - scale by the scale
-      - move by screenShift
+   - move by -focusPoint
+   - rotate by rotationMatrix
+   - scale by the scale
+   - move by screenShift
 */
 
 
@@ -737,3 +840,6 @@ mki3d.action.viewAlignRotation = function() {
     mki3d.redraw();
 } 
 
+/** from mki3d_tmp.js **/
+
+mki3d.tmp={};
