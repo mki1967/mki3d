@@ -2,7 +2,7 @@
   
   mki3d_view
 
-  Copyright (C) 2013  Marcin Kik mki1967@gmail.com
+  Copyright (C) 2015  Marcin Kik mki1967@gmail.com
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
@@ -27,12 +27,6 @@
 
 const MKI3D_VERTEX_POSITION_SIZE = 3; // 3 floats: x,y,z
 const MKI3D_VERTEX_COLOR_SIZE = 3; // 3 floats: r,g,b
-
-
-/* constants used to decide whether the element is degenerate */
-const MKI3D_MIN_SEGMENT = 1e-20;
-const MKI3D_MIN_TRIANGLE = 1e-20;
-
 
 /* upper limit for absoloute value of clipping coordinate */
 const MKI3D_MAX_CLIP_ABS = 1e+20;
@@ -204,7 +198,6 @@ mki3d.matrixInverse= function( m ){
     mki3d.vectorScale( r[1],  s, s,s );
     mki3d.vectorScale( r[2],  s, s, s );
 
-    // console.log( mki3d.matrixProduct( m, r) ); // for tests
     return r;
 }
 
@@ -365,52 +358,27 @@ mki3d.html.initObjects= function() {
     /* Register direction buttons */
     mki3d.html.leftButton= mki3d.html.registerInArray('#leftButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1,
-    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx,
-										    [mki3d.action.leftRotate,
-										     mki3d.moveLeft
-										    ]
-										   );
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.left)
 
     mki3d.html.rightButton= mki3d.html.registerInArray('#rightButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
-    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.rightRotate,
-										      mki3d.moveRight
-										     ]
-										    );
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.right)
 
     mki3d.html.upButton= mki3d.html.registerInArray('#upButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
-    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.upRotate,
-										      mki3d.moveUp
-										     ]
-										    );
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.up)
 
     mki3d.html.downButton= mki3d.html.registerInArray('#downButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
-    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.downRotate,
-										      mki3d.moveDown
-										     ]
-										    );
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.down)
 
     mki3d.html.backButton= mki3d.html.registerInArray('#backButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
-    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.backRotate,
-										      mki3d.moveBack
-										     ]
-										    );
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.back)
 
     mki3d.html.forwardButton= mki3d.html.registerInArray('#forwardButton', mki3d.html.directionButtonArray);
     idx = mki3d.html.directionButtonArray.length-1, 
-    mki3d.html.directionButtonArray[idx].onclick  = mki3d.directionSetOnClickClosure(idx,
-										     [mki3d.action.forwardRotate,
-										      mki3d.moveForward
-										     ]
-										    );
-
+    mki3d.html.directionButtonArray[idx].onclick = mki3d.directionSetOnClickClosure(idx, mki3d.directionActions.forward)
 
     /* Register action buttons */
     mki3d.html.rotateButton= mki3d.html.registerInArray('#rotateButton', mki3d.html.actionButtonArray);
@@ -442,16 +410,60 @@ mki3d.html.initObjects= function() {
     mki3d.html.resetButton= mki3d.html.registerInArray('#resetButton', mki3d.html.actionButtonArray);
     mki3d.html.helpButton= mki3d.html.registerInArray('#helpButton', mki3d.html.actionButtonArray);
 
-
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
 
-    console.log( mki3d.html.divUpperMessage );
-    
-
     mki3d.html.canvas= document.querySelector("#canvasId");
+    mki3d.html.canvas.onmousedown= function (e){
+	mki3d.stopIntervalAction();
+	mki3d.lastMouse.x=e.x;
+	mki3d.lastMouse.y=e.y;
+	mki3d.html.canvas.onmousemove=mki3d.onMouseMove;
+    }
+
+    mki3d.html.canvas.onmouseup= function (e){
+	mki3d.html.canvas.onmousemove=null;
+    }
+
+    mki3d.html.canvas.onwheel= function (e){
+	switch(mki3d.actionIdx) {
+	case mki3d.ROTATE_ACTION_IDX:
+	    mki3d.action.viewRotateForward(-e.wheelDeltaY/120*Math.PI/10);
+	    break;
+	case mki3d.MOVE_ACTION_IDX:
+	    mki3d.moveFocusPoint([0,0, -e.wheelDeltaY/120]);
+	    break;
+	}
+	mki3d.redraw();
+    }
+
 }
+
+mki3d.lastMouse={};
+
+mki3d.onMouseMove= function(e){
+    var dx= e.x-mki3d.lastMouse.x;
+    var dy= e.y-mki3d.lastMouse.y;
+    mki3d.lastMouse.x=e.x;
+    mki3d.lastMouse.y=e.y;
+    switch(mki3d.actionIdx) {
+    case mki3d.ROTATE_ACTION_IDX:
+	if( Math.abs(dx) >= Math.abs(dy) ) {
+	    mki3d.action.viewRotateRight(dx/mki3d.html.canvas.width*2*Math.PI);
+	} else {
+	    mki3d.action.viewRotateUp(-dy/mki3d.html.canvas.height*2*Math.PI);
+	}
+	break;
+    case mki3d.MOVE_ACTION_IDX:
+	var c=2*mki3d.data.view.screenShift[2]/mki3d.data.projection.zoomY;
+	mki3d.moveFocusPoint([-dx/mki3d.html.canvas.height*c, dy/mki3d.html.canvas.height*c,0]);
+	break;
+    }
+    mki3d.redraw();
+
+}
+
 
 
 /* scaling callbacks */
@@ -461,13 +473,13 @@ mki3d.MIN_SCALE= 1/mki3d.MAX_SCALE;
 
 mki3d.scaleUpCallback= function( buttonIdx ) {
     var view=mki3d.data.view;
-    view.scale= Math.min(mki3d.MAX_SCALE, 2*view.scale);
+    view.scale= Math.min(MKI3D_MAX_SCALE, 2*view.scale);
     mki3d.redraw();
 } 
 
 mki3d.scaleDownCallback= function( buttonIdx ) {
     var view=mki3d.data.view;
-    view.scale= Math.max(mki3d.MIN_SCALE, view.scale/2);
+    view.scale= Math.max(MKI3D_MIN_SCALE, view.scale/2);
     mki3d.redraw();
 } 
 
@@ -922,6 +934,17 @@ mki3d.moveForward = function() {
 
 mki3d.moveBack = function() {
     mki3d.moveFocusPoint([0,0,mki3d.MOVE_STEP]);
+}
+
+
+
+mki3d.directionActions = {
+    left: [mki3d.action.leftRotate, mki3d.moveLeft],
+    right: [mki3d.action.rightRotate, mki3d.moveRight],
+    up: [mki3d.action.upRotate, mki3d.moveUp],
+    down: [mki3d.action.downRotate, mki3d.moveDown],
+    back: [mki3d.action.backRotate, mki3d.moveBack],
+    forward: [mki3d.action.forwardRotate, mki3d.moveForward]
 }
 
 /** from mki3d_tmp.js **/
