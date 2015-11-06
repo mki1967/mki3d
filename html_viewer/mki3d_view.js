@@ -15,10 +15,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/***  snipetts from mki3d scripts ***/
-
-
 /** from mki3d_constants.js **/
 
 /* Constants used by mki3d */
