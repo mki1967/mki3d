@@ -54,7 +54,7 @@ mki3d.file.startExporting = function () {
     mki3d.loadModel(); // refresh mki3d.tmp.exported buffers
     mki3d.tmp.exported.view =mki3d.data.view;
     mki3d.tmp.exported.projection =mki3d.data.projection;
-
+    mki3d.tmp.exported.backgroundColor=mki3d.data.backgroundColor;
 
     var dataString = JSON.stringify(mki3d.tmp.exported);
     var htmlString = mki3d.template.exportedHtml.replace("{/* replace */}",dataString);

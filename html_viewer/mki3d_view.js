@@ -821,6 +821,8 @@ mki3d.dataReset= function(){
     mki3d.data.clipMaxVector = [MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS];
     mki3d.data.clipMinVector = [-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS];
     if(mki3d.exported.view) mki3d.data.view = JSON.parse(JSON.stringify(mki3d.exported.view)); // clone
+    if(mki3d.exported.projection) mki3d.data.projection = JSON.parse(JSON.stringify(mki3d.exported.projection)); // clone
+    if(mki3d.exported.backgroundColor) mki3d.data.backgroundColor = JSON.parse(JSON.stringify(mki3d.exported.backgroundColor)); // clone
 }
 
 
