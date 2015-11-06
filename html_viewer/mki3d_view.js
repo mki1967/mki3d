@@ -349,6 +349,7 @@ mki3d.buttonRotateCallback= function( buttonIdx ) {
 
 mki3d.html.initObjects= function() {
     mki3d.html.html=document.querySelector('#htmlId');
+    // mki3d.html.html.style.overflowY="";
     mki3d.html.divCanvas= mki3d.html.registerInArray('#divCanvas', mki3d.html.divsArray);
 
     var idx;

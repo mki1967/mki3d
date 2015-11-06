@@ -3,7 +3,7 @@ mki3d.template={};
 /*jshint multistr: true */
 mki3d.template.exportedHtml="\
 <!DOCTYPE html > \
-<html id=\"#htmlId\" style=\"overflow: hidden;\"> \
+<html id=\"htmlId\" style=\"overflow: hidden;\"> \
   <body> \
     <div id=\"divCanvas\" style=\"position: relative;\"> \
       <canvas id=\"canvasId\" style=\"border:0px; margin: 0px; padding: 0px;\" > \
