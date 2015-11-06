@@ -2,6 +2,42 @@
 
 mki3d.file = {};
 
+/* load recource named identified the "path/name". 
+callback function will process the returned string. */
+
+mki3d.file.loadResource= function( path, name, callback ){
+    var url= chrome.extension.getURL(path+"/"+name);
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            callback(xmlhttp.responseText);
+	}
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+mki3d.file.startSavingString= function( string, mySuggestedName ){
+    var saver = {};
+    saver.blob = new Blob([string], {type: 'text/plain'}); 
+    saver.config = {type: 'saveFile', suggestedName: mySuggestedName  };
+    saver.errorHandler = function(e) { console.error(e); }; 
+    saver.savingEndHandler= mki3d.file.savingEndHandler;
+    saver.writeEndHandler =   function(e){
+	mki3d.file.savingEndHandler(saver); 
+    };
+    chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+}
+
+
+mki3d.file.copyResourceToFile= function(path, name){
+    mki3d.file.loadResource( path, name, function( data ) { mki3d.file.startSavingString(data,name); } );
+}
+
+
+
+/* default suggested name for data saving */
 mki3d.file.suggestedName = "noname.mki3d";
 
 /* EXPORTING */
@@ -14,13 +50,16 @@ mki3d.file.startExporting = function () {
     /* unique-sort elements of the model */
     mki3d.modelSortUnique();
 
-    mki3d.loadModel(); // refresh mki3d.tmp.exported
+    /* prepare exported data */
+    mki3d.loadModel(); // refresh mki3d.tmp.exported buffers
+    mki3d.tmp.exported.view =mki3d.data.view;
+    mki3d.tmp.exported.projection =mki3d.data.projection;
 
 
-
-    var myObjectString = JSON.stringify(mki3d.tmp.exported);
-    saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
-    saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.replace(".mki3d",".json")  };
+    var dataString = JSON.stringify(mki3d.tmp.exported);
+    var htmlString = mki3d.template.exportedHtml.replace("{/* replace */}",dataString);
+    saver.blob = new Blob([htmlString], {type: 'text/plain'}); 
+    saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.replace(".mki3d",".html")  };
     saver.errorHandler = function(e) { console.error(e); }; 
     //    saver.savingEndHandler= savingEndHandler;
     saver.savingEndHandler= mki3d.file.savingEndHandler;
