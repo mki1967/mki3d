@@ -944,6 +944,64 @@ mki3d.directionActions = {
     forward: [mki3d.action.forwardRotate, mki3d.moveForward]
 }
 
+window.onkeydown = function (e){
+    // var code=e.keyCode? e.keyCode : e.charCode;
+    const rotStep = Math.PI / 36; // 5 degrees 
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+	/* direction actions */
+    case 38: // up
+    case 73: // I
+	mki3d.directionActions.up[mki3d.actionIdx]();
+	break;
+    case 40: // down
+    case 75: // K
+	mki3d.directionActions.down[mki3d.actionIdx]();
+	break;
+    case 37: // left
+    case 74:// J
+	mki3d.directionActions.left[mki3d.actionIdx]();
+	break;
+    case 39:// right
+    case 76: // L
+	mki3d.directionActions.right[mki3d.actionIdx]();
+	break;
+    case 70: // F
+	mki3d.directionActions.forward[mki3d.actionIdx]();
+	break;
+    case 66: // B
+    case 86: // V
+	mki3d.directionActions.back[mki3d.actionIdx]();
+	break;
+
+	/* action buttons */
+    case 82: // R
+	mki3d.html.rotateButton.onclick();
+	break;
+    case 77: // M
+	mki3d.html.moveButton.onclick();
+	break;
+
+    case 85: // U
+	mki3d.html.scaleUpButton.onclick();
+	break;
+    case 68: // D
+	mki3d.html.scaleDownButton.onclick();
+	break;
+    case 13: // enter
+    case 27: // escape
+    case 81: // Q
+	mki3d.html.resetButton.onclick();
+	break;
+    case 32: // space
+	mki3d.html.alignButton.onclick();
+	break;
+
+    }
+};
+
+
 /** from mki3d_tmp.js **/
 
 mki3d.tmp={};

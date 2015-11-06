@@ -24,7 +24,7 @@ mki3d.template.exportedHtml="\
 	<button type=\"button\" id=\"scaleDownButton\"> SCALE DOWN </button> \
 	<button type=\"button\" id=\"alignButton\"> ALIGN </button> \
 	<button type=\"button\" id=\"resetButton\"> RESET </button> \
-	<a href=\"https://github.com/mki1967/mki3d\"> INFO </a> \
+	<a href=\"https://github.com/mki1967/mki3d/tree/master/html_viewer\"> INFO </a> \
       </div> \
     </div> \
     <script src=\"mki3d_view.js\"> \
