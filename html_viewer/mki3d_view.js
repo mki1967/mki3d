@@ -412,7 +412,6 @@ mki3d.html.initObjects= function() {
 	mki3d.redraw();
     };
 
-    mki3d.html.helpButton= mki3d.html.registerInArray('#helpButton', mki3d.html.actionButtonArray);
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
