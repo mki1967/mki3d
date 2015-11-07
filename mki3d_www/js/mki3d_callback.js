@@ -58,6 +58,7 @@ mki3d.callback.colorMenuOnKeyDown = function (e){
 	}
 	break;
     case 27: // Esc
+    case 13: // Enter
     case 81: // Q
 	actionMessage="COLOR SET TO: "+JSON.stringify(mki3d.tmp.colorMenuOutput);
 	mki3d.action.escapeToCanvas();
