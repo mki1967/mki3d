@@ -2,6 +2,10 @@
   
   mki3d_view
 
+  THIS SCRIPT SHOULD BE SAVED IN THE FOLDER WITH HTML PAGES EXPORTED 
+  FROM THE MKI 3D RAPID MODELLER ( https://github.com/mki1967/mki3d ).
+  IT IS USED BY THE EXPORTED PAGES FOR RENDERING AND USER INTERACTION.
+
   Copyright (C) 2015  Marcin Kik mki1967@gmail.com
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
