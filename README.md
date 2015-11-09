@@ -4,6 +4,8 @@ MKI 3D RAPID MODELER
 Author: Marcin Kik <mki1967@gmail.com>
 Project can be found on: https://github.com/mki1967/mki3d
 
+Project GitHub Page is available at: http://mki1967.github.io/mki3d/
+
 MKI 3D RAPID MODELER is a keyboard-driven Chrome application 
 for creating simple 3D models consisting of colored line segments and triangles.
 
