@@ -502,6 +502,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
     case 84: // T
 	mki3d.action.toggleMarker2();
 	break;
+    case 85: // U
+	mki3d.undo();
+	break;
     case 78: // N
         mki3d.action.nextSetIndex();
 	break;

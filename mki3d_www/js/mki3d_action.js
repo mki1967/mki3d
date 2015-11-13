@@ -187,7 +187,7 @@ mki3d.action.enter = function(){
 	    if(mki3d.vectorCompare(cursor.marker1.position, point.position) != 0 ) { // enter segment
 		var seg = mki3d.newSegment( cursor.marker1, point );
 		mki3d.modelInsertElement( mki3d.data.model.segments, seg);
-                mki3d.modelChange();
+                mki3d.backup();
 		mki3d.messageAppend(" SEGMENT "+JSON.stringify(seg)
 				    +" INSERTED.<br>NR OF SEGMENTS: "+mki3d.data.model.segments.length);
 		cursor.marker1 = point;
@@ -200,7 +200,7 @@ mki3d.action.enter = function(){
  	    ) { // enter triangle 
 		var tr = mki3d.newTriangle( cursor.marker1, cursor.marker2, point );
 		mki3d.modelInsertElement( mki3d.data.model.triangles, tr);
-                mki3d.modelChange();
+                mki3d.backup();
 		mki3d.messageAppend(" TRIANGLE "+JSON.stringify(tr)
 				    +" INSERTED. <br>NR OF TRIANGLES: "+mki3d.data.model.triangles.length);
 		cursor.marker1 = point;
