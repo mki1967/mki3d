@@ -163,6 +163,7 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 
 mki3d.callback.dataCopyMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
@@ -170,9 +171,9 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.copySelected();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br>NEW SET IS NOW SELECTED";
 	break;
     case 49: // 1
 	mki3d.action.copySelected();
@@ -180,9 +181,9 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
 	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage="<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
     case 50: // 2
 	mki3d.action.copySelected();
@@ -190,9 +191,10 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
 	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+	actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+            "<br> WITH 'GLUES' BETWEEN SEGMENTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
     case 51: // 3
 	mki3d.action.copySelected();
@@ -201,14 +203,15 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
 	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS AND SEGMENTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS AND SEGMENTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+    mki3d.backup();
 }
 
 

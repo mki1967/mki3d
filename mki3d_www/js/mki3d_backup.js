@@ -25,15 +25,20 @@ mki3d.backup= function(){
 mki3d.restoreCurrentModel= function(){
     mki3d.data.model=JSON.parse(mki3d.backup.currentModelString);
     mki3d.tmpResetDisplayModel();
+    mki3d.cancelShades();
+    mki3d.action.cancelVisibilityRestrictions();
+    mki3d.action.cancelSelection();
     mki3d.redraw();
 }
 
 /* swap backup and autosave and restore from autosave */
 mki3d.undo= function(){
     mki3d.backupCheck();
+
     var tmp= mki3d.backup.currentModelString;
     mki3d.backup.currentModelString=mki3d.backup.oldModelString;
     mki3d.backup.oldModelString=tmp;
     mki3d.restoreCurrentModel();
+    mki3d.message("UNDO");
 }
 
