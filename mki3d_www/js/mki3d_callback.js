@@ -180,7 +180,6 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.glueSegments();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
         actionMessage="<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
 	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS"+
             "<br>NEW SET IS NOW SELECTED";
@@ -190,7 +189,6 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.glueTriangles();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
 	actionMessage=
 	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
             "<br> WITH 'GLUES' BETWEEN SEGMENTS"+
@@ -202,7 +200,6 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.glueTriangles();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
         actionMessage=
 	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
 	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS AND SEGMENTS"+
@@ -217,33 +214,29 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 
 mki3d.callback.dataMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
     case 48: //0 
 	mki3d.action.paintSelectedEndpoints();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.";
 	break; 
     case 50: // 2
 	mki3d.action.paintSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.";
 	break; 
     case 51: // 3
 	mki3d.action.paintSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.";
 	break; 
     case 52: // 4
 	mki3d.action.deleteSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS DELETED.");
+	actionMessage="<br> SELECTED SEGMENTS DELETED.";
 	break; 
     case 53: // 5
 	mki3d.action.deleteSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED TRIANGLES DELETED.");
+	actionMessage="<br> SELECTED TRIANGLES DELETED.";
 	break; 
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
@@ -256,10 +249,10 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     case 67: // C
 	mki3d.action.dataCopyMenu();
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+    mki3d.backup();
 }
 
 mki3d.callback.clipMenuOnKeyDown =function (e){
