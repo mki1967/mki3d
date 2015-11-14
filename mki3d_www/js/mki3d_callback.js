@@ -349,49 +349,48 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
 
 mki3d.callback.viewMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
     case 49: // 1
 	mki3d.action.viewSelectedElements();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED ELEMENTS.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED ELEMENTS."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 50: // 2
 	mki3d.action.viewSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED SEGMENTS.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED SEGMENTS."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 51: // 3
 	mki3d.action.viewSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED TRIANGLES.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED TRIANGLES."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 67: // C
 	mki3d.action.cancelVisibilityRestrictions();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTIONS CANCELED.");
+	actionMessage=
+	    "<br> VIEW RESTRICTIONS CANCELED.";
 	break;
     case 85: // U
 	mki3d.action.viewScaleUp();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
-			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	actionMessage=
+	    "<br> VIEW SCALE: "+mki3d.data.view.scale+
+	    "<br> CURSOR STEP: "+mki3d.data.cursor.step;
 	break;
     case 68: // D
 	mki3d.action.viewScaleDown();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
-			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	actionMessage=
+	    "<br> VIEW SCALE: "+mki3d.data.view.scale+
+	    "<br> CURSOR STEP: "+mki3d.data.cursor.step;
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
-    // temporary escape to canvas
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
 }
 
 mki3d.callback.actionMenuOnKeyDown = function (e){
