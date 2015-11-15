@@ -241,6 +241,7 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
 	mki3d.action.colorMenu(); 
+	return; // do not escape to canvas 
 	break;
     case 76: // L
 	// LIGHT
