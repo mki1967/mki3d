@@ -113,6 +113,7 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
     case 67: // C
         mki3d.tmp.colorMenuOutput = mki3d.data.cursor.color; // reference to the object
 	mki3d.action.colorMenu(); 
+	return; // submenu 
 	break;
 	
     case 74: // J
@@ -120,20 +121,14 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	    mki3d.data.model.segments.concat(mki3d.data.model.triangles)
 	);
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br>"+actionMessage);
 	break;
     case 83: // S
 	var endpoints= mki3d.tmp.selected;
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br>"+actionMessage);
 	break;
-	
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br>"+actionMessage);
 }
 
 mki3d.callback.fileMenuOnKeyDown = function (e){
@@ -241,7 +236,7 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
 	mki3d.action.colorMenu(); 
-	return; // do not escape to canvas 
+	return; // submenu -  do not escape to canvas 
 	break;
     case 76: // L
 	// LIGHT
@@ -249,6 +244,7 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
 	break;
     case 67: // C
 	mki3d.action.dataCopyMenu();
+	return; // submenu - do not escape to canvas 
 	break;
     };
     mki3d.action.escapeToCanvas();
