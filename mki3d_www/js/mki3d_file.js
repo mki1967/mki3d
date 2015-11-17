@@ -40,7 +40,7 @@ mki3d.file.copyResourceToFile= function(path, name){
 /* default suggested name for data saving */
 mki3d.file.suggestedName = "noname";
 
-mki3d.file.withoutExtenstion= function( name ){
+mki3d.file.withoutExtension= function( name ){
     var lastIdx = name.lastIndexOf(".");
     if(lastIdx<=0) return name;
     return name.substring(0, lastIdx );
@@ -215,7 +215,7 @@ mki3d.file.loadChooseEntryCallback = function (theEntry, loader) {
     ////
     chrome.fileSystem.getDisplayPath(theEntry, function (displayPath) { 
 	// console.log(displayPath);  
-        mki3d.file.suggestedName= mki3d.file.withoutExtenstion(displayPath);
+        mki3d.file.suggestedName= mki3d.file.withoutExtension(displayPath);
     }
 				    );
 
