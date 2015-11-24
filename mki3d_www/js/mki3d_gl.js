@@ -1,34 +1,34 @@
 mki3d.gl = {};
 
 /*jshint multistr: true */
-mki3d.gl.vertexShaderSource = " \
-attribute vec3 aVertexPosition; \
-attribute vec4 aVertexColor; \
-uniform mat4 uMVMatrix; \
-uniform mat4 uPMatrix; \
-varying vec4 vColor; \
-varying vec3 vPosition;\
-void main(void) { \
-gl_Position =   uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0); \
-vColor = aVertexColor; \
-vPosition = aVertexPosition; \
-}";
+mki3d.gl.vertexShaderSource = " "+
+" attribute vec3 aVertexPosition; "+
+" attribute vec4 aVertexColor; "+
+" uniform mat4 uMVMatrix; "+
+" uniform mat4 uPMatrix; "+
+" varying vec4 vColor; "+
+" varying vec3 vPosition;"+
+" void main(void) { "+
+" gl_Position =   uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0); "+
+" vColor = aVertexColor; "+
+" vPosition = aVertexPosition; "+
+" }\n";
 
-mki3d.gl.fragmentShaderSource = " \
-precision mediump float; \
-uniform vec3 uClipMax; \
-uniform vec3 uClipMin; \
-varying vec4 vColor; \
-varying vec3 vPosition;\
-void main(void) { \
-if( vPosition.x > uClipMax.x ) discard; \
-if( vPosition.y > uClipMax.y ) discard; \
-if( vPosition.z > uClipMax.z ) discard; \
-if( vPosition.x < uClipMin.x ) discard; \
-if( vPosition.y < uClipMin.y ) discard; \
-if( vPosition.z < uClipMin.z ) discard; \
-gl_FragColor = vColor; \
-}";
+mki3d.gl.fragmentShaderSource = " "+
+" precision mediump float; "+
+" uniform vec3 uClipMax; "+
+" uniform vec3 uClipMin; "+
+" varying vec4 vColor; "+
+" varying vec3 vPosition;"+
+" void main(void) { "+
+" if( vPosition.x > uClipMax.x ) discard; "+
+" if( vPosition.y > uClipMax.y ) discard; "+
+" if( vPosition.z > uClipMax.z ) discard; "+
+" if( vPosition.x < uClipMin.x ) discard; "+
+" if( vPosition.y < uClipMin.y ) discard; "+
+" if( vPosition.z < uClipMin.z ) discard; "+
+" gl_FragColor = vColor; "+
+" }\n";
 
 
 
@@ -80,23 +80,24 @@ mki3d.gl.newBuffers= function ( maxSegments, maxTriangles ) {
 
 // SHADER PROGRAM
 
-mki3d.gl.initShaderProgram= function(){
-    var gl=mki3d.gl.context;
-
-    var fragmentShader =gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, mki3d.gl.fragmentShaderSource);
-    gl.compileShader(fragmentShader);
-    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-        console.log(gl.getShaderInfoLog(fragmentShader));
-	return;
-    }
+mki3d.gl.compileAndLinkShaderProgram=function ( gl, vertexShaderSource, fragmentShaderSource ){
 
     var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, mki3d.gl.vertexShaderSource);
+    gl.shaderSource(vertexShader, vertexShaderSource);
     gl.compileShader(vertexShader);
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-        console.log(gl.getShaderInfoLog(vertexShader));
-	return;
+	console.log(gl.getShaderInfoLog(vertexShader));
+	console.log(gl);
+	return null;
+    }
+
+    var fragmentShader =gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fragmentShaderSource);
+    gl.compileShader(fragmentShader);
+    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+	console.log(gl.getShaderInfoLog(fragmentShader));
+	console.log(gl);
+	return null;
     }
 
     var shaderProgram = gl.createProgram();
@@ -104,9 +105,20 @@ mki3d.gl.initShaderProgram= function(){
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        console.log("Could not initialise shaders");
-	return;
+	console.log("Could not initialise shaders");
+	console.log(gl);
+	return null;
     }
+    // SUCCESS 
+    return shaderProgram;
+}
+
+/* init default shader */
+mki3d.gl.initShaderProgram= function(){
+    var gl=mki3d.gl.context;
+
+    var shaderProgram= mki3d.gl.compileAndLinkShaderProgram(  gl,  mki3d.gl.vertexShaderSource,  mki3d.gl.fragmentShaderSource );
+
     gl.useProgram(shaderProgram);
 
     shaderProgram.aVertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");

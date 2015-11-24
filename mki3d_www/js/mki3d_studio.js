@@ -95,6 +95,7 @@ mki3d.unsetClipping= function () {
 mki3d.redraw = function() {
     var gl = mki3d.gl.context;
     var bg = mki3d.data.backgroundColor;
+    gl.useProgram( mki3d.gl.shaderProgram ); // use the default shader program
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
@@ -118,6 +119,9 @@ mki3d.redraw = function() {
 	 mki3d.gl.buffers.selectedPoint
 	 );
     */
+
+    mki3d.text.redraw(); /// tests
+
 }
 
 /* load model to its GL buffer */

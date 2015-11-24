@@ -41,6 +41,7 @@ window.onload= function(){
 
     mki3d.html.initObjects();
     mki3d.gl.initGL( mki3d.html.canvas );
+    mki3d.text.initTexShaderProgram();
     window.onresize= mki3d.callback.onWindowResize;
     mki3d.callback.onWindowResize();
     mki3d.setProjectionMatrix();
