@@ -46,55 +46,33 @@ mki3d.text.createSymbolsImage= function(FONT_SIZE, FONT_FAMILY, SYMBOLS){
 
 /*jshint multistr: true */
 mki3d.text.TEX_VERTEX_SHADER = 
-
-"attribute  vec4 a_position;"+
-
-"attribute vec2 a_texcoord;"+
-
-"uniform float scale_x;\n"+
-
-"uniform vec3 mov;\n"+
-
-"varying vec2 v_texcoord;"+
-
-"void main() {"+
-
-"  vec4 position = a_position;"+
-
-
-"  position.x= position.x*scale_x;"+
-
-"  position.xyz= position.xyz+mov;"+
-
-"  gl_Position =  position;"+
-
-
-"  v_texcoord = a_texcoord; "+
-
-"}"+
-
-"\n";
+    "attribute  vec4 a_position;"+
+    "attribute vec2 a_texcoord;"+
+    " uniform mat4 uMVMatrix; "+
+    " uniform mat4 uPMatrix; "+
+    "uniform float scale_x;\n"+
+    "uniform vec3 mov;\n"+
+    "varying vec2 v_texcoord;"+
+    "void main() {"+
+    "  vec4 position = a_position;"+
+    "  position.x= position.x*scale_x;"+
+    "  position.xyz= position.xyz+mov;"+
+    "  gl_Position = uPMatrix*uMVMatrix*position;"+
+    "  v_texcoord = a_texcoord; "+
+    "}"+
+    "\n";
 
 
 mki3d.text.TEX_FRAGMENT_SHADER =
-    
-"precision mediump float;\n"+
-
-"varying vec2 v_texcoord;\n"+
-
-"uniform float step_y;\n"+
-
-"uniform float idx_y;\n"+
-
-"uniform sampler2D u_texture;\n"+
-
-"void main() {"+
-
-"   gl_FragColor = texture2D(u_texture, vec2(v_texcoord.x, v_texcoord.y*step_y+idx_y*step_y));"+
-
-"}"+
-
-"\n";
+    "precision mediump float;\n"+
+    "varying vec2 v_texcoord;\n"+
+    "uniform float step_y;\n"+
+    "uniform float idx_y;\n"+
+    "uniform sampler2D u_texture;\n"+
+    "void main() {"+
+    "   gl_FragColor = texture2D(u_texture, vec2(v_texcoord.x, v_texcoord.y*step_y+idx_y*step_y));"+
+    "}"+
+    "\n";
 
 mki3d.text.TEXTURE_UNIT=1; // texture unit for text
 
@@ -188,18 +166,9 @@ mki3d.text.prepareSymbolsTexture = function(gl, textureUnitNr, FONT_SIZE, FONT_F
     };  
 }
 
-mki3d.text.drawTextureSymbol= function(gl, symbolIdx, shaderProgram, symTexParams){
+mki3d.text.drawTextureSymbol= function(gl, symbolIdx, shaderProgram ){
     // test version
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, mki3d.text.bufferPos);
-    gl.vertexAttribPointer(shaderProgram.aPosition, 3, gl.FLOAT, false, 0, 0);
-    gl.bindBuffer(gl.ARRAY_BUFFER, mki3d.text.bufferTex);
-    gl.vertexAttribPointer(shaderProgram.aTexCoord, 2, gl.FLOAT, false, 0, 0);
-
-    gl.uniform1i(shaderProgram.uTexture ,  symTexParams.unit ); // texture unit 1
-
-    gl.uniform1f(shaderProgram.scaleX, symTexParams.scaleX);
-    gl.uniform1f(shaderProgram.stepY, 1/symTexParams.SYMBOLS.length );
     gl.uniform1f(shaderProgram.idxY, symbolIdx );
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 };
@@ -209,16 +178,24 @@ mki3d.text.redraw= function(){
     // test version
     var gl = mki3d.gl.context;
     gl.useProgram(mki3d.text.shaderProgram);
-    var texShaderProgram= mki3d.text.shaderProgram;
     var shaderProgram=mki3d.text.shaderProgram;
 
-/*
-    gl.uniform3f(texShaderProgram.mov, -0.5, -0.2, 0.0);
-    mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-1,texShaderProgram, mki3d.text.symTexParams);
-*/
+    gl.bindBuffer(gl.ARRAY_BUFFER, mki3d.text.bufferPos);
+    gl.vertexAttribPointer(shaderProgram.aPosition, 3, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, mki3d.text.bufferTex);
+    gl.vertexAttribPointer(shaderProgram.aTexCoord, 2, gl.FLOAT, false, 0, 0);
 
-    gl.uniform3f(texShaderProgram.mov, 0.0, 0.0, 0.0);
-    mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-1,texShaderProgram, mki3d.text.symTexParams);
+    gl.uniform1i(shaderProgram.uTexture ,   mki3d.text.symTexParams.unit ); // texture unit 1
+
+    gl.uniform1f(shaderProgram.scaleX,  mki3d.text.symTexParams.scaleX);
+    gl.uniform1f(shaderProgram.stepY, 1/ mki3d.text.symTexParams.SYMBOLS.length );
+    
+    gl.uniform3f(shaderProgram.mov, -0.5, -0.2, 0.9);
+    mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-2,shaderProgram, mki3d.text.symTexParams);
+    
+
+    gl.uniform3f(shaderProgram.mov, 0.0, 0.0, 1.0);
+    mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-1,shaderProgram, mki3d.text.symTexParams);
     
     console.log(gl);// test
 
@@ -227,19 +204,19 @@ mki3d.text.redraw= function(){
 
 /*
 
-gl.clearColor( 0,0.5,0.5, 1); 
-gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  gl.clearColor( 0,0.5,0.5, 1); 
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-gl.enable(gl.DEPTH_TEST);
-// gl.enable(gl.CULL_FACE); // not now ...
-// Clear the canvas AND the depth buffer.
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.enable(gl.DEPTH_TEST);
+  // gl.enable(gl.CULL_FACE); // not now ...
+  // Clear the canvas AND the depth buffer.
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-gl.uniform3f(texShaderProgram.mov, -0.5, -0.2, 0.0);
-drawTextureSymbol (gl, SYMBOLS.length-1,texShaderProgram, symTexParams);
+  gl.uniform3f(texShaderProgram.mov, -0.5, -0.2, 0.0);
+  drawTextureSymbol (gl, SYMBOLS.length-1,texShaderProgram, symTexParams);
 
-gl.uniform3f(texShaderProgram.mov, 0.0, 0.0, 0.1);
-drawTextureSymbol (gl, SYMBOLS.length-2,texShaderProgram, symTexParams);
-console.log(gl);
+  gl.uniform3f(texShaderProgram.mov, 0.0, 0.0, 0.1);
+  drawTextureSymbol (gl, SYMBOLS.length-2,texShaderProgram, symTexParams);
+  console.log(gl);
 
 */

@@ -2,33 +2,33 @@ mki3d.gl = {};
 
 /*jshint multistr: true */
 mki3d.gl.vertexShaderSource = " "+
-" attribute vec3 aVertexPosition; "+
-" attribute vec4 aVertexColor; "+
-" uniform mat4 uMVMatrix; "+
-" uniform mat4 uPMatrix; "+
-" varying vec4 vColor; "+
-" varying vec3 vPosition;"+
-" void main(void) { "+
-" gl_Position =   uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0); "+
-" vColor = aVertexColor; "+
-" vPosition = aVertexPosition; "+
-" }\n";
+    " attribute vec3 aVertexPosition; "+
+    " attribute vec4 aVertexColor; "+
+    " uniform mat4 uMVMatrix; "+
+    " uniform mat4 uPMatrix; "+
+    " varying vec4 vColor; "+
+    " varying vec3 vPosition;"+
+    " void main(void) { "+
+    " gl_Position =   uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0); "+
+    " vColor = aVertexColor; "+
+    " vPosition = aVertexPosition; "+
+    " }\n";
 
 mki3d.gl.fragmentShaderSource = " "+
-" precision mediump float; "+
-" uniform vec3 uClipMax; "+
-" uniform vec3 uClipMin; "+
-" varying vec4 vColor; "+
-" varying vec3 vPosition;"+
-" void main(void) { "+
-" if( vPosition.x > uClipMax.x ) discard; "+
-" if( vPosition.y > uClipMax.y ) discard; "+
-" if( vPosition.z > uClipMax.z ) discard; "+
-" if( vPosition.x < uClipMin.x ) discard; "+
-" if( vPosition.y < uClipMin.y ) discard; "+
-" if( vPosition.z < uClipMin.z ) discard; "+
-" gl_FragColor = vColor; "+
-" }\n";
+    " precision mediump float; "+
+    " uniform vec3 uClipMax; "+
+    " uniform vec3 uClipMin; "+
+    " varying vec4 vColor; "+
+    " varying vec3 vPosition;"+
+    " void main(void) { "+
+    " if( vPosition.x > uClipMax.x ) discard; "+
+    " if( vPosition.y > uClipMax.y ) discard; "+
+    " if( vPosition.z > uClipMax.z ) discard; "+
+    " if( vPosition.x < uClipMin.x ) discard; "+
+    " if( vPosition.y < uClipMin.y ) discard; "+
+    " if( vPosition.z < uClipMin.z ) discard; "+
+    " gl_FragColor = vColor; "+
+    " }\n";
 
 
 
@@ -154,10 +154,10 @@ mki3d.gl.matrix4 = function (  xx, yx, zx, wx,
 }
 
 mki3d.gl.setClipMax= function ( x, y, z) {
-        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMax,  x,y,z  );
+    mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMax,  x,y,z  );
 }
 
 mki3d.gl.setClipMin= function ( x, y, z) {
-        mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMin,  x,y,z  );
+    mki3d.gl.context.uniform3f(mki3d.gl.shaderProgram.uClipMin,  x,y,z  );
 }
 

@@ -317,9 +317,9 @@ mki3d.loadCursor= function (){
 
 
 
+/* compute projection matrix */
 
-/* load projection to GL uPMatrix */
-mki3d.setProjectionMatrix = function () {
+mki3d.projectionMatrix = function(){
     var projection = mki3d.data.projection;
     var gl = mki3d.gl.context;
     var xx=  projection.zoomY*gl.viewportHeight/gl.viewportWidth;
@@ -333,12 +333,18 @@ mki3d.setProjectionMatrix = function () {
 				    0, yy,  0,  0,
 				    0,  0, zz, wz,
 				    0,  0, zw,  0 );
+    return pMatrix;
+}
 
-    gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, pMatrix);
+/* load projection to GL uPMatrix */
+
+mki3d.setProjectionMatrix = function () {
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
 }
 
 /* load model view  to GL uMVMatrix */
-mki3d.setModelViewMatrix = function () {
+
+mki3d.modelViewMatrix= function () {
     var gl = mki3d.gl.context;
     var mov = mki3d.vectorClone( mki3d.data.view.focusPoint);
     mki3d.vectorScale( mov, -1, -1, -1);
@@ -356,9 +362,12 @@ mki3d.setModelViewMatrix = function () {
 	rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1],
 	rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
         0,                 0,         0,                                        1 );
-    
-    gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, mvMatrix);
 
+    return mvMatrix;
+}
+
+mki3d.setModelViewMatrix = function () {
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, mki3d.modelViewMatrix() );
 }
 
 
