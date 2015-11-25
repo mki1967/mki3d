@@ -90,12 +90,15 @@ mki3d.text.initTexShaderProgram= function(){
     shaderProgram.aTexCoord = gl.getAttribLocation(shaderProgram, "a_texcoord");
     gl.enableVertexAttribArray(shaderProgram.aTexCoord);
 
-    /* example of uniform: should be dy = symbolIdx * FONT_SIZE  */
+    /* uniform variables  */
     shaderProgram.idxY = gl.getUniformLocation(shaderProgram, "idx_y");
     shaderProgram.stepY = gl.getUniformLocation(shaderProgram, "step_y");
     shaderProgram.scaleX = gl.getUniformLocation(shaderProgram, "scale_x");
     shaderProgram.mov = gl.getUniformLocation(shaderProgram, "mov");
     shaderProgram.uTexture = gl.getUniformLocation(shaderProgram, "u_texture");
+    shaderProgram.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
+    shaderProgram.uMVMatrix = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
     /* load fixed attributes */
     
     
@@ -189,8 +192,17 @@ mki3d.text.redraw= function(){
 
     gl.uniform1f(shaderProgram.scaleX,  mki3d.text.symTexParams.scaleX);
     gl.uniform1f(shaderProgram.stepY, 1/ mki3d.text.symTexParams.SYMBOLS.length );
+
+    /* set matrces */
+    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
+
+    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uMVMatrix, false, 
+				      mki3d.matrixProduct( mki3d.modelViewMatrix(),
+							   mki3d.matrixInverse( mki3d.data.view.rotationMatrix )
+							 )
+				     );
     
-    gl.uniform3f(shaderProgram.mov, -0.5, -0.2, 0.9);
+    gl.uniform3f(shaderProgram.mov, 0.0, 0.0, 0.0);
     mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-2,shaderProgram, mki3d.text.symTexParams);
     
 
