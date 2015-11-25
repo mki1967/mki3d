@@ -189,3 +189,38 @@ mki3d.matrixRotatedYZ= function(matrix, alpha ){
 
     return mki3d.matrixProduct( rot, matrix );
 };
+
+
+/** 4-dimmensional vectors and matrices **/
+
+mki3d.scalarProduct4= function( v, w ) {
+    return v[0]*w[0]+v[1]*w[1]+v[2]*w[2]+v[3]*w[3];
+};
+
+
+/* extend 3d matrix to 4d matrix */
+mki3d.matrix3to4= function( m ) {
+    return [ 
+	[ m[0][0], m[0][1], m[0][2], 0 ],
+	[ m[1][0], m[1][1], m[1][2], 0 ],
+	[ m[2][0], m[2][1], m[2][2], 0 ],
+	[       0,       0,       0, 1 ]
+    ];
+};
+
+
+
+mki3d.matrix4Column = function ( matrix, i ){
+    return [ matrix[0][i], matrix[1][i], matrix[2][i], matrix[3][i] ];
+};
+
+mki3d.matrix4Product = function( m1, m2){ 
+    var sp = mki3d.scalarProduct4;
+    var col = mki3d.matrix4Column;
+    return [ 
+	[ sp(m1[0], col(m2, 0)) , sp(m1[0], col(m2, 1)),  sp(m1[0], col(m2, 2)),  sp(m1[0], col(m2, 3)) ], 
+	[ sp(m1[1], col(m2, 0)) , sp(m1[1], col(m2, 1)),  sp(m1[1], col(m2, 2)),  sp(m1[1], col(m2, 3)) ], 
+	[ sp(m1[2], col(m2, 0)) , sp(m1[2], col(m2, 1)),  sp(m1[2], col(m2, 2)),  sp(m1[2], col(m2, 3)) ], 
+	[ sp(m1[3], col(m2, 0)) , sp(m1[3], col(m2, 1)),  sp(m1[3], col(m2, 2)),  sp(m1[3], col(m2, 3)) ] 
+    ];
+};
