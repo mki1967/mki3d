@@ -52,11 +52,13 @@ mki3d.text.TEX_VERTEX_SHADER =
     "uniform mat4 uMVMatrix; "+
     "uniform mat4 uPMatrix; "+
     "uniform float scale_x;\n"+
+    "uniform float step;\n"+
     "uniform vec3 mov;\n"+
     "varying vec2 v_texcoord;"+
     "void main() {"+
     "  vec4 position = a_position;"+
     "  position.x= position.x*scale_x;"+
+    "  position.xy= position.xy*step;"+
     "  position= uReverseRot*position;"+
     "  position.xyz= position.xyz+mov;"+
     "  gl_Position = uPMatrix*uMVMatrix*position;"+
@@ -96,6 +98,7 @@ mki3d.text.initTexShaderProgram= function(){
     shaderProgram.idxY = gl.getUniformLocation(shaderProgram, "idx_y");
     shaderProgram.stepY = gl.getUniformLocation(shaderProgram, "step_y");
     shaderProgram.scaleX = gl.getUniformLocation(shaderProgram, "scale_x");
+    shaderProgram.step = gl.getUniformLocation(shaderProgram, "step");
     shaderProgram.mov = gl.getUniformLocation(shaderProgram, "mov");
     shaderProgram.uTexture = gl.getUniformLocation(shaderProgram, "u_texture");
     shaderProgram.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
@@ -195,6 +198,8 @@ mki3d.text.redraw= function(){
 
     gl.uniform1f(shaderProgram.scaleX,  mki3d.text.symTexParams.scaleX);
     gl.uniform1f(shaderProgram.stepY, 1/ mki3d.text.symTexParams.SYMBOLS.length );
+
+    gl.uniform1f(shaderProgram.step, mki3d.data.cursor.step);
 
     /* set matrces */
     mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
