@@ -48,14 +48,16 @@ mki3d.text.createSymbolsImage= function(FONT_SIZE, FONT_FAMILY, SYMBOLS){
 mki3d.text.TEX_VERTEX_SHADER = 
     "attribute  vec4 a_position;"+
     "attribute vec2 a_texcoord;"+
-    " uniform mat4 uMVMatrix; "+
-    " uniform mat4 uPMatrix; "+
+    "uniform mat4 uReverseRot; "+
+    "uniform mat4 uMVMatrix; "+
+    "uniform mat4 uPMatrix; "+
     "uniform float scale_x;\n"+
     "uniform vec3 mov;\n"+
     "varying vec2 v_texcoord;"+
     "void main() {"+
     "  vec4 position = a_position;"+
     "  position.x= position.x*scale_x;"+
+    "  position= uReverseRot*position;"+
     "  position.xyz= position.xyz+mov;"+
     "  gl_Position = uPMatrix*uMVMatrix*position;"+
     "  v_texcoord = a_texcoord; "+
@@ -98,6 +100,7 @@ mki3d.text.initTexShaderProgram= function(){
     shaderProgram.uTexture = gl.getUniformLocation(shaderProgram, "u_texture");
     shaderProgram.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.uMVMatrix = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    shaderProgram.uReverseRot = gl.getUniformLocation(shaderProgram, "uReverseRot");
 
     /* load fixed attributes */
     
@@ -195,21 +198,21 @@ mki3d.text.redraw= function(){
 
     /* set matrces */
     mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
+    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uReverseRot, false, 
+				      mki3d.gl.matrix4toGL(mki3d.matrix3to4(mki3d.matrixInverse( mki3d.data.view.rotationMatrix ))) );
 
     mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uMVMatrix, false, 
-				      mki3d.matrixProduct( mki3d.modelViewMatrix(),
-							   mki3d.matrixInverse( mki3d.data.view.rotationMatrix )
-							 )
+				      mki3d.gl.matrix4toGL( mki3d.modelViewMatrix() )
 				     );
     
     gl.uniform3f(shaderProgram.mov, 0.0, 0.0, 0.0);
     mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-2,shaderProgram, mki3d.text.symTexParams);
     
 
-    gl.uniform3f(shaderProgram.mov, 0.0, 0.0, 1.0);
+    gl.uniform3f(shaderProgram.mov, 1.0, 2.0, 2.0);
     mki3d.text.drawTextureSymbol (gl, mki3d.text.SYMBOLS.length-1,shaderProgram, mki3d.text.symTexParams);
     
-    console.log(gl);// test
+    // console.log(gl);// test
 
     gl.useProgram( mki3d.gl.shaderProgram ); //  use the default shader program
 };

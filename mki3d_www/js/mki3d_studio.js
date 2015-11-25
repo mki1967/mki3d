@@ -356,18 +356,29 @@ mki3d.modelViewMatrix= function () {
     mki3d.vectorScale( rot[2], scale, scale, scale);
     
     var scrSh= mki3d.data.view.screenShift;
-    
+   
+/* 
     var mvMatrix =  mki3d.gl.matrix4( 
 	rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0],
 	rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1],
 	rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
-        0,                 0,         0,                                        1 );
+        0,                 0,         0,                                        1 
+    );
+*/
+    var mvMatrix = [
+	[ rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0] ],
+	[ rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1] ],
+	[ rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2] ],
+        [ 0,                 0,         0,                                        1 ]
+    ];
 
+    
     return mvMatrix;
 }
 
 mki3d.setModelViewMatrix = function () {
-    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, mki3d.modelViewMatrix() );
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false,
+				      mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()) );
 }
 
 
