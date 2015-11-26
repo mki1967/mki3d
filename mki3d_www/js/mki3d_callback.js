@@ -98,6 +98,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	mki3d.action.viewMenu();
 	break;
 	
+    case 80: // P
+	mki3d.action.pointsMenu();
+	break;
+	
     default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
@@ -396,21 +400,60 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
-    case 49: // 1
+    case 83: // S
+	// set callback 
+	mki3d.tmp.afterPointsSelect= function( pointChar ) {
+	    if( !mki3d.tmp.points ) mki3d.tmp.points=[];
+	    if( !mki3d.tmp.points.pointers ) mki3d.tmp.points.pointers={};
+	    var pointObject= mki3d.tmp.points.pointers[pointChar];
+	    if(!pointObject) {
+		// create and install new point 
+		pointObject={ 
+		    idx: mki3d.text.SYMBOLS.search(pointChar), 
+		    pos: mki3d.vectorClone( mki3d.data.cursor.position ) 
+		};
+		mki3d.tmp.points.push( pointObject );
+		mki3d.tmp.points.pointers[pointChar]= pointObject;
+	    } else {
+		// change the position of the point
+		pointObject.pos = mki3d.vectorClone( mki3d.data.cursor.position );
+	    }
+	    return "POINT "+pointChar+" PLACED AT "+JSON.stringify(mki3d.data.cursor.position);
+	};
+	// go to point selection submenu ...
+	mki3d.action.pointsSelectMenu();
+	return;
+	break; 
+    case 74: // J
 	// ...
 	break; 
+    case 86: // V
+	// ...
+	break; 
+    case 72: // H
+	// ...
+	break; 
+    default:
+	mki3d.tmp.afterPointsSelect= null;
+	break;
     }
-    
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
 }
 
 mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
-    if( "A".charcodeAt(0)<= code && code<= "Z".charCodeAt(0) ){
-	mki3d.action.escapeToCanvas();	
-	mki3d.tmp.afterPointsSelect(String.String.fromCharCode(code)); 
-	/* mki3d.tmp.afterPointsSelect shoul be set by the procedure invoking this menu */
+    if( "A".charCodeAt(0)<= code && code<= "Z".charCodeAt(0) ){
+	actionMessage=mki3d.tmp.afterPointsSelect( String.fromCharCode(code) ); 
+	/* mki3d.tmp.afterPointsSelect should be set by the procedure invoking this menu */
+    } else {
+	actionMessage="<br>NOT VALID POINT KEY PRESSED !!! (USE THE KEYS FROM THE RANGE 'A' ... 'Z' ONLY.)"; 
     }
+    mki3d.tmp.afterPointsSelect=null; 
+    mki3d.action.escapeToCanvas();	
+    mki3d.messageAppend( actionMessage );
 }
 
 

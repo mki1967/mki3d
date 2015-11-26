@@ -894,3 +894,13 @@ mki3d.action.actionMenu = function(){
     window.onkeydown = mki3d.callback.actionMenuOnKeyDown;
 }
 
+mki3d.action.pointsMenu = function(){
+    mki3d.message( mki3d.html.divPointsMenu.innerHTML );
+    window.onkeydown = mki3d.callback.pointsMenuOnKeyDown;
+}
+
+mki3d.action.pointsSelectMenu = function(){
+    mki3d.message( mki3d.html.divPointsSelectMenu.innerHTML );
+    window.onkeydown = mki3d.callback.pointsSelectMenuOnKeyDown;
+}
+

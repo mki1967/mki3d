@@ -194,7 +194,10 @@ mki3d.text.drawSymbols= function( symbols ) {
 };
 
 mki3d.text.redraw= function(){
-    // test version
+    if(! mki3d.tmp.points ) return;
+    if( mki3d.tmp.points.length==0) return;
+
+    // something must be drawn here
     var gl = mki3d.gl.context;
     gl.useProgram(mki3d.text.shaderProgram);
     var shaderProgram=mki3d.text.shaderProgram;
@@ -226,7 +229,7 @@ mki3d.text.redraw= function(){
     symbols.push( { idx: mki3d.text.SYMBOLS.search("U"), pos: [5,5,5] });
     symbols.push( { idx: mki3d.text.SYMBOLS.search("F"), pos: [6,5,5] });
 
-    mki3d.text.drawSymbols( symbols );
+    mki3d.text.drawSymbols( mki3d.tmp.points );
     
     // console.log(gl);// test
 
