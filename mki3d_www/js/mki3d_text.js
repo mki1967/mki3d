@@ -187,6 +187,11 @@ mki3d.text.drawTextureSymbol= function( symbolIdx, pos ){
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 };
 
+mki3d.text.drawSymbols= function( symbols ) {
+    var i;
+    for(i=0; i<symbols.length; i++)
+	mki3d.text.drawTextureSymbol (symbols[i].idx, symbols[i].pos);
+};
 
 mki3d.text.redraw= function(){
     // test version
@@ -213,17 +218,15 @@ mki3d.text.redraw= function(){
 
 
     //// tests
-    mki3d.tmp.text= [
+    var symbols= [
 	{idx:13, pos: [0,0,0]},
 	{idx:14, pos: [0,2,0]},
 	{idx:15, pos: [2,1,0]},
     ];
-    mki3d.tmp.text.push( { idx: mki3d.text.SYMBOLS.search("U"), pos: [5,5,5] });
+    symbols.push( { idx: mki3d.text.SYMBOLS.search("U"), pos: [5,5,5] });
+    symbols.push( { idx: mki3d.text.SYMBOLS.search("F"), pos: [6,5,5] });
 
-    var i;
-    for(i=0; i<mki3d.tmp.text.length; i++)
-	mki3d.text.drawTextureSymbol (mki3d.tmp.text[i].idx, mki3d.tmp.text[i].pos);
-   
+    mki3d.text.drawSymbols( symbols );
     
     // console.log(gl);// test
 

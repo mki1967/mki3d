@@ -390,6 +390,31 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+mki3d.callback.pointsMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 49: // 1
+	// ...
+	break; 
+    }
+    
+}
+
+mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    if( "A".charcodeAt(0)<= code && code<= "Z".charCodeAt(0) ){
+	mki3d.action.escapeToCanvas();	
+	mki3d.tmp.afterPointsSelect(String.String.fromCharCode(code)); 
+	/* mki3d.tmp.afterPointsSelect shoul be set by the procedure invoking this menu */
+    }
+}
+
+
+
 mki3d.callback.actionMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     // TO DO
