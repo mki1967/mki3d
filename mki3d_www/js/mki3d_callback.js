@@ -403,8 +403,7 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
     case 83: // S
 	// set callback 
 	mki3d.tmp.afterPointsSelect= function( pointChar ) {
-	    if( !mki3d.tmp.points ) mki3d.tmp.points=[];
-	    if( !mki3d.tmp.points.pointers ) mki3d.tmp.points.pointers={};
+	    if( !mki3d.tmp.points ) mki3d.tmp.points={visible:[], pointers:{}}; // structure for constructive points 
 	    var pointObject= mki3d.tmp.points.pointers[pointChar];
 	    if(!pointObject) {
 		// create and install new point 
@@ -412,7 +411,7 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
 		    idx: mki3d.text.SYMBOLS.search(pointChar), 
 		    pos: mki3d.vectorClone( mki3d.data.cursor.position ) 
 		};
-		mki3d.tmp.points.push( pointObject );
+		mki3d.tmp.points.visible.push( pointObject );
 		mki3d.tmp.points.pointers[pointChar]= pointObject;
 	    } else {
 		// change the position of the point

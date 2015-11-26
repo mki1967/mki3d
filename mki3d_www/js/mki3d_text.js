@@ -195,7 +195,7 @@ mki3d.text.drawSymbols= function( symbols ) {
 
 mki3d.text.redraw= function(){
     if(! mki3d.tmp.points ) return;
-    if( mki3d.tmp.points.length==0) return;
+    if( mki3d.tmp.points.visible.length==0) return;
 
     // something must be drawn here
     var gl = mki3d.gl.context;
@@ -220,16 +220,8 @@ mki3d.text.redraw= function(){
 				     );
 
 
-    //// tests
-    var symbols= [
-	{idx:13, pos: [0,0,0]},
-	{idx:14, pos: [0,2,0]},
-	{idx:15, pos: [2,1,0]},
-    ];
-    symbols.push( { idx: mki3d.text.SYMBOLS.search("U"), pos: [5,5,5] });
-    symbols.push( { idx: mki3d.text.SYMBOLS.search("F"), pos: [6,5,5] });
 
-    mki3d.text.drawSymbols( mki3d.tmp.points );
+    mki3d.text.drawSymbols( mki3d.tmp.points.visible );
     
     // console.log(gl);// test
 
