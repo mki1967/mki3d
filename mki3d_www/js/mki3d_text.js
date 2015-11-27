@@ -189,13 +189,15 @@ mki3d.text.drawTextureSymbol= function( symbolIdx, pos ){
 
 mki3d.text.drawSymbols= function( symbols ) {
     var i;
+    symbols.reverse(); // to denote many points in the same position
     for(i=0; i<symbols.length; i++)
 	mki3d.text.drawTextureSymbol (symbols[i].idx, symbols[i].pos);
 };
 
 mki3d.text.redraw= function(){
-    if(! mki3d.tmp.points ) return;
-    if( mki3d.tmp.points.visible.length==0) return;
+    if(! mki3d.tmp.display ) return;
+    if(! mki3d.tmp.display.points ) return;
+    if( mki3d.tmp.display.points.length==0) return;
 
     // something must be drawn here
     var gl = mki3d.gl.context;
@@ -221,30 +223,10 @@ mki3d.text.redraw= function(){
 
 
 
-    mki3d.text.drawSymbols( mki3d.tmp.points.visible );
+    mki3d.text.drawSymbols( mki3d.tmp.display.points );
     
     // console.log(gl);// test
 
     gl.useProgram( mki3d.gl.shaderProgram ); //  use the default shader program
 };
 
-
-
-/*
-
-  gl.clearColor( 0,0.5,0.5, 1); 
-  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-  gl.enable(gl.DEPTH_TEST);
-  // gl.enable(gl.CULL_FACE); // not now ...
-  // Clear the canvas AND the depth buffer.
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  gl.uniform3f(texShaderProgram.mov, -0.5, -0.2, 0.0);
-  drawTextureSymbol (gl, SYMBOLS.length-1,texShaderProgram, symTexParams);
-
-  gl.uniform3f(texShaderProgram.mov, 0.0, 0.0, 0.1);
-  drawTextureSymbol (gl, SYMBOLS.length-2,texShaderProgram, symTexParams);
-  console.log(gl);
-
-*/
