@@ -904,3 +904,7 @@ mki3d.action.pointsSelectMenu = function(){
     window.onkeydown = mki3d.callback.pointsSelectMenuOnKeyDown;
 }
 
+mki3d.action.constructiveMenu = function(){
+    mki3d.message( mki3d.html.divConstructiveMenu.innerHTML );
+    window.onkeydown = mki3d.callback.constructiveMenuOnKeyDown;
+}

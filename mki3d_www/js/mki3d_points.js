@@ -40,6 +40,21 @@ mki3d.pointsHide= function(){
     mki3d.pointsToDisplay();
 }
 
+mki3d.pointsNotDisplayed= function( pointsString ){
+    var result="";
+    var i;
+    for(i=0; i<pointsString.length; i++) {
+	var pName= pointsString.substr(i,1);
+	if( (!mki3d.points.point[pName]) ||
+	    (!mki3d.points.point[pName].pos)  ||
+	    (!mki3d.points.point[pName].visible) ){
+	    result=result.concat(pName);
+	}
+    }
+    return result;
+}
+
+
 /** calbacks for mki3d.tmp.afterPointsSelect **/
 
 mki3d.setPointCallback = function( pointChar ) {

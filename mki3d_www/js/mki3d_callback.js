@@ -101,6 +101,9 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
     case 80: // P
 	mki3d.action.pointsMenu();
 	break;
+    case 77: // M
+        mki3d.action.constructiveMenu();
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();
@@ -394,6 +397,8 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+
+
 mki3d.callback.pointsMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -441,6 +446,20 @@ mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+mki3d.callback.constructiveMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.constructiveMoveAB();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
 
 
 mki3d.callback.actionMenuOnKeyDown = function (e){

@@ -38,6 +38,7 @@
     <script src="js/mki3d_gl.js"></script>
     <script src="js/mki3d_text.js"></script>
     <script src="js/mki3d_points.js"></script>
+    <script src="js/mki3d_constructive.js"></script>
     <script src="js/mki3d_studio.js"></script>
     <script src="js/mki3d_action.js"></script>
     <script src="js/mki3d_callback.js"></script>
@@ -45,9 +46,9 @@
 
 
     <!-- FOR TESTS 
-	<div> <img src="assets/mki_icon_48.png"> 
-	  You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </div>
--->
+	 <div> <img src="assets/mki_icon_48.png"> 
+	   You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </div>
+	 -->
 
 
     <div id="divHelp" display="none"  style="overflow-y: auto;">
@@ -76,7 +77,7 @@
 	      <li> CURSOR moving - when pressed </li>
 	      <li> ROTATION - when released </li>
 	    </ul>
-	  <dt> Arrow Keys, 'F', 'B','V'</dt>
+	    <dt> Arrow Keys, 'F', 'B','V'</dt>
 	  <dd> - Depending on the ACTION MODE, either: move cursor, rotate the screen, or manipulate selected endpoints</dd>
 	  <dt>'Q'</dt>
 	  <dd> - Main menu (contains many sub-menus)</dd>
@@ -130,7 +131,7 @@
 	space. They will be used as parameters of <em>constructive methods</em>.
 	They can be set and then displayed or hidden. 
 	(If two or more constructive points are displayed at the same position, then it is signaled by flashing between two
-         of them in subsequent redraws.)  
+        of them in subsequent redraws.)  
       </p>
 
       <h3> Some Usage Hints </h3>
@@ -252,6 +253,8 @@
 	<dd> - CLIP [...]</dd>
 	<dt>'P'</dt>
 	<dd> - CONSTRUCTIVE POINTS [...]</dd>
+	<dt>'M'</dt>
+	<dd> - CONSTRUCTIVE METHODS [...]</dd>
       </dl>
     </div>
 
@@ -425,6 +428,19 @@
       <dl>
 	<dt>'A' ... 'Z'</dt>
 	<dd>SELECT THE POINT SYMBOL</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveMenu" display="none">
+      <h2>Constructive Methods Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - MOVE SELECTED ENDPOINTS BY THE VECTOR 'A''B' </dd>
       </dl>
     </div>
 
