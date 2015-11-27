@@ -120,9 +120,17 @@
 	Element is <em>incident to</em> a set if at least one of its endpoints is in the set.
         Element is <em>glue element</em> if its endpoints are in different sets.
 	Glue element is incident to more than one set and it is not in any set.
-
+      </p>
+      <p>
 	Endpoints can be <em>selected</em>.
 	Element is <em>selected</em> if all its endpoints are selected.
+      </p>
+      <p>
+	<em>Constructive points</em> denoted by the letters 'A'...'Z' are used to denote positions in the 
+	space. They will be used as parameters of <em>constructive methods</em>.
+	They can be set and then displayed or hidden. 
+	(If two or more constructive points are displayed at the same position, then it is signaled by flashing between two
+         of them in subsequent redraws.)  
       </p>
 
       <h3> Some Usage Hints </h3>
@@ -211,6 +219,10 @@
 	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
 	  and save it to each folder with the exported html pages. 
 	  This script is used by the exported HTML pages.
+	</li>
+	<li>
+	  Use 'QPS...' to set constructive points. You can hide them with 'QPH'. 
+	  You can find any previously set constructive point (hidden or displayed) with 'QPJ...'.
 	</li>
       </ul>
       
@@ -402,9 +414,7 @@
 	<dt>'S'</dt>
 	<dd> - SET POINT AT CURSOR POSITION ... </dd>
 	<dt>'J'</dt>
-	<dd> - JUMP WITH A CURSOR TO SELECTED POINT ... </dd>
-	<dt>'V'</dt>
-	<dd> - SHOW SELECTED POINT ... </dd>
+	<dd> - JUMP WITH A CURSOR TO SELECTED POINT AND SHOW IT ... </dd>
 	<dt>'H'</dt>
 	<dd> - HIDE ALL POINTS </dd>
       </dl>

@@ -408,13 +408,15 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
 	return;
 	break; 
     case 74: // J
-	// ...
-	break; 
-    case 86: // V
-	// ...
+	// set the callback 
+	mki3d.tmp.afterPointsSelect= mki3d.jumpToPointCallback;
+	// go to point selection submenu ...
+	mki3d.action.pointsSelectMenu();
+	return;
 	break; 
     case 72: // H
-	// ...
+	mki3d.pointsHide();
+	actionMessage="<br> ALL CONSTRUCTIVE POINTS ARE HIDDEN. (USE 'QPJ...' TO FIND AND DISPLAY A POINT.)";
 	break; 
     default:
 	mki3d.tmp.afterPointsSelect= null;

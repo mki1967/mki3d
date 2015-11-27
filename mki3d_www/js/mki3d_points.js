@@ -1,4 +1,4 @@
-/* constructive points */
+/*** constructive points ***/
 
 mki3d.points={};
 
@@ -31,11 +31,35 @@ mki3d.pointsToDisplay= function(){
     }
 }
 
+
+mki3d.pointsHide= function(){
+    var pName;
+    for(pName in mki3d.points.point) {
+	mki3d.points.point[pName].visible=false;
+    }
+    mki3d.pointsToDisplay();
+}
+
+/** calbacks for mki3d.tmp.afterPointsSelect **/
+
 mki3d.setPointCallback = function( pointChar ) {
     var pObj=mki3d.points.point[pointChar];
-    if(!pObj) return; // pointChar is not a point ID
+    if(!pObj) return "<br>'"+pointChar+"' is not a point ID";
     pObj.pos=  mki3d.vectorClone( mki3d.data.cursor.position );
     pObj.visible= true;
     mki3d.pointsToDisplay();
-    return "POINT "+pointChar+" PLACED AT "+JSON.stringify(mki3d.data.cursor.position);
+    return "<br> POINT '"+pointChar+"' PLACED AT "+JSON.stringify(mki3d.data.cursor.position);
+};
+
+
+mki3d.jumpToPointCallback = function( pointChar ) {
+    var pObj=mki3d.points.point[pointChar];
+    if(!pObj) return "<br>'"+pointChar+"' is not a point ID";
+    if(!pObj.pos) return "<br>'"+pointChar+"' HAS NOT BEEN SET! (USE 'QPS"+pointChar+"' TO SET IT.)";
+    mki3d.data.cursor.position =  mki3d.vectorClone(pObj.pos);
+    pObj.visible= true;
+    delete mki3d.points.point[pointChar];
+    mki3d.points.point[pointChar]=pObj; // move pObj to the last position
+    mki3d.pointsToDisplay();
+    return "<br> POINT '"+pointChar+"' FOUND WITH THE CURSOR AT "+JSON.stringify(mki3d.data.cursor.position);
 };
