@@ -455,6 +455,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 48: // 0
 	actionMessage= mki3d.constructiveMoveAB();
 	break;
+    case 49: // 1
+	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
+	break;
     }
 
     mki3d.action.escapeToCanvas();
