@@ -14,6 +14,17 @@ mki3d.callback.helpOnKeyDown = function (e){
     }
 }
 
+mki3d.callback.inputsOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+    case 27: // Esc
+	mki3d.html.html.style.overflowY="";
+	mki3d.action.escapeToCanvas();
+	break;
+    }
+}
+
 
 mki3d.callback.colorMenuOnKeyDown = function (e){
     var actionMessage="";
@@ -103,6 +114,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	break;
     case 77: // M
         mki3d.action.constructiveMenu();
+	break;
+	
+    case 73: // I
+        mki3d.action.inputs();
 	break;
 	
     default:

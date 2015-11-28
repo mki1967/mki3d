@@ -908,3 +908,8 @@ mki3d.action.constructiveMenu = function(){
     mki3d.message( mki3d.html.divConstructiveMenu.innerHTML );
     window.onkeydown = mki3d.callback.constructiveMenuOnKeyDown;
 }
+
+mki3d.action.inputs = function(){
+    mki3d.message( mki3d.html.divInputs.innerHTML );
+    window.onkeydown = mki3d.callback.inputsOnKeyDown;
+}

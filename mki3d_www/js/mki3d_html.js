@@ -26,6 +26,7 @@ mki3d.html.showDiv = function(divObject) {
 mki3d.html.initObjects= function() {
     mki3d.html.html=document.querySelector('#htmlId');
     mki3d.html.divHelp= mki3d.html.registerDiv('#divHelp');
+    mki3d.html.divInputs= mki3d.html.registerDiv('#divInputs');
     // console.log(mki3d.html.divHelp.style);
     mki3d.html.divMainMenu= mki3d.html.registerDiv('#divMainMenu');
     mki3d.html.divColorMenu= mki3d.html.registerDiv('#divColorMenu');
