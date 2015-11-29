@@ -24,10 +24,10 @@ mki3d.html.showDiv = function(divObject) {
 
 
 mki3d.html.initObjects= function() {
+    // register divs
     mki3d.html.html=document.querySelector('#htmlId');
     mki3d.html.divHelp= mki3d.html.registerDiv('#divHelp');
     mki3d.html.divInputs= mki3d.html.registerDiv('#divInputs');
-    // console.log(mki3d.html.divHelp.style);
     mki3d.html.divMainMenu= mki3d.html.registerDiv('#divMainMenu');
     mki3d.html.divColorMenu= mki3d.html.registerDiv('#divColorMenu');
     mki3d.html.divCursorMenu= mki3d.html.registerDiv('#divCursorMenu');
@@ -43,9 +43,22 @@ mki3d.html.initObjects= function() {
     mki3d.html.divActionMenu= mki3d.html.registerDiv('#divActionMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 
+
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
 
     mki3d.html.canvas= document.querySelector("#canvasId");
+
+
+    mki3d.html.spanScalingFactor= document.querySelector("#spanScalingFactor");
+
+    /* Inputs page */
+    mki3d.html.inputCursorX= document.querySelector("#inputCursorX");
+    mki3d.html.inputCursorY= document.querySelector("#inputCursorY");
+    mki3d.html.inputCursorZ= document.querySelector("#inputCursorZ");
+    mki3d.html.inputCursorStep= document.querySelector("#inputCursorStep");
+
+    mki3d.html.inputScalingFactor= document.querySelector("#inputScalingFactor");
+
 }

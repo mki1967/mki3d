@@ -28,7 +28,7 @@ mki3d.action.mode = mki3d.action.modes[mki3d.action.modeIdx]; // default startin
 /* setting actions for the mode */
 
 mki3d.action.setModeActions= function(){
-var nothingSelectedWarning= "<br>NOTHING SELECTED !!! (YOU MAY USE Shift KEY TO LEAVE SELECTION MODES)"
+    var nothingSelectedWarning= "<br>NOTHING SELECTED !!! (YOU MAY USE Shift KEY TO LEAVE SELECTION MODES)"
     /* sets actions for current mki3d.action.mode */
     mki3d.message("MODE: <strong>"+mki3d.action.mode+"</strong>" );
     switch(mki3d.action.mode){
@@ -460,9 +460,9 @@ mki3d.action.rotate90 = function( myIn, myOut ){
     if(!mki3d.tmp.selected) return; // nothing selected
     mki3d.tmpRefreshVersorsMatrix();
     var vIn = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
-					     myIn );
+					myIn );
     var vOut = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
-					     myOut );
+					 myOut );
     var rotation=null;
     var i;
     for(i=0; i<mki3d.ROTATIONS_90.length; i++) {
@@ -496,7 +496,7 @@ mki3d.action.mirror= function( myDirection ) {
     if(!mki3d.tmp.selected) return; // nothing selected
     mki3d.tmpRefreshVersorsMatrix();
     var v = mki3d.matrixVectorProduct(mki3d.tmp.versorsMatrix , 
-					     myDirection );
+				      myDirection );
     var scale = [1-2*Math.abs(v[0]), 1-2*Math.abs(v[1]), 1-2*Math.abs(v[2])]; // set -1 on one coordinate and 1 on the remaining
     mki3d.scaleEndpointsArround( mki3d.tmp.selected, scale, mki3d.data.cursor.position );
     mki3d.cancelShades();
@@ -905,11 +905,90 @@ mki3d.action.pointsSelectMenu = function(){
 }
 
 mki3d.action.constructiveMenu = function(){
+    mki3d.html.spanScalingFactor.innerHTML=mki3d.constructive.scalingFactor;
     mki3d.message( mki3d.html.divConstructiveMenu.innerHTML );
     window.onkeydown = mki3d.callback.constructiveMenuOnKeyDown;
 }
 
 mki3d.action.inputs = function(){
-    mki3d.message( mki3d.html.divInputs.innerHTML );
+    /* Prepare Inputs page */
+    mki3d.html.inputCursorX.value= mki3d.data.cursor.position[0];
+    mki3d.html.inputCursorY.value= mki3d.data.cursor.position[1];
+    mki3d.html.inputCursorZ.value= mki3d.data.cursor.position[2];
+    
+    mki3d.html.inputCursorStep.value= mki3d.data.cursor.step;
+
+    // mki3d.html.inputScalingFactor.setAttribute("value", mki3d.constructive.scalingFactor);
+    mki3d.html.inputScalingFactor.value= mki3d.constructive.scalingFactor;
+
+    /* display inputs page */
+    mki3d.html.hideAllDivs();
+    mki3d.html.html.style.overflowY="auto";
+    mki3d.html.showDiv(mki3d.html.divInputs);
+
+    //    mki3d.message( mki3d.html.divInputs.innerHTML );
     window.onkeydown = mki3d.callback.inputsOnKeyDown;
+}
+
+mki3d.action.inputsEnter= function(){
+    var msg="";
+    var value;
+    var oldValue;
+
+    oldValue=mki3d.data.cursor.position[0];
+    value=Number(mki3d.html.inputCursorX.value);
+    if( value != oldValue ) 
+	if(-MKI3D_MAX_CLIP_ABS < value &&
+	   value < MKI3D_MAX_CLIP_ABS ) {
+	    mki3d.data.cursor.position[0]=value;
+	    msg+="<br>CURSOR X SET TO: "+mki3d.data.cursor.position[0];	
+	} else {
+	    msg+="<br>CURSOR X CAN NOT BE "+value;
+	}
+    oldValue=mki3d.data.cursor.position[1];
+    value=Number(mki3d.html.inputCursorY.value);
+    if( value != oldValue) 
+	if(-MKI3D_MAX_CLIP_ABS < value && value < MKI3D_MAX_CLIP_ABS ) {
+	    mki3d.data.cursor.position[1]=value;
+	    msg+="<br>CURSOR Y SET TO: "+mki3d.data.cursor.position[1];	
+	} else {
+	    msg+="<br>CURSOR Y CAN NOT BE "+value;
+	}
+    oldValue=mki3d.data.cursor.position[2];
+    value=Number(mki3d.html.inputCursorZ.value);
+    if( value != oldValue)
+	if(-MKI3D_MAX_CLIP_ABS < value && value < MKI3D_MAX_CLIP_ABS ) {
+	    mki3d.data.cursor.position[2]=value;
+	    msg+="<br>CURSOR Z SET TO: "+mki3d.data.cursor.position[2];	
+	} else {
+	    msg+="<br>CURSOR Z CAN NOT BE "+value;
+	}
+
+    oldValue=mki3d.data.cursorStep;
+    value=Number(mki3d.html.inputCursorStep.value);
+    if( value != oldValue ) {
+	if( (MKI3D_MIN_SCALE <= value && value <= MKI3D_MAX_SCALE) ||
+	    (-MKI3D_MAX_SCALE <= value && value <= -MKI3D_MIN_SCALE) ) {
+	    mki3d.data.cursor.step=value;
+	    mki3d.data.view.scale= 1.0/value;
+	    msg+="<br>CURSOR STEP SET TO: "+value;	
+	} else {
+	    msg+="<br>CURSOR STEP CAN NOT BE "+value;
+	}
+    }
+    oldValue=mki3d.constructive.scalingFactor;
+    value=Number(mki3d.html.inputScalingFactor.value);
+    if( value != oldValue ) {
+	if( (MKI3D_MIN_SCALE <= value && value <= MKI3D_MAX_SCALE) ||
+	    (-MKI3D_MAX_SCALE <= value && value <= -MKI3D_MIN_SCALE) ) {
+	    mki3d.constructive.scalingFactor=value;
+	    msg+="<br>SCALING FACTOR SET TO: "+mki3d.constructive.scalingFactor;	
+	} else {
+	    msg+="<br>SCALING FACTOR CAN NOT BE "+value;
+	}
+    }
+
+    // console.log(value);
+    // console.log(mki3d.html.inputCursorX);
+    return msg;
 }

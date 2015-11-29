@@ -16,11 +16,18 @@ mki3d.callback.helpOnKeyDown = function (e){
 
 mki3d.callback.inputsOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     switch(code)
     {
     case 27: // Esc
 	mki3d.html.html.style.overflowY="";
 	mki3d.action.escapeToCanvas();
+	break;
+    case 13: // Enter
+	mki3d.html.html.style.overflowY="";
+	actionMessage=mki3d.action.inputsEnter();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( actionMessage );
 	break;
     }
 }

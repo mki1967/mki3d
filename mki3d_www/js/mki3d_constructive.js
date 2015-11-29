@@ -1,3 +1,8 @@
+/* parameters of constructive methods */
+
+mki3d.constructive={};
+mki3d.constructive.scalingFactor=1.0; // used in scaling
+
 /* constructive methods */
 
 mki3d.checkConstructivePoints= function( methodName, neededPoints ){
