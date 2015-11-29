@@ -964,7 +964,7 @@ mki3d.action.inputsEnter= function(){
 	    msg+="<br>CURSOR Z CAN NOT BE "+value;
 	}
 
-    oldValue=mki3d.data.cursorStep;
+    oldValue=mki3d.data.cursor.step;
     value=Number(mki3d.html.inputCursorStep.value);
     if( value != oldValue ) {
 	if( (MKI3D_MIN_SCALE <= value && value <= MKI3D_MAX_SCALE) ||
