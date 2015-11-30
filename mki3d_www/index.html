@@ -128,7 +128,7 @@
       </p>
       <p>
 	<em>Constructive points</em> denoted by the letters 'A'...'Z' are used to denote positions in the 
-	space. They will be used as parameters of <em>constructive methods</em>.
+	space. They are used as parameters of <em>constructive methods</em>.
 	They can be set and then displayed or hidden. 
 	(If two or more constructive points are displayed at the same position, then it is signaled by flashing between two
         of them in subsequent redraws.)  
@@ -218,12 +218,16 @@
 	<li>
 	  You may export your model to HTML WebGL page ('QFE'). You need to download the script
 	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
-	  and save it to each folder with the exported html pages. 
+	  and save it to each folder with the exported HTML pages. 
 	  This script is used by the exported HTML pages.
 	</li>
 	<li>
 	  Use 'QPS...' to set constructive points. You can hide them with 'QPH'. 
 	  You can find any previously set constructive point (hidden or displayed) with 'QPJ...'.
+	</li>
+	<li>
+	  You can manually set the cursor coordinates and some other parameters
+	  on the Inputs Page ('QI...').
 	</li>
       </ul>
       
@@ -332,7 +336,7 @@
 	<strong>
 	  NOTE ON EXPORTING: Download the script
 	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
-	  and save it to each folder with the exported html pages.
+	  and save it to each folder with the exported HTML pages.
 	</strong>
 	<dt>'E'</dt>
 	<dd> 
@@ -464,7 +468,7 @@
 	<dt>'1'</dt>
 	<dd> - MOVE CURSOR TO THE INTERSECTION POINT OF LINE 'AB' AND PLANE 'CDE' </dd>
 	<dt>'2'</dt>
-	<dd> - SCALE BY SCALING FACTOR = <span id="spanScalingFactor">2</span> WITH FIXED POINT 'O' 
+	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR = <span id="spanScalingFactor">2</span> WITH FIXED POINT 'O' 
 	  (USE 'QI...' TO CHANGE SCALING FACTOR)
 	</dd>
       </dl>

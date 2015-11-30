@@ -480,6 +480,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 49: // 1
 	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
 	break;
+    case 50: // 2
+	actionMessage= mki3d.constructiveScaleWithFixedPointO();
+	break;
     }
 
     mki3d.action.escapeToCanvas();

@@ -1,7 +1,15 @@
 /* parameters of constructive methods */
 
 mki3d.constructive={};
-mki3d.constructive.scalingFactor=1.0; // used in scaling
+/* scaling factor used used for scaling in all directions */
+/* must be in [MKI3D_MIN_SCALE, MKI3D_MAX_SCALE] or [-MKI3D_MAX_SCALE, -MKI3D_MIN_SCALE] */ 
+mki3d.constructive.scalingFactor=1.0; 
+
+/* scaling factors used for scaling in one of directions X,Y,Z */
+/* must be in [-MKI3D_MAX_SCALE, MKI3D_MAX_SCALE] */
+mki3d.constructive.scalingFactorX=1.0;
+mki3d.constructive.scalingFactorY=1.0;
+mki3d.constructive.scalingFactorZ=1.0;
 
 /* constructive methods */
 
@@ -36,6 +44,33 @@ mki3d.constructiveMoveAB= function(){
     mki3d.backup();
     mki3d.redraw();
     return "<br>MOVED SELECTED ENDPOINTS BY THE VECTOR AB.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+
+/* scale each coordinate of v by, respectively, sx,sy,sz, where FP is a fixed point */
+mki3d.scaleWithFixedPoint= function(v, sx,sy,sz , FP){
+    v[0]= FP[0]+sx*(v[0]-FP[0]);
+    v[1]= FP[1]+sy*(v[1]-FP[1]);
+    v[2]= FP[2]+sz*(v[2]-FP[2]);
+}
+
+mki3d.constructiveScaleWithFixedPointO= function(){
+    var methodName ="SCALE";
+    var neededPoints = "O";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    mki3d.backup();
+    var selected=mki3d.tmp.selected;
+    var pO= mki3d.points.point.O.pos;
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var pos= selected[i].position; // reference to position
+	var s= mki3d.constructive.scalingFactor
+	mki3d.scaleWithFixedPoint(selected[i].position, s,s,s , pO);
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>SELECTED POINTS SCALED BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
 mki3d.moveCursorToIntersectionABandCDE = function(){
