@@ -918,8 +918,10 @@ mki3d.action.inputs = function(){
     
     mki3d.html.inputCursorStep.value= mki3d.data.cursor.step;
 
-    // mki3d.html.inputScalingFactor.setAttribute("value", mki3d.constructive.scalingFactor);
     mki3d.html.inputScalingFactor.value= mki3d.constructive.scalingFactor;
+    mki3d.html.inputPolygonNumberOfVertices.value= mki3d.constructive.polygonNumberOfVertices;
+
+
 
     /* display inputs page */
     mki3d.html.hideAllDivs();
@@ -985,6 +987,17 @@ mki3d.action.inputsEnter= function(){
 	    msg+="<br>SCALING FACTOR SET TO: "+mki3d.constructive.scalingFactor;	
 	} else {
 	    msg+="<br>SCALING FACTOR CAN NOT BE "+value;
+	}
+    }
+
+    oldValue=mki3d.constructive.polygonNumberOfVertices;
+    value=Number(mki3d.html.inputPolygonNumberOfVertices.value);
+    if( value != oldValue ) {
+	if( (MKI3D_POLYGON_MIN_VERTICES<= value && value <= MKI3D_POLYGON_MAX_VERTICES)) {
+	    mki3d.constructive.polygonNumberOfVertices=value;
+	    msg+="<br>NUMBER OF POLYGON VERTICES SET TO: "+mki3d.constructive.polygonNumberOfVertices;	
+	} else {
+	    msg+="<br>NUMBER OF POLYGON VERTICES CAN NOT BE "+value;
 	}
     }
 
