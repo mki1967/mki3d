@@ -52,6 +52,7 @@ mki3d.html.initObjects= function() {
 
 
     mki3d.html.spanScalingFactor= document.querySelector("#spanScalingFactor");
+    mki3d.html.spanPolygonNumberOfVertices= document.querySelector("#spanPolygonNumberOfVertices");
 
     /* Inputs page */
     mki3d.html.inputCursorX= document.querySelector("#inputCursorX");

@@ -486,6 +486,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 51: // 3
 	actionMessage= mki3d.constructivePolygonInsert();
 	break;
+    case 52: // 4
+	actionMessage= mki3d.constructivePolygonTriangles();
+	break;
     }
 
     mki3d.action.escapeToCanvas();

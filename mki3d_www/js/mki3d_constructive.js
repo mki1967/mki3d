@@ -27,6 +27,10 @@ mki3d.polygonMakeVertex= function( vIdx ){
 }
 
 mki3d.constructivePolygonInsert= function(){
+    mki3d.compressSetIndexes(mki3d.data);
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    mki3d.data.set.current=newIdx; // insert polygon to a new set
+
     var c = mki3d.data.cursor.color;
     var n=mki3d.constructive.polygonNumberOfVertices;
     var i;
@@ -43,8 +47,44 @@ mki3d.constructivePolygonInsert= function(){
 	mki3d.modelInsertElement( mki3d.data.model.segments, seg);
     }
     mki3d.backup();
-    return "<br>INSERTED REGULAR POLYGON.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+    return "<br>INSERTED REGULAR POLYGON SEGMENTS TO A NEW - CURRENT - SET."+
+	" (CAN BE SELECTED WITH 'QSS')"+
+	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
+
+mki3d.constructivePolygonTriangles= function(){
+    mki3d.compressSetIndexes(mki3d.data);
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    mki3d.data.set.current=newIdx; // insert polygon to a new set
+
+    var c = mki3d.data.cursor.color;
+    var n=mki3d.constructive.polygonNumberOfVertices;
+    var i;
+    for(i=0; i<n; i++) {
+	var p=mki3d.polygonMakeVertex( i );
+	var pt1 = mki3d.newPoint( p[0], p[1], p[2],  
+				  c[0], c[1], c[2] ,  
+				  mki3d.data.set.current );
+	p=mki3d.polygonMakeVertex( (i+1) % n );
+	var pt2 = mki3d.newPoint( p[0], p[1], p[2],  
+				  c[0], c[1], c[2] ,  
+				  mki3d.data.set.current );
+	var cp = mki3d.vectorClone(mki3d.data.cursor.position);
+	var pt3 = mki3d.newPoint( cp[0], cp[1], cp[2],  
+				  c[0], c[1], c[2] ,  
+				  mki3d.data.set.current );
+
+	var tr = mki3d.newTriangle( pt1, pt2, pt3 );
+	mki3d.modelInsertElement( mki3d.data.model.triangles, tr);
+    }
+    mki3d.backup();
+    return "<br>INSERTED REGULAR POLYGON TRIANGLES TO A NEW - CURRENT - SET."+
+	" (CAN BE SELECTED WITH 'QSS')"+
+	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+
+
+
 
 mki3d.checkConstructivePoints= function( methodName, neededPoints ){
     var missingPoints= mki3d.pointsNotDisplayed( neededPoints );
