@@ -98,7 +98,7 @@ mki3d.checkConstructivePoints= function( methodName, neededPoints ){
 }
 
 mki3d.constructiveMoveAB= function(){
-    var methodName ="MOVE AB";
+    var methodName ="MOVE BY AB";
     var neededPoints = "AB";
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
@@ -117,6 +117,39 @@ mki3d.constructiveMoveAB= function(){
     mki3d.backup();
     mki3d.redraw();
     return "<br>MOVED SELECTED ENDPOINTS BY THE VECTOR AB.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+
+mki3d.constructiveMoveInDirABLenCD= function(){
+    var methodName ="MOVE IN DIRECTION AB BY LENGTH |CD|";
+    var neededPoints = "ABCD";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var AB=[B[0]-A[0], B[1]-A[1], B[2]-A[2]];
+    var lenAB=mki3d.vectorLength(AB);
+    if( lenAB==0 ) return "LENGTH |AB| IS ZERO - NO DIRECTION !";
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var CD=[D[0]-C[0], D[1]-C[1], D[2]-C[2]];
+    var lenCD=mki3d.vectorLength(CD);
+    if( lenCD==0 ) return "LENGTH |CD| IS ZERO - NO MOVEMENT !";
+
+    var s= lenCD/lenAB;
+    var dv= AB;
+    mki3d.vectorScale(dv, s,s,s);
+
+    mki3d.backup();
+    
+    var selected=mki3d.tmp.selected;
+    var i;
+    for( i=0; i< selected.length; i++) {
+	mki3d.vectorMove(selected[i].position, dv[0], dv[1], dv[2]);
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>MOVED SELECTED ENDPOINTS IN DIRECTION AB BY THE LENGTH |CD|.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
 /* scale each coordinate of v by, respectively, sx,sy,sz, where FP is a fixed point */

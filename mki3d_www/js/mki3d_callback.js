@@ -468,7 +468,8 @@ mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
-mki3d.callback.constructiveMenuOnKeyDown = function (e){
+
+mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
     // TO DO
@@ -478,10 +479,43 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
 	actionMessage= mki3d.constructiveMoveAB();
 	break;
     case 49: // 1
-	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
+	actionMessage= mki3d.constructiveMoveInDirABLenCD();
 	break;
-    case 50: // 2
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
 	actionMessage= mki3d.constructiveScaleWithFixedPointO();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 77: // M
+	mki3d.action.constructiveMovingMenu();
+	return;
+    case 83: // S
+	mki3d.action.constructiveScalingMenu();
+	return;
+    case 49: // 1
+	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
 	break;
     case 51: // 3
 	actionMessage= mki3d.constructivePolygonInsert();

@@ -40,6 +40,8 @@ mki3d.html.initObjects= function() {
     mki3d.html.divPointsMenu= mki3d.html.registerDiv('#divPointsMenu');
     mki3d.html.divPointsSelectMenu= mki3d.html.registerDiv('#divPointsSelectMenu');
     mki3d.html.divConstructiveMenu= mki3d.html.registerDiv('#divConstructiveMenu');
+    mki3d.html.divConstructiveMovingMenu= mki3d.html.registerDiv('#divConstructiveMovingMenu');
+    mki3d.html.divConstructiveScalingMenu= mki3d.html.registerDiv('#divConstructiveScalingMenu');
     mki3d.html.divActionMenu= mki3d.html.registerDiv('#divActionMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 

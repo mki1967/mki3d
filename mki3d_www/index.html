@@ -464,14 +464,12 @@
 	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
       </p>
       <dl>
-	<dt>'0'</dt>
-	<dd> - MOVE SELECTED ENDPOINTS BY THE VECTOR 'AB' </dd>
+	<dt>'M'</dt>
+	<dd> - MOVING SELECTED POINTS ... </dd>
+	<dt>'S'</dt>
+	<dd> - SCALING SELECTED POINTS ... </dd>
 	<dt>'1'</dt>
 	<dd> - MOVE CURSOR TO THE INTERSECTION POINT OF LINE 'AB' AND PLANE 'CDE' </dd>
-	<dt>'2'</dt>
-	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR = <span id="spanScalingFactor"></span> WITH FIXED POINT 'O' 
-	  (USE 'QI...' TO CHANGE SCALING FACTOR)
-	</dd>
       </dl>
       <h3> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
 	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </h3>
@@ -481,8 +479,39 @@
 	<dt>'4'</dt>
 	<dd> - INSERT POLYGON SECTORS TRIANGLES </dd>
       </dl>
-
     </div>
+
+    <div id="divConstructiveMovingMenu" display="none">
+      <h2>Constructive Moving Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - MOVE SELECTED ENDPOINTS BY THE VECTOR 'AB' </dd>
+	<dt>'1'</dt>
+	<dd> - MOVE SELECTED ENDPOINTS IN DIRECTION 'AB' BY THE LENGTH |'CD'| </dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveScalingMenu" display="none">
+      <h2>Constructive Scaling Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR = <span id="spanScalingFactor"></span> WITH FIXED POINT 'O' 
+	  (USE 'QI...' TO CHANGE SCALING FACTOR)
+	</dd>
+      </dl>
+    </div>
+
+
 
     <div id="divActionMenu" display="none">
       <h2>Action Menu:</h2>

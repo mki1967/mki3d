@@ -913,6 +913,20 @@ mki3d.action.constructiveMenu = function(){
     window.onkeydown = mki3d.callback.constructiveMenuOnKeyDown;
 }
 
+mki3d.action.constructiveMovingMenu = function(){
+    /* <span> texts  are set by mki3d.action.constructiveMenu */
+
+    mki3d.message( mki3d.html.divConstructiveMovingMenu.innerHTML );
+    window.onkeydown = mki3d.callback.constructiveMovingMenuOnKeyDown;
+}
+
+mki3d.action.constructiveScalingMenu = function(){
+    /* <span> texts  are set by mki3d.action.constructiveMenu */
+
+    mki3d.message( mki3d.html.divConstructiveScalingMenu.innerHTML );
+    window.onkeydown = mki3d.callback.constructiveScalingMenuOnKeyDown;
+}
+
 mki3d.action.inputs = function(){
     /* Prepare Inputs page */
     mki3d.html.inputCursorX.value= mki3d.data.cursor.position[0];
