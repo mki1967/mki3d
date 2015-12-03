@@ -97,6 +97,8 @@ mki3d.checkConstructivePoints= function( methodName, neededPoints ){
 
 }
 
+/** MOVING SELECTED ENDPOINTS **/
+
 mki3d.constructiveMoveAB= function(){
     var methodName ="MOVE BY AB";
     var neededPoints = "AB";
@@ -152,6 +154,11 @@ mki3d.constructiveMoveInDirABLenCD= function(){
     return "<br>MOVED SELECTED ENDPOINTS IN DIRECTION AB BY THE LENGTH |CD|.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
+
+
+/** SCALING SELECTED ENDPOINTS **/
+
+
 /* scale each coordinate of v by, respectively, sx,sy,sz, where FP is a fixed point */
 mki3d.scaleWithFixedPoint= function(v, sx,sy,sz , FP){
     v[0]= FP[0]+sx*(v[0]-FP[0]);
@@ -178,6 +185,44 @@ mki3d.constructiveScaleWithFixedPointO= function(){
     mki3d.redraw();
     return "<br>SELECTED POINTS SCALED BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
+
+mki3d.constructiveScaleByABOverCD= function(){
+    var methodName ="SCALE BY |AB|/|CD|";
+    var neededPoints = "OABCD";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    mki3d.backup();
+    var selected=mki3d.tmp.selected;
+    var pO= mki3d.points.point.O.pos;
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var AB=[B[0]-A[0], B[1]-A[1], B[2]-A[2]];
+    var lenAB=mki3d.vectorLength(AB);
+    var CD=[D[0]-C[0], D[1]-C[1], D[2]-C[2]];
+    var lenCD=mki3d.vectorLength(CD);
+    if( lenCD==0 ) return "LENGTH |'CD'| IS ZERO - CAN NOT SCALE BY |'AB'|/|'CD'| !";
+    var s=lenAB/lenCD;
+    if( s > MKI3D_MAX_SCALE )
+	return "|'AB'|/|'CD'| IS "+Math.abs(s)+" > "+MKI3D_MAX_SCALE+" - TOO LARGE !";
+
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var pos= selected[i].position; // reference to position
+	mki3d.scaleWithFixedPoint(selected[i].position, s,s,s , pO);
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    var warning="";
+    if(s==0) warning="<br> WARNING: |AB|/|CD| WAS ZERO !"
+    return "<br>SELECTED POINTS SCALED BY |'AB'|/|'CD'| WITH FIXED POINT 'O'."+warning+"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+
+
+
+/** CURSOR JUMPING **/
 
 mki3d.moveCursorToIntersectionABandCDE = function(){
     var methodName ="MOVE CURSOR TO INTERSECTION OF AB AND CDE";
