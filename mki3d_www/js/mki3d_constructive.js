@@ -269,3 +269,97 @@ mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
     return [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ];
 
 }
+
+
+
+
+
+/** Three-point transformations transcript from https://github.com/mki1967/et-edit **/
+
+mki3d.findThreePointTransformation = function( P1, P2, P3, 
+					       Q1, Q2, Q3 ) {
+    
+    /*  assumption: for each Pi!=Pj and Qi!=Qj */
+
+    var u=[];
+    u[0]= [ P2[0]-P1[0], P2[1]-P1[1], P2[2]-P1[2] ]; 
+    u[1]= mki3d.vectorProduct( u[0],  [ P3[0]-P1[0], P3[1]-P1[1], P3[2]-P1[2] ] );
+    u[0]=mki3d.vectorNormalized( u[0] );
+    u[1]=mki3d.vectorNormalized( u[1] );
+    u[2]= mki3d.vectorProduct( u[0], u[1]);
+    /*  u[0], u[1],  u[2]  should be orthogonal to each other - the base of the first space */
+    if(mki3d.vectorLength(u[2])==0) {
+	return { error: "three points transformation: the first three points are colinear !!!\n"};
+    }
+
+    var w=[];
+    w[0]= [ Q2[0]-Q1[0], Q2[1]-Q1[1], Q2[2]-Q1[2] ]; 
+    w[1]= mki3d.vectorProduct( w[0],  [ Q3[0]-Q1[0], Q3[1]-Q1[1], Q3[2]-Q1[2] ] );
+    w[0]=mki3d.vectorNormalized( w[0] );
+    w[1]=mki3d.vectorNormalized( w[1] );
+    w[2]= mki3d.vectorProduct( w[0], w[1]);
+    /*  w[0], w[1],  w[2]  should be orthogonal to each other - the base of the second space */
+    if(mki3d.vectorLength(w[2])==0) {
+	return { error: "three points transformation: the last three points are colinear !!!\n"};
+    }
+
+    var i,j;
+    var R=[[],[],[]];
+    for(i=0; i<3; i++)
+	for(j=0; j<3; j++) {
+	    R[i][j]=0;
+	    for(k=0; k<3; k++)
+		R[i][j]+=u[k][j]*w[k][i];
+	}
+
+    var v= mki3d.matrixVectorProduct(R, P1, mv);
+    var mv=[Q1[0]-v[0], Q1[1]-v[1], Q1[2]-v[2] ];  /*  mv = Q1 - R*P1 */
+    
+    return { mv: mv, R: R };
+
+}
+
+
+mki3d.matrixVectorTransformed= function( m, v, vIn ) {
+    var u= mki3d.matrixVectorProduct(m, vIn );
+    mki3d.vectorMove(u, v[0], v[1], v[2] );
+    return u;
+}
+
+
+mki3d.constructiveThreePointTransformation= function(){
+    /*  assumption: for each Pi!=Pj and Qi!=Qj */
+    
+    var methodName ="THREE-POINT RANSFORMATION 'ABC' TO 'DEF'";
+    var neededPoints = "ABCDEF";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var E= mki3d.points.point.E.pos;
+    var F= mki3d.points.point.F.pos;
+
+    var tr=mki3d.findThreePointTransformation( A,B,C, D,E,F );
+
+    if( tr.error ) {
+	return "<br>ERROR: "+tr.error;
+    }
+    
+    var selected=mki3d.tmp.selected;
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var pos= selected[i].position; // reference to position
+	var v=mki3d.matrixVectorTransformed( tr.R, tr.mv, pos );
+	pos[0]=v[0];
+	pos[1]=v[1];
+	pos[2]=v[2];
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>THREE-POINT TRANFORMATION 'ABC' TO 'DEF' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+

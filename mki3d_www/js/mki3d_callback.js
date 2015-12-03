@@ -526,6 +526,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 52: // 4
 	actionMessage= mki3d.constructivePolygonTriangles();
 	break;
+    case 84: // T
+	actionMessage= mki3d.constructiveThreePointTransformation();
+	break;
     }
 
     mki3d.action.escapeToCanvas();
