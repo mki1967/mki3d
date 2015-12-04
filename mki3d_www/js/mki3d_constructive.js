@@ -450,7 +450,7 @@ mki3d.findCenteredFolding = function( A1, A2, /* normalised vectors: OA1 and OA2
 	return {error: "FOLDING FAILED: probably too large angle between rotated lines !!!"};
     }
 
-    y1= (-b-sqrt(delta))/(2*a);
+    y1= (-b-Math.sqrt(delta))/(2*a);
     z1= p*y1+q;
     x1= (Math.abs(A2[0]) > Math.abs(A1[0])) ?
 	(A2B2-y1*A2[1]-z1*A2[2])/A2[0]:
@@ -461,16 +461,16 @@ mki3d.findCenteredFolding = function( A1, A2, /* normalised vectors: OA1 and OA2
     matrix[1]=mki3d.vectorClone(A2);
     matrix[2]=mki3d.vectorClone(K);
 
-    d1=matrix3_det(matrix);
+    d1=mki3d.matrixDeterminant(matrix);
 
     matrix[2][0]=x1;
     matrix[2][1]=y1;
     matrix[2][2]=z1;
 
-    d2=matrix3_det(matrix);
+    d2=mki3d.matrixDeterminant(matrix);
 
     if(d1*d2 < 0){
-	y1= (-b+sqrt(delta))/(2*a);
+	y1= (-b+Math.sqrt(delta))/(2*a);
 	z1= p*y1+q;
 	x1= (Math.abs(A2[0]) > Math.abs(A1[0])) ?
 	    (A2B2-y1*A2[1]-z1*A2[2])/A2[0]:
@@ -545,7 +545,7 @@ mki3d.findFolding = function( A, B, C,
     
     var centered= mki3d.findCenteredFolding(A1,A2, B1,B2, K)
 
-    if( cenetered.error ) {
+    if( centered.error ) {
 	return centered; // propagate error :-(
     }
     
@@ -555,3 +555,67 @@ mki3d.findFolding = function( A, B, C,
     
 }
 
+
+mki3d.constructiveFolding= function(){
+    
+    var methodName ="FOLDING";
+    var neededPoints = "ABCDEF";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    if( !mki3d.tmp.bookmarked || mki3d.tmp.bookmarked.length==0 ) return "<br>NO BOKMARKED ENDPOINTS !!!";
+
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var E= mki3d.points.point.E.pos;
+    var F= mki3d.points.point.F.pos;
+
+    var fold=mki3d.findFolding( A,B,C, D,E, F );
+    if( fold.error ) {
+	return "<br>ERROR: "+fold.error;
+    }
+
+    var V=fold.V;
+    mki3d.pointSetAt("V", V);
+
+
+    var tr1=mki3d.findThreePointTransformation( A,B,D, A,B,V );
+
+    if( tr1.error ) {
+	return "<br> tr1.error (SOME BUG IN THE PROGRAM !!!): "+tr1.error;
+    }
+
+    var tr2=mki3d.findThreePointTransformation( A,C,E, A,C,V );
+
+    if( tr2.error ) {
+	return "<br> tr2.error (SOME BUG IN THE PROGRAM !!!): "+tr2.error;
+    }
+
+    /* tr1 nad tr2 are the correct transfomations */
+
+    var points=mki3d.tmp.selected;
+    var i;
+    for( i=0; i< points.length; i++) {
+	var pos= points[i].position; // reference to position
+	var v=mki3d.matrixVectorTransformed( tr1.R, tr1.mv, pos );
+	pos[0]=v[0];
+	pos[1]=v[1];
+	pos[2]=v[2];
+    }
+
+    points=mki3d.tmp.bookmarked;
+    for( i=0; i< points.length; i++) {
+	var pos= points[i].position; // reference to position
+	var v=mki3d.matrixVectorTransformed( tr2.R, tr2.mv, pos );
+	pos[0]=v[0];
+	pos[1]=v[1];
+	pos[2]=v[2];
+    }
+
+    mki3d.backup();
+    mki3d.cancelShades(); // some triangles could be rotated
+    mki3d.redraw();
+    return "<br>FOLDING OF SELECTED AROUND 'AB' AND OF BOOKARKED AROUND 'AC' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}

@@ -535,6 +535,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 84: // T
 	actionMessage= mki3d.constructiveThreePointTransformation();
 	break;
+    case 70: // F
+	actionMessage= mki3d.constructiveFolding();
+	break;
     }
 
     mki3d.action.escapeToCanvas();

@@ -55,7 +55,19 @@ mki3d.pointsNotDisplayed= function( pointsString ){
 }
 
 
+mki3d.pointSetAt= function( pointChar, position ){
+    var pObj=mki3d.points.point[pointChar];
+    if(!pObj) return; // "<br>'"+pointChar+"' is not a point ID";
+    pObj.pos=  mki3d.vectorClone( position );
+    pObj.visible= true;
+    mki3d.pointsToDisplay();
+    return; // "<br> POINT '"+pointChar+"' PLACED AT "+JSON.stringify(mki3d.data.cursor.position);
+};
+
+
+
 /** calbacks for mki3d.tmp.afterPointsSelect **/
+
 
 mki3d.setPointCallback = function( pointChar ) {
     var pObj=mki3d.points.point[pointChar];
