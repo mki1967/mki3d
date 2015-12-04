@@ -344,6 +344,12 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     case 88: // X
 	mki3d.action.selectInClipBox();
 	break;
+    case 66: // B
+	mki3d.action.bookmarkSelection();
+	break;
+    case 65: // A
+	mki3d.action.selectBookmarked();
+	break;
     case 67: // C
 	mki3d.action.selectByCursor();
 	break;

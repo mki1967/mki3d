@@ -667,6 +667,22 @@ mki3d.action.cancelSelection= function(){
     mki3d.tmp.selected=[];
 }
 
+
+mki3d.action.bookmarkSelection= function(){
+    // if(!mki3d.tmp.selected) return; // nothing selected
+    mki3d.tmp.bookmarked=mki3d.tmp.selected;
+    mki3d.action.cancelSelection();
+}
+
+mki3d.action.selectBookmarked= function(){
+    if(!mki3d.tmp.bookmarked) return; // nothing bookmarked
+    var i;
+    for(i=0; i< mki3d.tmp.bookmarked.length; i++) {
+	mki3d.tmp.bookmarked[i].selected=true;
+    }
+    mki3d.tmpRebuildSelected();  
+}
+
 mki3d.action.unselect= function(elements){
     mki3d.cleanElementEndpointsFromKey(elements, 'selected');
     mki3d.tmpRebuildSelected();

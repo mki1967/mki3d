@@ -42,7 +42,9 @@ mki3d.gl.initGL= function(canvas) {
     mki3d.gl.context = gl;
     mki3d.gl.buffers.cursor = mki3d.gl.newBuffers( MKI3D_CURSOR_MAX_SEGMENTS , MKI3D_CURSOR_MAX_TRIANGLES );
     mki3d.gl.buffers.model = mki3d.gl.newBuffers( MKI3D_MODEL_MAX_SEGMENTS , MKI3D_MODEL_MAX_TRIANGLES );
+    /* special point shapes */
     mki3d.gl.buffers.selectedPoint = mki3d.gl.newBuffers( MKI3D_SELECTED_POINT.length ,  0 /* not used */);
+    mki3d.gl.buffers.bookmarkedPoint = mki3d.gl.newBuffers( MKI3D_BOOKMARKED_POINT.length ,  0 /* not used */);
     mki3d.gl.initShaderProgram();
     mki3d.loadCursor();
 }

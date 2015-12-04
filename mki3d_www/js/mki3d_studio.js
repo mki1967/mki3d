@@ -113,12 +113,11 @@ mki3d.redraw = function() {
 
     if(mki3d.tmp.selected)  
 	mki3d.drawPoints( MKI3D_SELECTED_POINT, mki3d.tmp.selected, mki3d.gl.buffers.selectedPoint );
-    /*   // for tests
-	 mki3d.drawPoints( MKI3D_SELECTED_POINT,  
-	 mki3d.elementEndpointsInBox( mki3d.data.model.segments, mki3d.data.clipMinVector, mki3d.data.clipMaxVector ),
-	 mki3d.gl.buffers.selectedPoint
-	 );
-    */
+
+    if(mki3d.tmp.bookmarked)  
+	mki3d.drawPoints( MKI3D_BOOKMARKED_POINT, mki3d.tmp.bookmarked, mki3d.gl.buffers.bookmarkedPoint );
+
+
 
     mki3d.text.redraw(); /// tests
 
@@ -411,7 +410,7 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
     if( !points || points.length == 0) return; 
     var gl = mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
-    var buf = mki3d.gl.buffers.cursor;
+    // var buf = mki3d.gl.buffers.cursor;
 
     var cPos = mki3d.vectorClone(mki3d.data.cursor.position);
     var step=  mki3d.data.cursor.step;
