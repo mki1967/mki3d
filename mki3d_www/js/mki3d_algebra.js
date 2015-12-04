@@ -43,6 +43,12 @@ mki3d.vectorScale = function(v, sx, sy, sz ) {
     v[2]*= sz;
 };
 
+mki3d.vectorSwapCoordinates = function(v, i,j ) {
+    var tmp=v[i];
+    v[i]=v[j];
+    v[j]=tmp;
+};
+
 
 mki3d.scalarProduct= function( v, w ) {
     return v[0]*w[0]+v[1]*w[1]+v[2]*w[2];

@@ -364,3 +364,194 @@ mki3d.constructiveThreePointTransformation= function(){
     return "<br>THREE-POINT TRANFORMATION 'ABC' TO 'DEF' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
+
+/** FOLDING **/
+/* Folding procedures based on my old algorithms from et-editor (https://github.com/mki1967/et-edit) */
+
+/* mki3d.FindCenteredFolding returns either {error: ... } or {V: [...]}, 
+   where V is the meeting point of the points B1 and B2 tranformed by their respective rotations */
+
+
+
+mki3d.findCenteredFolding = function( A1, A2, /* normalised vectors: OA1 and OA2 are axes of rotations, where O=[0,0,0] */
+				      B1, B2, /* normalised vectors: OB1 and OB2 should meet after respective rotations */
+				      K /* position on one side of the plane OA1A2 - indicates the direction of rotations */
+				    ){
+    var eps= 1e-14;
+    var swap=0;  /*  0 - no swap, 1 - swaped xy, 2 - swaped yz  */
+    var m,p,q, A2B2, A1B1, a, b, c, delta, x1, y1, z1, d1,d2;
+    var matrix=[[0,0,0],[0,0,0],[0,0,0]]; 
+
+    A2B2= mki3d.scalarProduct(A2,B2);
+    A1B1= mki3d.scalarProduct(A1,B1);
+
+
+
+    m=A2[2]*A1[0]-A1[2]*A2[0];
+
+    if(Math.abs(m)<eps)
+    {
+	mki3d.vectorSwapCoordinates(A1, 0,1);
+	mki3d.vectorSwapCoordinates(A2, 0,1);
+	mki3d.vectorSwapCoordinates(B1, 0,1);
+	mki3d.vectorSwapCoordinates(B2, 0,1);
+	mki3d.vectorSwapCoordinates(K, 0,1);
+	m=A2[2]*A1[0]-A1[2]*A2[0];
+	swap=1;
+    }
+
+    if(Math.abs(m)<eps)
+    {
+	mki3d.vectorSwapCoordinates(A1, 0,1);
+	mki3d.vectorSwapCoordinates(A2, 0,1);
+	mki3d.vectorSwapCoordinates(B1, 0,1);
+	mki3d.vectorSwapCoordinates(B2, 0,1);
+	mki3d.vectorSwapCoordinates(K, 0,1);
+
+	mki3d.vectorSwapCoordinates(A1, 2,1);
+	mki3d.vectorSwapCoordinates(A2, 2,1);
+	mki3d.vectorSwapCoordinates(B1, 2,1);
+	mki3d.vectorSwapCoordinates(B2, 2,1);
+	mki3d.vectorSwapCoordinates(K, 2,1);
+	m=A2[2]*A1[0]-A1[2]*A2[0];
+	swap=2;
+    }
+
+
+
+    if(Math.abs(m)<eps){
+	return {error: "FOLDING REFUSED: the axes are almost colinear !!\n"};
+    }
+
+    /*  m!=0  */
+
+    p=(A1[1]*A2[0]-A2[1]*A1[0])/m;
+    q=(A2B2*A1[0]-A1B1*A2[0])/m;
+    
+    a=(1+p*p)*A2[0]*A2[0]+(A2[1]+p*A2[2])*(A2[1]+p*A2[2]);
+    b=2*(p*q*A2[0]*A2[0]-(A2B2-q*A2[2])*(A2[1]+p*A2[2]));
+    c=(q*q-1)*A2[0]*A2[0]+(A2B2-q*A2[2])*(A2B2-q*A2[2]);
+
+    if(Math.abs(a)<eps){
+	a=(1+p*p)*A1[0]*A1[0]+(A1[1]+p*A1[2])*(A1[1]+p*A1[2]);
+	b=2*(p*q*A1[0]*A1[0]-(A1B1-q*A1[2])*(A1[1]+p*A1[2]));
+	c=(q*q-1)*A1[0]*A1[0]+(A1B1-q*A1[2])*(A1B1-q*A1[2]);
+    }
+
+    if(Math.abs(a)<eps){
+	return {error: "FOLDING REFUSED: the axes are almost colinear !!\n"};
+    }
+
+    /*  a!=0 */
+
+    delta= b*b-4*a*c;
+
+    if(delta<0){
+	return {error: "FOLDING FAILED: probably too large angle between rotated lines !!!"};
+    }
+
+    y1= (-b-sqrt(delta))/(2*a);
+    z1= p*y1+q;
+    x1= (Math.abs(A2[0]) > Math.abs(A1[0])) ?
+	(A2B2-y1*A2[1]-z1*A2[2])/A2[0]:
+	(A1B1-y1*A1[1]-z1*A1[2])/A1[0];
+    
+
+    matrix[0]=mki3d.vectorClone(A1);
+    matrix[1]=mki3d.vectorClone(A2);
+    matrix[2]=mki3d.vectorClone(K);
+
+    d1=matrix3_det(matrix);
+
+    matrix[2][0]=x1;
+    matrix[2][1]=y1;
+    matrix[2][2]=z1;
+
+    d2=matrix3_det(matrix);
+
+    if(d1*d2 < 0){
+	y1= (-b+sqrt(delta))/(2*a);
+	z1= p*y1+q;
+	x1= (Math.abs(A2[0]) > Math.abs(A1[0])) ?
+	    (A2B2-y1*A2[1]-z1*A2[2])/A2[0]:
+	    (A1B1-y1*A1[1]-z1*A1[2])/A1[0];
+    }
+
+    var V=[x1,y1,z1];
+
+    switch(swap){
+    case 1:
+	mki3d.vectorSwapCoordinates(A1, 0,1);
+	mki3d.vectorSwapCoordinates(A2, 0,1);
+	mki3d.vectorSwapCoordinates(B1, 0,1);
+	mki3d.vectorSwapCoordinates(B2, 0,1);
+	mki3d.vectorSwapCoordinates(K, 0,1);
+	mki3d.vectorSwapCoordinates(V, 0,1);
+	break;
+
+    case 2:
+	mki3d.vectorSwapCoordinates(A1, 2,1);
+	mki3d.vectorSwapCoordinates(A2, 2,1);
+	mki3d.vectorSwapCoordinates(B1, 2,1);
+	mki3d.vectorSwapCoordinates(B2, 2,1);
+	mki3d.vectorSwapCoordinates(K, 2,1);
+	mki3d.vectorSwapCoordinates(V, 2,1);
+	break;
+
+    }
+
+    return {V: V};
+}
+
+
+/* 
+   mki3d.findFolding returns either {error:"..."} or {V:[...]},
+   where V is a position such that AV is the line, where AD meets AE while
+   AD and AE are rotarted around AB and AC respectively,
+   and F and V are on the same side of the plane ABC.
+*/
+
+mki3d.findFolding = function( A, B, C,
+			      D, E,
+			      F 
+			    ){
+    var A1, A2, B1, B2, K;
+
+    if(mki3d.vectorCompare(A,B)==0)
+    {
+	return {error: "FOLDING REFUSED: A=B !!!"};
+    };
+    A1=mki3d.vectorNormalized( [ B[0]-A[0], B[1]-A[1], B[2]-A[2] ] ); 
+
+    if(mki3d.vectorCompare(A,C)==0)
+    {
+	return {error: "FOLDING REFUSED: A=C !!!"};
+    }
+    A2=mki3d.vectorNormalized( [ C[0]-A[0], C[1]-A[1], C[2]-A[2] ] ); 
+    
+    if(mki3d.vectorCompare(A,D)==0)
+    {
+	return {error: "FOLDING REFUSED: A=D !!!"};
+    }
+    B1=mki3d.vectorNormalized( [ D[0]-A[0], D[1]-A[1], D[2]-A[2] ] ); 
+
+    if(mki3d.vectorCompare(A,E)==0)
+    {
+	return {error: "FOLDING REFUSED: A=E !!!"};
+    }
+    B2=mki3d.vectorNormalized( [ E[0]-A[0], E[1]-A[1], E[2]-A[2] ] ); 
+
+    K= [ F[0]-A[0], F[1]-A[1], F[2]-A[2] ]
+    
+    var centered= mki3d.findCenteredFolding(A1,A2, B1,B2, K)
+
+    if( cenetered.error ) {
+	return centered; // propagate error :-(
+    }
+    
+    
+    mki3d.vectorMove(centered.V, A);
+    return centered; // return centered solution moved by A :-)
+    
+}
+
