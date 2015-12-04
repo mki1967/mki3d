@@ -359,6 +359,7 @@ mki3d.constructiveThreePointTransformation= function(){
 	pos[2]=v[2];
     }
     mki3d.backup();
+    mki3d.cancelShades(); // some triangles could be rotated
     mki3d.redraw();
     return "<br>THREE-POINT TRANFORMATION 'ABC' TO 'DEF' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
