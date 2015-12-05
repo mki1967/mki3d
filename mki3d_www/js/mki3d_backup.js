@@ -28,6 +28,7 @@ mki3d.restoreCurrentModel= function(){
     mki3d.cancelShades();
     mki3d.action.cancelVisibilityRestrictions();
     mki3d.action.cancelSelection();
+    mki3d.tmp.bookmarked=null;
     mki3d.redraw();
 }
 

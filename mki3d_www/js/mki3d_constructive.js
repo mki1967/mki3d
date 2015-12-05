@@ -550,7 +550,7 @@ mki3d.findFolding = function( A, B, C,
     }
     
     
-    mki3d.vectorMove(centered.V, A);
+    mki3d.vectorMove(centered.V, A[0], A[1], A[2] );
     return centered; // return centered solution moved by A :-)
     
 }
