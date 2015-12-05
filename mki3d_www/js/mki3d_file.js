@@ -173,6 +173,7 @@ mki3d.file.loadingEndHandler = function (loader){
 	mki3d.data = loader.loadedObject; // dangerous !!!
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
+	mki3d.backup();
 	mki3d.action.escapeToCanvas(); 
     }
 } 

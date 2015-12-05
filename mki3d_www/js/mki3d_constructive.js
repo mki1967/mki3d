@@ -617,5 +617,7 @@ mki3d.constructiveFolding= function(){
     mki3d.backup();
     mki3d.cancelShades(); // some triangles could be rotated
     mki3d.redraw();
-    return "<br>FOLDING OF SELECTED AROUND 'AB' AND OF BOOKARKED AROUND 'AC' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
+    return "<br>FOLDING OF SELECTED AROUND 'AB' AND OF BOOKARKED AROUND 'AC' HAS BEEN DONE."+
+	"<br> LINE 'AV' IS THE COMMON RESULT THE RESPECTIVE ROTATIONS OF THE LINES 'AD' AROUND 'AB' AND 'AE' AROUND 'AC'."+
+	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
