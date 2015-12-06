@@ -14,6 +14,24 @@ mki3d.callback.helpOnKeyDown = function (e){
     }
 }
 
+mki3d.callback.inputsOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    switch(code)
+    {
+    case 27: // Esc
+	mki3d.html.html.style.overflowY="";
+	mki3d.action.escapeToCanvas();
+	break;
+    case 13: // Enter
+	mki3d.html.html.style.overflowY="";
+	actionMessage=mki3d.action.inputsEnter();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( actionMessage );
+	break;
+    }
+}
+
 
 mki3d.callback.colorMenuOnKeyDown = function (e){
     var actionMessage="";
@@ -98,6 +116,17 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	mki3d.action.viewMenu();
 	break;
 	
+    case 80: // P
+	mki3d.action.pointsMenu();
+	break;
+    case 77: // M
+        mki3d.action.constructiveMenu();
+	break;
+	
+    case 73: // I
+        mki3d.action.inputs();
+	break;
+	
     default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
@@ -113,6 +142,7 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
     case 67: // C
         mki3d.tmp.colorMenuOutput = mki3d.data.cursor.color; // reference to the object
 	mki3d.action.colorMenu(); 
+	return; // submenu 
 	break;
 	
     case 74: // J
@@ -120,20 +150,14 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	    mki3d.data.model.segments.concat(mki3d.data.model.triangles)
 	);
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br>"+actionMessage);
 	break;
     case 83: // S
 	var endpoints= mki3d.tmp.selected;
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br>"+actionMessage);
 	break;
-	
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br>"+actionMessage);
 }
 
 mki3d.callback.fileMenuOnKeyDown = function (e){
@@ -163,6 +187,7 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 
 mki3d.callback.dataCopyMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
@@ -170,29 +195,28 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.copySelected();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br>NEW SET IS NOW SELECTED";
 	break;
     case 49: // 1
 	mki3d.action.copySelected();
 	mki3d.action.glueSegments();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage="<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
     case 50: // 2
 	mki3d.action.copySelected();
 	mki3d.action.glueTriangles();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+	actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+            "<br> WITH 'GLUES' BETWEEN SEGMENTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
     case 51: // 3
 	mki3d.action.copySelected();
@@ -200,51 +224,48 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 	mki3d.action.glueTriangles();
 	mki3d.action.cancelSelection();
 	mki3d.action.selectCurrentSet();
-	mki3d.action.escapeToCanvas();
-        mki3d.messageAppend("<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)");
-        mki3d.messageAppend("<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS AND SEGMENTS");
-        mki3d.messageAppend("<br>NEW SET IS NOW SELECTED");
+        actionMessage=
+	    "<br> COPIED SELECTED TO SET: "+mki3d.data.set.current + " (CURENT SET)"+
+	    "<br> WITH 'GLUES' BETWEEN SEGMENTS' ENDPOINTS AND SEGMENTS"+
+            "<br>NEW SET IS NOW SELECTED";
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+    mki3d.backup();
 }
 
 
 mki3d.callback.dataMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
     case 48: //0 
 	mki3d.action.paintSelectedEndpoints();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.";
 	break; 
     case 50: // 2
 	mki3d.action.paintSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED SEGMENTS PAINTED WITH CURSOR COLOR.";
 	break; 
     case 51: // 3
 	mki3d.action.paintSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.");
+	actionMessage="<br> SELECTED TRIANGLES PAINTED WITH CURSOR COLOR.";
 	break; 
     case 52: // 4
 	mki3d.action.deleteSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED SEGMENTS DELETED.");
+	actionMessage="<br> SELECTED SEGMENTS DELETED.";
 	break; 
     case 53: // 5
 	mki3d.action.deleteSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> SELECTED TRIANGLES DELETED.");
+	actionMessage="<br> SELECTED TRIANGLES DELETED.";
 	break; 
     case 66: // B
         mki3d.tmp.colorMenuOutput = mki3d.data.backgroundColor; // reference to the object
 	mki3d.action.colorMenu(); 
+	return; // submenu -  do not escape to canvas 
 	break;
     case 76: // L
 	// LIGHT
@@ -252,11 +273,12 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
 	break;
     case 67: // C
 	mki3d.action.dataCopyMenu();
+	return; // submenu - do not escape to canvas 
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+    mki3d.backup();
 }
 
 mki3d.callback.clipMenuOnKeyDown =function (e){
@@ -322,6 +344,12 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
     case 88: // X
 	mki3d.action.selectInClipBox();
 	break;
+    case 66: // B
+	mki3d.action.bookmarkSelection();
+	break;
+    case 65: // A
+	mki3d.action.selectBookmarked();
+	break;
     case 67: // C
 	mki3d.action.selectByCursor();
 	break;
@@ -353,50 +381,186 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
 
 mki3d.callback.viewMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var actionMessage="";
     // TO DO
     switch(code)
     {
     case 49: // 1
 	mki3d.action.viewSelectedElements();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED ELEMENTS.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED ELEMENTS."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 50: // 2
 	mki3d.action.viewSelectedSegments();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED SEGMENTS.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED SEGMENTS."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 51: // 3
 	mki3d.action.viewSelectedTriangles();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTED TO SELECTED TRIANGLES.");
-	mki3d.messageAppend("<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)");
+	actionMessage=
+	    "<br> VIEW RESTRICTED TO SELECTED TRIANGLES."+
+	    "<br>(PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS.)";
 	break; 
     case 67: // C
 	mki3d.action.cancelVisibilityRestrictions();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW RESTRICTIONS CANCELED.");
+	actionMessage=
+	    "<br> VIEW RESTRICTIONS CANCELED.";
 	break;
     case 85: // U
 	mki3d.action.viewScaleUp();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
-			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	actionMessage=
+	    "<br> VIEW SCALE: "+mki3d.data.view.scale+
+	    "<br> CURSOR STEP: "+mki3d.data.cursor.step;
 	break;
     case 68: // D
 	mki3d.action.viewScaleDown();
-	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend("<br> VIEW SCALE: "+mki3d.data.view.scale+
-			    "<br> CURSOR STEP: "+mki3d.data.cursor.step);
+	actionMessage=
+	    "<br> VIEW SCALE: "+mki3d.data.view.scale+
+	    "<br> CURSOR STEP: "+mki3d.data.cursor.step;
 	break;
-    default:
-	mki3d.action.escapeToCanvas();
-	// temporary escape to canvas
     };
-    // temporary escape to canvas
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
 }
+
+
+
+mki3d.callback.pointsMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 83: // S
+	// set the callback 
+	mki3d.tmp.afterPointsSelect= mki3d.setPointCallback;
+	// go to point selection submenu ...
+	mki3d.action.pointsSelectMenu();
+	return;
+	break; 
+    case 74: // J
+	// set the callback 
+	mki3d.tmp.afterPointsSelect= mki3d.jumpToPointCallback;
+	// go to point selection submenu ...
+	mki3d.action.pointsSelectMenu();
+	return;
+	break; 
+    case 72: // H
+	mki3d.pointsHide();
+	actionMessage="<br> ALL CONSTRUCTIVE POINTS ARE HIDDEN. (USE 'QPJ...' TO FIND AND DISPLAY A POINT.)";
+	break; 
+    default:
+	mki3d.tmp.afterPointsSelect= null;
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    if( "A".charCodeAt(0)<= code && code<= "Z".charCodeAt(0) ){
+	actionMessage=mki3d.tmp.afterPointsSelect( String.fromCharCode(code) ); 
+	/* mki3d.tmp.afterPointsSelect should be set by the procedure invoking this menu */
+    } else {
+	actionMessage="<br>NOT VALID POINT KEY PRESSED !!! (USE THE KEYS FROM THE RANGE 'A' ... 'Z' ONLY.)"; 
+    }
+    mki3d.tmp.afterPointsSelect=null; 
+    mki3d.action.escapeToCanvas();	
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveCursorMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.moveCursorToPointsCenter();
+	break;
+    case 49: // 1
+	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.constructiveMoveAB();
+	break;
+    case 49: // 1
+	actionMessage= mki3d.constructiveMoveInDirABLenCD();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.constructiveScaleWithFixedPointO();
+	break;
+    case 49: // 1
+	actionMessage= mki3d.constructiveScaleByABOverCD();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
+mki3d.callback.constructiveMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 77: // M
+	mki3d.action.constructiveMovingMenu();
+	return;
+    case 83: // S
+	mki3d.action.constructiveScalingMenu();
+	return;
+    case 74: // J
+	mki3d.action.constructiveCursorMenu();
+	return;
+    case 51: // 3
+	actionMessage= mki3d.constructivePolygonInsert();
+	break;
+    case 52: // 4
+	actionMessage= mki3d.constructivePolygonTriangles();
+	break;
+    case 84: // T
+	actionMessage= mki3d.constructiveThreePointTransformation();
+	break;
+    case 70: // F
+	actionMessage= mki3d.constructiveFolding();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
 
 mki3d.callback.actionMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
@@ -501,6 +665,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	break;
     case 84: // T
 	mki3d.action.toggleMarker2();
+	break;
+    case 85: // U
+	mki3d.undo();
 	break;
     case 78: // N
         mki3d.action.nextSetIndex();

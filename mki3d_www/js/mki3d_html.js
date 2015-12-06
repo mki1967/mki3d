@@ -24,9 +24,10 @@ mki3d.html.showDiv = function(divObject) {
 
 
 mki3d.html.initObjects= function() {
+    // register divs
     mki3d.html.html=document.querySelector('#htmlId');
     mki3d.html.divHelp= mki3d.html.registerDiv('#divHelp');
-    // console.log(mki3d.html.divHelp.style);
+    mki3d.html.divInputs= mki3d.html.registerDiv('#divInputs');
     mki3d.html.divMainMenu= mki3d.html.registerDiv('#divMainMenu');
     mki3d.html.divColorMenu= mki3d.html.registerDiv('#divColorMenu');
     mki3d.html.divCursorMenu= mki3d.html.registerDiv('#divCursorMenu');
@@ -36,12 +37,33 @@ mki3d.html.initObjects= function() {
     mki3d.html.divClipMenu= mki3d.html.registerDiv('#divClipMenu');
     mki3d.html.divSelectionMenu= mki3d.html.registerDiv('#divSelectionMenu');
     mki3d.html.divViewMenu= mki3d.html.registerDiv('#divViewMenu');
+    mki3d.html.divPointsMenu= mki3d.html.registerDiv('#divPointsMenu');
+    mki3d.html.divPointsSelectMenu= mki3d.html.registerDiv('#divPointsSelectMenu');
+    mki3d.html.divConstructiveMenu= mki3d.html.registerDiv('#divConstructiveMenu');
+    mki3d.html.divConstructiveMovingMenu= mki3d.html.registerDiv('#divConstructiveMovingMenu');
+    mki3d.html.divConstructiveScalingMenu= mki3d.html.registerDiv('#divConstructiveScalingMenu');
+    mki3d.html.divConstructiveCursorMenu= mki3d.html.registerDiv('#divConstructiveCursorMenu');
     mki3d.html.divActionMenu= mki3d.html.registerDiv('#divActionMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
+
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
 
     mki3d.html.canvas= document.querySelector("#canvasId");
+
+
+    mki3d.html.spanScalingFactor= document.querySelector("#spanScalingFactor");
+    mki3d.html.spanPolygonNumberOfVertices= document.querySelector("#spanPolygonNumberOfVertices");
+
+    /* Inputs page */
+    mki3d.html.inputCursorX= document.querySelector("#inputCursorX");
+    mki3d.html.inputCursorY= document.querySelector("#inputCursorY");
+    mki3d.html.inputCursorZ= document.querySelector("#inputCursorZ");
+    mki3d.html.inputCursorStep= document.querySelector("#inputCursorStep");
+
+    mki3d.html.inputScalingFactor= document.querySelector("#inputScalingFactor");
+    mki3d.html.inputPolygonNumberOfVertices= document.querySelector("#inputPolygonNumberOfVertices");
+
 }

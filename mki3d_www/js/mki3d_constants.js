@@ -60,7 +60,23 @@ const MKI3D_CURSOR_MAX_TRIANGLES = 10;
 const MKI3D_MODEL_MAX_SEGMENTS  = 10000;
 const MKI3D_MODEL_MAX_TRIANGLES = 10000;
 
+
+/* shapes of special points as sequences of segments */
 const MKI3D_SELECTED_POINT = [
     [[-0.2, -0.2, 0.0], [ 0.2, 0.2, 0.0]],
     [[ 0.2, -0.2, 0.0], [-0.2, 0.2, 0.0]],
 ];
+
+const MKI3D_BOOKMARKED_POINT = [
+    [[-0.2, -0.2, 0.0], [ 0.2, -0.2, 0.0]],
+    [[-0.2, -0.2, 0.0], [ -0.2, 0.2, 0.0]],
+    [[ 0.2, 0.2, 0.0], [0.2, -0.2, 0.0]],
+    [[ 0.2, 0.2, 0.0], [-0.2, 0.2, 0.0]],
+];
+
+
+/* MINIMAL AND MAXIMAL NUMBERS OF VERTICES IN REGULAR POLYGON */
+
+const MKI3D_POLYGON_MIN_VERTICES = 3;
+const MKI3D_POLYGON_MAX_VERTICES = 1024;
+

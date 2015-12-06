@@ -8,4 +8,4 @@ One copy of the script
 should be placed in the folder together with the
 exported HTML pages.
 
-Online example: https://dl.dropboxusercontent.com/u/22924817/mki3d-data/html_viewer/example.html
+See online example: http://mki1967.github.io/mki3d/html_viewer/example.html
