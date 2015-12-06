@@ -224,6 +224,42 @@ mki3d.constructiveScaleByABOverCD= function(){
 
 /** CURSOR JUMPING **/
 
+/* moves the cursor to the center of visible constructive points */
+mki3d.moveCursorToPointsCenter = function(){
+    var pString=""
+    var n=0;
+    var pName;
+    for(pName in mki3d.points.point) {
+	var pObj= mki3d.points.point[pName];
+	if( pObj.pos && pObj.visible ) {
+	    n++;
+	    pString= pString.concat(pName);
+	}
+    }
+    
+    if( n==0) {
+	return "<br> THERE ARE NO VISIBLE CONSTRUCTIVE POINTS (USE 'QPS...' TO SET THE POINTS)";
+    }
+
+    var avg=[0,0,0];
+
+    for(pName in mki3d.points.point) {
+	var pObj= mki3d.points.point[pName];
+	if( pObj.pos && pObj.visible ) {
+	    var v= pObj.pos;
+	    mki3d.vectorMove( avg, v[0]/n, v[1]/n, v[2]/n);
+	}
+    }
+    
+    mki3d.data.cursor.position = avg;
+    mki3d.redraw();
+
+    return "<br> CURSOR MOVED TO THE CENTER OF THE POINTS: '"+pString+"'.";
+
+   ////
+}
+
+
 mki3d.moveCursorToIntersectionABandCDE = function(){
     var methodName ="MOVE CURSOR TO INTERSECTION OF AB AND CDE";
     var neededPoints = "ABCDE";

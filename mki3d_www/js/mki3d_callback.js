@@ -474,6 +474,23 @@ mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+mki3d.callback.constructiveCursorMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.moveCursorToPointsCenter();
+	break;
+    case 49: // 1
+	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
 
 mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
@@ -523,9 +540,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 83: // S
 	mki3d.action.constructiveScalingMenu();
 	return;
-    case 49: // 1
-	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
-	break;
+    case 74: // J
+	mki3d.action.constructiveCursorMenu();
+	return;
     case 51: // 3
 	actionMessage= mki3d.constructivePolygonInsert();
 	break;

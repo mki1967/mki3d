@@ -456,7 +456,7 @@
       <h2>Constructive Points Selection Menu::</h2>
       <dl>
 	<dt>'A' ... 'Z'</dt>
-	<dd>SELECT THE POINT SYMBOL</dd>
+	<dd>PRESS THE KEY WITH POINT SYMBOL (DO NOT PRESS SHIFT KEY)</dd>
       </dl>
     </div>
 
@@ -472,15 +472,16 @@
 	<dd> - MOVING SELECTED POINTS ... </dd>
 	<dt>'S'</dt>
 	<dd> - SCALING SELECTED POINTS ... </dd>
-	<dt>'1'</dt>
-	<dd> - MOVE CURSOR TO THE INTERSECTION POINT OF LINE 'AB' AND PLANE 'CDE' </dd>
+	<dt>'J'</dt>
+	<dd> - CURSOR JUMPING ... </dd>
 	<dt>'T'</dt>
-	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' </dd>
+	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' 
+	  (TRANSFORMS: POINT 'A' TO POINT 'D', LINE 'AB' TO LINE 'DE', AND PLANE 'ABC' TO PLANE 'DEF'.) </dd>
 	<dt>'F'</dt>
 	<dd> - FOLDING: ROTATE THE SELECTED ENDPOINTS AROUND THE LINE 'AB' AND THE BOOKMARKED ENDPOINTS AROUND THE LINE 'AC' IN THE DIRECTION OF POINT 'F', SO THAT
 	  THE FIRST ROTATION OF LINE 'AD' IS EQUAL TO THE SECOND ROTATION OF LINE 'AE'. 
 	  <br> 
-	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDOINTS SHOUD BE DISJOINT.
+	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDOINTS SHOULD BE DISJOINT.
 	</dd>
       </dl>
       <h3> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
@@ -493,7 +494,22 @@
       </dl>
     </div>
 
-    <div id="divConstructiveMovingMenu" display="none">
+     <div id="divConstructiveCursorMenu" display="none">
+      <h2>Constructive Cursor Jumping Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - MOVE CURSOR TO THE CENTER OF VISIBLE CONSTRUCTIVE POINTS</dd>
+	<dt>'1'</dt>
+	<dd> - MOVE CURSOR TO THE INTERSECTION POINT OF LINE 'AB' AND PLANE 'CDE' </dd>
+      </dl>
+    </div>
+
+   <div id="divConstructiveMovingMenu" display="none">
       <h2>Constructive Moving Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
