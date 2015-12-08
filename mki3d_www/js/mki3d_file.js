@@ -110,7 +110,7 @@ mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
     }
     chrome.fileSystem.getDisplayPath(writableEntry, function (displayPath) { 
 	// console.log(displayPath);  
-        mki3d.file.suggestedName= mki3d.file.withoutExtension(displayPath);
+        mki3d.file.selectedName= displayPath;
     }
 				    );
     writableEntry.createWriter(function(writer){ mki3d.file.writerCallback(writer,saver); });	
@@ -162,6 +162,8 @@ mki3d.file.writerCallback= function (writer, saver) {
 mki3d.file.savingEndHandler=   function (saver){
     // console.log(saver); // for tests ...
     mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br> SAVED TO FILE: "+mki3d.file.selectedName);
+    mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName); // what after exporting ?
 } 
 
 
@@ -193,7 +195,8 @@ mki3d.file.mergingEndHandler = function (loader){
 	mki3d.action.escapeToCanvas(); 
 	mki3d.messageAppend("<br> MERGED AND SELECTED "
 			    +mergedSegments.length+" SEGMENTS AND "
-			    + mergedTriangles.length+" TRIANGLES"
+			    + mergedTriangles.length+" TRIANGLES FROM: "
+			    + mki3d.file.selectedName
 			   ); 
     }
 } 
@@ -235,6 +238,8 @@ mki3d.file.loadingEndHandler = function (loader){
 	mki3d.setModelViewMatrix();
 	mki3d.backup();
 	mki3d.action.escapeToCanvas(); 
+	mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
+	mki3d.messageAppend("<br> LOADED FROM: "+mki3d.file.selectedName);
     }
 } 
 
@@ -278,7 +283,7 @@ mki3d.file.loadChooseEntryCallback = function (theEntry, loader) {
     ////
     chrome.fileSystem.getDisplayPath(theEntry, function (displayPath) { 
 	// console.log(displayPath);  
-        mki3d.file.suggestedName= mki3d.file.withoutExtension(displayPath);
+        mki3d.file.selectedName= displayPath;
     }
 				    );
 
