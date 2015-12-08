@@ -1,4 +1,4 @@
-/* File operations */
+/*** File operations ***/
 
 mki3d.file = {};
 
@@ -46,7 +46,7 @@ mki3d.file.withoutExtension= function( name ){
     return name.substring(0, lastIdx );
 }
 
-/* EXPORTING */
+/** EXPORTING **/
 
 mki3d.file.startExporting = function () {
     var saver = {};
@@ -67,7 +67,6 @@ mki3d.file.startExporting = function () {
     saver.blob = new Blob([htmlString], {type: 'text/plain'}); 
     saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.concat(".html")  };
     saver.errorHandler = function(e) { console.error(e); }; 
-    //    saver.savingEndHandler= savingEndHandler;
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
 	// console.log(e); // for tests..
@@ -77,7 +76,7 @@ mki3d.file.startExporting = function () {
 }
 
 
-/* SAVING */
+/** SAVING **/
 
 mki3d.file.startSaving = function () {
     var saver = {};
@@ -93,7 +92,6 @@ mki3d.file.startSaving = function () {
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
     saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.concat(".mki3d")   };
     saver.errorHandler = function(e) { console.error(e); }; 
-    //    saver.savingEndHandler= savingEndHandler;
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
 	// console.log(e); // for tests..
@@ -104,9 +102,10 @@ mki3d.file.startSaving = function () {
 
 mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
     saver.entry = writableEntry;
-    if (!writableEntry) {
+    if (chrome.runtime.lastError || !writableEntry) {
 	console.log( 'Nothing selected.');
-	saver.savingEndHandler(saver); 
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> NOTHING SAVED !!! (NO FILE NAME SELECTED)");
 	return;
     }
     chrome.fileSystem.getDisplayPath(writableEntry, function (displayPath) { 
@@ -165,7 +164,68 @@ mki3d.file.savingEndHandler=   function (saver){
     mki3d.action.escapeToCanvas();
 } 
 
-/* LOADING */
+
+/** MERGING **/
+
+mki3d.file.mergingEndHandler = function (loader){
+    if(loader.loadedObject) {
+	// console.log(loader.loadedObject); // for tests ...
+        mki3d.tmpCancel();
+        mki3d.tmpCancel();
+	mki3d.action.cancelSelection();
+	mki3d.tmp.merged = loader.loadedObject; // dangerous !!!
+	mki3d.compressSetIndexes( mki3d.data );
+	mki3d.compressSetIndexes( mki3d.tmp.merged );
+	var setIdxShift= mki3d.getMaxSetIndex(mki3d.data.model)+1;
+	var mergedSegments= mki3d.tmp.merged.model.segments;
+	var mergedTriangles= mki3d.tmp.merged.model.triangles;
+	var mergedEndpoints=mki3d.getEndpointsOfElements( mergedSegments.concat( mergedTriangles ) );
+	var i;
+	for(i=0; i<mergedEndpoints.length; i++) {
+	    mergedEndpoints[i].set += setIdxShift; // shift set indexes
+	    mergedEndpoints[i].selected = true; // select the merged endpoints
+	}
+	mki3d.data.model.segments = mki3d.data.model.segments.concat( mergedSegments );
+	mki3d.data.model.triangles = mki3d.data.model.triangles.concat( mergedTriangles );
+	mki3d.tmpRebuildSelected();
+	mki3d.setModelViewMatrix(); // ?
+	mki3d.backup();
+	mki3d.action.escapeToCanvas(); 
+	mki3d.messageAppend("<br> MERGED AND SELECTED "
+			    +mergedSegments.length+" SEGMENTS AND "
+			    + mergedTriangles.length+" TRIANGLES"
+			   ); 
+    }
+} 
+
+mki3d.file.startMerging = function ( ) {
+    var myAccepts = [{
+	//	mimeTypes: ['text/*'],
+	extensions: ['mki3d']
+    }];
+    
+    var loader = {};
+
+    loader.loadHandler = function(e) { // processing of the result
+
+	var myObjectString = e.target.result;
+	loader.loadedObject = JSON.parse(myObjectString);
+    };
+
+    loader.loadEndHandler = function(e) { 
+	// console.log(e);  // for tests ...
+	mki3d.file.mergingEndHandler(loader); // process merged data
+    }
+    loader.errorHandler = function(e) { console.error(e); }; 
+
+    loader.config = {type: 'openFile', accepts: myAccepts };
+    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+}
+
+
+
+
+/** LOADING **/
 
 mki3d.file.loadingEndHandler = function (loader){
     if(loader.loadedObject) {
@@ -186,7 +246,6 @@ mki3d.file.startLoading = function ( ) {
     
     var loader = {};
 
-    loader.loadingEndHandler = mki3d.file.loadingEndHandler;
     loader.loadHandler = function(e) { // processing of the result
 
 	var myObjectString = e.target.result;
@@ -205,12 +264,15 @@ mki3d.file.startLoading = function ( ) {
 }
 
 
+/* common callbacks for loading and merging */
 
-mki3d.file.loadChooseEntryCallback = function (theEntry, loader) {
-    if (!theEntry) {
+mki3d.file.loadChooseEntryCallback = function (theEntry, loader) { 
+    /* checking for chrome.runtime.lastError */
+    if (chrome.runtime.lastError || !theEntry) {
 	console.log('No file selected.');
+	mki3d.action.escapeToCanvas(); 
+	mki3d.messageAppend('<br> NOTHING LOADED !!! (NO FILE SELECTED)');
         loader.canceled = true;
-	loader.loadingEndHandler( loader );
 	return;
     }
     ////
