@@ -548,6 +548,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 74: // J
 	mki3d.action.constructiveCursorMenu();
 	return;
+    case 66: // B
+	actionMessage=mki3d.constructiveBBoxOfSelectedUW();
+	break; 
     case 51: // 3
 	actionMessage= mki3d.constructivePolygonInsert();
 	break;

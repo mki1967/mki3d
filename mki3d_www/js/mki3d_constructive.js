@@ -222,7 +222,39 @@ mki3d.constructiveScaleByABOverCD= function(){
 
 
 
+
+/* returns [u,w] - minimal and maximal corners of bounding box of selected endpoints or null */
+
+mki3d.boundingBoxOfSelected= function(){
+    if(!mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return null;
+    var selected= mki3d.tmp.selected;
+    var u= mki3d.vectorClone(selected[0].position);
+    var w= mki3d.vectorClone(selected[0].position);
+
+    var i,d;
+    for(i=0; i<selected.length; i++) {
+	for( d=0; d<3; d++) {
+	    u[d]= Math.min(u[d], selected[i].position[d]);
+	    w[d]= Math.max(w[d], selected[i].position[d]);
+	}
+    }
+    return [u,w];
+}
+
+
+/** SETING OF CONSTRUCTIVE POINTS **/
+
+mki3d.constructiveBBoxOfSelectedUW= function(){
+    var corners=mki3d.boundingBoxOfSelected();
+    if( corners==null ) return "<br> THERE ARE NO SELECTED ENDPOINTS !";
+    mki3d.pointSetAt( "U", corners[0] );
+    mki3d.pointSetAt( "W", corners[1] );
+    return "<br> POINTS 'U' 'W' SET ON THE MINIMAL AND MAXIMAL CORNERS OF BOUNDING BOX OF SELECTED"; 
+
+}
+
 /** CURSOR JUMPING **/
+
 
 /* moves the cursor to the center of visible constructive points */
 mki3d.moveCursorToPointsCenter = function(){
