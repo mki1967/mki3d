@@ -128,7 +128,7 @@ mki3d.createInSetModel = function(setIdx){
     var model={};
     model.segments= mki3d.elementsInSet( mki3d.data.model.segments, setIdx);
     model.triangles= mki3d.elementsInSet( mki3d.data.model.triangles, setIdx);
-    model.inSet=true;
+    model.setRestriction="inSet";
     return model;
 };
 
@@ -137,7 +137,7 @@ mki3d.createIncidentToSetModel = function(setIdx){
     var model={};
     model.segments= mki3d.elementsIncidentToSet( mki3d.data.model.segments, setIdx);
     model.triangles= mki3d.elementsIncidentToSet( mki3d.data.model.triangles, setIdx);
-    model.incidentToSet=true;
+    model.setRestriction="incidentToSet";
     return model;
 };
 
