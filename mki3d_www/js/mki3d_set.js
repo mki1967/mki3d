@@ -38,15 +38,15 @@ mki3d.compressSetIndexes= function( data ) {
     /* here: we have non-empty uncompressed set of indexes */
     var map=[];
     var i;
-    for(i=0; i<idxSet[idxSet.length-1]; i++) map.push( null );
-    for(i=0; i<idxSet[idxSet.length-1]; i++) map[idxSet[i]]=i;
+    for(i=0; i <= idxSet[idxSet.length-1]; i++) map.push( null ); /// old set values can be in [0, idxSet[idxSet.length-1]] !!!!
+    for(i=0; i<idxSet.length; i++) map[idxSet[i]]=i;
     /* renumber the indexes of the endpoints */
     var j;
     for(i=0; i<elements.length; i++) 
 	for(j=0; j<elements[i].length; j++){
 	    elements[i][j].set= map[elements[i][j].set];
 	}
-    if( map[data.set.current] === null ){
+    if( !map[data.set.current] ){
 	data.set.current = idxSet.length; // the lowest new index of empty set
     } else {
 	data.set.current = map[data.set.current]; // new index for current set
@@ -128,7 +128,7 @@ mki3d.createInSetModel = function(setIdx){
     var model={};
     model.segments= mki3d.elementsInSet( mki3d.data.model.segments, setIdx);
     model.triangles= mki3d.elementsInSet( mki3d.data.model.triangles, setIdx);
-    model.inSet=true;
+    model.setRestriction="inSet";
     return model;
 };
 
@@ -137,7 +137,7 @@ mki3d.createIncidentToSetModel = function(setIdx){
     var model={};
     model.segments= mki3d.elementsIncidentToSet( mki3d.data.model.segments, setIdx);
     model.triangles= mki3d.elementsIncidentToSet( mki3d.data.model.triangles, setIdx);
-    model.incidentToSet=true;
+    model.setRestriction="incidentToSet";
     return model;
 };
 

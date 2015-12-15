@@ -169,6 +169,10 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 	// LOAD
 	mki3d.file.startLoading();
 	break;
+    case 77: // M
+	// MERGE
+	mki3d.file.startMerging();
+	break;
 	
     case 83: // S
 	// SAVE
@@ -181,6 +185,7 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 	
     default:
 	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br> NO FILE ACTION SELECTED !");
 	// temporary escape to canvas
     };
 }
@@ -543,6 +548,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 74: // J
 	mki3d.action.constructiveCursorMenu();
 	return;
+    case 66: // B
+	actionMessage=mki3d.constructiveBBoxOfSelectedUW();
+	break; 
     case 51: // 3
 	actionMessage= mki3d.constructivePolygonInsert();
 	break;
