@@ -1,4 +1,6 @@
-/* parameters of constructive methods */
+/*** constructive methods ***/
+
+/** parameters of constructive methods **/
 
 mki3d.constructive={};
 /* scaling factor used used for scaling in all directions */
@@ -9,8 +11,11 @@ mki3d.constructive.scalingFactor=1.0;
 
 mki3d.constructive.polygonNumberOfVertices=3;
 
-/* constructive methods */
 
+
+
+
+/** inserting regular polygons **/
 
 mki3d.polygonMakeVertex= function( vIdx ){
     var n=mki3d.constructive.polygonNumberOfVertices;
@@ -85,6 +90,8 @@ mki3d.constructivePolygonTriangles= function(){
 
 
 
+/* testing for input constructive points:
+   the string neededPoints consists of the names of points that must be displayed */
 
 mki3d.checkConstructivePoints= function( methodName, neededPoints ){
     var missingPoints= mki3d.pointsNotDisplayed( neededPoints );
@@ -337,6 +344,7 @@ mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
     return [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ];
 
 }
+
 
 
 
@@ -689,3 +697,234 @@ mki3d.constructiveFolding= function(){
 	"<br> LINE 'AV' IS THE COMMON RESULT THE RESPECTIVE ROTATIONS OF THE LINES 'AD' AROUND 'AB' AND 'AE' AROUND 'AC'."+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
+
+/** triangle-triangle intersections (based on https://github.com/mki1967/et-edit ) **/
+
+/* returns [E1,E2] - endpoints positions of the segment intersection or null (if no segment is intersection) */
+mki3d.TriangleTriangleIntersection( A1, A2, A3, /* endpoints positions of the first triangle */
+				    B1, B2, B3, /* endpoints positions of the first triangle */
+				  ) 
+{
+    var E1,E2; /* output positions */
+    var M /* matrix [3][3]*/;
+    var NA, NB; /* vectors [3] */
+    var B_1, B_2, B_3, X1, X2, /*vectors [3] */
+    var A_1, A_2, A_3, Y1, Y2; /*vectors [3] */
+    var det1,det2, det3, t1, t2; /* real numbers */
+    NA=mki3d.normalToPlane( A1, A2, A3 );
+    if(mki3d.scalarProduct(NA,NA)==0) {
+	return null; /* triangle [A1,A2,A3] is degenarate */
+    }
+
+    NB=mki3d.normalToPlane( B1, B2, B3 );
+    if(mki3d.scalarProduct(NB,NB)==0) {
+	return null; /* triangle [B1,B2,B3] is degenarate */
+    }
+
+    M=[];
+    M[0]= [ A2[0]-A1[0], A2[1]-A1[1], A2[2]-A1[2] ]; 
+    M[1]= [ A3[0]-A1[0], A3[1]-A1[1], A3[2]-A1[2] ]; 
+
+    M[2]= [ B1[0]-A1[0], B1[1]-A1[1], B1[2]-A1[2] ]; 
+    det1= mki3d.matrixDeterminant(M);
+
+    M[2]= [ B2[0]-A1[0], B2[1]-A1[1], B2[2]-A1[2] ]; 
+    det2= mki3d.matrixDeterminant(M);
+
+    M[2]= [ B3[0]-A1[0], B3[1]-A1[1], B3[2]-A1[2] ]; 
+    det3= mki3d.matrixDeterminant(M);
+
+
+    if( (det1<=0 && det2<=0 && det3<=0) ||
+	(det1>=0 && det2>=0 && det3>=0)
+      ){
+	/*  all vertices of B are on the same side of plane A1,A2,A3 */
+	return null;
+    }
+
+    if( (det1<0 && det2>=0 && det3>=0) ||
+      (det1>0 && det2<=0 && det3<=0) 
+      ){
+	B_1 = mki3d.vectorClone(B1);
+	B_2 = mki3d.vectorClone(B2);
+	B_3 = mki3d.vectorClone(B3);
+    } else if( (det2<0 && det1>=0 && det3>=0) ||
+	      (det2>0 && det1<=0 && det3<=0) 
+	    ){
+	B_1 = mki3d.vectorClone(B2);
+	B_2 = mki3d.vectorClone(B1);
+	B_3 = mki3d.vectorClone(B3);
+    } else if( (det3<0 && det2>=0 && det1>=0) ||
+	       (det3>0 && det2<=0 && det1<=0) 
+	     ) {
+	B_1 = mki3d.vectorClone(B3);
+	B_2 = mki3d.vectorClone(B2);
+	B_3 = mki3d.vectorClone(B1);
+    }
+
+    /*  B_1 is on the other side of the plane A1, A2, A3 than B_2, B_3. */
+
+    X1= mki3d.lineABplaneCDEintersection( B_1,B_2, A1,A2,A3 );
+    X2= mki3d.lineABplaneCDEintersection( B_1,B_3, A1,A2,A3 );
+
+    M=[];
+
+    M[0]=[ B2[0]-B1[0], B2[1]-B1[1], B2[2]-B1[2] ];
+    M[1]=[ B2[0]-B1[0], B2[2]-B1[2], B2[2]-B1[2] ];
+ 
+    M[2]=[ A1[0]-B1[0], A1[1]-B1[1], A1[2]-B1[2] ];
+    det1= mki3d.matrixDeterminant(M);
+
+    M[2]=[ A2[0]-B1[0], A2[1]-B1[1], A2[2]-B1[2] ];
+    det2= mki3d.matrixDeterminant(M);
+
+    M[2]=[ A3[0]-B1[0], A3[1]-B1[1], A3[2]-B1[2] ];
+    det3= mki3d.matrixDeterminant(M);
+
+    if( (det1<=0 && det2<=0 && det3<=0) ||
+	(det1>=0 && det2>=0 && det3>=0)
+      ) {
+	/*  all vertices of A are on the same side of plane B1,B2,B3 */
+	return null;
+    }
+
+    if( (det1<0 && det2>=0 && det3>=0) ||
+	(det1>0 && det2<=0 && det3<=0)
+      ){
+	A_1 = mki3d.vectorClone(A1);
+	A_2 = mki3d.vectorClone(A2);
+	A_3 = mki3d.vectorClone(A3);
+    } else if( (det2<0 && det1>=0 && det3>=0) ||
+	       (det2>0 && det1<=0 && det3<=0)
+	     ){
+	A_1 = mki3d.vectorClone(A2);
+	A_2 = mki3d.vectorClone(A1);
+	A_3 = mki3d.vectorClone(A3);
+    } else if( (det3<0 && det2>=0 && det1>=0) ||
+	       (det3>0 && det2<=0 && det1<=0)
+	     ) {
+	A_1 = mki3d.vectorClone(A3);
+	A_2 = mki3d.vectorClone(A2);
+	A_3 = mki3d.vectorClone(A1);
+    }
+    /*  A_1 is on the other side of the plane B1, B2, B3 than A_2, A_3. */
+
+////////////////// TO DO ...
+
+  vector_add(A_1, NA, NA);
+  line_triangle_solve(X1,X2, A_1,A_2,NA, Y1, &t1);
+  line_triangle_solve(X1,X2, A_1,A_3,NA, Y2, &t2);
+
+  if(t2<t1)
+    {
+      double_swap(&t1, &t2);
+      vector_swap(Y1, Y2);
+    }
+
+  if( t2<=0  || t1>=1 )
+    {
+       /*  printf("t2==%lf<=0  || t1==%lf>=1\n", t2, t1); */
+      return False;
+    }
+
+
+  if(t1>0)
+    vectorcpy(E1, Y1);
+  else
+    vectorcpy(E1, X1);
+
+  if(t2<1)
+    vectorcpy(E2, Y2);
+  else
+    vectorcpy(E2, X2);
+
+
+  return True;
+
+   /* / DOKONCZ ... */
+
+}
+
+
+void group_tt_intersection(int g1, int g2)
+{
+  int i,i1,i2, n1, n2, g_new;
+  int *t1, *t2;
+  float E1[3],E2[3];
+
+  if(g1==g2)
+    {
+      printf("Intersection with the same group ?!\n");
+      return;
+    }
+  n1=group_internal_triangles(g1);
+  n2=group_internal_triangles(g2);
+  if(n1==0 || n2==0)
+    {
+      printf("At least one of the groups contains no internal triangles\n");
+      return;
+    }
+
+
+  backup();
+
+  t1=(int*) malloc(n1*sizeof(int));
+  t2=(int*) malloc(n2*sizeof(int));
+
+  if(t1==NULL || t2==NULL) 
+    {
+      printf("Out of memory !!!\n");
+      free(t1);
+      free(t2);
+      return;
+    }
+
+  i1=i2=0;
+  for(i=0; i<triangle_top; i++)
+    if(group[triangle[i][0]]==g1 &&
+       group[triangle[i][1]]==g1 &&
+       group[triangle[i][2]]==g1 
+       )
+      {
+	*(t1+i1)=i;
+	i1++;
+      }
+    else
+    if(group[triangle[i][0]]==g2 &&
+       group[triangle[i][1]]==g2 &&
+       group[triangle[i][2]]==g2 
+       )
+      {
+	*(t2+i2)=i;
+	i2++;
+      }
+
+  g_new=group_max(group, vertex_used)+1;
+  group_change_current(g_new, &group_current, group, vertex_used );
+
+  for(i1=0; i1<n1; i1++)
+    for(i2=0; i2<n2; i2++)
+	if(triangle_triangle_intersection(
+					  vertex[triangle[*(t1+i1)][0]],
+					  vertex[triangle[*(t1+i1)][1]],
+					  vertex[triangle[*(t1+i1)][2]],
+					  vertex[triangle[*(t2+i2)][0]],
+					  vertex[triangle[*(t2+i2)][1]],
+					  vertex[triangle[*(t2+i2)][2]],
+					  E1,E2
+					  )
+	   )
+	  edge_set_color( edge_vector_insert(E1, E2), current_color);
+
+  free(t1);
+  free(t2);
+  group_change_current(g_new, &group_current, group, vertex_used );
+  if(!group_restricted)
+    {
+      group_restricted_switch();
+      printf("(press <1> to switch back to GROUP RESTRICTED: OFF)\n");
+    }
+
+
+}
+
