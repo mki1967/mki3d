@@ -321,6 +321,14 @@ mki3d.moveCursorToIntersectionABandCDE = function(){
 
 
 mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
+    var obj=mki3d.linePlaneSolution( A,B, C,D,E ); 
+    if( obj === null ) return null;
+    return obj.V;
+}
+
+/* returns object {V: [x,y,z], t: t}, where V=A+t*(B-A) is the intersection of line AB with plane CDE,
+   or null if such solution does not exist */
+mki3d.linePlaneSolution = function( A,B, C,D,E ){
     var CD = [ D[0]-C[0], D[1]-C[1], D[2]-C[2] ];
     var CE = [ E[0]-C[0], E[1]-C[1], E[2]-C[2] ];
     var AB = [ B[0]-A[0], B[1]-A[1], B[2]-A[2] ];
@@ -341,7 +349,7 @@ mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
     t=d1/d;
     mki3d.vectorScale(X, t,t,t );
     
-    return [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ];
+    return { V: [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ], t: t};
 
 }
 
@@ -809,42 +817,46 @@ mki3d.TriangleTriangleIntersection( A1, A2, A3, /* endpoints positions of the fi
     }
     /*  A_1 is on the other side of the plane B1, B2, B3 than A_2, A_3. */
 
-////////////////// TO DO ...
-
-  vector_add(A_1, NA, NA);
-  line_triangle_solve(X1,X2, A_1,A_2,NA, Y1, &t1);
-  line_triangle_solve(X1,X2, A_1,A_3,NA, Y2, &t2);
-
-  if(t2<t1)
-    {
-      double_swap(&t1, &t2);
-      vector_swap(Y1, Y2);
+    var A1NA = [ A_1[0]+NA[0], A_1[1]+NA[1], A_1[2]+NA[2] ];  
+    var solution1= mki3d.linePlaneSolution( X1,X2, A_1,A_2,A1NA )
+    var solution2= mki3d.linePlaneSolution( X1,X2, A_1,A_3,A1NA )
+    t1 = solution1.t;
+    t2 = solution2.t;
+    if(solution1.t<= solution2.t) {
+	t1 = solution1.t;
+	Y1 = solution1.V;
+	t2 = solution2.t;
+	Y2 = solution2.V;
+    } else {
+	t2 = solution1.t;
+	Y2 = solution1.V;
+	t1 = solution2.t;
+	Y1 = solution2.V;
     }
 
-  if( t2<=0  || t1>=1 )
-    {
-       /*  printf("t2==%lf<=0  || t1==%lf>=1\n", t2, t1); */
-      return False;
+    if( t2<=0  || t1>=1 ) {
+	/*  t2<=0  || t1>=1 -- segment [X1,X2] is outside triangle A */
+	return null;
     }
 
+    /* [E1,E2] should be the part of [X1,X2] that is inside triangle A */
+    if(t1>0) {
+	E1=Y1;
+    } else {
+	E1=X1;
+    }
+    
+    if(t2<1) {
+	E2=Y2;
+    } else {
+	E2=X2;
+    }
 
-  if(t1>0)
-    vectorcpy(E1, Y1);
-  else
-    vectorcpy(E1, X1);
-
-  if(t2<1)
-    vectorcpy(E2, Y2);
-  else
-    vectorcpy(E2, X2);
-
-
-  return True;
-
-   /* / DOKONCZ ... */
+    return [E1, E2];
 
 }
 
+////////////// TO DO
 
 void group_tt_intersection(int g1, int g2)
 {
