@@ -109,6 +109,46 @@ mki3d.selectElement= function( element ) {
 }
 
 
+/* element is labeled  if all its endpoints have  field label evaluating to true */
+
+mki3d.elementLabeled= function( element, label ) {
+    var j;
+    for( j=0; j<element.length; j++ )
+	if(!element[j][label]) return false;
+    return true;
+}
+
+mki3d.getLabeledElements= function( elements, label ){
+    var out=[];
+    var i;
+    for(i=0; i<elements.length; i++) {
+	if( mki3d.elementLabeled(elements[i], label) ) out.push( elements[i] );
+    }
+    return out;
+}
+
+/* get bookmarked elements */
+mki3d.getBookmarkedElements= function( elements ){
+    if(!mki3d.tmp.bookmarked || mki3d.tmp.bookmarked.length == 0) return []; // nothing bookmarked
+    var i;
+
+    /* label with "bookmarked" */
+    for(i=0; i<mki3d.tmp.bookmarked.length; i++) {
+	mki3d.tmp.bookmarked[i].bookmarked=true;
+    }
+
+    var out= mki3d.getLabeledElements( elements, "bookmarked" );
+    
+    /* clean label "bookmarked" */
+    for(i=0; i<mki3d.tmp.bookmarked.length; i++) {
+	delete mki3d.tmp.bookmarked[i].bookmarked;
+    }
+
+    return out;
+}
+
+/* TO DO: reimplement following '...Selected(...)' functions using '...Labeled(...)' functions */
+
 /* element is selected if all its endpoints are selected */
 
 mki3d.elementSelected= function( element ) {

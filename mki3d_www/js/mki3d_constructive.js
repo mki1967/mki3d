@@ -855,89 +855,41 @@ mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions
 
 }
 
-////////////// TO DO
 
-/*
-void group_tt_intersection(int g1, int g2)
-{
-  int i,i1,i2, n1, n2, g_new;
-  int *t1, *t2;
-  float E1[3],E2[3];
+mki3d.SelectedBookmarkedTriangleIntersection= function() {
+    var t1= mki3d.getSelectedElements(mki3d.data.model.triangles);
+    if(t1.length==0) return "<br> NO TRIANGLES HAVE ALL ENDPOINTS SELECTED !";
 
-  if(g1==g2)
-    {
-      printf("Intersection with the same group ?!\n");
-      return;
-    }
-  n1=group_internal_triangles(g1);
-  n2=group_internal_triangles(g2);
-  if(n1==0 || n2==0)
-    {
-      printf("At least one of the groups contains no internal triangles\n");
-      return;
-    }
+    var t2= mki3d.getBookmarkedElements(mki3d.data.model.triangles);
+    if(t2.length==0) return "<br> NO TRIANGLES HAVE ALL ENDPOINTS BOOKMARKED !";
 
 
-  backup();
+    mki3d.compressSetIndexes(mki3d.data);
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    mki3d.data.set.current=newIdx; // insert intersection segments to a new set
 
-  t1=(int*) malloc(n1*sizeof(int));
-  t2=(int*) malloc(n2*sizeof(int));
+    var c = mki3d.data.cursor.color;
+    var count=0;
+    var i1, i2;
+    for(i1=0; i1<t1.length; i1++)
+	for(i2=0; i2<t2.length; i2++) {
+	    var cut= mki3d.TriangleTriangleIntersection( t1[0].position, t1[1].position, t1[2].position, 
+							 t2[0].position, t2[1].position, t2[2].position );
 
-  if(t1==NULL || t2==NULL) 
-    {
-      printf("Out of memory !!!\n");
-      free(t1);
-      free(t2);
-      return;
-    }
-
-  i1=i2=0;
-  for(i=0; i<triangle_top; i++)
-    if(group[triangle[i][0]]==g1 &&
-       group[triangle[i][1]]==g1 &&
-       group[triangle[i][2]]==g1 
-       )
-      {
-	*(t1+i1)=i;
-	i1++;
-      }
-    else
-    if(group[triangle[i][0]]==g2 &&
-       group[triangle[i][1]]==g2 &&
-       group[triangle[i][2]]==g2 
-       )
-      {
-	*(t2+i2)=i;
-	i2++;
-      }
-
-  g_new=group_max(group, vertex_used)+1;
-  group_change_current(g_new, &group_current, group, vertex_used );
-
-  for(i1=0; i1<n1; i1++)
-    for(i2=0; i2<n2; i2++)
-	if(triangle_triangle_intersection(
-					  vertex[triangle[*(t1+i1)][0]],
-					  vertex[triangle[*(t1+i1)][1]],
-					  vertex[triangle[*(t1+i1)][2]],
-					  vertex[triangle[*(t2+i2)][0]],
-					  vertex[triangle[*(t2+i2)][1]],
-					  vertex[triangle[*(t2+i2)][2]],
-					  E1,E2
-					  )
-	   )
-	  edge_set_color( edge_vector_insert(E1, E2), current_color);
-
-  free(t1);
-  free(t2);
-  group_change_current(g_new, &group_current, group, vertex_used );
-  if(!group_restricted)
-    {
-      group_restricted_switch();
-      printf("(press <1> to switch back to GROUP RESTRICTED: OFF)\n");
-    }
-
-
+	    if(cut) {
+		var p= cut[0];
+		var pt1 = mki3d.newPoint( p[0], p[1], p[2],  
+					  c[0], c[1], c[2] ,  
+					  mki3d.data.set.current );
+		var p=cut[1];
+		var pt2 = mki3d.newPoint( p[0], p[1], p[2],  
+					  c[0], c[1], c[2] ,  
+					  mki3d.data.set.current );
+		var seg = mki3d.newSegment( pt1, pt2 );
+		mki3d.modelInsertElement( mki3d.data.model.segments, seg);
+		count++;
+	    }
+	}
+    return "INSERTED "+count+" SEGMENTS OF THE INTERSECTION TO THE NEW CURRENT SET: "+mki3d.data.set.current;
 }
 
-*/
