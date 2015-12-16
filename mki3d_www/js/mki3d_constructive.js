@@ -709,14 +709,13 @@ mki3d.constructiveFolding= function(){
 /** triangle-triangle intersections (based on https://github.com/mki1967/et-edit ) **/
 
 /* returns [E1,E2] - endpoints positions of the segment intersection or null (if no segment is intersection) */
-mki3d.TriangleTriangleIntersection( A1, A2, A3, /* endpoints positions of the first triangle */
-				    B1, B2, B3, /* endpoints positions of the first triangle */
-				  ) 
-{
+mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions of the first triangle */
+					      B1, B2, B3 /* endpoints positions of the first triangle */
+					    ) {
     var E1,E2; /* output positions */
     var M /* matrix [3][3]*/;
     var NA, NB; /* vectors [3] */
-    var B_1, B_2, B_3, X1, X2, /*vectors [3] */
+    var B_1, B_2, B_3, X1, X2; /*vectors [3] */
     var A_1, A_2, A_3, Y1, Y2; /*vectors [3] */
     var det1,det2, det3, t1, t2; /* real numbers */
     NA=mki3d.normalToPlane( A1, A2, A3 );
@@ -858,6 +857,7 @@ mki3d.TriangleTriangleIntersection( A1, A2, A3, /* endpoints positions of the fi
 
 ////////////// TO DO
 
+/*
 void group_tt_intersection(int g1, int g2)
 {
   int i,i1,i2, n1, n2, g_new;
@@ -940,3 +940,4 @@ void group_tt_intersection(int g1, int g2)
 
 }
 
+*/
