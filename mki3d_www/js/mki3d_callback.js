@@ -533,6 +533,27 @@ mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+mki3d.callback.constructiveInsertingMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+    case 48: // 0
+	actionMessage= mki3d.SelectedBookmarkedTriangleIntersection();
+	break;
+    case 51: // 3
+	actionMessage= mki3d.constructivePolygonInsert();
+	break;
+    case 52: // 4
+	actionMessage= mki3d.constructivePolygonTriangles();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
 mki3d.callback.constructiveMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -545,18 +566,15 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     case 83: // S
 	mki3d.action.constructiveScalingMenu();
 	return;
+    case 73: // I
+	mki3d.action.constructiveInsertingMenu();
+	return;
     case 74: // J
 	mki3d.action.constructiveCursorMenu();
 	return;
     case 66: // B
 	actionMessage=mki3d.constructiveBBoxOfSelectedUW();
 	break; 
-    case 51: // 3
-	actionMessage= mki3d.constructivePolygonInsert();
-	break;
-    case 52: // 4
-	actionMessage= mki3d.constructivePolygonTriangles();
-	break;
     case 84: // T
 	actionMessage= mki3d.constructiveThreePointTransformation();
 	break;

@@ -940,6 +940,13 @@ mki3d.action.constructiveScalingMenu = function(){
     window.onkeydown = mki3d.callback.constructiveScalingMenuOnKeyDown;
 }
 
+mki3d.action.constructiveInsertingMenu= function(){
+    /* <span> texts  are set by mki3d.action.constructiveMenu */
+
+    mki3d.message( mki3d.html.divConstructiveInsertingMenu.innerHTML );
+    window.onkeydown = mki3d.callback.constructiveInsertingMenuOnKeyDown;
+}
+
 mki3d.action.constructiveCursorMenu = function(){
     /* <span> texts  are set by mki3d.action.constructiveMenu */
 

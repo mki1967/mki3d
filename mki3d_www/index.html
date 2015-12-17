@@ -476,6 +476,8 @@
 	<dd> - SCALING SELECTED POINTS ... </dd>
 	<dt>'J'</dt>
 	<dd> - CURSOR JUMPING ... </dd>
+	<dt>'I'</dt>
+	<dd> - INSERTING NEW CONSTRUCTED OBJECTS ... </dd>
 	<dt>'B'</dt>
 	<dd> - SET POINTS 'U' 'W' ON THE MINIMAL AND MAXIMAL CORNERS OF THE BOUNDING BOX OF SELECTED ENDPOINTS
 	</dd>
@@ -488,14 +490,6 @@
 	  <br> 
 	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDOINTS SHOULD BE DISJOINT.
 	</dd>
-      </dl>
-      <h3> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
-	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </h3>
-      <dl>	
-	<dt>'3'</dt>
-	<dd> - INSERT POLYGON OUTLINE SEGMENTS </dd> 
-	<dt>'4'</dt>
-	<dd> - INSERT POLYGON SECTORS TRIANGLES </dd>
       </dl>
     </div>
 
@@ -544,6 +538,31 @@
 	<dt>'1'</dt>
 	<dd> - SCALE SELECTED ENDPOINTS BY |'AB'|/|'CD'| WITH FIXED POINT 'O' 
 	</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveInsertingMenu" display="none">
+      <h2>Constructive Inserting Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd>
+	  - INSERT A NEW SET OF SEGMENTS THAT ARE INTERSECTIONS OF THE SELECTED TRIANGLES WITH THE BOOKMARKED TRIANGLES
+	</dd>
+      </dl>
+      <p> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
+	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </p>
+      <dl>	
+	<dt>'3'</dt>
+	<dd> - INSERT POLYGON OUTLINE SEGMENTS </dd> 
+	<dt>'4'</dt>
+	<dd> - INSERT POLYGON SECTORS TRIANGLES </dd>
+      </dl>
+      <dl>
       </dl>
     </div>
 

@@ -777,7 +777,7 @@ mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions
     M=[];
 
     M[0]=[ B2[0]-B1[0], B2[1]-B1[1], B2[2]-B1[2] ];
-    M[1]=[ B2[0]-B1[0], B2[2]-B1[2], B2[2]-B1[2] ];
+    M[1]=[ B3[0]-B1[0], B3[1]-B1[1], B3[2]-B1[2] ];
  
     M[2]=[ A1[0]-B1[0], A1[1]-B1[1], A1[2]-B1[2] ];
     det1= mki3d.matrixDeterminant(M);
@@ -873,8 +873,8 @@ mki3d.SelectedBookmarkedTriangleIntersection= function() {
     var i1, i2;
     for(i1=0; i1<t1.length; i1++)
 	for(i2=0; i2<t2.length; i2++) {
-	    var cut= mki3d.TriangleTriangleIntersection( t1[0].position, t1[1].position, t1[2].position, 
-							 t2[0].position, t2[1].position, t2[2].position );
+	    var cut= mki3d.TriangleTriangleIntersection( t1[i1][0].position, t1[i1][1].position, t1[i1][2].position, 
+							 t2[i2][0].position, t2[i2][1].position, t2[i2][2].position );
 
 	    if(cut) {
 		var p= cut[0];
@@ -890,6 +890,9 @@ mki3d.SelectedBookmarkedTriangleIntersection= function() {
 		count++;
 	    }
 	}
-    return "INSERTED "+count+" SEGMENTS OF THE INTERSECTION TO THE NEW CURRENT SET: "+mki3d.data.set.current;
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br> INSERTED "+count+" SEGMENTS OF THE INTERSECTION TO THE NEW CURRENT SET: "+mki3d.data.set.current+
+	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
