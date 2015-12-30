@@ -1,4 +1,6 @@
-/* parameters of constructive methods */
+/*** constructive methods ***/
+
+/** parameters of constructive methods **/
 
 mki3d.constructive={};
 /* scaling factor used used for scaling in all directions */
@@ -9,8 +11,11 @@ mki3d.constructive.scalingFactor=1.0;
 
 mki3d.constructive.polygonNumberOfVertices=3;
 
-/* constructive methods */
 
+
+
+
+/** inserting regular polygons **/
 
 mki3d.polygonMakeVertex= function( vIdx ){
     var n=mki3d.constructive.polygonNumberOfVertices;
@@ -85,6 +90,8 @@ mki3d.constructivePolygonTriangles= function(){
 
 
 
+/* testing for input constructive points:
+   the string neededPoints consists of the names of points that must be displayed */
 
 mki3d.checkConstructivePoints= function( methodName, neededPoints ){
     var missingPoints= mki3d.pointsNotDisplayed( neededPoints );
@@ -314,6 +321,14 @@ mki3d.moveCursorToIntersectionABandCDE = function(){
 
 
 mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
+    var obj=mki3d.linePlaneSolution( A,B, C,D,E ); 
+    if( obj === null ) return null;
+    return obj.V;
+}
+
+/* returns object {V: [x,y,z], t: t}, where V=A+t*(B-A) is the intersection of line AB with plane CDE,
+   or null if such solution does not exist */
+mki3d.linePlaneSolution = function( A,B, C,D,E ){
     var CD = [ D[0]-C[0], D[1]-C[1], D[2]-C[2] ];
     var CE = [ E[0]-C[0], E[1]-C[1], E[2]-C[2] ];
     var AB = [ B[0]-A[0], B[1]-A[1], B[2]-A[2] ];
@@ -334,9 +349,10 @@ mki3d.lineABplaneCDEintersection= function( A,B, C,D,E ){
     t=d1/d;
     mki3d.vectorScale(X, t,t,t );
     
-    return [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ];
+    return { V: [ A[0]+X[0], A[1]+X[1], A[2]+X[2] ], t: t};
 
 }
+
 
 
 
@@ -689,3 +705,194 @@ mki3d.constructiveFolding= function(){
 	"<br> LINE 'AV' IS THE COMMON RESULT THE RESPECTIVE ROTATIONS OF THE LINES 'AD' AROUND 'AB' AND 'AE' AROUND 'AC'."+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
+
+/** triangle-triangle intersections (based on https://github.com/mki1967/et-edit ) **/
+
+/* returns [E1,E2] - endpoints positions of the segment intersection or null (if no segment is intersection) */
+mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions of the first triangle */
+					      B1, B2, B3 /* endpoints positions of the first triangle */
+					    ) {
+    var E1,E2; /* output positions */
+    var M /* matrix [3][3]*/;
+    var NA, NB; /* vectors [3] */
+    var B_1, B_2, B_3, X1, X2; /*vectors [3] */
+    var A_1, A_2, A_3, Y1, Y2; /*vectors [3] */
+    var det1,det2, det3, t1, t2; /* real numbers */
+    NA=mki3d.normalToPlane( A1, A2, A3 );
+    if(mki3d.scalarProduct(NA,NA)==0) {
+	return null; /* triangle [A1,A2,A3] is degenarate */
+    }
+
+    NB=mki3d.normalToPlane( B1, B2, B3 );
+    if(mki3d.scalarProduct(NB,NB)==0) {
+	return null; /* triangle [B1,B2,B3] is degenarate */
+    }
+
+    M=[];
+    M[0]= [ A2[0]-A1[0], A2[1]-A1[1], A2[2]-A1[2] ]; 
+    M[1]= [ A3[0]-A1[0], A3[1]-A1[1], A3[2]-A1[2] ]; 
+
+    M[2]= [ B1[0]-A1[0], B1[1]-A1[1], B1[2]-A1[2] ]; 
+    det1= mki3d.matrixDeterminant(M);
+
+    M[2]= [ B2[0]-A1[0], B2[1]-A1[1], B2[2]-A1[2] ]; 
+    det2= mki3d.matrixDeterminant(M);
+
+    M[2]= [ B3[0]-A1[0], B3[1]-A1[1], B3[2]-A1[2] ]; 
+    det3= mki3d.matrixDeterminant(M);
+
+
+    if( (det1<=0 && det2<=0 && det3<=0) ||
+	(det1>=0 && det2>=0 && det3>=0)
+      ){
+	/*  all vertices of B are on the same side of plane A1,A2,A3 */
+	return null;
+    }
+
+    if( (det1<0 && det2>=0 && det3>=0) ||
+      (det1>0 && det2<=0 && det3<=0) 
+      ){
+	B_1 = mki3d.vectorClone(B1);
+	B_2 = mki3d.vectorClone(B2);
+	B_3 = mki3d.vectorClone(B3);
+    } else if( (det2<0 && det1>=0 && det3>=0) ||
+	      (det2>0 && det1<=0 && det3<=0) 
+	    ){
+	B_1 = mki3d.vectorClone(B2);
+	B_2 = mki3d.vectorClone(B1);
+	B_3 = mki3d.vectorClone(B3);
+    } else if( (det3<0 && det2>=0 && det1>=0) ||
+	       (det3>0 && det2<=0 && det1<=0) 
+	     ) {
+	B_1 = mki3d.vectorClone(B3);
+	B_2 = mki3d.vectorClone(B2);
+	B_3 = mki3d.vectorClone(B1);
+    }
+
+    /*  B_1 is on the other side of the plane A1, A2, A3 than B_2, B_3. */
+
+    X1= mki3d.lineABplaneCDEintersection( B_1,B_2, A1,A2,A3 );
+    X2= mki3d.lineABplaneCDEintersection( B_1,B_3, A1,A2,A3 );
+
+    M=[];
+
+    M[0]=[ B2[0]-B1[0], B2[1]-B1[1], B2[2]-B1[2] ];
+    M[1]=[ B3[0]-B1[0], B3[1]-B1[1], B3[2]-B1[2] ];
+ 
+    M[2]=[ A1[0]-B1[0], A1[1]-B1[1], A1[2]-B1[2] ];
+    det1= mki3d.matrixDeterminant(M);
+
+    M[2]=[ A2[0]-B1[0], A2[1]-B1[1], A2[2]-B1[2] ];
+    det2= mki3d.matrixDeterminant(M);
+
+    M[2]=[ A3[0]-B1[0], A3[1]-B1[1], A3[2]-B1[2] ];
+    det3= mki3d.matrixDeterminant(M);
+
+    if( (det1<=0 && det2<=0 && det3<=0) ||
+	(det1>=0 && det2>=0 && det3>=0)
+      ) {
+	/*  all vertices of A are on the same side of plane B1,B2,B3 */
+	return null;
+    }
+
+    if( (det1<0 && det2>=0 && det3>=0) ||
+	(det1>0 && det2<=0 && det3<=0)
+      ){
+	A_1 = mki3d.vectorClone(A1);
+	A_2 = mki3d.vectorClone(A2);
+	A_3 = mki3d.vectorClone(A3);
+    } else if( (det2<0 && det1>=0 && det3>=0) ||
+	       (det2>0 && det1<=0 && det3<=0)
+	     ){
+	A_1 = mki3d.vectorClone(A2);
+	A_2 = mki3d.vectorClone(A1);
+	A_3 = mki3d.vectorClone(A3);
+    } else if( (det3<0 && det2>=0 && det1>=0) ||
+	       (det3>0 && det2<=0 && det1<=0)
+	     ) {
+	A_1 = mki3d.vectorClone(A3);
+	A_2 = mki3d.vectorClone(A2);
+	A_3 = mki3d.vectorClone(A1);
+    }
+    /*  A_1 is on the other side of the plane B1, B2, B3 than A_2, A_3. */
+
+    var A1NA = [ A_1[0]+NA[0], A_1[1]+NA[1], A_1[2]+NA[2] ];  
+    var solution1= mki3d.linePlaneSolution( X1,X2, A_1,A_2,A1NA )
+    var solution2= mki3d.linePlaneSolution( X1,X2, A_1,A_3,A1NA )
+    t1 = solution1.t;
+    t2 = solution2.t;
+    if(solution1.t<= solution2.t) {
+	t1 = solution1.t;
+	Y1 = solution1.V;
+	t2 = solution2.t;
+	Y2 = solution2.V;
+    } else {
+	t2 = solution1.t;
+	Y2 = solution1.V;
+	t1 = solution2.t;
+	Y1 = solution2.V;
+    }
+
+    if( t2<=0  || t1>=1 ) {
+	/*  t2<=0  || t1>=1 -- segment [X1,X2] is outside triangle A */
+	return null;
+    }
+
+    /* [E1,E2] should be the part of [X1,X2] that is inside triangle A */
+    if(t1>0) {
+	E1=Y1;
+    } else {
+	E1=X1;
+    }
+    
+    if(t2<1) {
+	E2=Y2;
+    } else {
+	E2=X2;
+    }
+
+    return [E1, E2];
+
+}
+
+
+mki3d.SelectedBookmarkedTriangleIntersection= function() {
+    var t1= mki3d.getSelectedElements(mki3d.data.model.triangles);
+    if(t1.length==0) return "<br> NO TRIANGLES HAVE ALL ENDPOINTS SELECTED !";
+
+    var t2= mki3d.getBookmarkedElements(mki3d.data.model.triangles);
+    if(t2.length==0) return "<br> NO TRIANGLES HAVE ALL ENDPOINTS BOOKMARKED !";
+
+
+    mki3d.compressSetIndexes(mki3d.data);
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    mki3d.data.set.current=newIdx; // insert intersection segments to a new set
+
+    var c = mki3d.data.cursor.color;
+    var count=0;
+    var i1, i2;
+    for(i1=0; i1<t1.length; i1++)
+	for(i2=0; i2<t2.length; i2++) {
+	    var cut= mki3d.TriangleTriangleIntersection( t1[i1][0].position, t1[i1][1].position, t1[i1][2].position, 
+							 t2[i2][0].position, t2[i2][1].position, t2[i2][2].position );
+
+	    if(cut) {
+		var p= cut[0];
+		var pt1 = mki3d.newPoint( p[0], p[1], p[2],  
+					  c[0], c[1], c[2] ,  
+					  mki3d.data.set.current );
+		var p=cut[1];
+		var pt2 = mki3d.newPoint( p[0], p[1], p[2],  
+					  c[0], c[1], c[2] ,  
+					  mki3d.data.set.current );
+		var seg = mki3d.newSegment( pt1, pt2 );
+		mki3d.modelInsertElement( mki3d.data.model.segments, seg);
+		count++;
+	    }
+	}
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br> INSERTED "+count+" SEGMENTS OF THE INTERSECTION TO THE NEW CURRENT SET: "+mki3d.data.set.current+
+	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+

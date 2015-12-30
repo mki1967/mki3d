@@ -907,6 +907,41 @@ mki3d.action.actionMenu = function(){
     window.onkeydown = mki3d.callback.actionMenuOnKeyDown;
 }
 
+
+
+mki3d.action.setMenu = function(){
+    mki3d.action.cancelVisibilityRestrictions();
+
+    mki3d.compressSetIndexes( mki3d.data );
+    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+    // mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
+
+    mki3d.html.spanSetMaxIdx.innerHTML= maxIdx;
+    mki3d.html.spanSetCurrentIdx.innerHTML= mki3d.data.set.current;
+
+    mki3d.message( mki3d.html.divSetMenu.innerHTML );
+    window.onkeydown = mki3d.callback.setMenuOnKeyDown;
+}
+
+mki3d.action.setInculedView = function(){
+    mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
+    mki3d.redraw();
+    return "<br>VIEW RESTRICTED TO ELEMENTS INCLUDED IN SET: "+mki3d.data.set.current+". (PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS)";
+}
+
+mki3d.action.setIncidentView = function(){
+    mki3d.tmp.display.model=mki3d.createIncidentToSetModel(mki3d.data.set.current);
+    mki3d.redraw();
+    return "<br>VIEW RESTRICTED TO ELEMENTS INCIDENT TO SET: "+mki3d.data.set.current+". (PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS)";
+}
+
+mki3d.action.nextSetIdx= function(){
+    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+    mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
+    return "<br> CURRENT SET INDEX IS: "+mki3d.data.set.current;
+}
+
+
 mki3d.action.pointsMenu = function(){
     mki3d.message( mki3d.html.divPointsMenu.innerHTML );
     window.onkeydown = mki3d.callback.pointsMenuOnKeyDown;
@@ -938,6 +973,13 @@ mki3d.action.constructiveScalingMenu = function(){
 
     mki3d.message( mki3d.html.divConstructiveScalingMenu.innerHTML );
     window.onkeydown = mki3d.callback.constructiveScalingMenuOnKeyDown;
+}
+
+mki3d.action.constructiveInsertingMenu= function(){
+    /* <span> texts  are set by mki3d.action.constructiveMenu */
+
+    mki3d.message( mki3d.html.divConstructiveInsertingMenu.innerHTML );
+    window.onkeydown = mki3d.callback.constructiveInsertingMenuOnKeyDown;
 }
 
 mki3d.action.constructiveCursorMenu = function(){

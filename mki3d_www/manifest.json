@@ -3,7 +3,7 @@
     "name": "mki3d",
     "short_name": "MKI 3D",
     "description": "Designing simple 3D objects and exporting them to HTML",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "minimum_chrome_version": "38",
     "author": "Marcin Kik mki1967@gmail.com",
     "offline_enabled": true,

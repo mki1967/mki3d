@@ -43,7 +43,9 @@ mki3d.html.initObjects= function() {
     mki3d.html.divConstructiveMovingMenu= mki3d.html.registerDiv('#divConstructiveMovingMenu');
     mki3d.html.divConstructiveScalingMenu= mki3d.html.registerDiv('#divConstructiveScalingMenu');
     mki3d.html.divConstructiveCursorMenu= mki3d.html.registerDiv('#divConstructiveCursorMenu');
+    mki3d.html.divConstructiveInsertingMenu= mki3d.html.registerDiv('#divConstructiveInsertingMenu');
     mki3d.html.divActionMenu= mki3d.html.registerDiv('#divActionMenu');
+    mki3d.html.divSetMenu= mki3d.html.registerDiv('#divSetMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 
 
@@ -53,6 +55,8 @@ mki3d.html.initObjects= function() {
 
     mki3d.html.canvas= document.querySelector("#canvasId");
 
+    mki3d.html.spanSetMaxIdx= document.querySelector("#spanSetMaxIdx");
+    mki3d.html.spanSetCurrentIdx= document.querySelector("#spanSetCurrentIdx");
 
     mki3d.html.spanScalingFactor= document.querySelector("#spanScalingFactor");
     mki3d.html.spanPolygonNumberOfVertices= document.querySelector("#spanPolygonNumberOfVertices");

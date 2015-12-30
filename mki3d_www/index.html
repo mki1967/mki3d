@@ -259,6 +259,8 @@
 	<dd> - CONSTRUCTIVE POINTS [...]</dd>
 	<dt>'M'</dt>
 	<dd> - CONSTRUCTIVE METHODS [...]</dd>
+	<dt>'N'</dt>
+	<dd> - SET MENU [...]</dd>
 	<dt>'I'</dt>
 	<dd> - INPUTS PAGE [...]</dd>
       </dl>
@@ -476,11 +478,13 @@
 	<dd> - SCALING SELECTED POINTS ... </dd>
 	<dt>'J'</dt>
 	<dd> - CURSOR JUMPING ... </dd>
+	<dt>'I'</dt>
+	<dd> - INSERTING NEW CONSTRUCTED OBJECTS ... </dd>
 	<dt>'B'</dt>
 	<dd> - SET POINTS 'U' 'W' ON THE MINIMAL AND MAXIMAL CORNERS OF THE BOUNDING BOX OF SELECTED ENDPOINTS
 	</dd>
 	<dt>'T'</dt>
-	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' 
+	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' OF SELECTED ENDPOINTS
 	  (TRANSFORMS: POINT 'A' TO POINT 'D', LINE 'AB' TO LINE 'DE', AND PLANE 'ABC' TO PLANE 'DEF'.) </dd>
 	<dt>'F'</dt>
 	<dd> - FOLDING: ROTATE THE SELECTED ENDPOINTS AROUND THE LINE 'AB' AND THE BOOKMARKED ENDPOINTS AROUND THE LINE 'AC' IN THE DIRECTION OF POINT 'F', SO THAT
@@ -488,14 +492,6 @@
 	  <br> 
 	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDOINTS SHOULD BE DISJOINT.
 	</dd>
-      </dl>
-      <h3> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
-	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </h3>
-      <dl>	
-	<dt>'3'</dt>
-	<dd> - INSERT POLYGON OUTLINE SEGMENTS </dd> 
-	<dt>'4'</dt>
-	<dd> - INSERT POLYGON SECTORS TRIANGLES </dd>
       </dl>
     </div>
 
@@ -547,6 +543,31 @@
       </dl>
     </div>
 
+    <div id="divConstructiveInsertingMenu" display="none">
+      <h2>Constructive Inserting Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd>
+	  - INSERT A NEW SET OF SEGMENTS THAT ARE INTERSECTIONS OF THE SELECTED TRIANGLES WITH THE BOOKMARKED TRIANGLES
+	</dd>
+      </dl>
+      <p> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
+	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </p>
+      <dl>	
+	<dt>'3'</dt>
+	<dd> - INSERT POLYGON OUTLINE SEGMENTS </dd> 
+	<dt>'4'</dt>
+	<dd> - INSERT POLYGON SECTORS TRIANGLES </dd>
+      </dl>
+      <dl>
+      </dl>
+    </div>
+
 
 
     <div id="divActionMenu" display="none">
@@ -562,6 +583,25 @@
 	<dd> - RIGHT ANGLE SELECTION ROTATE AROUND THE CURSOR</dd>
 	<dt>'M'</dt>
 	<dd> - MIRROR REFLECTION BY CURSOR PLANES </dd>
+      </dl>
+    </div>
+
+    <div id="divSetMenu" display="none">
+      <h2>Set Menu:</h2>
+      <p>
+	Maximal index of nonempty set is: MAX_IDX = <span id="spanSetMaxIdx"></span>.
+	<br>
+	Current set index is: <span id="spanSetCurrentIdx"></span>.
+      </p>
+      <dl>
+	<dt>'N'</dt>
+	<dd> - SWITCH TO THE NEXT SET INDEX (MODULO MAX_IDX+2) </dd>
+	<dt>'0'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCLUDED IN THE CURRENT SET </dd>
+	<dt>'1'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCIDENT TO THE CURRENT SET </dd>
+	<dt>'P'</dt>
+	<dd> - PRINT SET STATISTICS </dd>
       </dl>
     </div>
 
