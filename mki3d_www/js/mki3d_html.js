@@ -45,6 +45,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divConstructiveCursorMenu= mki3d.html.registerDiv('#divConstructiveCursorMenu');
     mki3d.html.divConstructiveInsertingMenu= mki3d.html.registerDiv('#divConstructiveInsertingMenu');
     mki3d.html.divActionMenu= mki3d.html.registerDiv('#divActionMenu');
+    mki3d.html.divActionMenu= mki3d.html.registerDiv('#divSetMenu');
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
 
 

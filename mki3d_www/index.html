@@ -584,6 +584,25 @@
       </dl>
     </div>
 
+    <div id="divSetMenu" display="none">
+      <h2>Set Menu:</h2>
+      <p>
+	Maximal index of nonempty set is: MAX_IDX = <span id="spanSetMax"></span>.
+	<br>
+	Current set index is: <span id="spanSetCurrent"></span>.
+      </p>
+      <dl>
+	<dt>'N'</dt>
+	<dd> - SWITCH TO THE NEXT SET INDEX (MODULO MAX_IDX+2) </dd>
+	<dt>'0'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCLUDED IN THE CURRENT SET </dd>
+	<dt>'1'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCIDENT TO THE CURRENT SET </dd>
+	<dt>'C'</dt>
+	<dd> - CANCEL VISIBILITY RESTRICTIONS </dd>
+      </dl>
+    </div>
+
     <div id="divCanvas" style="position: relative;">
       <!-- <canvas id="canvasId" width="640" height="400"  style="border:0px; margin: 0px; padding: 0px;" > -->
       <canvas id="canvasId" style="border:0px; margin: 0px; padding: 0px;" >
