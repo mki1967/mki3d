@@ -268,6 +268,42 @@ mki3d.file.startLoading = function ( ) {
     
 }
 
+/** LOAD STRING **/
+
+mki3d.file.loadingStringEndHandler = function (loader){
+    if(loader.loadedString) {
+	console.log(loader.loadedString); // for tests ...
+	mki3d.file.string = loader.loadeString; // dangerous !!!
+	mki3d.action.escapeToCanvas(); 
+	mki3d.messageAppend("<br> LOADED STRING FROM: "+mki3d.file.stringName);
+    }
+} 
+
+mki3d.file.startLoadingString = function ( ) {
+    var myAccepts = [{
+	//	mimeTypes: ['text/*'],
+	extensions: ['mki3d']
+    }];
+    
+    var loader = {};
+
+    loader.loadHandler = function(e) { // processing of the result
+
+	var myObjectString = e.target.result;
+	loader.loadedString = myObjectString;
+    };
+
+    loader.loadEndHandler = function(e) { 
+	// console.log(e);  // for tests ...
+	mki3d.file.loadingStringEndHandler(loader); // process load
+    }
+    loader.errorHandler = function(e) { console.error(e); }; 
+
+    loader.config = {type: 'openFile', accepts: myAccepts };
+    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    
+}
+
 
 /* common callbacks for loading and merging */
 
