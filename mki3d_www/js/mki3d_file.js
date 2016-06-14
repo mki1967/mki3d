@@ -272,8 +272,9 @@ mki3d.file.startLoading = function ( ) {
 
 mki3d.file.loadingStringEndHandler = function (loader){
     if(loader.loadedString) {
-	console.log(loader.loadedString); // for tests ...
-	mki3d.file.string = loader.loadeString; // dangerous !!!
+	mki3d.file.loadedString = loader.loadedString;
+	console.log(mki3d.file.loadedString); // for tests ...
+	mki3d_et_getDataFromString(mki3d.file.loadedString); // test ...
 	mki3d.action.escapeToCanvas(); 
 	mki3d.messageAppend("<br> LOADED STRING FROM: "+mki3d.file.stringName);
     }
@@ -281,8 +282,8 @@ mki3d.file.loadingStringEndHandler = function (loader){
 
 mki3d.file.startLoadingString = function ( ) {
     var myAccepts = [{
-	//	mimeTypes: ['text/*'],
-	extensions: ['mki3d']
+	//	mimeTypes: ['text/*'];
+	 extensions: ['et']
     }];
     
     var loader = {};
