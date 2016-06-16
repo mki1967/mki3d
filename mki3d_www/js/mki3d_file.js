@@ -274,9 +274,12 @@ mki3d.file.loadingStringEndHandler = function (loader){
     if(loader.loadedString) {
 	mki3d.file.loadedString = loader.loadedString;
 	console.log(mki3d.file.loadedString); // for tests ...
-	mki3d_et_getDataFromString(mki3d.file.loadedString); // test ...
+	mki3d.data=mki3d_et_getDataFromString(mki3d.file.loadedString); // test ...
+        mki3d.tmpCancel();
+	console.log( mki3d.data ); // test ...
 	mki3d.action.escapeToCanvas(); 
-	mki3d.messageAppend("<br> LOADED STRING FROM: "+mki3d.file.stringName);
+	mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
+	mki3d.messageAppend("<br> LOADED STRING FROM: "+mki3d.file.suggestedName);
     }
 } 
 

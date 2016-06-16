@@ -97,6 +97,20 @@ mki3d_et_getDataFromString= function( string ){
     et.tNr= mki3d_ArrayInput_getNumber( arrayInput );
     et.triangleArray=mki3d_getArray( arrayInput, et.tNr, mki3d_et_getTriangle  );
 
+    /* from: et-variables.c 
+       char transformation_label[]="TRANSFORMATION";
+       char light_label[]="LIGHT";
+       char background_label[]="BACKGROUND";
+       char cursor_label[]="CURSOR";
+       char group_label[]="GROUPS";
+    */
+
+    et.transformation_label="TRANSFORMATION";
+    et.light_label="LIGHT";
+    et.background_label="BACKGROUND";
+    et.cursor_label="CURSOR";
+    et.group_label="GROUPS";
+
     /* read transformation */
     et.transformation={};
     et.transformation.label= mki3d_ArrayInput_getString( arrayInput );
@@ -126,10 +140,53 @@ mki3d_et_getDataFromString= function( string ){
     et.groups.vNr=mki3d_ArrayInput_getNumber( arrayInput );
     et.groups.groupArray=mki3d_getArray( arrayInput, et.groups.vNr ,mki3d_ArrayInput_getNumber );
 
+    /* update setIdx in veret points from groups */
+    var i;
+    for( i=0; i<et.vNr; i++) 
+	et.vertexArray[i].set= et.groups.groupArray[i];
+    
+    /* prepare data */
+
+    et.data= mki3d_newData();
+
+    /* prepare model: segments and triangles */
+    var segments=et.data.model.segments;
+    for(i=0; i<et.eNr; i++){
+	segments.push( mki3d.newSegment( et.vertexArray[ et.edgeArray[i].e1 ],
+					 et.vertexArray[ et.edgeArray[i].e2 ] ) // mki3d.newSegment clones the endpoints 
+		     );
+	segments[segments.length-1][0].color=mki3d.et.color[ et.edgeArray[i].colorIdx ].slice(0); // clone [r,g,b] 
+	segments[segments.length-1][1].color=mki3d.et.color[ et.edgeArray[i].colorIdx ].slice(0); // clone [r,g,b] 
+    }
+
+    var triangles=et.data.model.triangles;
+    for(i=0; i<et.tNr; i++){
+	triangles.push( mki3d.newTriangle( et.vertexArray[ et.triangleArray[i].t1 ],
+					   et.vertexArray[ et.triangleArray[i].t2 ],
+					   et.vertexArray[ et.triangleArray[i].t3 ] ) // mki3d.newTriangle clones the endpoints 
+		      );
+	triangles[triangles.length-1][0].color=mki3d.et.color[ et.triangleArray[i].colorIdx ].slice(0); // clone [r,g,b] 
+	triangles[triangles.length-1][1].color=mki3d.et.color[ et.triangleArray[i].colorIdx ].slice(0); // clone [r,g,b] 
+	triangles[triangles.length-1][2].color=mki3d.et.color[ et.triangleArray[i].colorIdx ].slice(0); // clone [r,g,b] 
+    }
+    
+    /* we ignore transformation */
+
+    /* set cursor.position */
+    if(et.cursor.label==et.cursor_label)
+	et.data.cursor.position=et.cursor.position;
+
+    /* set backgroundColor */
+    if(et.bg.label==et.background_label)
+	et.data.backgroundColor=mki3d.et.color[ et.bg.colorIdx ].slice(0); // clone [r,g,b]
+
+    /* set light.vector */
+    if(et.light.label==et.light_label)
+	et.data.light.vector=et.light.direction;
 
     console.log( et ); // test ...
 
-    return et;
+    return et.data;
 }
 
 
