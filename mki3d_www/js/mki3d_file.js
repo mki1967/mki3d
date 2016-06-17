@@ -21,7 +21,10 @@ mki3d.file.loadResource= function( path, name, callback ){
 mki3d.file.startSavingString= function( string, mySuggestedName ){
     var saver = {};
     saver.blob = new Blob([string], {type: 'text/plain'}); 
-    saver.config = {type: 'saveFile', suggestedName: mySuggestedName  };
+    saver.config = {
+	type: 'saveFile', 
+	suggestedName: mySuggestedName,	
+    };
     saver.errorHandler = function(e) { console.error(e); }; 
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
@@ -90,7 +93,14 @@ mki3d.file.startSaving = function () {
 
     var myObjectString = JSON.stringify(mki3d.data);
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
-    saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.concat(".mki3d")   };
+    saver.config = {
+	type: 'saveFile', 
+	suggestedName: mki3d.file.suggestedName.concat(".mki3d"), 
+	accepts: [{
+	    extensions: ['mki3d']
+	}]
+    };
+    
     saver.errorHandler = function(e) { console.error(e); }; 
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
