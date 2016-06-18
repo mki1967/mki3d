@@ -185,6 +185,10 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 	// EXPORT
         mki3d.file.startExporting();
 	break;
+    case 84: // T
+	// TEST STRING LOAD
+        mki3d.file.startLoadingString();
+	break;
 	
     default:
 	mki3d.action.escapeToCanvas();

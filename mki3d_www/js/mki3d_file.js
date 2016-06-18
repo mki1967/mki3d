@@ -4,7 +4,7 @@ mki3d.file = {};
 
 /* load recource named identified the "path/name". 
    callback function will process the returned string. */
-
+/* not used
 mki3d.file.loadResource= function( path, name, callback ){
     var url= chrome.extension.getURL(path+"/"+name);
     var xmlhttp = new XMLHttpRequest();
@@ -17,11 +17,15 @@ mki3d.file.loadResource= function( path, name, callback ){
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
+*/
 
 mki3d.file.startSavingString= function( string, mySuggestedName ){
     var saver = {};
     saver.blob = new Blob([string], {type: 'text/plain'}); 
-    saver.config = {type: 'saveFile', suggestedName: mySuggestedName  };
+    saver.config = {
+	type: 'saveFile', 
+	suggestedName: mySuggestedName,	
+    };
     saver.errorHandler = function(e) { console.error(e); }; 
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
@@ -90,7 +94,14 @@ mki3d.file.startSaving = function () {
 
     var myObjectString = JSON.stringify(mki3d.data);
     saver.blob = new Blob([myObjectString], {type: 'text/plain'}); 
-    saver.config = {type: 'saveFile', suggestedName: mki3d.file.suggestedName.concat(".mki3d")   };
+    saver.config = {
+	type: 'saveFile', 
+	suggestedName: mki3d.file.suggestedName.concat(".mki3d"), 
+	accepts: [{
+	    extensions: ['mki3d']
+	}]
+    };
+    
     saver.errorHandler = function(e) { console.error(e); }; 
     saver.savingEndHandler= mki3d.file.savingEndHandler;
     saver.writeEndHandler =   function(e){
@@ -260,6 +271,46 @@ mki3d.file.startLoading = function ( ) {
     loader.loadEndHandler = function(e) { 
 	// console.log(e);  // for tests ...
 	mki3d.file.loadingEndHandler(loader); // process load
+    }
+    loader.errorHandler = function(e) { console.error(e); }; 
+
+    loader.config = {type: 'openFile', accepts: myAccepts };
+    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    
+}
+
+/** LOAD STRING **/
+
+mki3d.file.loadingStringEndHandler = function (loader){
+    if(loader.loadedString) {
+	mki3d.file.loadedString = loader.loadedString;
+	console.log(mki3d.file.loadedString); // for tests ...
+	mki3d.data=mki3d_et_getDataFromString(mki3d.file.loadedString); // test ...
+        mki3d.tmpCancel();
+	console.log( mki3d.data ); // test ...
+	mki3d.action.escapeToCanvas(); 
+	mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
+	mki3d.messageAppend("<br> LOADED STRING FROM: "+mki3d.file.suggestedName);
+    }
+} 
+
+mki3d.file.startLoadingString = function ( ) {
+    var myAccepts = [{
+	//	mimeTypes: ['text/*'];
+	 extensions: ['et']
+    }];
+    
+    var loader = {};
+
+    loader.loadHandler = function(e) { // processing of the result
+
+	var myObjectString = e.target.result;
+	loader.loadedString = myObjectString;
+    };
+
+    loader.loadEndHandler = function(e) { 
+	// console.log(e);  // for tests ...
+	mki3d.file.loadingStringEndHandler(loader); // process load
     }
     loader.errorHandler = function(e) { console.error(e); }; 
 
