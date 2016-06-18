@@ -8,7 +8,7 @@ mki3d.getSetIdxArray= function( elements ) {
 	for(j=0; j<elements[i].length; j++){
 	    array.push(elements[i][j].set);
 	}
-    array.sort();
+    array.sort(function(a, b){return a-b}); // numerical sort
     if( array.length == 0) return array;
     var out=[array[0]];
     for(i=1; i<array.length; i++)
