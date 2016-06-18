@@ -4,7 +4,7 @@ mki3d.file = {};
 
 /* load recource named identified the "path/name". 
    callback function will process the returned string. */
-
+/* not used
 mki3d.file.loadResource= function( path, name, callback ){
     var url= chrome.extension.getURL(path+"/"+name);
     var xmlhttp = new XMLHttpRequest();
@@ -17,6 +17,7 @@ mki3d.file.loadResource= function( path, name, callback ){
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
+*/
 
 mki3d.file.startSavingString= function( string, mySuggestedName ){
     var saver = {};
