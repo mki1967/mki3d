@@ -888,8 +888,16 @@ mki3d.action.textLoad = function(){
     window.onkeydown = mki3d.callback.textLoadOnKeyDown;
 }
 
-mki3d.action.textSave = function(){
+mki3d.action.textSave = function(name){
     // mki3d.message( mki3d.html.divTextSave.innerHTML );
+          var a = document.getElementById("aDownload");
+
+      var file = new Blob([mki3d.html.textareaOutput.value], {type:'text/plain'});
+
+      a.href = URL.createObjectURL(file);
+
+    a.download = name;
+    
     mki3d.html.hideAllDivs();
     mki3d.html.html.style.overflowY="auto";
     mki3d.html.showDiv(mki3d.html.divTextSave);

@@ -76,7 +76,7 @@ mki3d.file.startExporting = function () {
 	// alert(err);
 	mki3d.html.textareaOutput.value=  htmlString;
 	mki3d.saveInfo("Exporting to '*.html'");
-	mki3d.action.textSave();
+	mki3d.action.textSave(mki3d.file.suggestedName.concat(".html"));
     }
 
 }
@@ -117,7 +117,7 @@ mki3d.file.startSaving = function () {
 	// alert(err);
 	mki3d.html.textareaOutput.value= myObjectString;
 	mki3d.saveInfo("Saving to '*.mki3d'");
-	mki3d.action.textSave();
+	mki3d.action.textSave(mki3d.file.suggestedName.concat(".mki3d"));
     }
 
 }

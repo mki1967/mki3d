@@ -84,7 +84,7 @@ mki3d.html.initObjects= function() {
 
     /* Text Save Page */
     mki3d.html.textareaOutput=document.querySelector("#textareaOutput");
-
+    mki3d.html.aDownload=document.querySelector("#aDownload");
  
 
 }
