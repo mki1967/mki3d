@@ -22,6 +22,13 @@ mki3d.html.showDiv = function(divObject) {
 }
 
 
+mki3d.saveInfo=function(string) {
+    document.querySelector("#saveInfo").innerHTML=string;
+}
+
+mki3d.loadInfo=function(string) {
+    document.querySelector("#loadInfo").innerHTML=string;
+}
 
 mki3d.html.initObjects= function() {
     // register divs

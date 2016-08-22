@@ -75,6 +75,7 @@ mki3d.file.startExporting = function () {
 	// console.log(err);
 	// alert(err);
 	mki3d.html.textareaOutput.value=  htmlString;
+	mki3d.saveInfo("Exporting to '*.html'");
 	mki3d.action.textSave();
     }
 
@@ -115,6 +116,7 @@ mki3d.file.startSaving = function () {
 	// console.log(err);
 	// alert(err);
 	mki3d.html.textareaOutput.value= myObjectString;
+	mki3d.saveInfo("Saving to '*.mki3d'");
 	mki3d.action.textSave();
     }
 
@@ -189,13 +191,11 @@ mki3d.file.savingEndHandler=   function (saver){
 
 /** MERGING **/
 
-mki3d.file.mergingEndHandler = function (loader){
-    if(loader.loadedObject) {
-	// console.log(loader.loadedObject); // for tests ...
+mki3d_merge_data= function( data ) {
         mki3d.tmpCancel();
         mki3d.tmpCancel();
 	mki3d.action.cancelSelection();
-	mki3d.tmp.merged = loader.loadedObject; // dangerous !!!
+	mki3d.tmp.merged = data; // dangerous !!!
 	mki3d.compressSetIndexes( mki3d.data );
 	mki3d.compressSetIndexes( mki3d.tmp.merged );
 	var setIdxShift= mki3d.getMaxSetIndex(mki3d.data.model)+1;
@@ -212,6 +212,14 @@ mki3d.file.mergingEndHandler = function (loader){
 	mki3d.tmpRebuildSelected();
 	mki3d.setModelViewMatrix(); // ?
 	mki3d.backup();
+}
+
+mki3d.file.mergingEndHandler = function (loader){
+    if(loader.loadedObject) {
+	// start
+	// console.log(loader.loadedObject); // for tests ...
+	mki3d_merge_data( loader.loadedObject) ;
+	// end
 	mki3d.action.escapeToCanvas(); 
 	mki3d.messageAppend("<br> MERGED AND SELECTED "
 			    +mergedSegments.length+" SEGMENTS AND "
@@ -245,8 +253,18 @@ mki3d.file.startMerging = function ( ) {
     try{
 	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
     } catch( err ) {
-	console.log(err);
-	alert(err);
+	// console.log(err);
+	// alert(err);
+	// set callback to consume textarea
+	mki3d.textLoadConsume= function(){
+	    var data= JSON.parse(mki3d.html.textareaInput.value);
+	    // to do: test data consistency ...
+	    mki3d_merge_data(data);
+	    // console.log(data); /// for tests
+	}
+	mki3d.loadInfo("Merging from '*.mki3d'");
+	mki3d.html.textareaInput.value=""; // clean input text area ?
+	mki3d.action.textLoad();
     }
 }
 
@@ -292,8 +310,8 @@ mki3d.file.startLoading = function ( ) {
     try{
 	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
     } catch( err ) {
-	console.log(err);
-	alert(err);
+	// console.log(err);
+	// alert(err);
 
 	// set callback to consume textarea
 	mki3d.textLoadConsume= function(){
@@ -303,8 +321,9 @@ mki3d.file.startLoading = function ( ) {
             mki3d.tmpCancel();
 	    mki3d.setModelViewMatrix();
 	    mki3d.backup();
-	    console.log(data);
+	    // console.log(data); /// for tests
 	}
+	mki3d.loadInfo("Loading from '*.mki3d'");
 	mki3d.html.textareaInput.value=""; // clean input text area ?
 	mki3d.action.textLoad();
     }
@@ -350,8 +369,21 @@ mki3d.file.startLoadingString = function ( ) {
     try{
 	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
     } catch( err ) {
-	console.log(err);
-	alert(err);
+	// console.log(err);
+	// alert(err);
+	// set callback to consume textarea
+	mki3d.textLoadConsume= function(){
+	    var data= mki3d_et_getDataFromString(mki3d.html.textareaInput.value);
+	    // to do: test data consistency ...
+	    mki3d.data = data;
+            mki3d.tmpCancel();
+	    mki3d.setModelViewMatrix();
+	    mki3d.backup();
+	    // console.log(data); /// for tests
+	}
+	mki3d.html.textareaInput.value=""; // clean input text area ?
+	mki3d.loadInfo("Importing from '*.et'");
+	mki3d.action.textLoad();
     }
     
 }
