@@ -19,16 +19,66 @@ mki3d.callback.inputsOnKeyDown = function (e){
     var actionMessage="";
     switch(code)
     {
-    case 27: // Esc
+	case 27: // Esc
 	mki3d.html.html.style.overflowY="";
 	mki3d.action.escapeToCanvas();
 	break;
-    case 13: // Enter
+	case 13: // Enter
 	mki3d.html.html.style.overflowY="";
 	actionMessage=mki3d.action.inputsEnter();
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend( actionMessage );
 	break;
+    }
+}
+
+mki3d.textLoadConsume=null; 
+
+mki3d.callback.textLoadOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    switch(code)
+    {
+	case 27: // Esc
+	mki3d.html.html.style.overflowY="";
+	mki3d.action.escapeToCanvas();
+	break;
+	case 13: // Enter
+	mki3d.html.html.style.overflowY="";
+	// actionMessage=mki3d.action.inputsEnter();
+	try{
+	    mki3d.textLoadConsume();
+	} catch( err ) {
+	    actionMessage="<br> There was an error in data: "+err;
+	}
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( actionMessage );
+	break;
+	case 88: // X
+	mki3d.html.textareaInput.value="";
+	break;
+    }
+}
+
+mki3d.callback.textSaveOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    switch(code)
+    {
+	case 27: // Esc
+	mki3d.html.html.style.overflowY="";
+	mki3d.action.escapeToCanvas();
+	break;
+	case 13: // Enter
+	mki3d.html.html.style.overflowY="";
+	// actionMessage=mki3d.action.inputsEnter();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( actionMessage );
+	break;
+	case 65: // A
+	mki3d.html.textareaOutput.select();
+	break;
+	
     }
 }
 
@@ -750,8 +800,8 @@ mki3d.callback.canvasOnKeyDown = function (e){
 
 
 mki3d.callback.onWindowResize = function () {
-    var wth = parseInt(window.innerWidth)-10;
-    var hth = parseInt(window.innerHeight)-10;
+    var wth = parseInt(window.innerWidth)-30;
+    var hth = parseInt(window.innerHeight)-30;
     var canvas = mki3d.html.canvas;
     var gl = mki3d.gl.context;
     canvas.setAttribute("width", ''+wth);

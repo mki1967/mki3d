@@ -52,7 +52,7 @@
 	 -->
 
 
-    <div id="divHelp" display="none"  style="overflow-y: auto;">
+    <div id="divHelp"  style="overflow-y:auto; display:none;">
       <h2>Help screen:</h2>
 
       <p> (Press 'Q' or Escape to return to the canvas.) </p>
@@ -241,7 +241,7 @@
 
     </div>
 
-    <div id="divMainMenu" display="none">
+    <div id="divMainMenu" style="display: none;">
       <h2>Main Menu:</h2>
       <dl>
 	<dt>'F'</dt>
@@ -267,7 +267,7 @@
       </dl>
     </div>
 
-    <div id="divInputs" display="none">
+    <div id="divInputs" style="display: none;">
       <h2>Inputs Page</h2>
       <ul>
 	<li>CURSOR X: <input id="inputCursorX" type="number"></li>
@@ -286,7 +286,45 @@
       </dl>
     </div>
 
-    <div id="divColorMenu" display="none">
+    <div id="divTextLoad"  style="display: none;">
+      <h2>Text Load Page</h2>
+      <p>Copy-paste the input data text into the TEXT AREA below and press Enter to submit.</p>
+      <h3>PRESS KEY:</h3>
+      <dl>
+	<dt>Enter</dt>
+	<dd> - TO SUBMIT THE DATA FROM THE TEXT AREA</dd>
+	<dt>Esc</dt>
+	<dd> - TO CANCEL </dd>
+	<dt>X</dt>
+	<dd> - TO CLEAN THE TEXT AREA</dd>
+      </dl>
+      <h3>INPUT TEXT AREA:</h3>
+      <p>
+	<textarea id="textareaInput" cols="80" rows="20">
+	</textarea>
+      </p>
+    </div>
+    
+    <div id="divTextSave"  style="display: none;">
+      <h2>Text Save Page</h2>
+      <p>Copy-paste selected all text from the TEXT AREA below to a text editor and use the editor to save it in the file.</p>
+      <h3>PRESS KEY:</h3>
+      <dl>
+	<dt>Enter</dt>
+	<dt>Esc</dt>
+	<dd> - TO CANCEL OR WHEN YOU FINISHED </dd>
+	<dt>A</dt>
+	<dd> - TO SELECT ALL IN THE TEXT AREA</dd>
+      </dl>
+      <h3>OUTPUT TEXT AREA:</h3>
+      <p>
+	<textarea id="textareaOutput" cols="80" rows="20" readonly>
+	</textarea>
+      </p>
+    </div>
+    
+
+    <div id="divColorMenu" style="display: none;">
       <h2>Color Menu:</h2>
       <dl id="dlColor">
 	<dt style="color:rgb(255,255,255); background-color:rgb(0,0,0);">'0'</dt>
@@ -318,7 +356,7 @@
       </dl>
     </div>
 
-    <div id="divCursorMenu" display="none">
+    <div id="divCursorMenu" style="display: none;">
       <h2>Cursor Menu:</h2>
       <dl>
 	<dt>'C'</dt>
@@ -330,7 +368,7 @@
       </dl>
     </div>
 
-    <div id="divFileMenu" display="none">
+    <div id="divFileMenu" style="display: none;">
       <h2>File Menu:</h2>
       <dl>
 	<dt>'S'</dt>
@@ -353,7 +391,7 @@
       </dl>
     </div>
 
-    <div id="divDataMenu" display="none">
+    <div id="divDataMenu" style="display: none;">
       <h2>Data Menu:</h2>
       <dl>
 	<dt>'L'</dt>
@@ -375,7 +413,7 @@
       </dl>
     </div>
 
-    <div id="divDataCopyMenu" display="none">
+    <div id="divDataCopyMenu" style="display: none;">
       <h2>Data Copy Menu:</h2>
       <dl>
 	<dt>'0'</dt>
@@ -391,7 +429,7 @@
 
 
 
-    <div id="divClipMenu" display="none">
+    <div id="divClipMenu" style="display: none;">
       <h2>Clip Menu:</h2>
       <dl>
 	<dt>Arrows, 'B', 'F'</dt>
@@ -401,7 +439,7 @@
       </dl>
     </div>
 
-    <div id="divSelectionMenu" display="none">
+    <div id="divSelectionMenu" style="display: none;">
       <h2>Selection Menu:</h2>
       <dl>
 	<dt>'X'</dt>
@@ -429,7 +467,7 @@
       </dl>
     </div>
 
-    <div id="divViewMenu" display="none">
+    <div id="divViewMenu" style="display: none;">
       <h2>View Menu:</h2>
       <dl>
 	<dt>'1'</dt>
@@ -447,7 +485,7 @@
       </dl>
     </div>
 
-    <div id="divPointsMenu" display="none">
+    <div id="divPointsMenu" style="display: none;">
       <h2>Constructive Points Menu:</h2>
       <dl>
 	<dt>'S'</dt>
@@ -459,7 +497,7 @@
       </dl>
     </div>
 
-    <div id="divPointsSelectMenu" display="none">
+    <div id="divPointsSelectMenu" style="display: none;">
       <h2>Constructive Points Selection Menu::</h2>
       <dl>
 	<dt>'A' ... 'Z'</dt>
@@ -467,7 +505,7 @@
       </dl>
     </div>
 
-    <div id="divConstructiveMenu" display="none">
+    <div id="divConstructiveMenu" style="display: none;">
       <h2>Constructive Methods Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
@@ -498,7 +536,7 @@
       </dl>
     </div>
 
-     <div id="divConstructiveCursorMenu" display="none">
+     <div id="divConstructiveCursorMenu" style="display: none;">
       <h2>Constructive Cursor Jumping Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
@@ -513,7 +551,7 @@
       </dl>
     </div>
 
-   <div id="divConstructiveMovingMenu" display="none">
+   <div id="divConstructiveMovingMenu" style="display: none;">
       <h2>Constructive Moving Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
@@ -528,7 +566,7 @@
       </dl>
     </div>
 
-    <div id="divConstructiveScalingMenu" display="none">
+    <div id="divConstructiveScalingMenu" style="display: none;">
       <h2>Constructive Scaling Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
@@ -546,7 +584,7 @@
       </dl>
     </div>
 
-    <div id="divConstructiveInsertingMenu" display="none">
+    <div id="divConstructiveInsertingMenu" style="display: none;">
       <h2>Constructive Inserting Menu:</h2>
       <p>
 	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
@@ -573,7 +611,7 @@
 
 
 
-    <div id="divActionMenu" display="none">
+    <div id="divActionMenu" style="display: none;">
       <h2>Action Menu:</h2>
       <dl>
 	<dt>'R'</dt>
@@ -589,7 +627,7 @@
       </dl>
     </div>
 
-    <div id="divSetMenu" display="none">
+    <div id="divSetMenu" style="display: none;">
       <h2>Set Menu:</h2>
       <p>
 	Maximal index of nonempty set is: MAX_IDX = <span id="spanSetMaxIdx"></span>.

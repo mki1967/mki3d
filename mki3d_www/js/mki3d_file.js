@@ -2,22 +2,6 @@
 
 mki3d.file = {};
 
-/* load recource named identified the "path/name". 
-   callback function will process the returned string. */
-/* not used
-mki3d.file.loadResource= function( path, name, callback ){
-    var url= chrome.extension.getURL(path+"/"+name);
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange=function() {
-	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            callback(xmlhttp.responseText);
-	}
-    }
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-}
-*/
 
 mki3d.file.startSavingString= function( string, mySuggestedName ){
     var saver = {};
@@ -31,7 +15,16 @@ mki3d.file.startSavingString= function( string, mySuggestedName ){
     saver.writeEndHandler =   function(e){
 	mki3d.file.savingEndHandler(saver); 
     };
-    chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    try{
+	chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    } catch( err ) {
+	// console.log(err);
+	// alert(err);
+
+	// to do: set the contents of text area ...
+	mki3d.html.textareaOutput.value= string;
+	mki3d.action.textSave();
+    }
 }
 
 
@@ -76,7 +69,15 @@ mki3d.file.startExporting = function () {
 	// console.log(e); // for tests..
 	mki3d.file.savingEndHandler(saver); 
     };
-    chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    try{
+	chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    } catch( err ) {
+	// console.log(err);
+	// alert(err);
+	mki3d.html.textareaOutput.value=  htmlString;
+	mki3d.action.textSave();
+    }
+
 }
 
 
@@ -108,7 +109,15 @@ mki3d.file.startSaving = function () {
 	// console.log(e); // for tests..
 	mki3d.file.savingEndHandler(saver); 
     };
-    chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    try{
+	chrome.fileSystem.chooseEntry(saver.config, function(writableEntry){ mki3d.file.saveChooseEntryCallback(writableEntry, saver); });
+    } catch( err ) {
+	// console.log(err);
+	// alert(err);
+	mki3d.html.textareaOutput.value= myObjectString;
+	mki3d.action.textSave();
+    }
+
 }
 
 mki3d.file.saveChooseEntryCallback= function  (writableEntry, saver) {
@@ -233,7 +242,12 @@ mki3d.file.startMerging = function ( ) {
     loader.errorHandler = function(e) { console.error(e); }; 
 
     loader.config = {type: 'openFile', accepts: myAccepts };
-    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    try{
+	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    } catch( err ) {
+	console.log(err);
+	alert(err);
+    }
 }
 
 
@@ -275,8 +289,26 @@ mki3d.file.startLoading = function ( ) {
     loader.errorHandler = function(e) { console.error(e); }; 
 
     loader.config = {type: 'openFile', accepts: myAccepts };
-    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
-    
+    try{
+	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    } catch( err ) {
+	console.log(err);
+	alert(err);
+
+	// set callback to consume textarea
+	mki3d.textLoadConsume= function(){
+	    var data= JSON.parse(mki3d.html.textareaInput.value);
+	    // to do: test data consistency ...
+	    mki3d.data = data;
+            mki3d.tmpCancel();
+	    mki3d.setModelViewMatrix();
+	    mki3d.backup();
+	    console.log(data);
+	}
+	mki3d.html.textareaInput.value=""; // clean input text area ?
+	mki3d.action.textLoad();
+    }
+
 }
 
 /** LOAD STRING **/
@@ -297,7 +329,7 @@ mki3d.file.loadingStringEndHandler = function (loader){
 mki3d.file.startLoadingString = function ( ) {
     var myAccepts = [{
 	//	mimeTypes: ['text/*'];
-	 extensions: ['et']
+	extensions: ['et']
     }];
     
     var loader = {};
@@ -315,7 +347,12 @@ mki3d.file.startLoadingString = function ( ) {
     loader.errorHandler = function(e) { console.error(e); }; 
 
     loader.config = {type: 'openFile', accepts: myAccepts };
-    chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    try{
+	chrome.fileSystem.chooseEntry(loader.config, function(theEntry) { mki3d.file.loadChooseEntryCallback(theEntry, loader); }); 
+    } catch( err ) {
+	console.log(err);
+	alert(err);
+    }
     
 }
 
