@@ -877,6 +877,28 @@ mki3d.action.fileMenu = function(){
     window.onkeydown = mki3d.callback.fileMenuOnKeyDown;
 }
 
+
+///---
+mki3d.action.textLoad = function(){
+    /// mki3d.message( mki3d.html.divTextLoad.innerHTML );
+        mki3d.html.hideAllDivs();
+    mki3d.html.html.style.overflowY="auto";
+
+    mki3d.html.showDiv(mki3d.html.divTextLoad);
+    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+}
+
+mki3d.action.textSave = function(){
+    // mki3d.message( mki3d.html.divTextSave.innerHTML );
+    mki3d.html.hideAllDivs();
+    mki3d.html.html.style.overflowY="auto";
+    mki3d.html.showDiv(mki3d.html.divTextSave);
+    mki3d.html.textareaOutput.select();
+    window.onkeydown = mki3d.callback.textSaveOnKeyDown;
+}
+
+
+
 mki3d.action.dataMenu = function(){
     mki3d.message( mki3d.html.divDataMenu.innerHTML );
     window.onkeydown = mki3d.callback.dataMenuOnKeyDown;
