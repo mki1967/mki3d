@@ -19,6 +19,9 @@ window.onload= function(){
     mki3d.html.divUpperMessage.innerHTML += "  (Press 'H' for help.)";
     mki3d.backup();// init backups
     mki3d.redraw();
+    window.onbeforeunload= function(){
+	return "Do not forget to save your data!\n";
+    }
     window.onkeydown=mki3d.callback.canvasOnKeyDown;
 }
 
