@@ -34,6 +34,30 @@ mki3d.callback.inputsOnKeyDown = function (e){
 
 mki3d.textLoadConsume=null; 
 
+mki3d_loadFromURLToTextarea= function() {
+    var callback= function( response ) {
+	mki3d.html.textareaInput.value=response;
+	mki3d.html.textareaInput.selected=true;
+    };
+    
+    var url=document.querySelector('#urlInput').value;
+    document.querySelector('#urlInput').selected=true;
+    var xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', url, true); // Replace 'my_data' with the path to your file
+    xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+        } else {
+	    mki3d.html.textareaInput.value="ERROR: COULD NOT LOAD FROM: "+url;
+	    mki3d.html.textareaInput.selected=true;
+	}
+    };
+    xobj.send(null);  
+
+}
+
 mki3d.callback.textLoadOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -53,6 +77,10 @@ mki3d.callback.textLoadOnKeyDown = function (e){
 	}
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend( actionMessage );
+	break;
+	case 85: // U
+	///...
+	mki3d_loadFromURLToTextarea();
 	break;
 	case 88: // X
 	mki3d.html.textareaInput.value="";
