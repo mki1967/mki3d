@@ -248,6 +248,25 @@ mki3d.constructiveScaleByABOverCD= function(){
     return "<br>SELECTED POINTS SCALED BY |'AB'|/|'CD'| WITH FIXED POINT 'O'."+warning+"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
+mki3d.constructiveScaleOrthogonalToEF= function(){
+    var methodName ="SCALE ORTHOGONAL TO 'EF'";
+    var neededPoints = "OEF";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    mki3d.backup();
+    var s= mki3d.constructive.scalingFactor;
+    if(s==0) return "SCALE ORTHOGONAL TO 'EF' WITH SCALING FACTOR ZERO: NOT IMPLEMENTED YET ..."
+    mki3d.backup.forbidden=true; // do not do internal backups
+    mki3d.constructiveScaleWithFixedPointO();
+    mki3d.constructive.scalingFactor=1/s; // temporary ..
+    mki3d.constructiveScaleInDirectionEF();
+    mki3d.backup.forbidden=false; // restore default
+    mki3d.constructive.scalingFactor=s; // restoring ...
+    mki3d.backup();
+    return "<br>SELECTED POINTS SCALED ORTHOGONAL TO 'EF' BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+}
+
 mki3d.constructiveScaleInDirectionEF= function(){
     var methodName ="SCALE IN DIRECTION 'EF'";
     var neededPoints = "OEF";

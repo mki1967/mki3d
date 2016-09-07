@@ -590,6 +590,9 @@ mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
 	case 50: // 2
 	actionMessage= mki3d.constructiveScaleInDirectionEF();
 	break;
+	case 51: // 3
+	actionMessage= mki3d.constructiveScaleOrthogonalToEF();
+	break;
     }
 
     mki3d.action.escapeToCanvas();

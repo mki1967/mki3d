@@ -29,7 +29,10 @@ mki3d.backupCheck= function(){
 
 }
 
+mki3d.backup.forbidden=false; // use to forbid backup ...
+
 mki3d.backup= function(){
+    if(mki3d.backup.forbidden) return "";
     mki3d.backupCheck();
     /* test for a change */
     var tmp= mki3d.dataModelString();
