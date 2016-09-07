@@ -578,11 +578,17 @@ mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
     // TO DO
     switch(code)
     {
-    case 48: // 0
+	case 83: // S
+	actionMessage= mki3d.constructiveSetScalingFactorToABOverCD();
+	break;
+	case 48: // 0
 	actionMessage= mki3d.constructiveScaleWithFixedPointO();
 	break;
-    case 49: // 1
+	case 49: // 1
 	actionMessage= mki3d.constructiveScaleByABOverCD();
+	break;
+	case 50: // 2
+	actionMessage= mki3d.constructiveScaleInDirectionEF();
 	break;
     }
 

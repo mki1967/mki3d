@@ -173,6 +173,27 @@ mki3d.scaleWithFixedPoint= function(v, sx,sy,sz , FP){
     v[2]= FP[2]+sz*(v[2]-FP[2]);
 }
 
+mki3d.constructiveSetScalingFactorToABOverCD= function(){
+    var methodName ="SET SCALING FACTOR TO |AB|/|CD|";
+    var neededPoints = "ABCD";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var AB=[B[0]-A[0], B[1]-A[1], B[2]-A[2]];
+    var lenAB=mki3d.vectorLength(AB);
+    var CD=[D[0]-C[0], D[1]-C[1], D[2]-C[2]];
+    var lenCD=mki3d.vectorLength(CD);
+    if( lenCD==0 ) return "LENGTH |'CD'| IS ZERO - CAN NOT SET |'AB'|/|'CD'| !";
+    var s=lenAB/lenCD;
+    if( s > MKI3D_MAX_SCALE )
+	return "|'AB'|/|'CD'| IS "+Math.abs(s)+" > "+MKI3D_MAX_SCALE+" (TOO LARGE !)";
+    mki3d.constructive.scalingFactor=s;
+    return "<br>SCALING FACTOR SET TO |AB|/|CD|="+s;
+}
+
 mki3d.constructiveScaleWithFixedPointO= function(){
     var methodName ="SCALE";
     var neededPoints = "O";
@@ -213,7 +234,7 @@ mki3d.constructiveScaleByABOverCD= function(){
     if( lenCD==0 ) return "LENGTH |'CD'| IS ZERO - CAN NOT SCALE BY |'AB'|/|'CD'| !";
     var s=lenAB/lenCD;
     if( s > MKI3D_MAX_SCALE )
-	return "|'AB'|/|'CD'| IS "+Math.abs(s)+" > "+MKI3D_MAX_SCALE+" - TOO LARGE !";
+	return "|'AB'|/|'CD'| IS "+Math.abs(s)+" > "+MKI3D_MAX_SCALE+" (TOO LARGE !)";
 
     var i;
     for( i=0; i< selected.length; i++) {
@@ -227,6 +248,40 @@ mki3d.constructiveScaleByABOverCD= function(){
     return "<br>SELECTED POINTS SCALED BY |'AB'|/|'CD'| WITH FIXED POINT 'O'."+warning+"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
+mki3d.constructiveScaleInDirectionEF= function(){
+    var methodName ="SCALE IN DIRECTION 'EF'";
+    var neededPoints = "OEF";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    mki3d.backup();
+    var selected=mki3d.tmp.selected;
+    var pO= mki3d.points.point.O.pos;
+    var E= mki3d.points.point.E.pos;
+    var F= mki3d.points.point.F.pos;
+
+    var EF=[F[0]-E[0], F[1]-E[1], F[2]-E[2]];
+    var lenEF=mki3d.vectorLength(EF);
+
+    if( lenEF==0 ) return "LENGTH |'EF'| IS ZERO - CAN NOT SCALE IN DIRECTION 'EF' !";
+    var N= mki3d.vectorNormalized(EF);
+    var s= mki3d.constructive.scalingFactor;
+    var sV=[ N[0]*(s-1)+1, N[1]*(s-1)+1, N[2]*(s-1)+1]; // scaling vector
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var pos=selected[i].position;
+	var dV=[pos[0]-pO[0], pos[1]-pO[1], pos[2]-pO[2]]; // position relative to fixed point
+	var sp=mki3d.scalarProduct(N,dV); // projection of relative vector on N axis
+	var ds=(s-1)*sp; // (scaled projection - projection)
+	var dV1=[ds*N[0], ds*N[1], ds*N[2]]; // delta in direction N
+	mki3d.vectorMove(selected[i].position, dV1[0], dV1[1], dV1[2]); // add delta to position
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>SELECTED POINTS SCALED IN DIRECTION 'EF' BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+
+    
+}
 
 
 
@@ -295,7 +350,7 @@ mki3d.moveCursorToPointsCenter = function(){
 
     return "<br> CURSOR MOVED TO THE CENTER OF THE POINTS: '"+pString+"'.";
 
-   ////
+    ////
 }
 
 
@@ -750,14 +805,14 @@ mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions
     }
 
     if( (det1<0 && det2>=0 && det3>=0) ||
-      (det1>0 && det2<=0 && det3<=0) 
+	(det1>0 && det2<=0 && det3<=0) 
       ){
 	B_1 = mki3d.vectorClone(B1);
 	B_2 = mki3d.vectorClone(B2);
 	B_3 = mki3d.vectorClone(B3);
     } else if( (det2<0 && det1>=0 && det3>=0) ||
-	      (det2>0 && det1<=0 && det3<=0) 
-	    ){
+	       (det2>0 && det1<=0 && det3<=0) 
+	     ){
 	B_1 = mki3d.vectorClone(B2);
 	B_2 = mki3d.vectorClone(B1);
 	B_3 = mki3d.vectorClone(B3);
@@ -778,7 +833,7 @@ mki3d.TriangleTriangleIntersection= function( A1, A2, A3, /* endpoints positions
 
     M[0]=[ B2[0]-B1[0], B2[1]-B1[1], B2[2]-B1[2] ];
     M[1]=[ B3[0]-B1[0], B3[1]-B1[1], B3[2]-B1[2] ];
- 
+    
     M[2]=[ A1[0]-B1[0], A1[1]-B1[1], A1[2]-B1[2] ];
     det1= mki3d.matrixDeterminant(M);
 
