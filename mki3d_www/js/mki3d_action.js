@@ -879,10 +879,44 @@ mki3d.action.fileMenu = function(){
 
 
 ///---
-mki3d.action.textLoad = function(){
+
+mki3d.action.selectFile= function(){
+    window.onkeydown = function(){
+	mki3d.html.hideAllDivs();
+	mki3d.html.showDiv(mki3d.html.divTextLoad);
+	window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+    };
+    mki3d.html.hideAllDivs();
+    mki3d.html.showDiv(document.getElementById('divFileSelector'));
+    document.getElementById('files').focus();
+}
+
+mki3d.action.textLoad = function(file_extenstion){
     /// mki3d.message( mki3d.html.divTextLoad.innerHTML );
-        mki3d.html.hideAllDivs();
+    mki3d.html.hideAllDivs();
     mki3d.html.html.style.overflowY="auto";
+    var myFileInput=document.getElementById('files');
+    myFileInput.accept=file_extenstion;
+
+    var handleFileSelect= function(evt) {
+	var files = evt.target.files;
+	// document.getElementById('files').blur();
+	for (var i = 0, f; f = files[i]; i++) { // only once
+	    var reader = new FileReader();
+	    reader.onload = (function(theFile) {
+		return function(e) {
+		    mki3d.html.textareaInput.value=e.target.result;
+		    // do something with   escape(theFile.name)
+		     mki3d.html.hideAllDivs();
+		    mki3d.html.showDiv(mki3d.html.divTextLoad);
+		    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+		};
+	    })(f);
+	    reader.readAsText(f);
+	}
+    }
+
+    myFileInput.addEventListener('change', handleFileSelect, false);
 
     mki3d.html.showDiv(mki3d.html.divTextLoad);
     window.onkeydown = mki3d.callback.textLoadOnKeyDown;

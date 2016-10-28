@@ -37,6 +37,7 @@ mki3d.textLoadConsume=null;
 mki3d.callback.textLoadOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
+    document.getElementById('files').blur();
     switch(code)
     {
 	case 27: // Esc
@@ -56,6 +57,9 @@ mki3d.callback.textLoadOnKeyDown = function (e){
 	break;
 	case 88: // X
 	mki3d.html.textareaInput.value="";
+	break;
+	case 70: // F
+	mki3d.action.selectFile();
 	break;
     }
 }

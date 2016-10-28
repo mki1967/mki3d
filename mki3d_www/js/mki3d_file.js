@@ -264,7 +264,7 @@ mki3d.file.startMerging = function ( ) {
 	}
 	mki3d.loadInfo("Merging from '*.mki3d'");
 	mki3d.html.textareaInput.value=""; // clean input text area ?
-	mki3d.action.textLoad();
+	mki3d.action.textLoad('.mki3d');
     }
 }
 
@@ -325,7 +325,7 @@ mki3d.file.startLoading = function ( ) {
 	}
 	mki3d.loadInfo("Loading from '*.mki3d'");
 	mki3d.html.textareaInput.value=""; // clean input text area ?
-	mki3d.action.textLoad();
+	mki3d.action.textLoad('.mki3d');
     }
 
 }
@@ -383,7 +383,7 @@ mki3d.file.startLoadingString = function ( ) {
 	}
 	mki3d.html.textareaInput.value=""; // clean input text area ?
 	mki3d.loadInfo("Importing from '*.et'");
-	mki3d.action.textLoad();
+	mki3d.action.textLoad('.et');
     }
     
 }
