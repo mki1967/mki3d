@@ -881,7 +881,9 @@ mki3d.action.fileMenu = function(){
 ///---
 
 mki3d.action.selectFile= function(){
-    window.onkeydown = function(){
+    window.onkeydown = function(e){
+	var code= e.whiqfch || e.keyCode;
+	if(code == 13) return; // reader.onload will do ...?
 	mki3d.html.hideAllDivs();
 	mki3d.html.showDiv(mki3d.html.divTextLoad);
 	window.onkeydown = mki3d.callback.textLoadOnKeyDown;
@@ -913,10 +915,12 @@ mki3d.action.textLoad = function(file_extenstion){
 		};
 	    })(f);
 	    reader.readAsText(f);
+	    evt.target.files=[];
 	}
     }
 
     myFileInput.addEventListener('change', handleFileSelect, false);
+    // myFileInput.addEventListener('submit', handleFileSelect, false);
 
     mki3d.html.showDiv(mki3d.html.divTextLoad);
     window.onkeydown = mki3d.callback.textLoadOnKeyDown;
