@@ -912,10 +912,10 @@ mki3d.action.textLoad = function(file_extenstion){
 		     mki3d.html.hideAllDivs();
 		    mki3d.html.showDiv(mki3d.html.divTextLoad);
 		    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+		    myFileInput.value='';
 		};
 	    })(f);
 	    reader.readAsText(f);
-	    evt.target.files=[];
 	}
     }
 
