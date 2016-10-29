@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MKI3D Textarea Input Output Hints </title>
+    <title>MKI3D Text-area Input Output Hints </title>
     
   </head>
   <body>
 
-    <h1>How to Use Input and Output through Textareas in MKI3D RAPID MODELLER</h1>
+    <h1>How to Use Input and Output through Text-areas in MKI3D RAPID MODELLER</h1>
     <p>
       If the file chooser is not available then you can load and save data through text areas.
       The data are in textual form.
@@ -14,7 +14,8 @@
 
     <h3>Saving:</h3>
     <p>
-      Textarea contains the data to be saved.
+      You are presented with a Text Save Page.
+      Text-area on the page contains the data to be saved.
       You have the following two options for saving:
     </p>
     <dl>
@@ -23,7 +24,7 @@
 	This is the same procedure as for downloading of the file.
 	Note that you can set in the browser to ask you where to save the downloaded file.
       </dd>
-      <dt>Copy-paste from textarea to text editor and save it to the file</dt>
+      <dt>Copy-paste from text-area to text editor and save it to the file</dt>
       <dd>
 	This is not recommended. Note that some outputs contain very long lines and not all
 	editors can efficiently cope with such data.
@@ -32,18 +33,24 @@
 
     <h3>Loading:</h3>
     <p>
-      You are presented with empty editable textarea. You have to fill this textarea with input data and press <code>ENTER</code>.
-      For example, you can open a new tab in your browser.In this tab, open the URL:
-      <code>file:///path_to_your_file_with_data</code>. The text of the file should be displayed in the tab.
-      Select and copy all the text, then switch back to the tab with MKI3D, paste the text to the textarea and press Enter.
-      In most browsers you should be able to use <code>Ctrl-A</code> for selection, <code>Ctrl-C</code> to copy, and <code>Ctrl-V</code> to paste.
+      You are presented with a Text Load Page with an empty editable text-area. You have to fill this text-area with input data and press <code>ENTER</code>.
+      <ul>
+	<li>
+	  You can press <code>F</code> key and then press <code>ENTER</code> or click on the file input button to open file chooser
+	  to load data from a file to text area.
+	</li>
+	<li>
+	  You can also open a new tab in your browser.In this tab, open the URL:
+	  <code>file:///path_to_your_file_with_data</code>. The text of the file should be displayed in the tab.
+	  Select and copy all the text, then switch back to the tab with MKI3D, paste the text to the text-area and press Enter.
+	  In most browsers you should be able to use <code>Ctrl-A</code> for selection, <code>Ctrl-C</code> to copy, and <code>Ctrl-V</code> to paste.
+	  Note that you can keep opened the URL:  <code>file:///path_to_your_directory_with_data_files</code> in separate browser's tab and
+	  use it as a 'file chooser' for loading.
+	</li>
+      </ul>
     </p>
     <p>
-      Note that you can keep opened the URL:  <code>file:///path_to_your_directory_with_data_files</code> in separate browser's tab and
-      use it as a 'file chooser' for loading.
-    </p>
-    <p>
-      (If you change your mind, you may press <code>X</code> to clean the textarea and then load another data.)
+      (If you change your mind, you may press <code>X</code> to clean the text-area and then load another data or <code>ESCAPE</code> to resign from loading.)
     </p>
     
   </body>
