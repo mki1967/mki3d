@@ -384,6 +384,7 @@ mki3d.file.startLoadingString = function ( ) {
             mki3d.tmpCancel();
 	    mki3d.setModelViewMatrix();
 	    mki3d.backup();
+	    mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
 	    // console.log(data); /// for tests
 	}
 	mki3d.html.textareaInput.value=""; // clean input text area ?
