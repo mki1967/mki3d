@@ -909,7 +909,8 @@ mki3d.action.textLoad = function(file_extenstion){
 		return function(e) {
 		    mki3d.html.textareaInput.value=e.target.result;
 		    // do something with   escape(theFile.name)
-		     mki3d.html.hideAllDivs();
+		    mki3d.file.selectedName=escape(theFile.name);
+		    mki3d.html.hideAllDivs();
 		    mki3d.html.showDiv(mki3d.html.divTextLoad);
 		    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
 		    myFileInput.value='';
@@ -940,6 +941,7 @@ mki3d.action.textSave = function(name){
     mki3d.html.html.style.overflowY="auto";
     mki3d.html.showDiv(mki3d.html.divTextSave);
     mki3d.html.textareaOutput.select();
+    a.focus();
     window.onkeydown = mki3d.callback.textSaveOnKeyDown;
 }
 

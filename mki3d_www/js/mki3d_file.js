@@ -37,6 +37,10 @@ mki3d.file.copyResourceToFile= function(path, name){
 /* default suggested name for data saving */
 mki3d.file.suggestedName = "noname";
 
+/* next suggested name from file chooser after loading to text area */
+mki3d.file.selectedName="noname";
+
+/* get the name without extension */
 mki3d.file.withoutExtension= function( name ){
     var lastIdx = name.lastIndexOf(".");
     if(lastIdx<=0) return name;
@@ -321,6 +325,7 @@ mki3d.file.startLoading = function ( ) {
             mki3d.tmpCancel();
 	    mki3d.setModelViewMatrix();
 	    mki3d.backup();
+	    mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
 	    // console.log(data); /// for tests
 	}
 	mki3d.loadInfo("Loading from '*.mki3d'");
