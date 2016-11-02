@@ -36,6 +36,19 @@ mki3d_collada_assets= function() {
     var authoring_tool= oDOM.createElement("authoring_tool");
     contributor.appendChild(authoring_tool);
     authoring_tool.appendChild( oDOM.createTextNode("MKI3D RAPID MODELER") );
+
+    var created= oDOM.createElement("created");
+    asset.appendChild(created);
+    created.appendChild( oDOM.createTextNode((new Date()).toISOString()));
+
+    var keywords= oDOM.createElement("keywords");
+    asset.appendChild(keywords);
+    keywords.appendChild( oDOM.createTextNode("COLLADA interchange"));
+    
+    var modified= oDOM.createElement("modified");
+    asset.appendChild(modified);
+    modified.appendChild( oDOM.createTextNode((new Date()).toISOString()));
+    
 }
 
 
