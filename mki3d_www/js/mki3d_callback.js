@@ -243,8 +243,12 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
         mki3d.file.startExporting();
 	break;
 	case 84: // T
-	// TEST STRING LOAD
+	// IMPORT *.et
         mki3d.file.startLoadingString();
+	break;
+	case 67: // C
+	// COLLADA EXPORT
+        mki3d.file.exportCollada();
 	break;
 	
 	default:

@@ -86,6 +86,18 @@ mki3d.file.startExporting = function () {
 }
 
 
+/** COOLADA **/
+mki3d.file.exportCollada= function(){
+    /* clean data from temporratry markers */
+    mki3d.action.cancelSelection();
+    /* unique-sort elements of the model */
+    mki3d.modelSortUnique();
+    mki3d.html.textareaOutput.value= mki3d_collada_export();
+    mki3d.saveInfo("Exporting to COLLADA '*.dae'");
+    mki3d.action.textSave(mki3d.file.suggestedName.concat(".dae"));
+}
+
+
 /** SAVING **/
 
 mki3d.file.startSaving = function () {
