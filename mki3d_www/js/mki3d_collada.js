@@ -15,7 +15,9 @@ mki3d_collada= function() {
 
     mki3d_collada_assets();
     mki3d_collada_library_geometries();
-
+    mki3d_collada_library_visual_scenes();
+    mki3d_collada_scene();
+    
     var oSerializer = new XMLSerializer();
     var outString = oSerializer.serializeToString( mki3d.collada.oDOM);
     return outString;
@@ -61,10 +63,12 @@ mki3d_collada_library_geometries= function() {
 
     var geometry=oDOM.createElement("geometry");
     library_geometries.appendChild(geometry);
+    geometry.setAttribute("id", "Lines-geometry");
 
     var mesh=oDOM.createElement("mesh");
     geometry.appendChild(mesh);
 
+    /* source */
     var source=oDOM.createElement("source");
     mesh.appendChild(source);
     source.setAttribute("id", "Lines-positions");
@@ -102,7 +106,7 @@ mki3d_collada_library_geometries= function() {
     param.setAttribute("name","Z");
     param.setAttribute("type","float");
     
-
+    /* vertices */
     var vertices=oDOM.createElement("vertices");
     mesh.appendChild(vertices);
     vertices.setAttribute("id", "Lines-vertices");
@@ -111,8 +115,52 @@ mki3d_collada_library_geometries= function() {
     vertices.appendChild(input);
     input.setAttribute("semantic", "POSITION");
     input.setAttribute("source", "#Lines-positions");
+
+    /* lines */
+    var lines=oDOM.createElement("lines");
+    mesh.appendChild(lines);
+    lines.setAttribute("count",  mki3d.data.model.segments.length);
+    input=oDOM.createElement("input");
+    lines.appendChild(input);
+    input.setAttribute("semantic","VERTEX");
+    input.setAttribute("source", "#Lines-vertices");
+    input.setAttribute("offset",0);
+    var p=oDOM.createElement("p");
+    lines.appendChild(p);
+    p.appendChild( oDOM.createTextNode(" "));
+    for( var i=0; i<mki3d.data.model.segments.length; i++)
+	p.childNodes[0].appendData(" "+2*i+" "+(2*i+1));	
+    
     
 }
 
 
+mki3d_collada_library_visual_scenes= function() {
+    oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var library_visual_scenes = oDOM.createElement("library_visual_scenes");
+    var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
+    collada.appendChild(library_visual_scenes);
 
+    var visual_scene =oDOM.createElement("visual_scene");
+    library_visual_scenes.appendChild(visual_scene);
+    visual_scene.setAttribute("id", "Scene_MKI3D");
+
+    var node=oDOM.createElement("node");
+    visual_scene.appendChild(node);
+
+    var instance_geometry=oDOM.createElement("instance_geometry");
+    node.appendChild(instance_geometry);
+    instance_geometry.setAttribute("url", "#Lines-geometry");
+}
+
+mki3d_collada_scene= function() {
+    oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var scene = oDOM.createElement("scene");
+    var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
+    collada.appendChild(scene);
+
+    var instance_visual_scene =  oDOM.createElement("instance_visual_scene");
+    scene.appendChild(instance_visual_scene);
+    instance_visual_scene.setAttribute("url","#Scene_MKI3D");
+   
+}
