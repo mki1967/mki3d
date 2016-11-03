@@ -68,7 +68,7 @@ mki3d_collada_library_geometries= function() {
     var mesh=oDOM.createElement("mesh");
     geometry.appendChild(mesh);
 
-    /* source */
+    /* source "Lines-positions" */
     var source=oDOM.createElement("source");
     mesh.appendChild(source);
     source.setAttribute("id", "Lines-positions");
@@ -79,9 +79,11 @@ mki3d_collada_library_geometries= function() {
     float_array.setAttribute("count",mki3d.data.model.segments.length*2*3);
     var linesEndpoints= mki3d.getElementsEndpoints(mki3d.data.model.segments);
     float_array.appendChild( oDOM.createTextNode(" "));
-    for( var i=0; i<linesEndpoints.length; i++ )
-	for( var j=0; j<3; j++)
-	    float_array.childNodes[0].appendData(" "+linesEndpoints[i].position[j]);
+    for( var i=0; i<linesEndpoints.length; i++ ) {
+	float_array.childNodes[0].appendData(" "+linesEndpoints[i].position[0]);
+	float_array.childNodes[0].appendData(" "+linesEndpoints[i].position[1]);
+	float_array.childNodes[0].appendData(" "+(-linesEndpoints[i].position[2]));
+    }
 
     var technique_common=oDOM.createElement("technique_common");
     source.appendChild(technique_common);
@@ -106,6 +108,44 @@ mki3d_collada_library_geometries= function() {
     param.setAttribute("name","Z");
     param.setAttribute("type","float");
     
+    /* source "Lines-colors" */
+    var source=oDOM.createElement("source");
+    mesh.appendChild(source);
+    source.setAttribute("id", "Lines-colors");
+
+    var float_array=oDOM.createElement("float_array");
+    source.appendChild(float_array);
+    float_array.setAttribute("id", "Lines-colors-array");
+    float_array.setAttribute("count",mki3d.data.model.segments.length*2*3);
+    var linesEndpoints= mki3d.getElementsEndpoints(mki3d.data.model.segments);
+    float_array.appendChild( oDOM.createTextNode(" "));
+    for( var i=0; i<linesEndpoints.length; i++ )
+	for( var j=0; j<3; j++)
+	    float_array.childNodes[0].appendData(" "+linesEndpoints[i].color[j]);
+
+    var technique_common=oDOM.createElement("technique_common");
+    source.appendChild(technique_common);
+    var accessor=oDOM.createElement("accessor");
+    technique_common.appendChild(accessor);
+    accessor.setAttribute("source", "Lines-colors-array");
+    accessor.setAttribute("count", mki3d.data.model.segments.length*2);
+    accessor.setAttribute("stride", 3);
+
+    var param=oDOM.createElement("param");
+    accessor.appendChild(param);
+    param.setAttribute("name","R");
+    param.setAttribute("type","float");
+    
+    param=oDOM.createElement("param");
+    accessor.appendChild(param);
+    param.setAttribute("name","G");
+    param.setAttribute("type","float");
+
+    param=oDOM.createElement("param");
+    accessor.appendChild(param);
+    param.setAttribute("name","B");
+    param.setAttribute("type","float");
+    
     /* vertices */
     var vertices=oDOM.createElement("vertices");
     mesh.appendChild(vertices);
@@ -115,6 +155,11 @@ mki3d_collada_library_geometries= function() {
     vertices.appendChild(input);
     input.setAttribute("semantic", "POSITION");
     input.setAttribute("source", "#Lines-positions");
+
+    var input=oDOM.createElement("input");
+    vertices.appendChild(input);
+    input.setAttribute("semantic", "COLOR");
+    input.setAttribute("source", "#Lines-colors");
 
     /* lines */
     var lines=oDOM.createElement("lines");
