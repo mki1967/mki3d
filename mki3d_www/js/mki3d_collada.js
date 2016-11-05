@@ -61,6 +61,7 @@ mki3d_collada_library_geometries= function() {
     var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
     collada.appendChild(library_geometries);
 
+    /* geometry "Lines-geometry" */
     var geometry=oDOM.createElement("geometry");
     library_geometries.appendChild(geometry);
     geometry.setAttribute("id", "Lines-geometry");
@@ -169,6 +170,11 @@ mki3d_collada_library_geometries= function() {
     lines.appendChild(input);
     input.setAttribute("semantic","VERTEX");
     input.setAttribute("source", "#Lines-vertices");
+    input.setAttribute("offset",0);
+    input=oDOM.createElement("input");
+    lines.appendChild(input);
+    input.setAttribute("semantic","COLOR");
+    input.setAttribute("source", "#Lines-colors");
     input.setAttribute("offset",0);
     var p=oDOM.createElement("p");
     lines.appendChild(p);
