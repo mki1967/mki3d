@@ -16,6 +16,7 @@ mki3d_collada= function() {
     mki3d_collada_assets();
     mki3d_collada_library_geometries();
     mki3d_collada_library_lights();
+    mki3d_collada_library_cameras();
     mki3d_collada_library_visual_scenes();
     mki3d_collada_scene();
     
@@ -357,6 +358,45 @@ mki3d_collada_library_lights=function(){
     var fr= 1-mki3d.data.light.ambientFraction;
     color.appendChild( oDOM.createTextNode(" "+fr+" "+fr+" "+fr)); // RGB directional fraction 
     
+    
+}
+
+mki3d_collada_library_cameras=function(){
+    var oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var library_cameras = oDOM.createElement("library_cameras");
+    var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
+    collada.appendChild(library_cameras);
+
+    var camera=oDOM.createElement("camera");
+    library_cameras.appendChild(camera);
+    camera.setAttribute("id", "Camera");
+
+    var optics=oDOM.createElement("optics");
+    camera.appendChild(optics);
+
+    var technique_common=oDOM.createElement("technique_common");
+    optics.appendChild(technique_common);
+
+    var perspective=oDOM.createElement("perspective");
+    technique_common.appendChild(perspective);
+
+    var yfov=oDOM.createElement("yfov");
+    perspective.appendChild(yfov);
+    yfov.appendChild(oDOM.createTextNode(" "+Math.atan(mki3d.data.projection.zoomY)*180/Math.PI ));
+
+    var aspect_ratio=oDOM.createElement("aspect_ratio");
+    perspective.appendChild(aspect_ratio);
+    var gl=mki3d.gl.context;
+    aspect_ratio.appendChild(oDOM.createTextNode(" "+(gl.viewportHeight/gl.viewportWidth) ));
+
+    var znear=oDOM.createElement("znear");
+    perspective.appendChild(znear);
+    znear.appendChild( oDOM.createTextNode(" "+mki3d.data.projection.zNear));
+
+    var zfar=oDOM.createElement("zfar");
+    perspective.appendChild(zfar);
+    zfar.appendChild( oDOM.createTextNode(" "+mki3d.data.projection.zFar));
+
     
 }
 
