@@ -15,6 +15,7 @@ mki3d_collada= function() {
 
     mki3d_collada_assets();
     mki3d_collada_library_geometries();
+    mki3d_collada_library_lights();
     mki3d_collada_library_visual_scenes();
     mki3d_collada_scene();
     
@@ -24,7 +25,7 @@ mki3d_collada= function() {
 }
 
 mki3d_collada_assets= function() {
-    oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
     var asset = oDOM.createElement("asset");
     var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
     collada.appendChild(asset);
@@ -56,7 +57,7 @@ mki3d_collada_assets= function() {
 
 
 mki3d_collada_library_geometries= function() {
-    oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
     var library_geometries = oDOM.createElement("library_geometries");
     var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
     collada.appendChild(library_geometries);
@@ -318,8 +319,49 @@ mki3d_collada_library_geometries= function() {
 }
 
 
+mki3d_collada_library_lights=function(){
+    var oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var library_lights = oDOM.createElement("library_lights");
+    var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
+    collada.appendChild(library_lights);
+
+    /* ambient light */
+    var light=oDOM.createElement("light");
+    library_lights.appendChild(light);
+    light.setAttribute("id","Ambient-light");
+
+    var technique_common=oDOM.createElement("technique_common");
+    light.appendChild(technique_common);
+
+    var ambient=oDOM.createElement("ambient"); 
+    technique_common.appendChild(ambient);
+
+    var color=oDOM.createElement("color");
+    ambient.appendChild(color);
+    var fr=mki3d.data.light.ambientFraction;
+    color.appendChild( oDOM.createTextNode(" "+fr+" "+fr+" "+fr)); // RGB ambient fraction 
+    
+    /* directional light */
+    var light=oDOM.createElement("light");
+    library_lights.appendChild(light);
+    light.setAttribute("id","Directional-light");
+
+    var technique_common=oDOM.createElement("technique_common");
+    light.appendChild(technique_common);
+
+    var directional=oDOM.createElement("directional"); 
+    technique_common.appendChild(directional);
+
+    var color=oDOM.createElement("color");
+    directional.appendChild(color);
+    var fr= 1-mki3d.data.light.ambientFraction;
+    color.appendChild( oDOM.createTextNode(" "+fr+" "+fr+" "+fr)); // RGB directional fraction 
+    
+    
+}
+
 mki3d_collada_library_visual_scenes= function() {
-    oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
+    var oDOM=mki3d.collada.oDOM; // reference to COLLADA DOM
     var library_visual_scenes = oDOM.createElement("library_visual_scenes");
     var collada = oDOM.getElementsByTagName("COLLADA")[0]; // root element
     collada.appendChild(library_visual_scenes);
@@ -331,8 +373,45 @@ mki3d_collada_library_visual_scenes= function() {
     var root_node=oDOM.createElement("node");
     visual_scene.appendChild(root_node);
     root_node.setAttribute("id", "Root_node_MKI3D");
-    
 
+    /* light nodes */
+   
+    var node=oDOM.createElement("node");
+    root_node.appendChild(node);
+    node.setAttribute("id", "Ambient_node_MKI3D");
+
+    var instance_light=oDOM.createElement("instance_light");
+    node.appendChild(instance_light);
+    instance_light.setAttribute("url", "#Ambient-light");
+
+    var node=oDOM.createElement("node");
+    root_node.appendChild(node);
+    node.setAttribute("id", "Directional_node_MKI3D");
+
+    var matrix=oDOM.createElement("matrix");
+    node.appendChild(matrix);
+    var l=mki3d.data.light.vector; // light direction: [x,y,z]
+    
+    /* we have to transform [0,0,-1] to obtain [x,y,-z] */
+    matrix.appendChild(
+	oDOM.createTextNode(
+	    ""
+		+" "+0+" "+0+" "+(-l[0])+" "+0
+		+" "+0+" "+0+" "+(-l[1])+" "+0
+		+" "+0+" "+0+" "+( l[2])+" "+0
+		+" "+0+" "+0+" "+   0   +" "+1
+	    
+		
+    ));
+    
+	
+    var instance_light=oDOM.createElement("instance_light");
+    node.appendChild(instance_light);
+    instance_light.setAttribute("url", "#Directional-light");
+
+    
+    
+    /*  geometry nodes */
     
     var node=oDOM.createElement("node");
     root_node.appendChild(node);
