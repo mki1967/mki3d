@@ -382,12 +382,12 @@ mki3d_collada_library_cameras=function(){
 
     var yfov=oDOM.createElement("yfov");
     perspective.appendChild(yfov);
-    yfov.appendChild(oDOM.createTextNode(" "+Math.atan(mki3d.data.projection.zoomY)*180/Math.PI ));
+    yfov.appendChild(oDOM.createTextNode(" "+2*Math.atan(1/mki3d.data.projection.zoomY)*180/Math.PI ));
 
     var aspect_ratio=oDOM.createElement("aspect_ratio");
     perspective.appendChild(aspect_ratio);
     var gl=mki3d.gl.context;
-    aspect_ratio.appendChild(oDOM.createTextNode(" "+(gl.viewportHeight/gl.viewportWidth) ));
+    aspect_ratio.appendChild(oDOM.createTextNode(" "+(gl.viewportWidth/gl.viewportHeight) ));
 
     var znear=oDOM.createElement("znear");
     perspective.appendChild(znear);
@@ -413,6 +413,72 @@ mki3d_collada_library_visual_scenes= function() {
     var root_node=oDOM.createElement("node");
     visual_scene.appendChild(root_node);
     root_node.setAttribute("id", "Root_node_MKI3D");
+
+    /* camera node */
+    var node=oDOM.createElement("node");
+    root_node.appendChild(node);
+    node.setAttribute("id", "Camera_MKI3D");
+
+    var matrix=oDOM.createElement("matrix");
+    node.appendChild(matrix);
+    var r=mki3d.data.view.rotationMatrix ; // rotation of the observed world
+    var f=mki3d.data.view.focusPoint  ; // focus point of the camera
+    var s=mki3d.data.view.screenShift ; // screen shift from the focus point
+
+    /* switch z direction */
+    var sz= [
+	[ 1, 0, 0, 0 ],
+	[ 0, 1, 0, 0 ],
+	[ 0, 0,-1, 0 ],
+	[ 0, 0, 0, 1 ],
+	
+    ];
+    
+    var r4=  mki3d.matrix3to4( mki3d.matrixInverse(r) ); // 4d matrix - rotation of the observer
+
+    /* move to focus point */
+    var f4= [
+	[1, 0, 0, f[0]],
+	[0, 1, 0, f[1]],
+	[0, 0, 1, f[2]],
+	[0, 0, 0,   1 ],
+	
+    ];
+
+    /* move to from screen */
+    var s4= [
+	[1, 0, 0, -s[0]],
+	[0, 1, 0, -s[1]],
+	[0, 0, 1, -s[2]],
+	[0, 0, 0,    1 ],
+	
+    ];
+
+    var m4= sz; /* switch Z direction */
+    m4= mki3d.matrix4Product(s4, m4); /* move from the screen */
+    m4= mki3d.matrix4Product(r4, m4); /* rotate camera */
+    m4= mki3d.matrix4Product(f4, m4); /* move to focus point */
+    m4= mki3d.matrix4Product(sz, m4); /*  switch Z direction again  */
+    
+
+    
+
+    
+    /* we have to transform camera */
+    matrix.appendChild(
+	oDOM.createTextNode(
+	    ""
+		+" "+m4[0][0]+" "+m4[0][1]+" "+m4[0][2]+" "+m4[0][3]	    
+		+" "+m4[1][0]+" "+m4[1][1]+" "+m4[1][2]+" "+m4[1][3]	    
+		+" "+m4[2][0]+" "+m4[2][1]+" "+m4[2][2]+" "+m4[2][3]	    
+		+" "+m4[3][0]+" "+m4[3][1]+" "+m4[3][2]+" "+m4[3][3]	    
+		
+    ));
+
+    var instance_camera=oDOM.createElement("instance_camera");
+    node.appendChild(instance_camera);
+    instance_camera.setAttribute("url", "#Camera");
+    
 
     /* light nodes */
    
