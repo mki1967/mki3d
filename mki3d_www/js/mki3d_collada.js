@@ -518,9 +518,13 @@ mki3d_collada_library_visual_scenes= function() {
     
     
     /*  geometry nodes */
+    var geo_node=oDOM.createElement("node");
+    root_node.appendChild(geo_node);
+    geo_node.setAttribute("id", "Geometries_node_MKI3D");
+    
     
     var node=oDOM.createElement("node");
-    root_node.appendChild(node);
+    geo_node.appendChild(node);
     node.setAttribute("id", "Triangles_node_MKI3D");
 
     var instance_geometry=oDOM.createElement("instance_geometry");
@@ -528,7 +532,7 @@ mki3d_collada_library_visual_scenes= function() {
     instance_geometry.setAttribute("url", "#Triangles-geometry");
     
     var node=oDOM.createElement("node");
-    root_node.appendChild(node);
+    geo_node.appendChild(node);
     node.setAttribute("id", "Lines_node_MKI3D");
 
     var instance_geometry=oDOM.createElement("instance_geometry");
