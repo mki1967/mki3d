@@ -1038,6 +1038,13 @@ mki3d.action.constructiveMovingMenu = function(){
     window.onkeydown = mki3d.callback.constructiveMovingMenuOnKeyDown;
 }
 
+mki3d.action.projectionsMenu = function(){
+    /* <span> texts  are set by mki3d.action.constructiveMenu */
+
+    mki3d.message( mki3d.html.divProjectionsMenu.innerHTML );
+    window.onkeydown = mki3d.callback.projectionsMenuOnKeyDown;
+}
+
 mki3d.action.constructiveScalingMenu = function(){
     /* <span> texts  are set by mki3d.action.constructiveMenu */
 

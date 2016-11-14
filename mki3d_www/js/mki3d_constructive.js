@@ -970,3 +970,40 @@ mki3d.SelectedBookmarkedTriangleIntersection= function() {
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
+
+
+/*** PROJECTIONS OF SELECTED ENDPOINTS ***/
+
+mki3d.parallelProjection_AB_CDE= function(){
+    var methodName ="PROJECTION OF SELECTED ENDPOINTS IN DIRECTION 'AB' ON THE PLANE 'CDE'";
+    var neededPoints = "ABCDE";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var C= mki3d.points.point.C.pos;
+    var D= mki3d.points.point.D.pos;
+    var E= mki3d.points.point.E.pos;
+
+    var result = mki3d.lineABplaneCDEintersection( A,B, C,D,E );
+    if(!result) return "<br> INTERSECTION POINT OF 'AB' AND 'CDE' COULD NOT BE FOUND.";
+
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+
+    mki3d.backup();
+    var selected=mki3d.tmp.selected;
+
+    var d=[B[0]-A[0], B[1]-A[1], B[2]-D[2]]; // direction
+
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var PA= selected[i].position; // reference to position
+	var PB= [PA[0]+d[0], PA[1]+d[1], PA[2]+d[2]];
+	selected[i].position =  mki3d.lineABplaneCDEintersection( PA, PB, C,D,E ); // project on plane CDE
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>PROJECTED THE SELECTED ENDPOINTS BY THE VECTOR 'AB' ON THE PLANE 'CDE'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+    
+}
+

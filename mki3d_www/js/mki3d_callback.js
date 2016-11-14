@@ -583,6 +583,21 @@ mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+mki3d.callback.projectionsMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+	case 48: // 0
+	actionMessage= mki3d.parallelProjection_AB_CDE();
+	break;
+    }
+
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend( actionMessage );
+}
+
 mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -631,6 +646,7 @@ mki3d.callback.constructiveInsertingMenuOnKeyDown = function (e){
     mki3d.messageAppend( actionMessage );
 }
 
+
 mki3d.callback.constructiveMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -639,6 +655,9 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     {
 	case 77: // M
 	mki3d.action.constructiveMovingMenu();
+	return;
+	case 80: // P
+	actionMessage= mki3d.action.projectionsMenu();
 	return;
 	case 83: // S
 	mki3d.action.constructiveScalingMenu();
@@ -649,6 +668,7 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
 	case 74: // J
 	mki3d.action.constructiveCursorMenu();
 	return;
+
 	case 66: // B
 	actionMessage=mki3d.constructiveBBoxOfSelectedUW();
 	break; 
