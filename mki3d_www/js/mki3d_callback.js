@@ -592,6 +592,9 @@ mki3d.callback.projectionsMenuOnKeyDown = function (e){
 	case 48: // 0
 	actionMessage= mki3d.parallelProjection_AB_CDE();
 	break;
+	case 49: // 1
+	actionMessage= mki3d.sphereProjection_O_AB();
+	break;
     }
 
     mki3d.action.escapeToCanvas();

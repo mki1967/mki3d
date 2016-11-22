@@ -1007,3 +1007,33 @@ mki3d.parallelProjection_AB_CDE= function(){
     
 }
 
+mki3d.sphereProjection_O_AB= function(){
+    var methodName ="PROJECTION OF SELECTED ENDPOINTS ON THE SPHERE CENTERED AT 'O' WITH RADIUS LENGTH |AB|";
+    var neededPoints = "OAB";
+    var check= mki3d.checkConstructivePoints( methodName, neededPoints );
+    if( check != "") return check;
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
+    
+    var A= mki3d.points.point.A.pos;
+    var B= mki3d.points.point.B.pos;
+    var O= mki3d.points.point.O.pos;
+    var AB=[B[0]-A[0], B[1]-A[1], B[2]-A[2]];
+    var lenAB=mki3d.vectorLength(AB); // radius
+    // if( lenAB==0 ) return "LENGTH |AB| IS ZERO!";
+    mki3d.backup();
+    var selected=mki3d.tmp.selected;
+    var i;
+    for( i=0; i< selected.length; i++) {
+	var P= selected[i].position; // reference to position
+	var OP= [P[0]-O[0], P[1]-O[1], P[2]-O[2]];
+	var lenOP=mki3d.vectorLength(OP);
+	if( lenOP >0 ) {
+	    var s= lenAB/lenOP;
+	    selected[i].position = [ O[0]+OP[0]*s, O[1]+OP[1]*s, O[2]+OP[2]*s] ; // project on a sphere (O, |AB|)
+	}
+    }
+    mki3d.backup();
+    mki3d.redraw();
+    return "<br>PROJECTED THE SELECTED ENDPOINTS ON THE SPHERE CENTERED AT 'O' WITH RADIUS LENGTH |AB|.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
+
+}
