@@ -27,6 +27,12 @@ const MKI3D_MIN_SCALE = 1/ MKI3D_MAX_SCALE;
 
 const MKI3D_SCREEN_Z = 60;
 
+/* SCREEN Z range */
+
+const MKI3D_MIN_SCREEN_Z= 1;
+const MKI3D_MAX_SCREEN_Z= 200;
+
+
 /* Initial projection parameters */
 
 const MKI3D_PROJECTION_Z_NEAR = 0.25;

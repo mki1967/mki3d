@@ -77,6 +77,8 @@ mki3d.html.initObjects= function() {
     mki3d.html.inputCursorY= document.querySelector("#inputCursorY");
     mki3d.html.inputCursorZ= document.querySelector("#inputCursorZ");
     mki3d.html.inputCursorStep= document.querySelector("#inputCursorStep");
+    
+    mki3d.html.inputScreenZ= document.querySelector("#inputScreenZ");
 
     mki3d.html.inputScalingFactor= document.querySelector("#inputScalingFactor");
     mki3d.html.inputPolygonNumberOfVertices= document.querySelector("#inputPolygonNumberOfVertices");
