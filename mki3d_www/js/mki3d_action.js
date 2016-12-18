@@ -1076,6 +1076,8 @@ mki3d.action.inputs = function(){
     
     mki3d.html.inputScreenZ.value= mki3d.data.view.screenShift[2];
 
+    mki3d.html.inputZoom.value= mki3d.data.projection.zoomY;
+
     mki3d.html.inputScalingFactor.value= mki3d.constructive.scalingFactor;
     mki3d.html.inputPolygonNumberOfVertices.value= mki3d.constructive.polygonNumberOfVertices;
 
@@ -1148,6 +1150,21 @@ mki3d.action.inputsEnter= function(){
 	    msg+="<br>SCREEN Z CAN NOT BE "+value+" (outside ["+MKI3D_MIN_SCREEN_Z+","+MKI3D_MAX_SCREEN_Z+"])";
 	}
    
+    oldValue=mki3d.data.projection.zoomY;
+    value=Number(mki3d.html.inputZoom.value);
+    if( value != oldValue)
+	if(  MKI3D_MIN_ZOOM <= value && value <= MKI3D_MAX_ZOOM ) {
+	    mki3d.data.projection.zoomY=value;
+	    msg+="<br>ZOOM SET TO: "+mki3d.data.projection.zoomY;
+	    mki3d.setProjectionMatrix();
+	    mki3d.redraw();
+	} else {
+	    msg+="<br>ZOOM CAN NOT BE "+value+" (outside ["+MKI3D_MIN_ZOOM+","+MKI3D_MAX_ZOOM+"])";
+	}
+   
+
+
+
     oldValue=mki3d.constructive.scalingFactor;
     value=Number(mki3d.html.inputScalingFactor.value);
     if( value != oldValue ) {

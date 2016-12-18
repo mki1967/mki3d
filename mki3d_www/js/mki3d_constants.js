@@ -39,6 +39,12 @@ const MKI3D_PROJECTION_Z_NEAR = 0.25;
 const MKI3D_PROJECTION_Z_FAR = 300;
 const MKI3D_PROJECTION_ZOOM_Y = 4.0;
 
+/* ZOOM RANGE */
+const MKI3D_MIN_ZOOM = 0.5;
+const MKI3D_MAX_ZOOM = 10;
+
+
+
 /* Shape of the cursor */
 
 /* cursor shape is a set of line segments in 3D */
