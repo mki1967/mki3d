@@ -57,24 +57,32 @@
     <div id="divHelp"  style="overflow-y:auto; display:none;">
       <h2>Help screen of <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a>:</h2>
 
-      <p> (Press 'Q' or Escape to return to the canvas.) </p>
+      <p> <strong>(Press 'Q' or Escape to return to the canvas.)</strong></p>
 
-      <p style="color:red;"> <strong>Info about Chrome Web Store problem: </strong> 
-	<a href="https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html" target="_blank"> Chromium blog post</a> informs about
-	removing support for packaged and hosted apps from Chrome on Windows, Mac, and Linux.
-	<a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> is being adapted to be usable both
-	on-line and off-line in arbitrary browser.
-	Read <a href="https://mki1967.github.io/mki3d/docs/usage_options.html" target="_blank">instructions for usage options</a>.
-      </p>
+      <div style="color:red;">
+	<h3> Some notifications: </h3>
+	<ul>
+	  <li>
+	    <strong>News and Tutorial Blog:</strong> Some news and tutorials illustrated with screen-shots are being posted on a blog:
+	    <a href="https://mki3d.blogspot.com/" target="_blank">https://mki3d.blogspot.com/</a>
+	  </li>
+	  <li>
+	    <strong> Warnings: </strong> The 'undo' operation is limited to a single step and it may still be missing in some  editing actions.
+	    (The best strategy is frequent saving of your data.)
+	    Some details of the user interface or of the data format may be modified in the future versions.
+	  </li>
+	  <li>  
+	    <strong>Info about Chrome: </strong> 
+	    <a href="https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html" target="_blank"> Chromium blog post</a> informs about
+	    removing support for packaged and hosted apps from Chrome on Windows, Mac, and Linux.
+	    <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> can be used both
+	    on-line and off-line in arbitrary modern browsers supporting WebGL.
+	    Read <a href="https://mki1967.github.io/mki3d/docs/usage_options.html" target="_blank">instructions for usage options</a>.
+	  </li>
+	</ul>
+      </div>
       
-      <h3> Warnings: </h3>    
-
-      <p>
-	Data protection mechanisms such as 'undo' or 'auto-save' are still not implemented.
-	User operations are irreversible without warnings.
-	The best strategy is frequent saving of your data in a file. 
-      </p>
-
+ 
       <h3> Key presses on the canvas: </h3>
       <p>
 	<dl>
@@ -492,7 +500,7 @@
 	<dt>'B'</dt>
 	<dd> - BOOKMARK THE SELECTION (CANCELS SELECTION AND THE PREVIOUS BOOKMARK) </dd>
 	<dt>'A'</dt>
-	<dd> - ADD BOOKMARKED ENPOINTS TO SELECTION </dd>
+	<dd> - ADD BOOKMARKED ENDPOINTS TO SELECTION </dd>
       </dl>
     </div>
 
@@ -553,16 +561,16 @@
 	<dt>'I'</dt>
 	<dd> - INSERTING NEW CONSTRUCTED OBJECTS ... </dd>
 	<dt>'B'</dt>
-	<dd> - SET POINTS 'U' 'W' ON THE MINIMAL AND MAXIMAL CORNERS OF THE BOUNDING BOX OF SELECTED ENDPOINTS
+	<dd> - SET CONSTRUCTIVE POINTS 'U' AND  'W' ON THE MINIMAL AND MAXIMAL CORNERS OF THE BOUNDING BOX OF THE SELECTED ENDPOINTS
 	</dd>
 	<dt>'T'</dt>
-	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' OF SELECTED ENDPOINTS
+	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' OF THE SELECTED ENDPOINTS
 	  (TRANSFORMS: POINT 'A' TO POINT 'D', LINE 'AB' TO LINE 'DE', AND PLANE 'ABC' TO PLANE 'DEF'.) </dd>
 	<dt>'F'</dt>
 	<dd> - FOLDING: ROTATE THE SELECTED ENDPOINTS AROUND THE LINE 'AB' AND THE BOOKMARKED ENDPOINTS AROUND THE LINE 'AC' IN THE DIRECTION OF POINT 'F', SO THAT
 	  THE FIRST ROTATION OF LINE 'AD' IS EQUAL TO THE SECOND ROTATION OF LINE 'AE'. 
 	  <br> 
-	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDOINTS SHOULD BE DISJOINT.
+	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDPOINTS SHOULD BE DISJOINT.
 	</dd>
       </dl>
     </div>
@@ -658,9 +666,9 @@
 	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </p>
       <dl>	
 	<dt>'3'</dt>
-	<dd> - INSERT POLYGON OUTLINE SEGMENTS WITH THE CURSOR IN THE CENER </dd> 
+	<dd> - INSERT POLYGON OUTLINE SEGMENTS WITH THE CURSOR IN THE CENTER </dd> 
 	<dt>'4'</dt>
-	<dd> - INSERT POLYGON SECTORS TRIANGLES WITH THE CURSOR IN THE CENER </dd>
+	<dd> - INSERT POLYGON SECTORS TRIANGLES WITH THE CURSOR IN THE CENTER </dd>
       </dl>
       <dl>
       </dl>
@@ -709,7 +717,7 @@
 	Your browser does not support the canvas element.
       </canvas>
       <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
-	UPPER MESSAGE 
+	IF YOU SEE THIS, THEN THERE IS SOME PROBLEM (Probably WebGL is not enabled.) 
       </div>
     </div>
   </body>

@@ -16,7 +16,7 @@ window.onload= function(){
     mki3d.setProjectionMatrix();
     mki3d.setModelViewMatrix();
     mki3d.action.init(); // mki3d.action requires initialization
-    mki3d.html.divUpperMessage.innerHTML += "  (Press 'H' for help and <span style='color:red;'>Chrome Web Store problem info</span>.)";
+    mki3d.html.divUpperMessage.innerHTML += "  (Press 'H' for help.)";
     mki3d.backup();// init backups
     mki3d.redraw();
     window.onbeforeunload= function(){
