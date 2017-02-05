@@ -327,18 +327,27 @@ mki3d.projectionMatrix = function(){
     var zw= 1;
     var wz= -2*projection.zFar*projection.zNear/(projection.zFar-projection.zNear);
 
-
+/*
     var pMatrix = mki3d.gl.matrix4( xx,  0,  0,  0,
 				    0, yy,  0,  0,
 				    0,  0, zz, wz,
 				    0,  0, zw,  0 );
+*/
+    
+    var pMatrix = [
+	[xx,  0,  0,  0],
+	[ 0, yy,  0,  0],
+	[ 0,  0, zz, wz],
+	[ 0,  0, zw,  0]
+    ];
+    
     return pMatrix;
 }
 
 /* load projection to GL uPMatrix */
 
 mki3d.setProjectionMatrix = function () {
-    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  mki3d.gl.matrix4toGL(mki3d.projectionMatrix()) );
 }
 
 /* load model view  to GL uMVMatrix */
