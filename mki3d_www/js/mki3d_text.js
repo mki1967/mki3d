@@ -194,7 +194,7 @@ mki3d.text.drawSymbols= function( symbols ) {
 	mki3d.text.drawTextureSymbol (symbols[i].idx, symbols[i].pos);
 };
 
-mki3d.text.redraw= function(){
+mki3d.text.redraw= function(projectionMatrixGL){
     if(! mki3d.tmp.display ) return;
     if(! mki3d.tmp.display.points ) return;
     if( mki3d.tmp.display.points.length==0) return;
@@ -213,7 +213,8 @@ mki3d.text.redraw= function(){
     gl.uniform1f(shaderProgram.step, mki3d.data.cursor.step);
 
     /* set matrces */
-    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
+//    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, mki3d.projectionMatrix() );
+    mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uPMatrix, false, projectionMatrixGL );
     mki3d.gl.context.uniformMatrix4fv(mki3d.text.shaderProgram.uReverseRot, false, 
 				      mki3d.gl.matrix4toGL(mki3d.matrix3to4(mki3d.matrixInverse( mki3d.data.view.rotationMatrix ))) );
 

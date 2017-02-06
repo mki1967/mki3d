@@ -93,9 +93,11 @@ mki3d.unsetClipping= function () {
 /* general redraw function */
 
 mki3d.redraw = function() {
+    mki3d.loadModel();
+    mki3d.loadCursor();
+    
     var gl = mki3d.gl.context;
     var bg = mki3d.data.backgroundColor;
-    gl.useProgram( mki3d.gl.shaderProgram ); // use the default shader program
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
@@ -103,12 +105,20 @@ mki3d.redraw = function() {
     gl.clearColor(bg[0], bg[1], bg[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mki3d.loadModel();
+    mki3d.redrawProjection(mki3d.monoProjectionGL); // monoscopic view
+
+
+}
+
+mki3d.redrawProjection = function( projectionMatrixGL ) {
+    mki3d.gl.context.useProgram( mki3d.gl.shaderProgram ); // use the default shader program
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  projectionMatrixGL  ); // projectionMatrixGL
+
+    
     mki3d.setDataClipping()
     mki3d.drawGraph( mki3d.gl.buffers.model );
     mki3d.unsetClipping();
 
-    mki3d.loadCursor();
     mki3d.drawGraph( mki3d.gl.buffers.cursor );
 
     if(mki3d.tmp.selected)  
@@ -119,8 +129,7 @@ mki3d.redraw = function() {
 
 
 
-    mki3d.text.redraw(); /// tests
-
+    mki3d.text.redraw( projectionMatrixGL ); /// tests
 }
 
 /* load model to its GL buffer */
