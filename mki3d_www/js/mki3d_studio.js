@@ -347,7 +347,10 @@ mki3d.projectionMatrix = function(){
 /* load projection to GL uPMatrix */
 
 mki3d.setProjectionMatrix = function () {
-    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  mki3d.gl.matrix4toGL(mki3d.projectionMatrix()) );
+    mki3d.setProjectionGLMatrices();
+    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  mki3d.gl.matrix4toGL(mki3d.projectionMatrix()) );
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,   mki3d.monoProjectionGL );
+    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,    mki3d.stereoRightProjectionGL );
 }
 
 /* load model view  to GL uMVMatrix */

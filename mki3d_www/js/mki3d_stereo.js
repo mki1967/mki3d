@@ -13,11 +13,11 @@ mki3d.stereoProjection= function(eyeShift){
     ];
 
     
-    var screenZ = data.view.screenShift
+    var screenZ = mki3d.data.view.screenShift[2];
     var projection = mki3d.data.projection;
     var gl = mki3d.gl.context;
     
-    var dx = d* projection.zoomY / screenShift * gl.viewportHeight/gl.viewportWidth;
+    var dx = d* projection.zoomY / screenZ * gl.viewportHeight/gl.viewportWidth;
 
      var shift2 = [
 	[ 1, 0, 0, dx],
@@ -33,9 +33,9 @@ mki3d.stereoProjection= function(eyeShift){
 }
 
 mki3d.setProjectionGLMatrices= function(){
+    mki3d.monoProjectionGL=  mki3d.gl.matrix4toGL(mki3d.projectionMatrix());
     mki3d.stereoLeftProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( -mki3d.stereo.eyeShift ));
     mki3d.stereoRightProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( mki3d.stereo.eyeShift ));
-    mki3d.monoProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( mki3d.stereo.eyeShift ));
 }
 
 /* LEFT AND RIGHT COLORS */
