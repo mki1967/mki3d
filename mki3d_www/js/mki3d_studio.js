@@ -101,12 +101,25 @@ mki3d.redraw = function() {
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
+    
+   /// mki3d.stereo.mode=true // test stereo mode
 
-    gl.clearColor(bg[0], bg[1], bg[2], 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    mki3d.redrawProjection(mki3d.monoProjectionGL); // monoscopic view
-
+    if(mki3d.stereo.mode){  /// test stereo version for white colors only ;-)
+	gl.clearColor(0.0, 0.0, 0.0, 1.0); // stereo background 
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear everything
+	/* LEFT */
+	gl.colorMask(true, false, false, true ); /// red filter
+	mki3d.redrawProjection( mki3d.stereoLeftProjectionGL); // monoscopic view
+	/* RIGHT */
+	gl.clear(gl.DEPTH_BUFFER_BIT); // clear depth buffer only
+	gl.colorMask(false, false, true, true ); /// blue filter
+	mki3d.redrawProjection( mki3d.stereoRightProjectionGL); // monoscopic view
+	gl.colorMask(true, true, true, true ); /// reset filter
+    } else {
+	gl.clearColor(bg[0], bg[1], bg[2], 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	mki3d.redrawProjection(mki3d.monoProjectionGL); // monoscopic view
+    }
 
 }
 

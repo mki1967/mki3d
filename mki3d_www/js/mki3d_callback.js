@@ -493,6 +493,12 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
 	    "<br> VIEW SCALE: "+mki3d.data.view.scale+
 	    "<br> CURSOR STEP: "+mki3d.data.cursor.step;
 	break;
+	case 83: // S
+	mki3d.stereo.mode= !mki3d.stereo.mode;
+	actionMessage=
+	    "<br> STEREO MODE: "+mki3d.stereo.mode;
+	break;
+	
     };
     mki3d.action.escapeToCanvas();
     mki3d.messageAppend( actionMessage );
