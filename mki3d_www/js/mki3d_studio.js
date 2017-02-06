@@ -114,6 +114,7 @@ mki3d.redraw = function() {
 	gl.clear(gl.DEPTH_BUFFER_BIT); // clear depth buffer only
 	gl.colorMask(false, false, true, true ); /// blue filter
 	mki3d.redrawProjection( mki3d.stereoRightProjectionGL); // monoscopic view
+	mki3d.text.redraw( mki3d.stereoRightProjectionGL ); /// reverse multi-points
 	gl.colorMask(true, true, true, true ); /// reset filter
     } else {
 	gl.clearColor(bg[0], bg[1], bg[2], 1.0);
