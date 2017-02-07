@@ -102,7 +102,7 @@ mki3d.redraw = function() {
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
     
-   /// mki3d.stereo.mode=true // test stereo mode
+    /// mki3d.stereo.mode=true // test stereo mode
 
     if(mki3d.stereo.mode){  /// test stereo version for white colors only ;-)
 	gl.clearColor(0.0, 0.0, 0.0, 1.0); // stereo background 
@@ -159,15 +159,25 @@ mki3d.loadModel= function (){
     var elements = [];
     var elementsColors = [];
 
+    var red= mki3d.stereo.red;
+    var blue=mki3d.stereo.blue;
+    var stereoMode= mki3d.stereo.mode;
+
     var i,j;
     for(i=0; i<model.segments.length; i++){
 	for(j=0; j<2; j++){
 	    elements.push(model.segments[i][j].position[0]);
 	    elements.push(model.segments[i][j].position[1]);
 	    elements.push(model.segments[i][j].position[2]);
-	    elementsColors.push(model.segments[i][j].color[0]);
-	    elementsColors.push(model.segments[i][j].color[1]);
-	    elementsColors.push(model.segments[i][j].color[2]);
+	    if(stereoMode) {
+		elementsColors.push(red);
+		elementsColors.push(0.0);
+		elementsColors.push(blue);
+	    } else {
+		elementsColors.push(model.segments[i][j].color[0]);
+		elementsColors.push(model.segments[i][j].color[1]);
+		elementsColors.push(model.segments[i][j].color[2]);
+	    }
 	}
     }
 
@@ -191,16 +201,28 @@ mki3d.loadModel= function (){
     elements = [];
     elementsColors = [];
 
+    /* scale down red and blue coefficients */
+    red= red/3;
+    blue=blue/3;
+    
     for(i=0; i<model.triangles.length; i++){
-	if(!model.triangles[i].shade) 
-	    model.triangles[i].shade = mki3d.shadeFactor( model.triangles[i], mki3d.data.light);
+	var triangle=model.triangles[i];
+	if(!triangle.shade) 
+	    triangle.shade = mki3d.shadeFactor( triangle, mki3d.data.light);
 	for(j=0; j<3; j++){
-	    elements.push(model.triangles[i][j].position[0]);
-	    elements.push(model.triangles[i][j].position[1]);
-	    elements.push(model.triangles[i][j].position[2]);
-	    elementsColors.push(model.triangles[i][j].color[0]*model.triangles[i].shade);
-	    elementsColors.push(model.triangles[i][j].color[1]*model.triangles[i].shade);
-	    elementsColors.push(model.triangles[i][j].color[2]*model.triangles[i].shade);
+	    elements.push(triangle[j].position[0]);
+	    elements.push(triangle[j].position[1]);
+	    elements.push(triangle[j].position[2]);
+	    if( stereoMode ) {
+		var c= (triangle[j].color[0]+ triangle[j].color[1]+ triangle[j].color[2])*triangle.shade;
+		elementsColors.push(c*red);
+		elementsColors.push(0.0);
+		elementsColors.push(c*blue);		
+	    } else {
+		elementsColors.push(triangle[j].color[0]*triangle.shade);
+		elementsColors.push(triangle[j].color[1]*triangle.shade);
+		elementsColors.push(triangle[j].color[2]*triangle.shade);
+	    }
 	}
     }
 
@@ -255,11 +277,23 @@ mki3d.loadCursor= function (){
 	}
     }
 
+    /* COLORS */
+    var red= mki3d.stereo.red;
+    var blue=mki3d.stereo.blue;
+    var stereoMode= mki3d.stereo.mode;
+
+    
     var colors = [];
     for( i=0 ; i<2*(MKI3D_CURSOR_SHAPE.length+MKI3D_PLANE_MARKER.length); i++) {
-        colors.push(cCol[0]);
-        colors.push(cCol[1]);
-        colors.push(cCol[2]);
+	if(stereoMode) {
+	    colors.push(red);
+	    colors.push(0);
+	    colors.push(blue);
+	} else {
+            colors.push(cCol[0]);
+            colors.push(cCol[1]);
+            colors.push(cCol[2]);
+	}
     }
     
 
@@ -269,16 +303,28 @@ mki3d.loadCursor= function (){
         segments.push( marker1.position[0] );
         segments.push( marker1.position[1] );
         segments.push( marker1.position[2] );
-        colors.push( marker1.color[0] );
-        colors.push( marker1.color[1] );
-        colors.push( marker1.color[2] );
+	if(stereoMode) {
+	    colors.push(red);
+	    colors.push(0);
+	    colors.push(blue);
+	} else {
+            colors.push( marker1.color[0] );
+            colors.push( marker1.color[1] );
+            colors.push( marker1.color[2] );
+	}
         // push cursor
         segments.push(cPos[0]);
         segments.push(cPos[1]);
         segments.push(cPos[2]);
-        colors.push(cCol[0]);
-        colors.push(cCol[1]);
-        colors.push(cCol[2]);
+	if(stereoMode) {
+	    colors.push(red);
+	    colors.push(0);
+	    colors.push(blue);
+	} else {
+            colors.push(cCol[0]);
+            colors.push(cCol[1]);
+            colors.push(cCol[2]);
+	}
     }
 
 
@@ -297,6 +343,9 @@ mki3d.loadCursor= function (){
     var triangles = [];
     colors =[]; // reusing variable 
     var marker2 = mki3d.data.cursor.marker2;
+    /* scale down red and blue coefficients */
+    red= red/3;
+    blue=blue/3;
 
     if( marker1 !== null && marker2 !== null) { // draw triangle (cursor, marker1, marker2)
         var light = mki3d.data.light;
@@ -308,23 +357,44 @@ mki3d.loadCursor= function (){
         triangles.push( marker1.position[0] );
         triangles.push( marker1.position[1] );
         triangles.push( marker1.position[2] );
-        colors.push( marker1.color[0]*shade );
-        colors.push( marker1.color[1]*shade );
-        colors.push( marker1.color[2]*shade );
+	if( stereoMode ) {
+	    var c= (marker1.color[0]+marker1.color[1]+marker1.color[2])*shade;
+	    colors.push(c*red);
+	    colors.push(0.0);
+	    colors.push(c*blue);		
+	} else {
+	    colors.push( marker1.color[0]*shade );
+	    colors.push( marker1.color[1]*shade );
+	    colors.push( marker1.color[2]*shade );
+	}
         // push marker 2
         triangles.push( marker2.position[0] );
         triangles.push( marker2.position[1] );
         triangles.push( marker2.position[2] );
-        colors.push( marker2.color[0]*shade );
-        colors.push( marker2.color[1]*shade );
-        colors.push( marker2.color[2]*shade );
+	if( stereoMode ) {
+	    var c= (marker2.color[0]+marker2.color[1]+marker2.color[2])*shade;
+	    colors.push(c*red);
+	    colors.push(0.0);
+	    colors.push(c*blue);		
+	} else {
+	    colors.push( marker2.color[0]*shade );
+	    colors.push( marker2.color[1]*shade );
+	    colors.push( marker2.color[2]*shade );
+	}
         // push cursor
         triangles.push(cPos[0]);
         triangles.push(cPos[1]);
         triangles.push(cPos[2]);
-        colors.push(cCol[0]*shade);
-        colors.push(cCol[1]*shade);
-        colors.push(cCol[2]*shade);
+	if( stereoMode ) {
+	    var c= (cCol[0]+cCol[1]+cCol[2])*shade;
+	    colors.push(c*red);
+	    colors.push(0.0);
+	    colors.push(c*blue);		
+	} else {
+	    colors.push(cCol[0]*shade);
+	    colors.push(cCol[1]*shade);
+	    colors.push(cCol[2]*shade);
+	}
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
@@ -350,12 +420,12 @@ mki3d.projectionMatrix = function(){
     var zw= 1;
     var wz= -2*projection.zFar*projection.zNear/(projection.zFar-projection.zNear);
 
-/*
-    var pMatrix = mki3d.gl.matrix4( xx,  0,  0,  0,
-				    0, yy,  0,  0,
-				    0,  0, zz, wz,
-				    0,  0, zw,  0 );
-*/
+    /*
+      var pMatrix = mki3d.gl.matrix4( xx,  0,  0,  0,
+      0, yy,  0,  0,
+      0,  0, zz, wz,
+      0,  0, zw,  0 );
+    */
     
     var pMatrix = [
 	[xx,  0,  0,  0],
@@ -390,15 +460,15 @@ mki3d.modelViewMatrix= function () {
     mki3d.vectorScale( rot[2], scale, scale, scale);
     
     var scrSh= mki3d.data.view.screenShift;
-   
-/* 
-    var mvMatrix =  mki3d.gl.matrix4( 
-	rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0],
-	rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1],
-	rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
-        0,                 0,         0,                                        1 
-    );
-*/
+    
+    /* 
+       var mvMatrix =  mki3d.gl.matrix4( 
+       rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0],
+       rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1],
+       rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
+       0,                 0,         0,                                        1 
+       );
+    */
     var mvMatrix = [
 	[ rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0] ],
 	[ rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1] ],

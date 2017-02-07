@@ -40,8 +40,8 @@ mki3d.setProjectionGLMatrices= function(){
 
 /* LEFT AND RIGHT COLORS */
 
-mki3d.stereo.leftColor=[0.6,0,0];
-mki3d.stereo.righColor=[0,0,1];
+mki3d.stereo.red= 0.6;
+mki3d.stereo.blue= 1;
 
 mki3d.stereo.leftColorMask=[true, false, false];
 mki3d.stereo.righColorMask=[false, false, true];
