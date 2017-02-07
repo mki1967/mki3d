@@ -81,6 +81,10 @@ mki3d.html.initObjects= function() {
     mki3d.html.inputScreenZ= document.querySelector("#inputScreenZ");
     mki3d.html.inputZoom= document.querySelector("#inputZoom");
 
+    mki3d.html.inputStereoRed= document.querySelector("#inputStereoRed");
+    mki3d.html.inputStereoBlue= document.querySelector("#inputStereoBlue");
+    mki3d.html.inputStereoEyeShift= document.querySelector("#inputStereoEyeShift");
+
     mki3d.html.inputScalingFactor= document.querySelector("#inputScalingFactor");
     mki3d.html.inputPolygonNumberOfVertices= document.querySelector("#inputPolygonNumberOfVertices");
 
