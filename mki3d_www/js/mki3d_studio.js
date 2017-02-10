@@ -133,7 +133,7 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
     mki3d.drawGraph( mki3d.gl.buffers.model );
     mki3d.unsetClipping();
 
-    mki3d.drawGraph( mki3d.gl.buffers.cursor );
+    if(! mki3d.displayMode) mki3d.drawGraph( mki3d.gl.buffers.cursor );
 
     if(mki3d.tmp.selected)  
 	mki3d.drawPoints( MKI3D_SELECTED_POINT, mki3d.tmp.selected, mki3d.gl.buffers.selectedPoint );

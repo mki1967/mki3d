@@ -760,6 +760,13 @@ mki3d.callback.canvasOnKeyUp = function (e){
 
 }
 
+mki3d.callback.displayOnKeyDown = function (e){
+    mki3d.displayMode=false;
+    mki3d.redraw();
+    window.onkeydown=mki3d.callback.canvasOnKeyDown;
+}
+
+
 mki3d.callback.canvasOnKeyDown = function (e){
     // var code=e.keyCode? e.keyCode : e.charCode;
     const rotStep = Math.PI / 36; // 5 degrees 
@@ -771,6 +778,11 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	mki3d.action.mode = mki3d.action.CURSOR_MODE;
 	mki3d.action.modeIdx = 0;
 	mki3d.action.setModeActions();
+	break;
+	case 68: // D
+	mki3d.displayMode=true;
+	mki3d.redraw();
+        window.onkeydown = mki3d.callback.displayOnKeyDown; 
 	break;
 	case 13: // enter
         mki3d.action.enter();
