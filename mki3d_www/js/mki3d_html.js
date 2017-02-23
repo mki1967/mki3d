@@ -21,6 +21,10 @@ mki3d.html.showDiv = function(divObject) {
     divObject.style.display="block";
 }
 
+mki3d.html.hideDiv = function(divObject) {
+    divObject.style.display="none";
+}
+
 
 mki3d.saveInfo=function(string) {
     document.querySelector("#saveInfo").innerHTML=string;

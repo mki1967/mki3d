@@ -762,6 +762,7 @@ mki3d.callback.canvasOnKeyUp = function (e){
 
 mki3d.callback.displayOnKeyDown = function (e){
     mki3d.displayMode=false;
+    mki3d.html.showDiv(mki3d.html.divUpperMessage);
     mki3d.redraw();
     window.onkeydown=mki3d.callback.canvasOnKeyDown;
 }
@@ -781,6 +782,7 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	break;
 	case 68: // D
 	mki3d.displayMode=true;
+	mki3d.html.hideDiv(mki3d.html.divUpperMessage);
 	mki3d.redraw();
         window.onkeydown = mki3d.callback.displayOnKeyDown; 
 	break;

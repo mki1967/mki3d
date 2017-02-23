@@ -35,7 +35,8 @@ mki3d.gl.fragmentShaderSource = " "+
 
 
 mki3d.gl.initGL= function(canvas) {
-    var gl = canvas.getContext("experimental-webgl");
+    var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    // var gl = canvas.getContext("experimental-webgl");
     gl.viewportWidth = canvas.width;
     gl.viewportHeight = canvas.height;
     // console.log(gl); // tests
