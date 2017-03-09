@@ -372,6 +372,28 @@ mki3d.moveCursorToPointsCenter = function(){
     ////
 }
 
+mki3d.moveCursorToCenteroidOfSelected = function(){
+
+    if(!mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br> THERE ARE NO SELECTED ENDPOINTS. (USE 'QS...' TO SELECT SOME.)";
+    var selected= mki3d.tmp.selected;
+
+    var avg=[0,0,0];
+    var n=selected.length;
+    
+    for(i=0; i<n; i++) {
+	var v=selected[i].position;
+	mki3d.vectorMove( avg, v[0]/n, v[1]/n, v[2]/n);
+    }
+    
+    mki3d.data.cursor.position = avg;
+    mki3d.redraw();
+
+    return "<br> CURSOR MOVED TO THE CENTEROID OF THE "+n+" SELECTED ENDPOINTS.";
+
+    ////
+}
+
+
 
 mki3d.moveCursorToIntersectionABandCDE = function(){
     var methodName ="MOVE CURSOR TO INTERSECTION OF AB AND CDE";

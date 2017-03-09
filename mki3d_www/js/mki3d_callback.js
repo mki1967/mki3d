@@ -562,6 +562,9 @@ mki3d.callback.constructiveCursorMenuOnKeyDown = function (e){
 	case 48: // 0
 	actionMessage= mki3d.moveCursorToPointsCenter();
 	break;
+	case 67: // C
+	actionMessage=mki3d.moveCursorToCenteroidOfSelected() ;
+	break;
 	case 49: // 1
 	actionMessage= mki3d.moveCursorToIntersectionABandCDE();
 	break;
