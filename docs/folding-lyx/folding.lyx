@@ -1,0 +1,620 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Folding Algorithm.
+\end_layout
+
+\begin_layout Author
+Marcin Kik
+\end_layout
+
+\begin_layout Address
+email: mki1967@gmail.com, www: 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://cs.pwr.edu.pl/kik/"
+target "http://cs.pwr.edu.pl/kik/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+We present analysis underlying the folding algorithm implemented in 
+\begin_inset CommandInset href
+LatexCommand href
+name "mki3d"
+target "https://mki1967.github.io/mki3d/"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset href
+LatexCommand href
+name "et-editor"
+target "https://mki1967.github.io/et-edit/"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The input contains four vectors 
+\begin_inset Formula $A_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $A_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $B_{2}$
+\end_inset
+
+ from 
+\begin_inset Formula $\mathbb{R}^{3}$
+\end_inset
+
+, such that their lengths 
+\begin_inset Formula $|A_{1}|=|A_{2}|=|B_{1}|=|B_{2}|=1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $O=(0,0,0)\in\mathbb{\mathbb{R}}^{3}$
+\end_inset
+
+.
+ We want to find a point 
+\begin_inset Formula $V\in\mathbb{R}^{3}$
+\end_inset
+
+ that is result of both: the rotation of the point 
+\begin_inset Formula $B_{1}$
+\end_inset
+
+ around the line 
+\begin_inset Formula $OA_{1}$
+\end_inset
+
+ and the rotation of the point 
+\begin_inset Formula $B_{2}$
+\end_inset
+
+ around the line 
+\begin_inset Formula $OA_{2}$
+\end_inset
+
+.
+ Generally, we have three possible cases:
+\end_layout
+
+\begin_layout Enumerate
+there is no such point, or
+\end_layout
+
+\begin_layout Enumerate
+there is only single such point (on the plane 
+\begin_inset Formula $OA_{1}A_{2}$
+\end_inset
+
+), or
+\end_layout
+
+\begin_layout Enumerate
+there are two such points on both sides of the plane 
+\begin_inset Formula $OA_{1}A_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The input also contains a point 
+\begin_inset Formula $K\in\mathbb{R}^{3}$
+\end_inset
+
+ that is outside the plane 
+\begin_inset Formula $OA_{1}A_{2}$
+\end_inset
+
+.
+ Point 
+\begin_inset Formula $K$
+\end_inset
+
+ indicates on which side of the plane should be the point 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ We present a sequence of equations that yield the method of computing 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Assume, that we have input for which 
+\begin_inset Formula $V=(V_{x},V_{y},V_{z})=(x,y,z)$
+\end_inset
+
+ exists.
+ We have to find the values of 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+, and 
+\begin_inset Formula $z$
+\end_inset
+
+.
+ First note that the length of 
+\begin_inset Formula $V$
+\end_inset
+
+ is 
+\begin_inset Formula $|V|=1$
+\end_inset
+
+ so we have scalar product 
+\begin_inset Formula $V\cdot V=1$
+\end_inset
+
+.
+ This implies: 
+\begin_inset Formula 
+\begin{equation}
+x^{2}+y^{2}+z^{2}=1.\label{eq:3}
+\end{equation}
+
+\end_inset
+
+Since 
+\begin_inset Formula $V-B_{i}\bot A_{i}$
+\end_inset
+
+ (i.e.
+ 
+\begin_inset Formula $V-B_{i}$
+\end_inset
+
+is orthogonal to 
+\begin_inset Formula $A_{i}$
+\end_inset
+
+), we have: 
+\begin_inset Formula 
+\begin{equation}
+A_{i}\cdot(V-B_{i})=0.\label{eq:2}
+\end{equation}
+
+\end_inset
+
+This implies that 
+\begin_inset Formula $A_{i}\cdot V=A_{i}B_{i}$
+\end_inset
+
+ which is equivalent to 
+\begin_inset Formula 
+\begin{equation}
+xA_{i,x}+yA_{i,y}+zA_{i,x}=A_{i}\cdot B_{i}.\label{eq:4}
+\end{equation}
+
+\end_inset
+
+(We use notation 
+\begin_inset Formula $A_{i}=(A_{i,x},A_{i,y},A_{i,z})$
+\end_inset
+
+.) Thus we have: 
+\begin_inset Formula 
+\begin{equation}
+\begin{cases}
+xA_{1,x}A_{2,x}=(A_{1}B_{1}-yA_{1,y}-zA_{1,z})A_{2,x} & \mbox{, and}\\
+xA_{2,x}A_{1,x}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})A_{1,x} & .
+\end{cases}
+\end{equation}
+
+\end_inset
+
+By equality of left sides: 
+\begin_inset Formula 
+\begin{equation}
+(A_{1}B_{1}-yA_{1,y}-zA_{1,z})A_{2,x}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})A_{1,x}.
+\end{equation}
+
+\end_inset
+
+Let us multiply and group by 
+\begin_inset Formula $z$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+, and remaining components: 
+\begin_inset Formula 
+\begin{equation}
+z(A_{2,z}A_{1,x}-A_{1,z}A_{2,x})=y(A_{1,y}A_{2,x}-A_{2,y}A_{1,x})+A_{2}B_{2}A_{1,x}-A_{1}B_{1}A_{2,x}.
+\end{equation}
+
+\end_inset
+
+Now assume that 
+\begin_inset Formula $m=A_{2,z}A_{1,x}-A_{1,z}A_{2,x}\not=0$
+\end_inset
+
+.
+ (Otherwise, we could consider 
+\begin_inset Formula $\{x,y\}$
+\end_inset
+
+or 
+\begin_inset Formula $\{x,z\}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $\{y,z\}$
+\end_inset
+
+.) Then 
+\begin_inset Formula 
+\begin{equation}
+z=y\cdot p+q,\label{eq:7n}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{equation}
+p=\frac{A_{1,y}A_{2,x}-A_{2,y}A_{1,x}}{m}
+\end{equation}
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{equation}
+q=\frac{A_{2}B_{2}A_{1,x}-A_{1}B_{1}A_{2,x}}{m}.
+\end{equation}
+
+\end_inset
+
+By Equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:3"
+
+\end_inset
+
+ we have 
+\begin_inset Formula $x^{2}=1-y^{2}-z^{2}$
+\end_inset
+
+ and hence
+\begin_inset Formula 
+\begin{equation}
+x^{2}A_{2,x}^{2}=(1-y^{2}-z^{2})A_{2,x}^{2}.\label{eq:10n}
+\end{equation}
+
+\end_inset
+
+ On the other side, by Equation
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:4"
+
+\end_inset
+
+ for 
+\begin_inset Formula $i=2$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{equation}
+x^{2}A_{2,x}^{2}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})^{2}.\label{eq:11n}
+\end{equation}
+
+\end_inset
+
+By 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:10n"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:11n"
+
+\end_inset
+
+ we have 
+\begin_inset Formula 
+\begin{equation}
+(1-y^{2}-z^{2})A_{2,x}^{2}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})^{2}.
+\end{equation}
+
+\end_inset
+
+Using 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:7n"
+
+\end_inset
+
+ we rewrite it as a square equation on 
+\begin_inset Formula $y$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+(1-y^{2}-(py+q)^{2})A_{2,x}^{2} & = & (A_{2}B_{2}-yA_{2,y}-(py+q)A_{2,z})^{2}\\
+(1-y^{2}-p^{2}y^{2}-2pqy-q^{2})A_{2,x}^{2} & = & (A_{2}B_{2}-qA_{2,z}-y(A_{2,y}+pA_{2,z}))^{2}\\
+(-(1+p^{2})y^{2}-2pqy+(1-q^{2}))A_{2,x}^{2} & = & (A_{2}B_{2}-qA_{2,z})^{2}\\
+ &  & -2(A_{2,y}+pA_{2,z})(A_{2}B_{2}-qA_{2,z})y\\
+ &  & +(A_{2,y}+pA_{2,z})^{2}y^{2}.
+\end{eqnarray*}
+
+\end_inset
+
+Let us move everything on the right side:
+\begin_inset Formula 
+\begin{equation}
+0=ay^{2}+by+c,
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{eqnarray*}
+a & = & ((1+p^{2})A_{2,x}^{2}+(A_{2,y}+pA_{2,z})^{2},\\
+b & = & (2pqA_{2,x}^{2}-2(A_{2,y}+pA_{2,z})(A_{2}B_{2}-qA_{2,z}),\\
+c & = & (q^{2}-1)A_{2,x}^{2}+(A_{2}B_{2}-qA_{2,z})^{2}.
+\end{eqnarray*}
+
+\end_inset
+
+Now we can solve it.
+ First compute 
+\begin_inset Formula $\Delta=b^{2}-4ac$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\Delta<0$
+\end_inset
+
+ then there is no solution.
+ Otherwise, let: 
+\begin_inset Formula 
+\begin{eqnarray*}
+y_{1} & = & \frac{-b-\sqrt{\Delta}}{2a},\\
+y_{2} & = & \frac{-b+\sqrt{\Delta}}{2a}.
+\end{eqnarray*}
+
+\end_inset
+
+By 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:7n"
+
+\end_inset
+
+ we can compute, for each 
+\begin_inset Formula $y_{j}$
+\end_inset
+
+, the corresponding 
+\begin_inset Formula $z_{j}$
+\end_inset
+
+.
+ The assumption 
+\begin_inset Formula $m\not=0$
+\end_inset
+
+ excludes the case 
+\begin_inset Formula $A_{1,x}=A_{2,x}=0$
+\end_inset
+
+.
+ Thus, by 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:4"
+
+\end_inset
+
+, we have at least one 
+\begin_inset Formula $i\in\{1,2\}$
+\end_inset
+
+ that we can use for computing the corresponding 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{equation}
+x_{j}=\frac{A_{i}\cdot B_{i}-y_{j}A_{i,y}-z_{j}A_{i,z}}{A_{i,x}}.
+\end{equation}
+
+\end_inset
+
+Let 
+\begin_inset Formula $V_{j}=(x_{j},y_{j},x_{j})$
+\end_inset
+
+.
+ Finally, if 
+\begin_inset Formula $V_{1}\not=V_{2}$
+\end_inset
+
+, we have to decide, which solution should be selected.
+ Recall that we have the input point 
+\begin_inset Formula $K$
+\end_inset
+
+ that should be used for this purpose.
+ 
+\begin_inset Formula $V_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $V_{2}$
+\end_inset
+
+ should be on different sides of the plane 
+\begin_inset Formula $OA_{1}A_{2}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $\det[W_{1},W_{2},W_{3}]$
+\end_inset
+
+ denote the determinant of the matrix with the columns 
+\begin_inset Formula $W_{1}$
+\end_inset
+
+, 
+\begin_inset Formula $W_{2}$
+\end_inset
+
+, 
+\begin_inset Formula $W_{3}$
+\end_inset
+
+.
+ We should select 
+\begin_inset Formula $V=V_{i}$
+\end_inset
+
+, such that 
+\begin_inset Formula $\det[A_{1},A_{2},K]\cdot\det[A_{1},A_{2},V_{i}]>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The working JavaScript implementation of the folding algorithm can be found
+ in the file 
+\begin_inset CommandInset href
+LatexCommand href
+name "mki3d_constructive.js"
+target "https://github.com/mki1967/mki3d/blob/master/mki3d_www/js/mki3d_constructive.js"
+
+\end_inset
+
+.
+ The method described in this document is implemented in the function named
+ 
+\family typewriter
+mki3d.findCenteredFolding
+\family default
+.
+ 
+\end_layout
+
+\end_body
+\end_document
