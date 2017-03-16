@@ -519,6 +519,13 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
 	mki3d.action.pointsSelectMenu();
 	return;
 	break; 
+	case 68: // D
+	// set the callback 
+	mki3d.tmp.afterPointsSelect= mki3d.hidePointCallback;
+	// go to point selection submenu ...
+	mki3d.action.pointsSelectMenu();
+	return;
+	break; 
 	case 74: // J
 	// set the callback 
 	mki3d.tmp.afterPointsSelect= mki3d.jumpToPointCallback;

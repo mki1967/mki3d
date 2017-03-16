@@ -78,6 +78,15 @@ mki3d.setPointCallback = function( pointChar ) {
     return "<br> POINT '"+pointChar+"' PLACED AT "+JSON.stringify(mki3d.data.cursor.position);
 };
 
+mki3d.hidePointCallback = function( pointChar ) {
+    var pObj=mki3d.points.point[pointChar];
+    if(!pObj) return "<br>'"+pointChar+"' is not a point ID";
+    // pObj.pos=  mki3d.vectorClone( mki3d.data.cursor.position );
+    pObj.visible= false;
+    mki3d.pointsToDisplay();
+    return "<br> POINT '"+pointChar+"' IS HIDDEN.";
+};
+
 
 mki3d.jumpToPointCallback = function( pointChar ) {
     var pObj=mki3d.points.point[pointChar];
