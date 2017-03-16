@@ -742,8 +742,7 @@ mki3d.constructiveFolding= function(){
     var neededPoints = "ABCDEF";
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
-    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    if( !mki3d.tmp.bookmarked || mki3d.tmp.bookmarked.length==0 ) return "<br>NO BOKMARKED ENDPOINTS !!!";
+    var alerts="";
 
     var A= mki3d.points.point.A.pos;
     var B= mki3d.points.point.B.pos;
@@ -777,28 +776,33 @@ mki3d.constructiveFolding= function(){
 
     var points=mki3d.tmp.selected;
     var i;
-    for( i=0; i< points.length; i++) {
-	var pos= points[i].position; // reference to position
-	var v=mki3d.matrixVectorTransformed( tr1.R, tr1.mv, pos );
-	pos[0]=v[0];
-	pos[1]=v[1];
-	pos[2]=v[2];
-    }
+    if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) alerts+="<br>NO SELECTED ENDPOINTS !!!";
+    else
+	for( i=0; i< points.length; i++) {
+	    var pos= points[i].position; // reference to position
+	    var v=mki3d.matrixVectorTransformed( tr1.R, tr1.mv, pos );
+	    pos[0]=v[0];
+	    pos[1]=v[1];
+	    pos[2]=v[2];
+	}
 
     points=mki3d.tmp.bookmarked;
-    for( i=0; i< points.length; i++) {
-	var pos= points[i].position; // reference to position
-	var v=mki3d.matrixVectorTransformed( tr2.R, tr2.mv, pos );
-	pos[0]=v[0];
-	pos[1]=v[1];
-	pos[2]=v[2];
-    }
+    if( !mki3d.tmp.bookmarked || mki3d.tmp.bookmarked.length==0 ) alerts+="<br>NO BOKMARKED ENDPOINTS !!!";
+    else
+	for( i=0; i< points.length; i++) {
+	    var pos= points[i].position; // reference to position
+	    var v=mki3d.matrixVectorTransformed( tr2.R, tr2.mv, pos );
+	    pos[0]=v[0];
+	    pos[1]=v[1];
+	    pos[2]=v[2];
+	}
 
     mki3d.backup();
     mki3d.cancelShades(); // some triangles could be rotated
     mki3d.redraw();
     return "<br>FOLDING OF SELECTED AROUND 'AB' AND OF BOOKARKED AROUND 'AC' HAS BEEN DONE."+
 	"<br> LINE 'AV' IS THE COMMON RESULT THE RESPECTIVE ROTATIONS OF THE LINES 'AD' AROUND 'AB' AND 'AE' AROUND 'AC'."+
+	alerts+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
