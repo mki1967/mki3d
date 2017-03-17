@@ -141,6 +141,9 @@ mki3d.callback.colorMenuOnKeyDown = function (e){
 	break;
     }
     
+    if(mki3d.tmp.colorMenuOutput!== null){
+	document.querySelector("#spanRGB").innerHTML=JSON.stringify(mki3d.tmp.colorMenuOutput);
+    }
     // ...
     mki3d.redraw();
     // mki3d.message("COLOR SET TO: "+JSON.stringify(mki3d.tmp.colorMenuOutput));

@@ -864,6 +864,11 @@ mki3d.action.colorMenu = function(){
     mki3d.tmp.selectedColors.index=mki3d.tmp.selectedColors.length;
 
     mki3d.message( mki3d.html.divColorMenu.innerHTML );
+    mki3d.messageAppend( '<p> RGB= <span id="spanRGB"></span></p>' );
+    if(mki3d.tmp.colorMenuOutput!== null){
+	document.querySelector("#spanRGB").innerHTML=JSON.stringify(mki3d.tmp.colorMenuOutput);
+    }
+
     window.onkeydown = mki3d.callback.colorMenuOnKeyDown; ////// temporary
 }
 
