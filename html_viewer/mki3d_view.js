@@ -1,6 +1,6 @@
 /*
   
-  mki3d_view  version 2
+  mki3d_view  version 3
 
   THIS SCRIPT SHOULD BE SAVED IN THE FOLDER WITH HTML PAGES EXPORTED
   FROM THE MKI 3D RAPID MODELLER ( https://github.com/mki1967/mki3d ).
@@ -351,6 +351,49 @@ mki3d.buttonRotateCallback= function( buttonIdx ) {
     mki3d.html.actionButtonArray[buttonIdx].style.color= mki3d.ACTION_ACTIVE_COLOR; 
 }
 
+// for mouse and touch move
+mki3d.deltaAction= function( dx, dy ){
+    switch(mki3d.actionIdx) {
+    case mki3d.ROTATE_ACTION_IDX:
+	if( Math.abs(dx) >= Math.abs(dy) ) {
+	    mki3d.action.viewRotateRight(dx/mki3d.html.canvas.width*2*Math.PI);
+	} else {
+	    mki3d.action.viewRotateUp(-dy/mki3d.html.canvas.height*2*Math.PI);
+	}
+	break;
+    case mki3d.MOVE_ACTION_IDX:
+	var c=2*mki3d.data.view.screenShift[2]/mki3d.data.projection.zoomY;
+	mki3d.moveFocusPoint([-dx/mki3d.html.canvas.height*c, dy/mki3d.html.canvas.height*c,0]);
+	break;
+    }
+    mki3d.redraw();
+}
+
+mki3d.lastMouse={};
+
+mki3d.onMouseMove= function(e){
+    var dx= e.clientX-mki3d.lastMouse.clientX;
+    var dy= e.clientY-mki3d.lastMouse.clientY;
+    mki3d.lastMouse.clientX=e.clientX;
+    mki3d.lastMouse.clientY=e.clientY;
+    mki3d.deltaAction( dx, dy );
+}
+
+// touch callbacks 
+mki3d.lastTouch={};
+
+mki3d.onTouchMove=function(e){
+    e.preventDefault();
+    var dx= e.touches[0].clientX-mki3d.lastTouch.clientX;
+    var dy= e.touches[0].clientY-mki3d.lastTouch.clientY;
+    mki3d.lastTouch.clientX=e.touches[0].clientX;
+    mki3d.lastTouch.clientY=e.touches[0].clientY;
+    mki3d.deltaAction( dx, dy );
+}
+
+
+
+
 mki3d.html.initObjects= function() {
     mki3d.html.html=document.querySelector('#htmlId');
     // mki3d.html.html.style.overflowY="";
@@ -423,6 +466,31 @@ mki3d.html.initObjects= function() {
     mki3d.html.showDiv(mki3d.html.divCanvas);
 
     mki3d.html.canvas= document.querySelector("#canvasId");
+
+
+    /* touch callbacks */
+
+    function onTouchDown(evt){
+	evt.preventDefault();
+	mki3d.stopIntervalAction();
+	mki3d.lastTouch.clientX=evt.touches[0].clientX;
+	mki3d.lastTouch.clientY=evt.touches[0].clientY;
+	mki3d.html.canvas.addEventListener("touchmove",   mki3d.onTouchMove, false);
+    }
+
+    function onTouchUp(evt){
+	evt.preventDefault();
+	mki3d.html.canvas.removeEventListener("touchmove",   mki3d.onTouchMove);
+    }
+
+    mki3d.html.canvas.addEventListener("touchstart", onTouchDown, false);
+    mki3d.html.canvas.addEventListener("touchend", onTouchUp, false);
+
+
+    
+
+    /* mouse callbacs */
+
     mki3d.html.canvas.onmousedown= function (e){
 	mki3d.stopIntervalAction();
 	mki3d.lastMouse.clientX=e.clientX;
@@ -433,6 +501,8 @@ mki3d.html.initObjects= function() {
     mki3d.html.canvas.onmouseup= function (e){
 	mki3d.html.canvas.onmousemove=null;
     }
+
+
 
     mki3d.html.canvas.onwheel= function (e){
 	if(!e.deltaY) return;
@@ -451,29 +521,6 @@ mki3d.html.initObjects= function() {
 
 }
 
-mki3d.lastMouse={};
-
-mki3d.onMouseMove= function(e){
-    var dx= e.clientX-mki3d.lastMouse.clientX;
-    var dy= e.clientY-mki3d.lastMouse.clientY;
-    mki3d.lastMouse.clientX=e.clientX;
-    mki3d.lastMouse.clientY=e.clientY;
-    switch(mki3d.actionIdx) {
-    case mki3d.ROTATE_ACTION_IDX:
-	if( Math.abs(dx) >= Math.abs(dy) ) {
-	    mki3d.action.viewRotateRight(dx/mki3d.html.canvas.width*2*Math.PI);
-	} else {
-	    mki3d.action.viewRotateUp(-dy/mki3d.html.canvas.height*2*Math.PI);
-	}
-	break;
-    case mki3d.MOVE_ACTION_IDX:
-	var c=2*mki3d.data.view.screenShift[2]/mki3d.data.projection.zoomY;
-	mki3d.moveFocusPoint([-dx/mki3d.html.canvas.height*c, dy/mki3d.html.canvas.height*c,0]);
-	break;
-    }
-    mki3d.redraw();
-
-}
 
 
 
@@ -958,50 +1005,50 @@ window.onkeydown = function (e){
     switch(code)
     {
 	/* direction actions */
-    case 38: // up
-    case 73: // I
+	case 38: // up
+	case 73: // I
 	mki3d.directionActions.up[mki3d.actionIdx]();
 	break;
-    case 40: // down
-    case 75: // K
+	case 40: // down
+	case 75: // K
 	mki3d.directionActions.down[mki3d.actionIdx]();
 	break;
-    case 37: // left
-    case 74:// J
+	case 37: // left
+	case 74:// J
 	mki3d.directionActions.left[mki3d.actionIdx]();
 	break;
-    case 39:// right
-    case 76: // L
+	case 39:// right
+	case 76: // L
 	mki3d.directionActions.right[mki3d.actionIdx]();
 	break;
-    case 70: // F
+	case 70: // F
 	mki3d.directionActions.forward[mki3d.actionIdx]();
 	break;
-    case 66: // B
-    case 86: // V
+	case 66: // B
+	case 86: // V
 	mki3d.directionActions.back[mki3d.actionIdx]();
 	break;
 
 	/* action buttons */
-    case 82: // R
+	case 82: // R
 	mki3d.html.rotateButton.onclick();
 	break;
-    case 77: // M
+	case 77: // M
 	mki3d.html.moveButton.onclick();
 	break;
 
-    case 85: // U
+	case 85: // U
 	mki3d.html.scaleUpButton.onclick();
 	break;
-    case 68: // D
+	case 68: // D
 	mki3d.html.scaleDownButton.onclick();
 	break;
-    case 13: // enter
-    case 27: // escape
-    case 81: // Q
+	case 13: // enter
+	case 27: // escape
+	case 81: // Q
 	mki3d.html.resetButton.onclick();
 	break;
-    case 32: // space
+	case 32: // space
 	mki3d.html.alignButton.onclick();
 	break;
 
