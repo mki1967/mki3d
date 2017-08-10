@@ -63,6 +63,8 @@ mki3d.file.startExporting = function () {
     mki3d.tmp.exported.projection =mki3d.data.projection;
     mki3d.tmp.exported.backgroundColor=mki3d.data.backgroundColor;
 
+    if( mki3d.stereo.mode )  mki3d.tmp.exported.stereo = mki3d.stereo; // exporting in stereo mode
+
     var dataString = JSON.stringify(mki3d.tmp.exported);
     var htmlString = mki3d.template.exportedHtml.replace("{/* replace */}",dataString);
     saver.blob = new Blob([htmlString], {type: 'text/plain'}); 

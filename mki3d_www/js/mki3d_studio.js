@@ -109,12 +109,12 @@ mki3d.redraw = function() {
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear everything
 	/* LEFT */
 	gl.colorMask(true, false, false, true ); /// red filter
-	mki3d.redrawProjection( mki3d.stereoLeftProjectionGL); // monoscopic view
+	mki3d.redrawProjection( mki3d.stereo.leftProjectionGL); // monoscopic view
 	/* RIGHT */
 	gl.clear(gl.DEPTH_BUFFER_BIT); // clear depth buffer only
 	gl.colorMask(false, false, true, true ); /// blue filter
-	mki3d.redrawProjection( mki3d.stereoRightProjectionGL); // monoscopic view
-	mki3d.text.redraw( mki3d.stereoRightProjectionGL ); /// reverse multi-points
+	mki3d.redrawProjection( mki3d.stereo.rightProjectionGL); // monoscopic view
+	mki3d.text.redraw( mki3d.stereo.rightProjectionGL ); /// reverse multi-points
 	gl.colorMask(true, true, true, true ); /// reset filter
     } else {
 	gl.clearColor(bg[0], bg[1], bg[2], 1.0);
@@ -443,7 +443,7 @@ mki3d.setProjectionMatrix = function () {
     mki3d.setProjectionGLMatrices();
     // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  mki3d.gl.matrix4toGL(mki3d.projectionMatrix()) );
     mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,   mki3d.monoProjectionGL );
-    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,    mki3d.stereoRightProjectionGL );
+    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,    mki3d.stereo.rightProjectionGL );
 }
 
 /* load model view  to GL uMVMatrix */

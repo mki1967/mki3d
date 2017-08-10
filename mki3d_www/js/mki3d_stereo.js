@@ -34,8 +34,8 @@ mki3d.stereoProjection= function(eyeShift){
 
 mki3d.setProjectionGLMatrices= function(){
     mki3d.monoProjectionGL=  mki3d.gl.matrix4toGL(mki3d.projectionMatrix());
-    mki3d.stereoLeftProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( -mki3d.stereo.eyeShift ));
-    mki3d.stereoRightProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( mki3d.stereo.eyeShift ));
+    mki3d.stereo.leftProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( -mki3d.stereo.eyeShift ));
+    mki3d.stereo.rightProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( mki3d.stereo.eyeShift ));
 }
 
 /* LEFT AND RIGHT COLORS */

@@ -1,6 +1,6 @@
 /*
   
-  mki3d_view  version 3
+  mki3d_view  version 3+ (unstable) 
 
   THIS SCRIPT SHOULD BE SAVED IN THE FOLDER WITH HTML PAGES EXPORTED
   FROM THE MKI 3D RAPID MODELLER ( https://github.com/mki1967/mki3d ).
