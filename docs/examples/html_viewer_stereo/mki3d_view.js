@@ -986,6 +986,9 @@ mki3d.dataReset= function(){
     if(mki3d.exported.backgroundColor) mki3d.data.backgroundColor = JSON.parse(JSON.stringify(mki3d.exported.backgroundColor)); // clone
     mki3d.stereo= { mode: false };
     if(mki3d.exported.stereo)	mki3d.stereo = JSON.parse(JSON.stringify(mki3d.exported.stereo)); // clone
+    // recompute matrices 
+    mki3d.setProjectionGLMatrices();
+    mki3d.setModelViewMatrix();
 }
 
 
