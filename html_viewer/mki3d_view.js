@@ -1,6 +1,6 @@
 /*
   
-  mki3d_view  version 3+ (unstable) 
+  mki3d_view  version 4
 
   THIS SCRIPT SHOULD BE SAVED IN THE FOLDER WITH HTML PAGES EXPORTED
   FROM THE MKI 3D RAPID MODELLER ( https://github.com/mki1967/mki3d ).
@@ -308,7 +308,7 @@ mki3d.stereoProjection= function(eyeShift){
     
     var dx = d* projection.zoomY / screenZ * gl.viewportHeight/gl.viewportWidth;
 
-     var shift2 = [
+    var shift2 = [
 	[ 1, 0, 0, dx],
 	[ 0, 1, 0,  0],
 	[ 0, 0, 1,  0],

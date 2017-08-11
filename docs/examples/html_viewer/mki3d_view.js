@@ -1,6 +1,6 @@
 /*
   
-  mki3d_view  version 3
+  mki3d_view  version 4
 
   THIS SCRIPT SHOULD BE SAVED IN THE FOLDER WITH HTML PAGES EXPORTED
   FROM THE MKI 3D RAPID MODELLER ( https://github.com/mki1967/mki3d ).
@@ -255,6 +255,81 @@ mki3d.matrixRotatedYZ= function(matrix, alpha ){
 
     return mki3d.matrixProduct( rot, matrix );
 };
+
+/** 4-dimmensional vectors and matrices **/
+
+mki3d.scalarProduct4= function( v, w ) {
+    return v[0]*w[0]+v[1]*w[1]+v[2]*w[2]+v[3]*w[3];
+};
+
+
+/* extend 3d matrix to 4d matrix */
+mki3d.matrix3to4= function( m ) {
+    return [ 
+	[ m[0][0], m[0][1], m[0][2], 0 ],
+	[ m[1][0], m[1][1], m[1][2], 0 ],
+	[ m[2][0], m[2][1], m[2][2], 0 ],
+	[       0,       0,       0, 1 ]
+    ];
+};
+
+
+
+mki3d.matrix4Column = function ( matrix, i ){
+    return [ matrix[0][i], matrix[1][i], matrix[2][i], matrix[3][i] ];
+};
+
+mki3d.matrix4Product = function( m1, m2){ 
+    var sp = mki3d.scalarProduct4;
+    var col = mki3d.matrix4Column;
+    return [ 
+	[ sp(m1[0], col(m2, 0)) , sp(m1[0], col(m2, 1)),  sp(m1[0], col(m2, 2)),  sp(m1[0], col(m2, 3)) ], 
+	[ sp(m1[1], col(m2, 0)) , sp(m1[1], col(m2, 1)),  sp(m1[1], col(m2, 2)),  sp(m1[1], col(m2, 3)) ], 
+	[ sp(m1[2], col(m2, 0)) , sp(m1[2], col(m2, 1)),  sp(m1[2], col(m2, 2)),  sp(m1[2], col(m2, 3)) ], 
+	[ sp(m1[3], col(m2, 0)) , sp(m1[3], col(m2, 1)),  sp(m1[3], col(m2, 2)),  sp(m1[3], col(m2, 3)) ] 
+    ];
+};
+
+
+/** from mki3d_stereo.js **/
+mki3d.stereoProjection= function(eyeShift){
+    var d=eyeShift;
+    var shift1 = [
+	[ 1, 0, 0, -d],
+	[ 0, 1, 0,  0],
+	[ 0, 0, 1,  0],
+	[ 0, 0, 0,  1]
+    ];
+
+    
+    var screenZ = mki3d.data.view.screenShift[2];
+    var projection = mki3d.data.projection;
+    var gl = mki3d.gl.context;
+    
+    var dx = d* projection.zoomY / screenZ * gl.viewportHeight/gl.viewportWidth;
+
+    var shift2 = [
+	[ 1, 0, 0, dx],
+	[ 0, 1, 0,  0],
+	[ 0, 0, 1,  0],
+	[ 0, 0, 0,  1]
+    ];
+
+    var m= mki3d.matrix4Product( mki3d.projectionMatrix(), shift1 );
+
+    return  mki3d.matrix4Product( shift2, m );
+    
+}
+
+mki3d.setProjectionGLMatrices= function(){
+    mki3d.monoProjectionGL=  mki3d.gl.matrix4toGL(mki3d.projectionMatrix());
+    if( mki3d.stereo.mode ) {
+	mki3d.stereo.leftProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( -mki3d.stereo.eyeShift ));
+	mki3d.stereo.rightProjectionGL=  mki3d.gl.matrix4toGL(mki3d.stereoProjection( mki3d.stereo.eyeShift ));
+    }
+}
+
+
 
 
 /** from mki3d_html.js **/
@@ -697,7 +772,9 @@ mki3d.callback.onWindowResize = function () {
     gl.viewportHeight = hth;
     gl.viewport(0,0,wth,hth);
 
-    mki3d.setProjectionMatrix();
+    // mki3d.setProjectionMatrix();
+    mki3d.setProjectionGLMatrices()
+
     mki3d.setModelViewMatrix();
 
     mki3d.redraw();
@@ -707,16 +784,6 @@ mki3d.callback.onWindowResize = function () {
 
 /** from mki3d_studio.js **/
 
-
-/* shadeFactor is computed for triangles */
-/* Color of the triangle is scaled by the shade factor before placing it into buffer of colors */
-/* light parameter can be mki3d.data.light  */
-
-mki3d.shadeFactor= function ( triangle, light) {
-    var normal= mki3d.normalToPlane(triangle[0].position,triangle[1].position,triangle[2].position);
-    var sp= mki3d.scalarProduct(light.vector, normal);
-    return light.ambientFraction+(1-light.ambientFraction)*Math.abs(sp);  
-}
 
 mki3d.drawGraph = function (graph) {
     //    console.log(graph); // test
@@ -741,8 +808,24 @@ mki3d.drawGraph = function (graph) {
     }
 }
 
-/* load projection to GL uPMatrix */
-mki3d.setProjectionMatrix = function () {
+
+/* 4d matrix to GL format */
+mki3d.gl.matrix4toGL = function ( m )
+{
+    // sequence of concatenated columns
+    return new Float32Array( [
+	m[0][0], m[1][0], m[2][0], m[3][0],
+	m[0][1], m[1][1], m[2][1], m[3][1],
+	m[0][2], m[1][2], m[2][2], m[3][2],
+	m[0][3], m[1][3], m[2][3], m[3][3]
+    ] );
+}
+
+
+
+/* compute projection matrix */
+
+mki3d.projectionMatrix = function(){
     var projection = mki3d.data.projection;
     var gl = mki3d.gl.context;
     var xx=  projection.zoomY*gl.viewportHeight/gl.viewportWidth;
@@ -751,14 +834,17 @@ mki3d.setProjectionMatrix = function () {
     var zw= 1;
     var wz= -2*projection.zFar*projection.zNear/(projection.zFar-projection.zNear);
 
-
-    var pMatrix = mki3d.gl.matrix4( xx,  0,  0,  0,
-				    0, yy,  0,  0,
-				    0,  0, zz, wz,
-				    0,  0, zw,  0 );
-
-    gl.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false, pMatrix);
+    
+    var pMatrix = [
+	[xx,  0,  0,  0],
+	[ 0, yy,  0,  0],
+	[ 0,  0, zz, wz],
+	[ 0,  0, zw,  0]
+    ];
+    
+    return pMatrix;
 }
+
 
 /* load model view  to GL uMVMatrix */
 mki3d.setModelViewMatrix = function () {
@@ -831,23 +917,46 @@ mki3d.loadExported= function() {
 /* general redraw function */
 
 mki3d.redraw = function() {
+    
     var gl = mki3d.gl.context;
     var bg = mki3d.data.backgroundColor;
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
 
-    gl.clearColor(bg[0], bg[1], bg[2], 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
     mki3d.setModelViewMatrix();
-    mki3d.setDataClipping()
+    
+    /// mki3d.stereo.mode=true // test stereo mode
 
-    // draw the model
-    mki3d.drawGraph( mki3d.gl.buffers.model );
+    if(mki3d.stereo.mode){  /// test stereo version for white colors only ;-)
+	gl.clearColor(0.0, 0.0, 0.0, 1.0); // stereo background 
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear everything
+	/* LEFT */
+	gl.colorMask(true, false, false, true ); /// red filter
+	mki3d.redrawProjection( mki3d.stereo.leftProjectionGL); // monoscopic view
+	/* RIGHT */
+	gl.clear(gl.DEPTH_BUFFER_BIT); // clear depth buffer only
+	gl.colorMask(false, false, true, true ); /// blue filter
+	mki3d.redrawProjection( mki3d.stereo.rightProjectionGL); // monoscopic view
+	gl.colorMask(true, true, true, true ); /// reset filter
+    } else {
+	gl.clearColor(bg[0], bg[1], bg[2], 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	mki3d.redrawProjection(mki3d.monoProjectionGL); // monoscopic view
+    }
 
 }
 
+mki3d.redrawProjection = function( projectionMatrixGL ) {
+    mki3d.gl.context.useProgram( mki3d.gl.shaderProgram ); // use the default shader program
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  projectionMatrixGL  ); // projectionMatrixGL
+
+    
+    mki3d.setDataClipping()
+    mki3d.drawGraph( mki3d.gl.buffers.model );
+    mki3d.unsetClipping();
+
+}
 
 
 /** from mki3d_data.js **/
@@ -875,6 +984,8 @@ mki3d.dataReset= function(){
     if(mki3d.exported.view) mki3d.data.view = JSON.parse(JSON.stringify(mki3d.exported.view)); // clone
     if(mki3d.exported.projection) mki3d.data.projection = JSON.parse(JSON.stringify(mki3d.exported.projection)); // clone
     if(mki3d.exported.backgroundColor) mki3d.data.backgroundColor = JSON.parse(JSON.stringify(mki3d.exported.backgroundColor)); // clone
+    mki3d.stereo= { mode: false };
+    if(mki3d.exported.stereo)	mki3d.stereo = JSON.parse(JSON.stringify(mki3d.exported.stereo)); // clone
 }
 
 
