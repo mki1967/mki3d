@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html id="htmlId">
+  <!--
+      MKI 3D RAPID MODELER
+      Copyright (C) 2015  Marcin Kik mki1967@gmail.com 
+      The JavaScript code in this page is free software: you can
+      redistribute it and/or modify it under the terms of the GNU
+      General Public License (GNU GPL) as published by the Free Software
+      Foundation, either version 3 of the License, or (at your option)
+      any later version.  The code is distributed WITHOUT ANY WARRANTY;
+      without even the implied warranty of MERCHANTABILITY or FITNESS
+      FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+      As additional permission under GNU GPL version 3 section 7, you
+      may distribute non-source (e.g., minimized or compacted) forms of
+      that code without the copy of the GNU GPL normally required by
+      section 4, provided you include this license notice and a URL
+      through which recipients can access the Corresponding Source.
+    -->
+  <head>
+    <title>MKI 3D RAPID MODELER</title>
+    <link rel="icon" type="image/png" href="assets/mki_icon_16.png"/>
+    <link rel="manifest" href="./pwa-manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+      if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered', reg))
+      .catch(err => console.error('Service Worker **not** registered', err));
+      }
+      else {
+      console.warn('Service Worker not supported in this browser');
+      }    
+    </script>
+
+  </head>
+
+  <body>
+
+
+    <script src="js/mki3d_constants.js"></script>
+    <script src="js/mki3d.js"></script>
+    <script src="js/mki3d_algebra.js"></script>
+    <script src="js/mki3d_base.js"></script>
+    <script src="js/mki3d_template.js"></script>
+    <script src="js/mki3d_tmp.js"></script>
+    <script src="js/mki3d_html.js"></script>
+    <script src="js/mki3d_data.js"></script>
+    <script src="js/mki3d_set.js"></script>
+    <script src="js/mki3d_file.js"></script>
+    <script src="js/mki3d_gl.js"></script>
+    <script src="js/mki3d_text.js"></script>
+    <script src="js/mki3d_points.js"></script>
+    <script src="js/mki3d_constructive.js"></script>
+    <script src="js/mki3d_studio.js"></script>
+    <script src="js/mki3d_action.js"></script>
+    <script src="js/mki3d_callback.js"></script>
+    <script src="js/mki3d_backup.js"></script>
+    <script src="js/mki3d_et.js"></script>
+    <script src="js/mki3d_collada.js"></script>
+    <script src="js/mki3d_stereo.js"></script>
+
+
+    <!-- FOR TESTS 
+	 <div> <img src="assets/mki_icon_48.png"> 
+	   You can find more info on <a href="https://github.com/mki1967" target="_blank">https://github.com/mki1967</a> </div>
+	 -->
+
+
+    <div id="divHelp"  style="overflow-y:auto; display:none;">
+      <h2>Help screen of <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a>:</h2>
+
+      <p> <strong>(Press 'Q' or Escape to return to the canvas.)</strong></p>
+
+      <div style="color:red;">
+	<h3> Some notifications: </h3>
+	<ul>
+	  <li>
+	    You can press 'D' key to have a display without the cursor and the upper text message. Then you can save the clean image from the canvas
+	    (e.g. take a screen-shot or - if you run it in the browser - save graphics on the  right-mouse-button pop-up menu).
+	    Pressing any key resumes standard display mode for further editing.
+	  </li>
+	  <li>
+	    Red-blue stereoscopic mode has been added. Press 'QVS' key sequence to toggle the stereo/mono-scopic mode.
+	  </li>
+	  <li>
+	    <strong>News and Tutorial Blog:</strong> Some news and tutorials illustrated with screen-shots are being posted on a blog:
+	    <a href="https://mki3d.blogspot.com/" target="_blank">https://mki3d.blogspot.com/</a>
+	  </li>
+	  <li>
+	    <strong> Warnings: </strong> The 'undo' operation is limited to a single step and it may still be missing in some  editing actions.
+	    (The best strategy is frequent saving of your data.)
+	    Some details of the user interface or of the data format may be modified in the future versions.
+	  </li>
+	  <li>  
+	    <strong>Info about Chrome: </strong> 
+	    <a href="https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html" target="_blank"> Chromium blog post</a> informs about
+	    removing support for packaged and hosted apps from Chrome on Windows, Mac, and Linux.
+	    <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> can be used both
+	    on-line and off-line in arbitrary modern browsers supporting WebGL.
+	    Read <a href="https://mki1967.github.io/mki3d/docs/usage_options.html" target="_blank">instructions for usage options</a>.
+	  </li>
+	</ul>
+      </div>
+      
+      
+      <h3> Key presses on the canvas: </h3>
+      <p>
+	<dl>
+	  <dt>'H'</dt>
+	  <dd> - This help screen</dd>
+	  <dt>'A'</dt>
+	  <dd> - Switch ACTION MODE (either rotate, move cursor, or actions on selected endpoints)</dd>
+	  <dt>Shift</dt>
+	  <dd> - Switch ACTION MODE to: 
+	    <ul>
+	      <li> CURSOR moving - when pressed </li>
+	      <li> ROTATION - when released </li>
+	    </ul>
+	    <dt> Arrow Keys, 'F', 'B','V'</dt>
+	  <dd> - Depending on the ACTION MODE, either: move cursor, rotate the screen, or manipulate selected endpoints</dd>
+	  <dt>'Q'</dt>
+	  <dd> - Main menu (contains many sub-menus)</dd>
+	  <dt>'N'</dt>
+	  <dd> - Changing current SET INDEX , displaying its included and incident elements</dd>
+	  </dd>
+	  <dt>Space</dt>
+	  <dd> - Align view rotation to right angles</dd>
+	  <dt>Enter</dt>
+	  <dd> - Depending on markers:
+	    <ul>
+	      <li> if MARKER1 is not set, then set MARKER1 </li>
+	      <li> if only MARKER1 is set, then insert segment between MARKER1 and CURSOR 
+		and set MARKER1 to CURSOR 
+	      </li>
+	      <li> if MARKER1 and MARKER2 are both set, then insert triangle between MARKER1, MARKER2, and CURSOR
+		and set MARKER1 to CURSOR and cancel MARKER2
+	      </li>
+	    </ul> 
+	  </dd>
+	  <dt>Escape, 'C'</dt>
+	  <dd> - Cancel both markers </dd>
+	  <dt>'T'</dt>
+	  <dd> - Toggle MARKER2 (either set it to CURSOR or cancel it) </dd>
+	  <dt>'D'</dt>
+	  <dd> - Display without the cursor and the upper text messsage
+	    (for taking screen-shots or saving graphics from the canvas on right mouse-button pop-up menu).</dd>
+	</dl>
+      </p>
+      
+
+      <h3> General description </h3>
+      <p>
+	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
+        Each <em>segment</em> is defined by a pair of <em>points</em> (<em> endpoints</em> of the segment). 
+        Each <em>triangle</em> is defined by a triple of <em>points</em> (<em> endpoints</em> of the triangle). 
+        Each <em>point</em> has position in (x,y,z) coordinates and a color (R,G,B) components.
+        Each <em>point</em> belongs to a single <em>set</em>.
+        The <em>sets</em> are indexed by natural numbers.
+	The set index numbers are assigned automatically to the endpoints,
+	and the program tries to keep the indexes of non-empty sets to be consecutive numbers
+	starting from zero.
+        Element is <em>in</em> a set if all its endpoints are in the set.
+	Element is <em>incident to</em> a set if at least one of its endpoints is in the set.
+        Element is <em>glue element</em> if its endpoints are in different sets.
+	Glue element is incident to more than one set and it is not in any set.
+      </p>
+      <p>
+	Endpoints can be <em>selected</em>.
+	Element is <em>selected</em> if all its endpoints are selected.
+      </p>
+      <p>
+	<em>Constructive points</em> denoted by the letters 'A'...'Z' are used to denote positions in the 
+	space. They are used as parameters of <em>constructive methods</em>.
+	They can be set and then displayed or hidden. 
+	(If two or more constructive points are displayed at the same position, then it is signaled by flashing between two
+        of them in subsequent redraws.)  
+      </p>
+
+      <h3> Some Usage Hints </h3>
+      <ul>
+	<li>
+          Press the Shift key to move the cursor with the Arrows ,'B' 'V' (i.e. back), and 'F' (i.e. forward) keys.
+	  (Instead of Arrow keys you may also use the 'I','J','K','L' keys.)
+	</li>
+	<li>
+          Release the Shift key to rotate the model around the cursor with the arrows and 'B', 'F'.
+          (Focus point - the center of the screen - is set to the cursor position.)
+	</li>
+	<li>
+	  Use Space to align rotation rotation to right angles.
+	</li>
+        <li>
+          To insert segment lines:
+	  <ol>
+	    <li> move the cursor to the position of its first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the position of its second endpoint and press Enter to insert the segment 
+	      and to set MARKER1 at the new position, </li>
+            <li> and so on - continue with the following segments' endpoints.</li>
+	  </ol>
+          To stop inserting lines, press Escape key to cancel markers.
+        </li>
+        <li> 
+          To insert a triangle:
+	  <ol>
+	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the second endpoint and press 'T' to set MARKER2, </li>
+            <li> move the cursor to the third endpoint and press Enter to insert the triangle. 
+              (This also sets MARKER1, so you can continue inserting segments or triangles.)
+	    </li>
+	  </ol>
+
+	</li>
+	<li> 
+          The light consists of directional fraction and small ambient fraction. 
+	  To set directional light for triangles' shading, rotate the model and press 'QDL' sequence of keys.
+          Directional light is set perpendicular to the screen (in both directions).
+	</li>
+	<li>
+	  The color of inserted endpoint is the color of the cursor.
+          The selected endpoints can be painted with current cursor color.
+          If endpoints of the element have different colors, 
+	  the colors inside the element are interpolated.
+	</li>
+	<li>
+          You can limit visibility by clipping - the key sequences 'QX...'
+	</li>
+	<li>
+	  You can select endpoints - the key sequences 'QS ...'
+          (Note that you can either add new endpoints to selection or remove all selection.) 
+	</li>
+	<li>
+	  You may use selection to limit visibility (in 'QV' sub-menu) or 
+	  manipulate selected endpoints (in 'QD' sub-menu)
+	</li>
+	<li>
+	  Sets can be used for grouping endpoints.
+	  Use 'N' in canvas mode to cycle through the sets inspecting their included and incident elements.
+          (The last set in the cycle is always empty - stop at it if you want the following endpoints to be 
+          in a new set.)
+	  You also create a new set when you are making a copy of selected elements ('QDC...').
+          After creation of a copy, the selection is switched to this new copy.
+          Thus the actions on selected endpoints are applied on the new copy.
+	</li>
+	<li>
+	  To cancel view restrictions use 'QVC' sequence.
+	</li>
+	<li>
+	  You can change the color of the cursor ('QCC') or of the background ('QDB').
+	  Cursor color is used for the created endpoints (unless they are copies of other endpoints) and
+	  for painting. 
+          You can set one of the seven predefined colors. 
+	  You can also fine-tune each of the RGB components separately with the pairs of keys: 'E'-'R', 'F'-'G', and 'V'-'B'.
+          To use already used color, select the endpoints and, in the Color Menu, use 'N' to cycle trough the colors of the
+          selected endpoints.
+          Leave the color menu by pressing either 'Q' or Escape key.
+	</li>
+	<li>
+	  DO NOT FORGET TO SAVE YOUR DATA (key sequence: 'QFS')
+	</li>
+	<li>
+	  You may export your model to HTML WebGL page ('QFE'). You need to download the script
+	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
+	  and save it to each folder with the exported HTML pages. 
+	  This script is used by the exported HTML pages.
+	</li>
+	<li>
+	  Use 'QPS...' to set constructive points. You can hide them with 'QPH'. 
+	  You can find any previously set constructive point (hidden or displayed) with 'QPJ...'.
+	</li>
+	<li>
+	  You can manually set the cursor coordinates and some other parameters
+	  on the Inputs Page ('QI...').
+	</li>
+      </ul>
+      
+      <h3>About</h3>
+      <p> 
+	<a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> by Marcin Kik mki1967@gmail.com. 
+	The project is hosted on <a href="https://github.com/mki1967/mki3d" target="_blank">https://github.com/mki1967/mki3d</a> 
+      </p>
+
+
+    </div>
+
+    <div id="divMainMenu" style="display: none;">
+      <h2>Main Menu:</h2>
+      <dl>
+	<dt>'F'</dt>
+	<dd> - FILE [...]</dd>
+	<dt>'S'</dt>
+	<dd> - SELECTION [...]</dd>
+	<dt>'C'</dt>
+	<dd> - CURSOR [...]</dd>
+	<dt>'D'</dt>
+	<dd> - DATA [...]</dd>
+	<dt>'V'</dt>
+	<dd> - VIEW [...]</dd>
+	<dt>'X'</dt>
+	<dd> - CLIP [...]</dd>
+	<dt>'P'</dt>
+	<dd> - CONSTRUCTIVE POINTS [...]</dd>
+	<dt>'M'</dt>
+	<dd> - CONSTRUCTIVE METHODS [...]</dd>
+	<dt>'N'</dt>
+	<dd> - SET MENU [...]</dd>
+	<dt>'I'</dt>
+	<dd> - INPUTS PAGE [...]</dd>
+      </dl>
+    </div>
+
+    <div id="divInputs" style="display: none;">
+      <h2>Inputs Page</h2>
+      <ul>
+	<li>CURSOR X: <input id="inputCursorX" type="number"></li>
+	<li>CURSOR Y: <input id="inputCursorY" type="number"></li>
+	<li>CURSOR Z: <input id="inputCursorZ" type="number"></li>
+	<li>CURSOR STEP: <input id="inputCursorStep" type="number"> (ALSO SETS VIEW SCALE TO INVERSE OF CURSOR STEP)</li> 
+	<li>SCREEN Z: <input id="inputScreenZ" type="number"></li>
+	<li>STEREO RED: <input id="inputStereoRed" type="number" min="0" max="1" step="0.1"></li>
+	<li>STEREO BLUE: <input id="inputStereoBlue" type="number" min="0" max="1" step="0.1"></li>
+	<li>STEREO EYE SHIFT: <input id="inputStereoEyeShift" type="number"  min="0" max="10" step="0.1" ></li>
+	<li>ZOOM: <input id="inputZoom" type="number"></li>
+	<li>SCALING FACTOR: <input id="inputScalingFactor" type="number"></li>
+	<li>NUMBER OF POLYGON VERTICES: <input id="inputPolygonNumberOfVertices" type="number"></li>
+      </ul>
+      <h3>PRESS KEY:</h3>
+      <dl>
+	<dt>Enter</dt>
+	<dd> - TO SET THE VALUES </dd>
+	<dt>Esc, 'Q'</dt>
+	<dd> - TO CANCEL </dd>
+      </dl>
+    </div>
+
+    <div id="divTextLoad"  style="display: none;">
+      <h2>Text Load Page</h2>
+      <h3 id="loadInfo"></h3>
+      <p>Copy-paste the input data text into the TEXT AREA below and press Enter to submit.</p>
+      <h3>PRESS KEY:</h3>
+      <dl>
+	<dt>Enter</dt>
+	<dd> - TO SUBMIT THE DATA FROM THE TEXT AREA</dd>
+	<dt>Esc, 'Q'</dt>
+	<dd> - TO CANCEL </dd>
+	<dt>'F'</dt>
+	<dd> - LOAD FILE TO TEXT AREA</dd>
+	<dt>'X'</dt>
+	<dd> - TO CLEAN THE TEXT AREA</dd>
+      </dl>
+      <h3>INPUT TEXT AREA:</h3>
+      <p>
+	<textarea id="textareaInput" cols="80" rows="20">
+	</textarea>
+      </p>
+    </div>
+
+    <div id="divFileSelector"  style="display: none;">
+      <h2>Select File: </h2>
+      <p>
+	<input type="file" id="files" name="files[]" accept=".mki3d" />
+      </p>
+    </div>
+    
+    <div id="divTextSave"  style="display: none;">
+      <h2>Text Save Page</h2>
+      <h3 id="saveInfo"></h3>
+      <p>Use
+	<a id="aDownload" href="">THIS DOWNLOAD LINK TO SAVE DATA</a>
+	or copy-paste selected all text from the TEXT AREA below to a text editor and use the editor to save it in the file.</p>
+      <h3>PRESS KEY:</h3>
+      <dl>
+	<dt>Enter</dt>
+	<dt>Esc,'Q'</dt>
+	<dd> - TO CANCEL OR WHEN YOU FINISHED </dd>
+	<dt>A</dt>
+	<dd> - TO SELECT ALL IN THE TEXT AREA</dd>
+      </dl>
+      <h3>OUTPUT TEXT AREA:</h3>
+      <p>
+	<textarea id="textareaOutput" cols="80" rows="20" readonly>
+	</textarea>
+      </p>
+    </div>
+    
+
+    <div id="divColorMenu" style="display: none;">
+      <h2>Color Menu:</h2>
+      <!-- <p> RGB= <span id="spanRGB"></span></p> -->
+      <dl id="dlColor">
+	<dt style="color:rgb(255,255,255); background-color:rgb(0,0,0);">'0'</dt>
+	<dd id="ddColor0" style="color:rgb(255,255,255); background-color:rgb(0,0,0);"> [0,0,0] </dd>
+	<dt style="background-color:rgb(0,0,255);">'1'</dt>
+	<dd id="ddColor1" style="background-color:rgb(0,0,255);"> [0,0,1] </dd>
+	<dt style="background-color:rgb(0,255,0);">'2'</dt>
+	<dd id="ddColor2" style="background-color:rgb(0,255,0);"> [0,1,0] </dd>
+	<dt style="background-color:rgb(0,255,255);">'3'</dt>
+	<dd id="ddColor3" style="background-color:rgb(0,255,255);"> [0,1,1] </dd>
+	<dt style="background-color:rgb(255,0,0);">'4'</dt>
+	<dd id="ddColor4" style="background-color:rgb(255,0,0);"> [1,0,0] </dd>
+	<dt style="background-color:rgb(255,0,255);">'5'</dt>
+	<dd id="ddColor5" style="background-color:rgb(255,0,255);"> [1,0,1] </dd>
+	<dt style="background-color:rgb(255,255,0);">'6'</dt>
+	<dd id="ddColor6" style="background-color:rgb(255,255,0);"> [1,1,0] </dd>
+	<dt style="background-color:rgb(255,255,255); color:rgb(0,0,0);" >'7' </dt>
+	<dd id="ddColor7" style="background-color:rgb(255,255,255);"> [1,1,1] </dd>
+	<dt style="color:rgb(255,0,0);">'E','R'</dt>
+	<dd style="color:rgb(255,0,0);"> FINE TUNE RED COMPONENT </dd>
+	<dt style="color:rgb(0,255,0);">'F','G'</dt>
+	<dd style="color:rgb(0,255,0);"> FINE TUNE GREEN COMPONENT </dd>
+	<dt style="color:rgb(0,0,255);">'V','B'</dt>
+	<dd style="color:rgb(0,0,255);"> FINE TUNE BLUE COMPONENT </dd>
+	<dt> 'N'</dt>
+	<dd> CYCLE TROUGH THE COLORS OF SELECTED ENDPOINTS</dd>
+	<dt> Escape, Enter, 'Q'</dt>
+	<dd> RETURN TO CANVAS </dd>
+      </dl>
+    </div>
+
+    <div id="divCursorMenu" style="display: none;">
+      <h2>Cursor Menu:</h2>
+      <dl>
+	<dt>'C'</dt>
+	<dd> - SET CURSOR COLOR </dd>
+	<dt>'J'</dt>
+	<dd> - JUMP TO THE NEAREST ENDPOINT </dd>
+	<dt>'S'</dt>
+	<dd> - JUMP TO THE NEAREST SELECTED ENDPOINT </dd>
+      </dl>
+    </div>
+
+    <div id="divFileMenu" style="display: none;">
+      <h2>File Menu:</h2>
+      <dl>
+	<dt>'S'</dt>
+	<dd> - SAVE </dd>
+	<dt>'L'</dt>
+	<dd> - LOAD </dd>
+	<dt>'M'</dt>
+	<dd> - MERGE </dd>
+	<dt>'T'</dt>
+	<dd> - IMPORT FROM *.et  FILES (see:  <a href="https://github.com/mki1967/et-edit" target="_blank">et-edit<a>)</dd>
+	<strong>
+	  NOTE ON EXPORTING: Download the script
+	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
+	  and save it to each folder with the exported HTML pages.
+	</strong>
+	<dt>'E'</dt>
+	<dd> 
+	  - EXPORT 
+	</dd>
+	<dt>'C'</dt>
+	<dd> 
+	  - EXPORT TO COLLADA ('*.dae')
+	</dd>
+      </dl>
+    </div>
+
+    <div id="divDataMenu" style="display: none;">
+      <h2>Data Menu:</h2>
+      <dl>
+	<dt>'L'</dt>
+	<dd> - LIGHT DIRECTION  </dd>
+	<dt>'B'</dt>
+	<dd> - BACKGROUND COLOR </dd>
+	<dt>'0'</dt>
+	<dd> - PAINT SELECTED ENDPOINTS WITH CURSOR COLOR </dd>
+	<dt>'2'</dt>
+	<dd> - PAINT SELECTED SEGMENTS WITH CURSOR COLOR </dd>
+	<dt>'3'</dt>
+	<dd> - PAINT SELECTED TRIANGLES WITH CURSOR COLOR </dd>
+	<dt>'4'</dt>
+	<dd> - DELETE SELECTED SEGMENTS </dd>
+	<dt>'5'</dt>
+	<dd> - DELETE SELECTED TRIANGLES </dd>
+	<dt>'C'</dt>
+	<dd> - COPY  SUB-MENU ... </dd>
+      </dl>
+    </div>
+
+    <div id="divDataCopyMenu" style="display: none;">
+      <h2>Data Copy Menu:</h2>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET  </dd>
+ 	<dt>'1'</dt>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS' ENDPOINTS </dd>
+ 	<dt>'2'</dt>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS </dd>
+ 	<dt>'3'</dt>
+	<dd> - COPY SELECTED ELEMENTS TO A NEW SET WITH GLUES BETWEEN SEGMENTS AND SEGMENTS' ENDPOINTS </dd>
+      </dl>
+    </div>
+
+
+
+    <div id="divClipMenu" style="display: none;">
+      <h2>Clip Menu:</h2>
+      <dl>
+	<dt>Arrows, 'B', 'F'</dt>
+	<dd> - TOGGLE CLIPPING IN THAT DIRECTION  </dd>
+	<dt>'R'</dt>
+	<dd> - REMOVE CLIPPING </dd>
+      </dl>
+    </div>
+
+    <div id="divSelectionMenu" style="display: none;">
+      <h2>Selection Menu:</h2>
+      <dl>
+	<dt>'X'</dt>
+	<dd> - ADD ENDPOINTS IN CLIPPING BOX TO SELECTION </dd>
+	<dt>'C'</dt>
+	<dd> - ADD ENDPOINTS INCIDENT TO CURSOR AND MARKERS TO SELECTION </dd>
+	<dt>'S'</dt>
+	<dd> - ADD ENDPOINTS FROM THE CURRENT SET TO SELECTION </dd>
+	<dt>'2'</dt>
+	<dd> - ADD ALL ENDPOINTS OF SEGMENTS INCIDENT TO SELECTION </dd>
+	<dt>'3'</dt>
+	<dd> - ADD ALL ENDPOINTS OF TRIANGLES INCIDENT TO SELECTION </dd>
+	<dt>'4'</dt>
+	<dd> - UNSELECT SEGMENTS </dd>
+	<dt>'5'</dt>
+	<dd> - UNSELECT TRIANGLES </dd>
+	<dt>'R'</dt>
+	<dd> - CANCEL SELECTION  </dd>
+	<dt>'E'</dt>
+	<dd> - EXTRACT THE SELECTED ENDPOINTS TO A NEW SET  </dd>
+	<dt>'B'</dt>
+	<dd> - BOOKMARK THE SELECTION (CANCELS SELECTION AND THE PREVIOUS BOOKMARK) </dd>
+	<dt>'A'</dt>
+	<dd> - ADD BOOKMARKED ENDPOINTS TO SELECTION </dd>
+      </dl>
+    </div>
+
+    <div id="divViewMenu" style="display: none;">
+      <h2>View Menu:</h2>
+      <dl>
+	<dt>'1'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCLUDED IN SELECTED ENDPOINTS </dd>
+	<dt>'2'</dt>
+	<dd> - RESTRICT VISIBILITY TO SEGMENTS INCLUDED IN SELECTED ENDPOINTS </dd>
+	<dt>'3'</dt>
+	<dd> - RESTRICT VISIBILITY TO TRIANGLES INCLUDED IN SELECTED ENDPOINTS </dd>
+	<dt>'C'</dt>
+	<dd> - CANCEL VISIBILITY RESTRICTIONS </dd>
+	<dt>'D'</dt>
+	<dd> - DOWNSCALE THE VIEW  </dd>
+	<dt>'U'</dt>
+	<dd> - UPSCALE THE VIEW   </dd>
+	<dt>'S'</dt>
+	<dd> - TOGGLE STEREOSCOPIC / MONOSCOPIC MODE   </dd>
+      </dl>
+    </div>
+
+    <div id="divPointsMenu" style="display: none;">
+      <h2>Constructive Points Menu:</h2>
+      <dl>
+	<dt>'S'</dt>
+	<dd> - SET POINT AT CURSOR POSITION ... </dd>
+	<dt>'J'</dt>
+	<dd> - JUMP WITH A CURSOR TO SELECTED POINT AND SHOW IT ... </dd>
+	<dt>'D'</dt>
+	<dd> - HIDE SELECTED POINT </dd>
+	<dt>'H'</dt>
+	<dd> - HIDE ALL POINTS </dd>
+      </dl>
+    </div>
+
+    <div id="divPointsSelectMenu" style="display: none;">
+      <h2>Constructive Points Selection Menu::</h2>
+      <dl>
+	<dt>'A' ... 'Z'</dt>
+	<dd>PRESS THE KEY WITH POINT SYMBOL (DO NOT PRESS SHIFT KEY)</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveMenu" style="display: none;">
+      <h2>Constructive Methods Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'M'</dt>
+	<dd> - MOVING SELECTED POINTS ... </dd>
+	<dt>'S'</dt>
+	<dd> - SCALING SELECTED POINTS ... </dd>
+	<dt>'P'</dt>
+	<dd> - PROJECTIONS OF SELECTED POINTS ... </dd>
+	<dt>'J'</dt>
+	<dd> - CURSOR JUMPING ... </dd>
+	<dt>'I'</dt>
+	<dd> - INSERTING NEW CONSTRUCTED OBJECTS ... </dd>
+	<dt>'B'</dt>
+	<dd> - SET CONSTRUCTIVE POINTS 'U' AND  'W' ON THE MINIMAL AND MAXIMAL CORNERS OF THE BOUNDING BOX OF THE SELECTED ENDPOINTS
+	</dd>
+	<dt>'T'</dt>
+	<dd> - THREE-POINT TRANSFORMATION 'ABC' TO 'DEF' OF THE SELECTED ENDPOINTS
+	  (TRANSFORMS: POINT 'A' TO POINT 'D', LINE 'AB' TO LINE 'DE', AND PLANE 'ABC' TO PLANE 'DEF'.) </dd>
+	<dt>'F'</dt>
+	<dd> - FOLDING: ROTATE THE SELECTED ENDPOINTS AROUND THE LINE 'AB' AND THE BOOKMARKED ENDPOINTS AROUND THE LINE 'AC' IN THE DIRECTION OF POINT 'F', SO THAT
+	  THE FIRST ROTATION OF LINE 'AD' IS EQUAL TO THE SECOND ROTATION OF LINE 'AE'. 
+	  <br> 
+	  WARNING: THE SETS OF THE SELECTED AND OF THE BOOKMARKED ENDPOINTS SHOULD BE DISJOINT.
+	</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveCursorMenu" style="display: none;">
+      <h2>Constructive Cursor Jumping Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - MOVE CURSOR TO THE CENTER OF VISIBLE CONSTRUCTIVE POINTS</dd>
+	<dt>'C'</dt>
+	<dd> - MOVE CURSOR TO THE CENTEROID OF THE SELECTED ENDPOINTS</dd>
+	<dt>'1'</dt>
+	<dd> - MOVE CURSOR TO THE INTERSECTION POINT OF LINE 'AB' AND PLANE 'CDE' </dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveMovingMenu" style="display: none;">
+      <h2>Constructive Moving Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - MOVE SELECTED ENDPOINTS BY THE VECTOR 'AB' </dd>
+	<dt>'1'</dt>
+	<dd> - MOVE SELECTED ENDPOINTS IN DIRECTION 'AB' BY THE LENGTH |'CD'| </dd>
+      </dl>
+    </div>
+
+    <div id="divProjectionsMenu" style="display: none;">
+      <h2>Constructive Projections Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd> - PARALLEL PROJECTION OF SELECTED ENDPOINTS IN DIRECTION 'AB' ON THE PLANE 'CDE'</dd>
+	<dt>'1'</dt>
+	<dd> - PROJECTION OF SELECTED ENDPOINTS ON THE SPHERE CENTERED AT 'O' WITH RADIUS LENGTH |AB|</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveScalingMenu" style="display: none;">
+      <h2>Constructive Scaling Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <p>
+	SCALING FACTOR  = <span id="spanScalingFactor"></span>  (USE 'QI...' TO CHANGE SCALING FACTOR ON INPUTS PAGE)
+      </p>
+      <dl>
+	<dt>'S'</dt>
+	<dd> - SET SCALING FACTOR TO |'AB'|/|'CD'| 	 
+	</dd>
+	<dt>'0'</dt>
+	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR WITH FIXED POINT 'O' 	 
+	</dd>
+	<dt>'1'</dt>
+	<dd> - SCALE SELECTED ENDPOINTS BY |'AB'|/|'CD'| WITH FIXED POINT 'O' 
+	</dd>
+	<dt>'2'</dt>
+	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR IN DIRECTION 'EF' WITH FIXED POINT 'O' 
+	</dd>
+	<dt>'3'</dt>
+	<dd> - SCALE SELECTED ENDPOINTS BY SCALING FACTOR ORTHOGONAL TO 'EF' WITH FIXED POINT 'O' 
+	</dd>
+      </dl>
+    </div>
+
+    <div id="divConstructiveInsertingMenu" style="display: none;">
+      <h2>Constructive Inserting Menu:</h2>
+      <p>
+	NAMES OF CONSTRUCTIVE POINTS ARE IN SINGLE QUOTES.
+	ALL THE CONSTRUCTIVE POINTS USED BY THE METHOD MUST BE SET AND VISIBLE. 
+	USE 'QPS...' TO SET CONSTRUCTIVE POINTS.
+      </p>
+      <dl>
+	<dt>'0'</dt>
+	<dd>
+	  - INSERT A NEW SET OF SEGMENTS THAT ARE INTERSECTIONS OF THE SELECTED TRIANGLES WITH THE BOOKMARKED TRIANGLES
+	</dd>
+      </dl>
+      <p> INSERTING POLYGON WITH NUMBER OF VERTICES = <span id="spanPolygonNumberOfVertices"></span>
+	(USE 'QI...' TO CHANGE NUMBER OF POLYGON VERTICES): </p>
+      <dl>	
+	<dt>'3'</dt>
+	<dd> - INSERT POLYGON OUTLINE SEGMENTS WITH THE CURSOR IN THE CENTER </dd> 
+	<dt>'4'</dt>
+	<dd> - INSERT POLYGON SECTORS TRIANGLES WITH THE CURSOR IN THE CENTER </dd>
+      </dl>
+      <dl>
+      </dl>
+    </div>
+
+
+
+    <div id="divActionMenu" style="display: none;">
+      <h2>Action Menu:</h2>
+      <dl>
+	<dt>'R'</dt>
+	<dd> - ROTATION </dd>
+	<dt>'C'</dt>
+	<dd> - CURSOR MOVE </dd>
+	<dt>'S'</dt>
+	<dd> - SELECTION MOVE</dd>
+	<dt>'L'</dt>
+	<dd> - RIGHT ANGLE SELECTION ROTATE AROUND THE CURSOR</dd>
+	<dt>'M'</dt>
+	<dd> - MIRROR REFLECTION BY CURSOR PLANES </dd>
+      </dl>
+    </div>
+
+    <div id="divSetMenu" style="display: none;">
+      <h2>Set Menu:</h2>
+      <p>
+	Maximal index of nonempty set is: MAX_IDX = <span id="spanSetMaxIdx"></span>.
+	<br>
+	Current set index is: <span id="spanSetCurrentIdx"></span>.
+      </p>
+      <dl>
+	<dt>'N'</dt>
+	<dd> - SWITCH TO THE NEXT SET INDEX (MODULO MAX_IDX+2) </dd>
+	<dt>'0'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCLUDED IN THE CURRENT SET </dd>
+	<dt>'1'</dt>
+	<dd> - RESTRICT VISIBILITY TO ELEMENTS INCIDENT TO THE CURRENT SET </dd>
+	<dt>'P'</dt>
+	<dd> - PRINT SET STATISTICS </dd>
+      </dl>
+    </div>
+
+    <div id="divCanvas" style="position: relative;">
+      <!-- <canvas id="canvasId" width="640" height="400"  style="border:0px; margin: 0px; padding: 0px;" > -->
+      <canvas id="canvasId" style="border:0px; margin: 0px; padding: 0px;" >
+	Your browser does not support the canvas element.
+      </canvas>
+      <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
+	IF YOU SEE THIS, THEN THERE IS SOME PROBLEM (Probably WebGL is not enabled.) 
+      </div>
+    </div>
+  </body>
+</html>

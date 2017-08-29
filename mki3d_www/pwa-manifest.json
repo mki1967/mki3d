@@ -1,0 +1,42 @@
+{
+    "dir": "ltr",
+    "lang": "en",
+    "name": "MKI3D RAPID MODELER",
+    "display": "standalone",
+    "start_url": "./mkisg.html",
+    "short_name": "MKI_SG",
+    "theme_color": "transparent",
+    "description": "Designing simple 3D models",
+    "orientation": "any",
+    "background_color": "#0000FF",
+    "theme_color": "#0000FF",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "icons": [
+	{
+	    "src": "./assets/mki_icon_16.png",
+	    "type": "image/png",
+	    "sizes": "16x16"
+	},
+	{
+	    "src": "./assets/mki3d_icon_144x144.png",
+	    "type": "image/png",
+	    "sizes": "144x144"
+	},
+	{
+	    "src": "./assets/mki_icon_48.png",
+	    "type": "image/png",
+	    "sizes": "48x48"
+	},
+	{
+	    "src": "./assets/mki3d_icon_512x512.png",
+	    "type": "image/png",
+	    "sizes": "512x512"
+	},
+	{
+	    "src": "./assets/mki3d_icon_192x192.png",
+	    "type": "image/png",
+	    "sizes": "192x192"
+	}
+    ]
+}
