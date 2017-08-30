@@ -3,7 +3,7 @@
 */
 
 var appName = 'mki3d';
-var version = '0.0.2';
+var version = '0.0.3';
 var currentCacheName= appName+'_'+version;   // e.g.: 'mki3d_0.0.1';
 
 self.addEventListener('install', e => {
@@ -30,7 +30,7 @@ self.addEventListener('activate', e => {
 			    {
 				console.log(cacheNames); // test
 				let toDelete = cacheNames.filter(
-					name => name.localeCompare(currentCacheName) != 0 && name.includes(appName)
+					name => name.localeCompare(currentCacheName) != 0 && name.includes(appName+'_')
 				);
 				console.log(toDelete);  // test
 				return Promise.all (
