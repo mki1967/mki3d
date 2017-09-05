@@ -1,0 +1,216 @@
+
+    <div id="divHelp"  style="overflow-y:auto; display:none;">
+      <h2>Help screen of <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a>:</h2>
+
+      <p> <strong>(Press 'Q' or Escape to return to the canvas.)</strong></p>
+
+      <div style="color:red;">
+	<h3> Some notifications: </h3>
+	<ul>
+	  <li>
+	    You can press 'D' key to have a display without the cursor and the upper text message. Then you can save the clean image from the canvas
+	    (e.g. take a screen-shot or - if you run it in the browser - save graphics on the  right-mouse-button pop-up menu).
+	    Pressing any key resumes standard display mode for further editing.
+	  </li>
+	  <li>
+	    Red-blue stereoscopic mode has been added. Press 'QVS' key sequence to toggle the stereo/mono-scopic mode.
+	  </li>
+	  <li>
+	    <strong>News and Tutorial Blog:</strong> Some news and tutorials illustrated with screen-shots are being posted on a blog:
+	    <a href="https://mki3d.blogspot.com/" target="_blank">https://mki3d.blogspot.com/</a>
+	  </li>
+	  <li>
+	    <strong> Warnings: </strong> The 'undo' operation is limited to a single step and it may still be missing in some  editing actions.
+	    (The best strategy is frequent saving of your data.)
+	    Some details of the user interface or of the data format may be modified in the future versions.
+	  </li>
+	  <li>  
+	    <strong>Info about Chrome: </strong> 
+	    <a href="https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html" target="_blank"> Chromium blog post</a> informs about
+	    removing support for packaged and hosted apps from Chrome on Windows, Mac, and Linux.
+	    <a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> can be used both
+	    on-line and off-line in arbitrary modern browsers supporting WebGL.
+	    Read <a href="https://mki1967.github.io/mki3d/docs/usage_options.html" target="_blank">instructions for usage options</a>.
+	  </li>
+	</ul>
+      </div>
+      
+      
+      <h3> Key presses on the canvas: </h3>
+      <p>
+	<dl>
+	  <dt>'H'</dt>
+	  <dd> - This help screen</dd>
+	  <dt>'A'</dt>
+	  <dd> - Switch ACTION MODE (either rotate, move cursor, or actions on selected endpoints)</dd>
+	  <dt>Shift</dt>
+	  <dd> - Switch ACTION MODE to: 
+	    <ul>
+	      <li> CURSOR moving - when pressed </li>
+	      <li> ROTATION - when released </li>
+	    </ul>
+	    <dt> Arrow Keys, 'F', 'B','V'</dt>
+	  <dd> - Depending on the ACTION MODE, either: move cursor, rotate the screen, or manipulate selected endpoints</dd>
+	  <dt>'Q'</dt>
+	  <dd> - Main menu (contains many sub-menus)</dd>
+	  <dt>'N'</dt>
+	  <dd> - Changing current SET INDEX , displaying its included and incident elements</dd>
+	  </dd>
+	  <dt>Space</dt>
+	  <dd> - Align view rotation to right angles</dd>
+	  <dt>Enter</dt>
+	  <dd> - Depending on markers:
+	    <ul>
+	      <li> if MARKER1 is not set, then set MARKER1 </li>
+	      <li> if only MARKER1 is set, then insert segment between MARKER1 and CURSOR 
+		and set MARKER1 to CURSOR 
+	      </li>
+	      <li> if MARKER1 and MARKER2 are both set, then insert triangle between MARKER1, MARKER2, and CURSOR
+		and set MARKER1 to CURSOR and cancel MARKER2
+	      </li>
+	    </ul> 
+	  </dd>
+	  <dt>Escape, 'C'</dt>
+	  <dd> - Cancel both markers </dd>
+	  <dt>'T'</dt>
+	  <dd> - Toggle MARKER2 (either set it to CURSOR or cancel it) </dd>
+	  <dt>'D'</dt>
+	  <dd> - Display without the cursor and the upper text messsage
+	    (for taking screen-shots or saving graphics from the canvas on right mouse-button pop-up menu).</dd>
+	</dl>
+      </p>
+      
+
+      <h3> General description </h3>
+      <p>
+	The <em>model</em> consists of line <em>segments</em> and <em>triangles</em>.
+        Each <em>segment</em> is defined by a pair of <em>points</em> (<em> endpoints</em> of the segment). 
+        Each <em>triangle</em> is defined by a triple of <em>points</em> (<em> endpoints</em> of the triangle). 
+        Each <em>point</em> has position in (x,y,z) coordinates and a color (R,G,B) components.
+        Each <em>point</em> belongs to a single <em>set</em>.
+        The <em>sets</em> are indexed by natural numbers.
+	The set index numbers are assigned automatically to the endpoints,
+	and the program tries to keep the indexes of non-empty sets to be consecutive numbers
+	starting from zero.
+        Element is <em>in</em> a set if all its endpoints are in the set.
+	Element is <em>incident to</em> a set if at least one of its endpoints is in the set.
+        Element is <em>glue element</em> if its endpoints are in different sets.
+	Glue element is incident to more than one set and it is not in any set.
+      </p>
+      <p>
+	Endpoints can be <em>selected</em>.
+	Element is <em>selected</em> if all its endpoints are selected.
+      </p>
+      <p>
+	<em>Constructive points</em> denoted by the letters 'A'...'Z' are used to denote positions in the 
+	space. They are used as parameters of <em>constructive methods</em>.
+	They can be set and then displayed or hidden. 
+	(If two or more constructive points are displayed at the same position, then it is signaled by flashing between two
+        of them in subsequent redraws.)  
+      </p>
+
+      <h3> Some Usage Hints </h3>
+      <ul>
+	<li>
+          Press the Shift key to move the cursor with the Arrows ,'B' 'V' (i.e. back), and 'F' (i.e. forward) keys.
+	  (Instead of Arrow keys you may also use the 'I','J','K','L' keys.)
+	</li>
+	<li>
+          Release the Shift key to rotate the model around the cursor with the arrows and 'B', 'F'.
+          (Focus point - the center of the screen - is set to the cursor position.)
+	</li>
+	<li>
+	  Use Space to align rotation rotation to right angles.
+	</li>
+        <li>
+          To insert segment lines:
+	  <ol>
+	    <li> move the cursor to the position of its first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the position of its second endpoint and press Enter to insert the segment 
+	      and to set MARKER1 at the new position, </li>
+            <li> and so on - continue with the following segments' endpoints.</li>
+	  </ol>
+          To stop inserting lines, press Escape key to cancel markers.
+        </li>
+        <li> 
+          To insert a triangle:
+	  <ol>
+	    <li> move the cursor to the first endpoint and press Enter to set MARKER1, </li>
+	    <li> move the cursor to the second endpoint and press 'T' to set MARKER2, </li>
+            <li> move the cursor to the third endpoint and press Enter to insert the triangle. 
+              (This also sets MARKER1, so you can continue inserting segments or triangles.)
+	    </li>
+	  </ol>
+
+	</li>
+	<li> 
+          The light consists of directional fraction and small ambient fraction. 
+	  To set directional light for triangles' shading, rotate the model and press 'QDL' sequence of keys.
+          Directional light is set perpendicular to the screen (in both directions).
+	</li>
+	<li>
+	  The color of inserted endpoint is the color of the cursor.
+          The selected endpoints can be painted with current cursor color.
+          If endpoints of the element have different colors, 
+	  the colors inside the element are interpolated.
+	</li>
+	<li>
+          You can limit visibility by clipping - the key sequences 'QX...'
+	</li>
+	<li>
+	  You can select endpoints - the key sequences 'QS ...'
+          (Note that you can either add new endpoints to selection or remove all selection.) 
+	</li>
+	<li>
+	  You may use selection to limit visibility (in 'QV' sub-menu) or 
+	  manipulate selected endpoints (in 'QD' sub-menu)
+	</li>
+	<li>
+	  Sets can be used for grouping endpoints.
+	  Use 'N' in canvas mode to cycle through the sets inspecting their included and incident elements.
+          (The last set in the cycle is always empty - stop at it if you want the following endpoints to be 
+          in a new set.)
+	  You also create a new set when you are making a copy of selected elements ('QDC...').
+          After creation of a copy, the selection is switched to this new copy.
+          Thus the actions on selected endpoints are applied on the new copy.
+	</li>
+	<li>
+	  To cancel view restrictions use 'QVC' sequence.
+	</li>
+	<li>
+	  You can change the color of the cursor ('QCC') or of the background ('QDB').
+	  Cursor color is used for the created endpoints (unless they are copies of other endpoints) and
+	  for painting. 
+          You can set one of the seven predefined colors. 
+	  You can also fine-tune each of the RGB components separately with the pairs of keys: 'E'-'R', 'F'-'G', and 'V'-'B'.
+          To use already used color, select the endpoints and, in the Color Menu, use 'N' to cycle trough the colors of the
+          selected endpoints.
+          Leave the color menu by pressing either 'Q' or Escape key.
+	</li>
+	<li>
+	  DO NOT FORGET TO SAVE YOUR DATA (key sequence: 'QFS')
+	</li>
+	<li>
+	  You may export your model to HTML WebGL page ('QFE'). You need to download the script
+	  <a href="https://raw.githubusercontent.com/mki1967/mki3d/master/html_viewer/mki3d_view.js" target="_blank">mki3d_view.js</a> 
+	  and save it to each folder with the exported HTML pages. 
+	  This script is used by the exported HTML pages.
+	</li>
+	<li>
+	  Use 'QPS...' to set constructive points. You can hide them with 'QPH'. 
+	  You can find any previously set constructive point (hidden or displayed) with 'QPJ...'.
+	</li>
+	<li>
+	  You can manually set the cursor coordinates and some other parameters
+	  on the Inputs Page ('QI...').
+	</li>
+      </ul>
+      
+      <h3>About</h3>
+      <p> 
+	<a href="https://mki1967.github.io/mki3d/" target="_blank"> MKI3D RAPID MODELER</a> by Marcin Kik mki1967@gmail.com. 
+	The project is hosted on <a href="https://github.com/mki1967/mki3d" target="_blank">https://github.com/mki1967/mki3d</a> 
+      </p>
+
+
+    </div>
