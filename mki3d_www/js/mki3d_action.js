@@ -878,6 +878,7 @@ mki3d.action.cursorMenu = function(){
 }
 
 mki3d.action.fileMenu = function(){
+    mki3d.html.spanCurrentName.innerHTML=mki3d.file.suggestedName;
     mki3d.message( mki3d.html.divFileMenu.innerHTML );
     window.onkeydown = mki3d.callback.fileMenuOnKeyDown;
 }
@@ -1090,6 +1091,7 @@ mki3d.action.inputs = function(){
 
     mki3d.html.inputScalingFactor.value= mki3d.constructive.scalingFactor;
     mki3d.html.inputPolygonNumberOfVertices.value= mki3d.constructive.polygonNumberOfVertices;
+    mki3d.html.inputCurrentName.value= mki3d.file.suggestedName;
 
 
 
@@ -1229,6 +1231,12 @@ mki3d.action.inputsEnter= function(){
 	}
     }
 
+    oldValue= mki3d.file.suggestedName;
+    value=mki3d.html.inputCurrentName.value;
+    if( value != oldValue ) {
+	mki3d.file.suggestedName=value;
+	msg+="<br>NEW CURRENT NAME: '"+value+"'";
+    }
     // console.log(value);
     // console.log(mki3d.html.inputCursorX);
     return msg;

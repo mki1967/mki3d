@@ -76,6 +76,8 @@ mki3d.html.initObjects= function() {
     mki3d.html.spanScalingFactor= document.querySelector("#spanScalingFactor");
     mki3d.html.spanPolygonNumberOfVertices= document.querySelector("#spanPolygonNumberOfVertices");
 
+    mki3d.html.spanCurrentName= document.querySelector("#spanCurrentName");
+
     /* Inputs page */
     mki3d.html.inputCursorX= document.querySelector("#inputCursorX");
     mki3d.html.inputCursorY= document.querySelector("#inputCursorY");
@@ -91,6 +93,8 @@ mki3d.html.initObjects= function() {
 
     mki3d.html.inputScalingFactor= document.querySelector("#inputScalingFactor");
     mki3d.html.inputPolygonNumberOfVertices= document.querySelector("#inputPolygonNumberOfVertices");
+
+    mki3d.html.inputCurrentName= document.querySelector("#inputCurrentName");
 
     /* Text Load Page */
     mki3d.html.textareaInput=document.querySelector("#textareaInput");
