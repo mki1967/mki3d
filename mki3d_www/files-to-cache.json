@@ -14,6 +14,7 @@
 "js/mki3d_file.js",
 "js/mki3d_gl.js",
 "js/mki3d_html.js",
+"js/mki3d_idb.js",
 "js/mki3d.js",
 "js/mki3d_points.js",
 "js/mki3d_set.js",
