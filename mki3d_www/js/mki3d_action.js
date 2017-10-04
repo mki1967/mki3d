@@ -883,6 +883,16 @@ mki3d.action.fileMenu = function(){
     window.onkeydown = mki3d.callback.fileMenuOnKeyDown;
 }
 
+mki3d.action.indexedDBMenu = function(){
+    // mki3d.message( mki3d.html.divIndexedDBMenu.innerHTML );
+    mki3d.html.divUpperMessage.innerHTML =  mki3d.html.divIndexedDBMenu.innerHTML ;
+    // mki3d.html.divIndexedDBMenu.innerHTML = "";
+    // mki3d.html.spanCurrentNameIDB.innerHTML=mki3d.file.suggestedName;
+    document.querySelector("#spanCurrentNameIDB").innerHTML=mki3d.file.suggestedName; // referenced span from mki3d.html.divIndexedDBMenu.innerHTML
+    /// ...
+    window.onkeydown = mki3d.callback.indexedDBMenuOnKeyDown;
+}
+
 
 ///---
 

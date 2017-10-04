@@ -62,6 +62,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.divCanvas= mki3d.html.registerDiv('#divCanvas');
     mki3d.html.divdivFileSelector= mki3d.html.registerDiv('#divFileSelector');
     mki3d.html.divProjectionsMenu= mki3d.html.registerDiv('#divProjectionsMenu');
+    mki3d.html.divIndexedDBMenu= mki3d.html.registerDiv('#divIndexedDBMenu');
 
 
     mki3d.html.divUpperMessage= document.querySelector('#divUpperMessage');
@@ -77,6 +78,7 @@ mki3d.html.initObjects= function() {
     mki3d.html.spanPolygonNumberOfVertices= document.querySelector("#spanPolygonNumberOfVertices");
 
     mki3d.html.spanCurrentName= document.querySelector("#spanCurrentName");
+    mki3d.html.spanCurrentNameIDB= document.querySelector("#spanCurrentNameIDB");
 
     /* Inputs page */
     mki3d.html.inputCursorX= document.querySelector("#inputCursorX");

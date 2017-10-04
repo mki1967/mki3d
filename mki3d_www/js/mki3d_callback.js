@@ -2,6 +2,18 @@
 
 mki3d.callback = {};
 
+mki3d.callback.indexedDBMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+	case 27: // Esc
+	case 81: // Q
+	mki3d.action.escapeToCanvas();
+	break;
+    }
+}
+
+
 mki3d.callback.helpOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     switch(code)
@@ -188,6 +200,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	
 	case 73: // I
         mki3d.action.inputs();
+	break;
+	
+	case 66: // B
+        mki3d.action.indexedDBMenu();
 	break;
 	
 	default:
