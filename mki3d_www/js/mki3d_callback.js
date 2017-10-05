@@ -2,6 +2,21 @@
 
 mki3d.callback = {};
 
+mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    switch(code)
+    {
+	case 27: // Esc
+	case 81: // Q
+	/// restore data ...
+	mki3d.action.escapeToCanvas();
+	break;
+	case 86: // V
+	mki3d.callback.setDisplayMode();
+	break;	
+    }
+}
+
 mki3d.callback.indexedDBMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     switch(code)
@@ -9,6 +24,12 @@ mki3d.callback.indexedDBMenuOnKeyDown = function (e){
 	case 27: // Esc
 	case 81: // Q
 	mki3d.action.escapeToCanvas();
+	break;
+	case 73: // I
+	mki3d.action.inspectIDBMenu();
+	break;
+	case 65: // A
+	// mki3d.idb.addToIDB();
 	break;
     }
 }
@@ -790,10 +811,25 @@ mki3d.callback.canvasOnKeyUp = function (e){
 }
 
 mki3d.callback.displayOnKeyDown = function (e){
+    mki3d.callback.cancelDisplayMode();
+}
+
+mki3d.callback.cancelDisplayMode = function(){
+    if( !mki3d.displayMode ) return;
     mki3d.displayMode=false;
     mki3d.html.showDiv(mki3d.html.divUpperMessage);
     mki3d.redraw();
-    window.onkeydown=mki3d.callback.canvasOnKeyDown;
+    // window.onkeydown=mki3d.callback.canvasOnKeyDown;
+    window.onkeydown=mki3d.callback.preDisplayOnKeyDown;
+}
+
+mki3d.callback.setDisplayMode = function(){
+    if(	mki3d.displayMode ) return;
+    mki3d.displayMode=true;
+    mki3d.html.hideDiv(mki3d.html.divUpperMessage);
+    mki3d.redraw();
+    mki3d.callback.preDisplayOnKeyDown =  window.onkeydown;
+    window.onkeydown = mki3d.callback.displayOnKeyDown; 
 }
 
 
@@ -810,10 +846,7 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	mki3d.action.setModeActions();
 	break;
 	case 68: // D
-	mki3d.displayMode=true;
-	mki3d.html.hideDiv(mki3d.html.divUpperMessage);
-	mki3d.redraw();
-        window.onkeydown = mki3d.callback.displayOnKeyDown; 
+	mki3d.callback.setDisplayMode();
 	break;
 	case 13: // enter
         mki3d.action.enter();

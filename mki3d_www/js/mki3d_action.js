@@ -893,6 +893,13 @@ mki3d.action.indexedDBMenu = function(){
     window.onkeydown = mki3d.callback.indexedDBMenuOnKeyDown;
 }
 
+mki3d.action.inspectIDBMenu = function(){
+    /// test if database has any elements ...
+    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
+    /// add below ...
+    window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
+}
+
 
 ///---
 
