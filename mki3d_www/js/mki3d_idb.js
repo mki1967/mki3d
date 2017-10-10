@@ -14,9 +14,9 @@ mki3d.idb.onupgradeneeded = function( event ) {
     var db = event.target.result;
     
     // Create an objectStore and date as its index 
-    if(!thisDB.objectStoreNames.contains("files")) {
-	var os = thisDB.createObjectStore("files", {keyPath: 'key', autoIncrement:true});
-	os.createIndex("date", "", {unique:false});
+    if(!db.objectStoreNames.contains("files")) {
+	var os = db.createObjectStore("files", {keyPath: 'key', autoIncrement:true});
+	os.createIndex("date", "date", {unique:false});
     }
 
 }
@@ -57,13 +57,15 @@ mki3d.idb.findFiles= function() {
     index.openCursor(range).onsuccess = function(e) {
 	var cursor = e.target.result;
         console.log('got something');
-	var name =  cursor.value['name']
-	if(cursor) && ( name.includes(substring) ) {
-	    item= {} ;
-	    item.key = cursor.key;
-	    item.date = cursor.value['date'];
-	    item.name = name;
-	    mki3d.idb.filesFound.push(item);
+	if(cursor) { // anything more found ...
+	    var name =  cursor.value['name']
+	    if(  name.includes(substring) ) { // substring filter ...
+		item= {} ;
+		item.key = cursor.key;
+		item.date = cursor.value['date'];
+		item.name = name;
+		mki3d.idb.filesFound.push(item);
+	    }
 	    cursor.continue();
 	}
     }
@@ -74,17 +76,27 @@ mki3d.idb.findFiles= function() {
 mki3d.idb.dbName = "mki3d" // name of the database
 
 
-mki3d.idb.openDB = function( ){
+mki3d.idb.openDB = function( onsuccessFunction, onerrorFunction ){
+    /* 
+       onsuccessFunction - function to be called on success with event as parametr 
+       onerrorFunction - function to be called on error with event as parametr 
+     */
     var request = indexedDB.open(mki3d.idb.dbName);
+
+    request.onsuccessFunction=onsuccessFunction;
+    request.onerrorFunction=onerrorFunction;
     
     request.onupgradeneeded = mki3d.idb.onupgradeneeded;
     
     request.onerror = function( event) {
 	console.log( event );
+	if( this.onerrorFunction ) this.onerrorFunction( event );
     };
     
     request.onsuccess = function( event ) {
 	mki3d.idb.db = event.target.result;
+	console.log( event );
+	if( this.onsuccessFunction )  this.onsuccessFunction( event );
     };
 
 }

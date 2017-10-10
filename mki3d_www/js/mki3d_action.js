@@ -884,13 +884,21 @@ mki3d.action.fileMenu = function(){
 }
 
 mki3d.action.indexedDBMenu = function(){
-    // mki3d.message( mki3d.html.divIndexedDBMenu.innerHTML );
-    mki3d.html.divUpperMessage.innerHTML =  mki3d.html.divIndexedDBMenu.innerHTML ;
-    // mki3d.html.divIndexedDBMenu.innerHTML = "";
-    // mki3d.html.spanCurrentNameIDB.innerHTML=mki3d.file.suggestedName;
-    document.querySelector("#spanCurrentNameIDB").innerHTML=mki3d.file.suggestedName; // referenced span from mki3d.html.divIndexedDBMenu.innerHTML
-    /// ...
-    window.onkeydown = mki3d.callback.indexedDBMenuOnKeyDown;
+    var onsuccess = function( event ) {
+	mki3d.html.divUpperMessage.innerHTML =  mki3d.html.divIndexedDBMenu.innerHTML ;
+	document.querySelector("#spanCurrentNameIDB").innerHTML=mki3d.file.suggestedName; // referenced span from mki3d.html.divIndexedDBMenu.innerHTML
+	/// ...
+	window.onkeydown = mki3d.callback.indexedDBMenuOnKeyDown;
+    }
+
+    var onerror  = function( event ) {
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( "<br>COULD NOT OPEN DATA BASE !!!" );
+    }
+
+    mki3d.message("OPENING DATA BASE ... ");
+    
+    mki3d.idb.openDB( onsuccess, onerror);
 }
 
 mki3d.action.inspectIDBMenu = function(){
