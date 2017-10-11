@@ -29,7 +29,9 @@ mki3d.callback.indexedDBMenuOnKeyDown = function (e){
 	mki3d.action.inspectIDBMenu();
 	break;
 	case 65: // A
-	// mki3d.idb.addToIDB();
+	mki3d.idb.addToIDB();
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend( "<br>ADDED TO DATA BASE !!!" );
 	break;
     }
 }
