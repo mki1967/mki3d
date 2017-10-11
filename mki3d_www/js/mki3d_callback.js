@@ -9,6 +9,7 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	case 27: // Esc
 	case 81: // Q
 	/// restore data ...
+	mki3d.idb.restoreTmp();
 	mki3d.action.escapeToCanvas();
 	break;
 	

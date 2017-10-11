@@ -37,6 +37,16 @@ mki3d.idb.tmpLoad = function( id ){
     
 }
 
+mki3d.idb.restoreTmp = function() {
+    if( mki3d.idb.dataBackup == null ) return; // nothing to be restored
+    mki3d.data =  mki3d.idb.dataBackup;
+    mki3d.tmpCancel();
+    mki3d.setModelViewMatrix();
+    mki3d.setProjectionMatrix();
+    mki3d.redraw();
+    mki3d.idb.dataBackup= null;
+}
+
 
 mki3d.idb.filesFound= [];
 mki3d.idb.filesIdx= -1;
