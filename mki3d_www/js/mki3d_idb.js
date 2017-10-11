@@ -30,6 +30,9 @@ mki3d.idb.tmpLoad = function( id ){
 	mki3d.data= JSON.parse( event.target.result.dataString);
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
+	mki3d.setProjectionMatrix();
+	mki3d.redraw();
+
     };
     
 }
@@ -139,3 +142,11 @@ mki3d.idb.addToIDB= function(){
     mki3d.idb.db.transaction(["files"],"readwrite").objectStore("files").add( mki3d.idb.prepareItem() );
 }
 
+mki3d.idb.fillIDBSpans= function() {
+    document.querySelector("#spanIDBTotal").innerHTML= mki3d.idb.filesFound.length;
+    document.querySelector("#spanIDBIndex").innerHTML= mki3d.idb.filesIdx;
+    if(  0 <= mki3d.idb.filesIdx && mki3d.idb.filesIdx <  mki3d.idb.filesFound.length ){
+	document.querySelector("#spanIDBName").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].name;
+	document.querySelector("#spanIDBDate").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].date;
+    }
+}

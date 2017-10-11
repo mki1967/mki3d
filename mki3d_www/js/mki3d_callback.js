@@ -11,6 +11,23 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	/// restore data ...
 	mki3d.action.escapeToCanvas();
 	break;
+	
+	case 80: // P
+	if( mki3d.idb.filesFound.length > 0 ) {
+	    mki3d.idb.filesIdx = (mki3d.idb.filesIdx + mki3d.idb.filesFound.length - 1) % mki3d.idb.filesFound.length;
+	    mki3d.idb.fillIDBSpans();
+	    mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id );
+	}
+	break;
+	
+	case 78: // N
+	if( mki3d.idb.filesFound.length > 0 ) {
+	    mki3d.idb.filesIdx = (mki3d.idb.filesIdx + 1) % mki3d.idb.filesFound.length;
+	    mki3d.idb.fillIDBSpans();
+	    mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id );
+	}
+	break;
+	
 	case 86: // V
 	mki3d.callback.setDisplayMode();
 	break;	
