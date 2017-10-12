@@ -41,12 +41,14 @@ mki3d.idb.tmpLoad = function( id ){
     if(mki3d.idb.dataBackup == null) mki3d.idb.dataBackup=mki3d.data;
     
     mki3d.idb.db.transaction(["files"]).objectStore("files").get(id).onsuccess = function(event) {
-	mki3d.data= JSON.parse( event.target.result.dataString);
-        mki3d.tmpCancel();
-	mki3d.setModelViewMatrix();
-	mki3d.setProjectionMatrix();
-	mki3d.redraw();
-
+	console.log( event );
+	if(  event.target.result) {
+	    mki3d.data= JSON.parse( event.target.result.dataString);
+            mki3d.tmpCancel();
+	    mki3d.setModelViewMatrix();
+	    mki3d.setProjectionMatrix();
+	    mki3d.redraw();
+	}
     };
     
 }
