@@ -60,10 +60,15 @@ mki3d.idb.findFiles= function( finalFunction ) {
        REMADE FROM EXAMPLE:
        https://static.raymondcamden.com/demos/2013/jun/6/test1.html
     */
-    
+
+    /* old
     var fromDate = document.querySelector("#inputIDBFromDate").value;
     var toDate = document.querySelector("#inputIDBToDate").value;
     var substring = document.querySelector("#inputIDBNameSubString").value;
+    */
+    var fromDate = mki3d.idb.filter.fromDate;
+    var toDate = mki3d.idb.filter.toDate;
+    var substring = mki3d.idb.filter.substring;
     var range=null;
 
     // if(fromDate == "" && toDate == "") return;
@@ -159,4 +164,15 @@ mki3d.idb.fillIDBSpans= function() {
 	document.querySelector("#spanIDBName").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].name;
 	document.querySelector("#spanIDBDate").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].date;
     }
+}
+
+mki3d.idb.filter = {}; // object containing scanning filters
+mki3d.idb.filter.substring = ""; // name substring
+mki3d.idb.filter.fromDate = ""; // lower bound for date range
+mki3d.idb.filter.toDate = ""; // upper bound for date range
+
+mki3d.idb.setFilter= function(){
+    mki3d.idb.filter.fromDate = document.querySelector("#inputIDBFromDate").value;
+    mki3d.idb.filter.toDate = document.querySelector("#inputIDBToDate").value;
+    mki3d.idb.filter.substring  = document.querySelector("#inputIDBNameSubString").value;
 }
