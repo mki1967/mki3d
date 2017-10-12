@@ -21,6 +21,20 @@ mki3d.idb.onupgradeneeded = function( event ) {
 
 }
 
+mki3d.idb.remove = function( id , onsuccess){
+    var request = mki3d.idb.db.transaction(["files"], "readwrite")
+                .objectStore("files")
+                .delete(id);
+    request.onsuccess = function(event) {
+	console.log(event);
+	if( onsuccess ) onsuccess(event);
+    };
+    request.onerror = function(event) {
+	// Handle errors.
+	console.log(event);
+    };
+}
+
 mki3d.idb.dataBackup=null;
 
 mki3d.idb.tmpLoad = function( id ){
@@ -35,6 +49,11 @@ mki3d.idb.tmpLoad = function( id ){
 
     };
     
+}
+
+mki3d.idb.tmpLoadIndexed = function() {
+    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+	mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
 }
 
 mki3d.idb.restoreTmp = function() {
@@ -52,17 +71,20 @@ mki3d.idb.filesFound= [];
 mki3d.idb.filesIdx= -1;
 
 mki3d.idb.findFilesFinalFunction = function() {
-	var len = mki3d.idb.filesFound.length;
-	mki3d.idb.filesIdx = len-1;
-
-	if( mki3d.idb.filesIdx >= 0 ) mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
-	
-	mki3d.idb.fillIDBSpans();	
-
-	mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
-	/// add below ...
-	window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
-    }
+    var len = mki3d.idb.filesFound.length;
+    mki3d.idb.filesIdx = len-1;
+    mki3d.idb.tmpLoadIndexed(); // load the last one if exists
+    /*
+    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+	mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
+    */
+    
+    mki3d.idb.fillIDBSpans();	
+    
+    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
+    /// add below ...
+    window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
+}
 
 mki3d.idb.findFiles= function( finalFunction ) {
     /*

@@ -36,7 +36,24 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	mki3d.idb.restoreTmp();
 	window.onkeydown = mki3d.callback.IDBFiltersOnKeyDown;
 	mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divIDBFilters").innerHTML ;
-	mki3d.idb.initFilters();
+	mki3d.idb.initFilters(); // after displaying
+	break;
+
+	case 82: // R
+	/// REMOVE ENTRYS ...
+	var yesAction = function(){
+	    mki3d.idb.restoreTmp(); // ?
+	    var onsuccess = function( event ) {
+		var idx = (mki3d.idb.filesIdx+ mki3d.idb.filesFound.length -1) %  mki3d.idb.filesFound.length;
+		mki3d.action.inspectIDBMenu();
+		// mki3d.action.inform("REMOVED !!!");
+		// mki3d.idb.filesIdx= idx;
+		// mki3d.idb.tmpLoadIndexed(); // load previous if exists
+	    }
+	    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		mki3d.idb.remove( mki3d.idb.filesFound[mki3d.idb.filesIdx].id, onsuccess ); // remove the indexed entry
+	}
+	mki3d.action.confirm("REMOVE ENTRY?", yesAction);
 	break;
 	
 	case 80: // P
