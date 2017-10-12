@@ -2,6 +2,24 @@
 
 mki3d.callback = {};
 
+mki3d.callback.IDBFiltersOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    switch(code)
+    {
+	case 27: // Esc
+	mki3d.idb.restoreTmp();
+	mki3d.action.inspectIDBMenu(); // return to inspecting
+	break;
+	case 13: // Enter
+	mki3d.idb.readFilters(); 
+	mki3d.idb.restoreTmp();
+	mki3d.action.inspectIDBMenu(); // return to inspecting
+	break;
+    }
+}
+
+
 mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     switch(code)
@@ -11,6 +29,14 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	/// restore data ...
 	mki3d.idb.restoreTmp();
 	mki3d.action.escapeToCanvas();
+	break;
+	
+	case 70: // F
+	/// FILTER ENTRIES ...
+	mki3d.idb.restoreTmp();
+	window.onkeydown = mki3d.callback.IDBFiltersOnKeyDown;
+	mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divIDBFilters").innerHTML ;
+	mki3d.idb.initFilters();
 	break;
 	
 	case 80: // P
@@ -37,6 +63,7 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 
 mki3d.callback.indexedDBMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
+    var msg="";
     switch(code)
     {
 	case 27: // Esc
@@ -47,9 +74,9 @@ mki3d.callback.indexedDBMenuOnKeyDown = function (e){
 	mki3d.action.inspectIDBMenu();
 	break;
 	case 65: // A
-	mki3d.idb.addToIDB();
+	msg=mki3d.idb.addToIDB();
 	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend( "<br>ADDED TO DATA BASE !!!" );
+	mki3d.messageAppend( msg );
 	break;
     }
 }
@@ -73,7 +100,7 @@ mki3d.callback.inputsOnKeyDown = function (e){
     switch(code)
     {
 	case 27: // Esc
-	case 81: // Q
+	// case 81: // Q //// collides with typing letter 'q' or 'Q' in the 'CURRENT NAME'
 	mki3d.html.html.style.overflowY="";
 	mki3d.action.escapeToCanvas();
 	break;

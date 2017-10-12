@@ -51,6 +51,18 @@ mki3d.idb.restoreTmp = function() {
 mki3d.idb.filesFound= [];
 mki3d.idb.filesIdx= -1;
 
+mki3d.idb.findFilesFinalFunction = function() {
+	var len = mki3d.idb.filesFound.length;
+	mki3d.idb.filesIdx = len-1;
+
+	if( mki3d.idb.filesIdx >= 0 ) mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
+	
+	mki3d.idb.fillIDBSpans();	
+
+	mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
+	/// add below ...
+	window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
+    }
 
 mki3d.idb.findFiles= function( finalFunction ) {
     /*
@@ -154,15 +166,23 @@ mki3d.idb.prepareItem= function(){
 }
 
 mki3d.idb.addToIDB= function(){
-    mki3d.idb.db.transaction(["files"],"readwrite").objectStore("files").add( mki3d.idb.prepareItem() );
+    var item=  mki3d.idb.prepareItem() 
+    mki3d.idb.db.transaction(["files"],"readwrite").objectStore("files").add(item);
+    return "</br>'"+item.name+"' ADDED TO DATA BASE (DATE: '"+item.date+"')";
 }
 
 mki3d.idb.fillIDBSpans= function() {
     document.querySelector("#spanIDBTotal").innerHTML= mki3d.idb.filesFound.length;
     document.querySelector("#spanIDBIndex").innerHTML= mki3d.idb.filesIdx;
+    document.querySelector("#spanIDBFromDate").innerHTML= mki3d.idb.filter.fromDate ;
+    document.querySelector("#spanIDBToDate").innerHTML= mki3d.idb.filter.toDate ;
+    document.querySelector("#spanIDBNameSubString").innerHTML= mki3d.idb.filter.substring ;
     if(  0 <= mki3d.idb.filesIdx && mki3d.idb.filesIdx <  mki3d.idb.filesFound.length ){
 	document.querySelector("#spanIDBName").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].name;
 	document.querySelector("#spanIDBDate").innerHTML= mki3d.idb.filesFound[ mki3d.idb.filesIdx].date;
+    } else {
+	document.querySelector("#spanIDBName").innerHTML= "";
+	document.querySelector("#spanIDBDate").innerHTML= "";
     }
 }
 
@@ -171,8 +191,15 @@ mki3d.idb.filter.substring = ""; // name substring
 mki3d.idb.filter.fromDate = ""; // lower bound for date range
 mki3d.idb.filter.toDate = ""; // upper bound for date range
 
-mki3d.idb.setFilter= function(){
+mki3d.idb.readFilters= function(){
     mki3d.idb.filter.fromDate = document.querySelector("#inputIDBFromDate").value;
     mki3d.idb.filter.toDate = document.querySelector("#inputIDBToDate").value;
     mki3d.idb.filter.substring  = document.querySelector("#inputIDBNameSubString").value;
 }
+
+mki3d.idb.initFilters= function(){
+    document.querySelector("#inputIDBFromDate").value = mki3d.idb.filter.fromDate;
+    document.querySelector("#inputIDBToDate").value = mki3d.idb.filter.toDate;
+    document.querySelector("#inputIDBNameSubString").value = mki3d.idb.filter.substring;
+}
+

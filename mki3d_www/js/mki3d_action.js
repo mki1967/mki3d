@@ -903,22 +903,10 @@ mki3d.action.indexedDBMenu = function(){
 
 mki3d.action.inspectIDBMenu = function(){
 
-    var finalFunction = function() {
-	var len = mki3d.idb.filesFound.length;
-	mki3d.idb.filesIdx = len-1;
-
-	if( mki3d.idb.filesIdx >= 0 ) mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
-	
-	mki3d.idb.fillIDBSpans();	
-
-	mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
-	/// add below ...
-	window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
-    }
 
     mki3d.message("SCANNING DATA BASE ... ");
     /// test if database has any elements ...
-    mki3d.idb.findFiles( finalFunction );
+    mki3d.idb.findFiles( mki3d.idb.findFilesFinalFunction  );
 
 }
 

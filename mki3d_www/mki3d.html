@@ -555,6 +555,24 @@
 
 
     </div>
+<div id="divIDBFilters" style="display: none;">
+  <h2>IDB Filters:</h2>
+  <p>
+    Input values and type ENTER to filter entries.
+  </p>      
+  <ul>
+    <li> NAME SUBSTRING:  <input id="inputIDBNameSubString" type="text" size="70">
+    <li> FROM  DATE: <input type="date" id="inputIDBFromDate">
+    <li> TO  DATE: <input type="date" id="inputIDBToDate">
+  </ul>
+  <dl>
+    <dt>Enter</dt>
+    <dd> - TO SET THE FILTER VALUES </dd>
+    <dt>Esc</dt>
+    <dd> - TO CANCEL </dd>
+  </dl>
+
+</div>
     <div id="divIndexedDBMenu" style="display: none;">
       <h2>IndexedDB Menu:</h2>
       <dl>
@@ -584,7 +602,7 @@
       <dl>
 	<dt>Enter</dt>
 	<dd> - TO SET THE VALUES </dd>
-	<dt>Esc, 'Q'</dt>
+	<dt>Esc</dt>
 	<dd> - TO CANCEL </dd>
       </dl>
     </div>
@@ -599,9 +617,11 @@
   </p>      
   <dl>
     <dt>'F'</dt>
-    <dd> - FILTER:
-      NAME SUBSTRING:  <input id="inputIDBNameSubString" type="text" size="70">
-      DATE RANGE: <input type="date" id="inputIDBFromDate"> - <input type="date" id="inputIDBToDate"></dd>
+    <dd>
+      - SET FILTER:
+      (SUBSTRING:  '<span id="spanIDBNameSubString"></span>'
+	DATES: '<span id="spanIDBFromDate"></span>' - '<span id="spanIDBToDate"></span>')
+    </dd>
     <dt>'P' / 'N'</dt>
     <dd> - PREVIOUS / NEXT  </dd>
     <dt>'M'</dt>
