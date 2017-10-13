@@ -37,6 +37,28 @@ mki3d.idb.remove = function( id , onsuccess){
 
 mki3d.idb.dataBackup=null;
 
+
+mki3d.idb.mergeIndexed= function(onsuccess){
+    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	var id= mki3d.idb.filesFound[mki3d.idb.filesIdx].id;
+	mki3d.idb.db.transaction(["files"]).objectStore("files").get(id).onsuccess = function(event) {
+	    console.log( event );
+	    if(  event.target.result) {
+		mki3d.idb.restoreTmp();
+		mki3d.setModelViewMatrix();
+		mki3d.setProjectionMatrix();
+		var data= JSON.parse( event.target.result.dataString);
+		mki3d_merge_data( data );
+		mki3d.action.escapeToCanvas();
+		mki3d.messageAppend("<br>MERGED '" +mki3d.idb.filesFound[mki3d.idb.filesIdx].name
+			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"') !!!");
+		mki3d.redraw();
+	    }
+	
+	}
+    }
+}
+
 mki3d.idb.tmpLoad = function( id ){
     if(mki3d.idb.dataBackup == null) mki3d.idb.dataBackup=mki3d.data;
     
