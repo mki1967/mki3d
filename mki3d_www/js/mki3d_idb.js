@@ -38,6 +38,17 @@ mki3d.idb.remove = function( id , onsuccess){
 mki3d.idb.dataBackup=null;
 
 
+mki3d.idb.removeIndexed= function(){
+    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	var id= mki3d.idb.filesFound[mki3d.idb.filesIdx].id;
+	var onsuccess = function( event ) {
+	    mki3d.idb.oldIdx = mki3d.idb.filesIdx;
+	    mki3d.idb.findFiles( mki3d.idb.findFilesFinalFunction  );	    
+	}
+	mki3d.idb.remove( mki3d.idb.filesFound[mki3d.idb.filesIdx].id, onsuccess ); // remove the indexed entry
+    }    
+}
+
 mki3d.idb.mergeIndexed= function(onsuccess){
     if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
 	var id= mki3d.idb.filesFound[mki3d.idb.filesIdx].id;
@@ -118,13 +129,12 @@ mki3d.idb.filesIdx= -1;
 
 mki3d.idb.findFilesFinalFunction = function() {
     var len = mki3d.idb.filesFound.length;
-    mki3d.idb.filesIdx = len-1;
-    mki3d.idb.tmpLoadIndexed(); // load the last one if exists
-    /*
-    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
-	mki3d.idb.tmpLoad( mki3d.idb.filesFound[mki3d.idb.filesIdx].id ); // load the last one if exists
-    */
-    
+    if( mki3d.idb.oldIdx ) {
+	mki3d.idb.filesIdx= (mki3d.idb.oldIdx + mki3d.idb.filesFound.length -1) %  mki3d.idb.filesFound.length;
+	mki3d.idb.oldIdx = null;
+    } else
+	mki3d.idb.filesIdx = len-1;
+    mki3d.idb.tmpLoadIndexed(); // load the indexed one if exists
     mki3d.idb.fillIDBSpans();	
     
     mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
@@ -141,17 +151,11 @@ mki3d.idb.findFiles= function( finalFunction ) {
        https://static.raymondcamden.com/demos/2013/jun/6/test1.html
     */
 
-    /* old
-    var fromDate = document.querySelector("#inputIDBFromDate").value;
-    var toDate = document.querySelector("#inputIDBToDate").value;
-    var substring = document.querySelector("#inputIDBNameSubString").value;
-    */
     var fromDate = mki3d.idb.filter.fromDate;
     var toDate = mki3d.idb.filter.toDate;
     var substring = mki3d.idb.filter.substring;
     var range=null;
 
-    // if(fromDate == "" && toDate == "") return;
 
     // console.log('doSearch',fromDate,toDate);
     var transaction = mki3d.idb.db.transaction(["files"],"readonly");

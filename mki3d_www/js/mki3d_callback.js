@@ -42,13 +42,9 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	case 82: // R
 	/// REMOVE ENTRY ...
 	var yesAction = function(){
-	    mki3d.idb.restoreTmp(); // ?
-	    var onsuccess = function( event ) {
-		var idx = (mki3d.idb.filesIdx+ mki3d.idb.filesFound.length -1) %  mki3d.idb.filesFound.length;
-		mki3d.action.inspectIDBMenu();
-	    }
+	    // mki3d.idb.restoreTmp(); // ?
 	    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
-		mki3d.idb.remove( mki3d.idb.filesFound[mki3d.idb.filesIdx].id, onsuccess ); // remove the indexed entry
+		mki3d.idb.removeIndexed();
 	}
 	mki3d.action.confirm("REMOVE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
 			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
