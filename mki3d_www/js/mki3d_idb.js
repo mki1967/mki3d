@@ -59,6 +59,28 @@ mki3d.idb.mergeIndexed= function(onsuccess){
     }
 }
 
+mki3d.idb.loadIndexed= function(onsuccess){
+    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	var id= mki3d.idb.filesFound[mki3d.idb.filesIdx].id;
+	mki3d.idb.db.transaction(["files"]).objectStore("files").get(id).onsuccess = function(event) {
+	    console.log( event );
+	    if(  event.target.result) {
+		mki3d.idb.restoreTmp();
+		mki3d.data= JSON.parse( event.target.result.dataString);
+		mki3d.tmpCancel();
+		mki3d.setModelViewMatrix();
+		mki3d.setProjectionMatrix();
+		mki3d.action.escapeToCanvas();
+		mki3d.file.suggestedName=mki3d.idb.filesFound[mki3d.idb.filesIdx].name;
+		mki3d.messageAppend("<br>LOADED '" +mki3d.idb.filesFound[mki3d.idb.filesIdx].name
+			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"') !!!");
+		mki3d.redraw();
+	    }
+	
+	}
+    }
+}
+
 mki3d.idb.tmpLoad = function( id ){
     if(mki3d.idb.dataBackup == null) mki3d.idb.dataBackup=mki3d.data;
     
