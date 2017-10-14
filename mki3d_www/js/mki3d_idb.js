@@ -40,12 +40,13 @@ mki3d.idb.dataBackup=null;
 
 mki3d.idb.removeIndexed= function(){
     if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
-	var id= mki3d.idb.filesFound[mki3d.idb.filesIdx].id;
+	var item = mki3d.idb.filesFound[mki3d.idb.filesIdx];
 	var onsuccess = function( event ) {
 	    mki3d.idb.oldIdx = mki3d.idb.filesIdx;
-	    mki3d.idb.findFiles( mki3d.idb.findFilesFinalFunction  );	    
+	    mki3d.idb.findFiles( mki3d.idb.findFilesFinalFunction  );
+	    mki3d.toast("REMOVED '"+item.name+"' (DATE: '"+item.date+"') FROM DATA-BASE !!!", 4000);
 	}
-	mki3d.idb.remove( mki3d.idb.filesFound[mki3d.idb.filesIdx].id, onsuccess ); // remove the indexed entry
+	mki3d.idb.remove( item.id, onsuccess ); // remove the indexed entry
     }    
 }
 

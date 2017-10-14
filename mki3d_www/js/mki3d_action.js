@@ -4,17 +4,14 @@ mki3d.action = {};
 
 /* EACH OF THE TWO FUNCTIONS BELOW MUST BE CALLED AT THE END OF A KEY_EVENT CALLBACK */
 
-mki3d.action.inform = function( msg ) {
-    mki3d.action.previousOnKeyDown = window.onkeydown;
-    mki3d.action.previousMsg =  mki3d.html.divUpperMessage.innerHTML;
-
-    mki3d.message(""+msg+"<br>(PRESS ANY KEY TO CONTINUE.)")
-    window.onkeydown = function(e){
-	var code= e.which || e.keyCode;
-	window.onkeydown =  mki3d.action.previousOnKeyDown;
-	mki3d.html.divUpperMessage.innerHTML= mki3d.action.previousMsg;
-	console.log(msg, e);
+mki3d.toast = function( msg, milliseconds ) {
+    var divInfo=document.querySelector("#divInfoMessage");
+    divInfo.innerHTML=msg;
+    divInfo.style.display="block"; // show
+    var hideMessage = function(){
+	divInfo.style.display="none";
     }
+    setTimeout(hideMessage, milliseconds); // hide afer milliseconds
     
 }
 

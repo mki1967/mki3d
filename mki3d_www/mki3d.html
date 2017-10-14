@@ -90,7 +90,10 @@
 	Your browser does not support the canvas element.
       </canvas>
       <div id="divUpperMessage" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white;"> 
-	IF YOU SEE THIS, THEN THERE IS SOME PROBLEM (Probably WebGL is not enabled.) 
+	IF YOU SEE THIS, THEN THERE IS SOME PROBLEM 
+      </div>
+      <div id="divInfoMessage" style="position: absolute; top: 0px; right: 0px; color: red; background-color: white; display: none;"> 
+	IF YOU SEE THIS, THEN THERE IS SOME PROBLEM 
       </div>
     </div>
     <div id="divClipMenu" style="display: none;">
@@ -620,9 +623,9 @@
     <dd> - PREVIOUS / NEXT  </dd>
     <dt>'F'</dt>
     <dd>
-      - SET FILTER:
-      (SUBSTRING:  '<span id="spanIDBNameSubString"></span>'
-	DATES: '<span id="spanIDBFromDate"></span>' - '<span id="spanIDBToDate"></span>')
+      - SET FILTERS:
+      (NAME SUBSTRING:  '<span id="spanIDBNameSubString"></span>'
+	DATES RANGE: '<span id="spanIDBFromDate"></span>' - '<span id="spanIDBToDate"></span>')
     </dd>
     <dt>'M'</dt>
     <dd> - MERGE </dd>
