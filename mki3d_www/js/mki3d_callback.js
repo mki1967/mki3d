@@ -40,34 +40,40 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	break;
 
 	case 82: // R
-	/// REMOVE ENTRY ...
-	var yesAction = function(){
-	    // mki3d.idb.restoreTmp(); // ?
-	    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
-		mki3d.idb.removeIndexed();
-	}
-	mki3d.action.confirm("REMOVE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
-			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	    /// REMOVE ENTRY ...
+	    var yesAction = function(){
+		// mki3d.idb.restoreTmp(); // ?
+		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		    mki3d.idb.removeIndexed();
+	    }
+	    mki3d.action.confirm("REMOVE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
+				 +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	} else  mki3d.toast("NOTHING TO REMOVE !!!", 2000);
 	break;
 	
 	case 76: // L
-	/// LOAD ENTRY ...
-	var yesAction = function(){
-	    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
-		mki3d.idb.loadIndexed(); // merge the indexed entry
-	}
-	mki3d.action.confirm("LOAD ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
-			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	    /// LOAD ENTRY ...
+	    var yesAction = function(){
+		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		    mki3d.idb.loadIndexed(); // merge the indexed entry
+	    }
+	    mki3d.action.confirm("LOAD ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
+				 +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	} else  mki3d.toast("NOTHING TO LOAD !!!", 2000);
 	break;
 	
 	case 77: // M
-	/// MERGE ENTRY ...
-	var yesAction = function(){
-	    if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
-		mki3d.idb.mergeIndexed(); // merge the indexed entry
-	}
-	mki3d.action.confirm("MERGE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
-			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
+	    /// MERGE ENTRY ...
+	    var yesAction = function(){
+		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		    mki3d.idb.mergeIndexed(); // merge the indexed entry
+	    }
+	    mki3d.action.confirm("MERGE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
+				 +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
+	} else  mki3d.toast("NOTHING TO MERGE !!!", 2000);
 	break;
 	
 	case 80: // P

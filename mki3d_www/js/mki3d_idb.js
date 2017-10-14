@@ -37,6 +37,7 @@ mki3d.idb.remove = function( id , onsuccess){
 
 mki3d.idb.dataBackup=null;
 
+mki3d.idb.oldIdx=null;
 
 mki3d.idb.removeIndexed= function(){
     if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
@@ -130,15 +131,15 @@ mki3d.idb.filesIdx= -1;
 
 mki3d.idb.findFilesFinalFunction = function() {
     var len = mki3d.idb.filesFound.length;
-    if( mki3d.idb.oldIdx ) {
-	mki3d.idb.filesIdx= (mki3d.idb.oldIdx + mki3d.idb.filesFound.length -1) %  mki3d.idb.filesFound.length;
+    if( mki3d.idb.oldIdx !=null && len>0 ) {
+	mki3d.idb.filesIdx= (mki3d.idb.oldIdx + len -1) %  len;
 	mki3d.idb.oldIdx = null;
     } else
 	mki3d.idb.filesIdx = len-1;
     mki3d.idb.tmpLoadIndexed(); // load the indexed one if exists
+    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
     mki3d.idb.fillIDBSpans();	
     
-    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divInspectIDBMenu").innerHTML ;
     /// add below ...
     window.onkeydown = mki3d.callback.inspectIDBMenuOnKeyDown;
 }
