@@ -1,0 +1,2 @@
+chromeMessage="";
+isChromeApp=false;

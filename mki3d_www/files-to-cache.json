@@ -1,6 +1,7 @@
 ["mki3d.html",
 "pwa-manifest.json",
 "styles.css",
+"js/chrome.js",
 "js/mki3d_action.js",
 "js/mki3d_algebra.js",
 "js/mki3d_backup.js",
@@ -22,4 +23,5 @@
 "js/mki3d_studio.js",
 "js/mki3d_template.js",
 "js/mki3d_text.js",
-"js/mki3d_tmp.js"]
+"js/mki3d_tmp.js",
+"js/pwa.js"]
