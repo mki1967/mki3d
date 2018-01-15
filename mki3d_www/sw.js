@@ -3,7 +3,7 @@
 */
 
 var appName = 'mki3d';
-var version = '0.13';
+var version = '0.14';
 var currentCacheName= appName+'_'+version;   // e.g.: 'mki3d_0.0.1';
 
 self.addEventListener('install', e => {

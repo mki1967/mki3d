@@ -915,6 +915,7 @@ mki3d.callback.setDisplayMode = function(){
     if(	mki3d.displayMode ) return;
     mki3d.displayMode=true;
     mki3d.html.hideDiv(mki3d.html.divUpperMessage);
+    mki3d.html.hideDiv(document.querySelector("#divInfoMessage"));
     mki3d.redraw();
     mki3d.callback.preDisplayOnKeyDown =  window.onkeydown;
     window.onkeydown = mki3d.callback.displayOnKeyDown; 
@@ -991,6 +992,23 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	break;
 	case 78: // N
         mki3d.action.nextSetIndex();
+	break;
+	case 187: // =
+	{
+	    var msg="<strong>INFO:</strong>";
+	    msg+="<br> Number of segments: "+ mki3d.data.model.segments.length;
+	    msg+="<br> Number of triangles: "+ mki3d.data.model.triangles.length;
+	    
+	    var cursor = mki3d.data.cursor
+	    if(cursor.marker1 != null){
+		
+		var m1=cursor.marker1.position;
+		var c=cursor.position;
+		msg+="<br> MARKER1-CURSOR  distance = "+mki3d.vectorLength([m1[0]-c[0],m1[1]-c[1],m1[2]-c[2]])
+		
+	    }
+	    mki3d.message(msg);
+	}
 	break;
 
 	/*
