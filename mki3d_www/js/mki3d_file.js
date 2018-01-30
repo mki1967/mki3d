@@ -81,7 +81,7 @@ mki3d.file.startExporting = function () {
 	// console.log(err);
 	// alert(err);
 	mki3d.html.textareaOutput.value=  htmlString;
-	mki3d.saveInfo("Exporting to '*.html'");
+	mki3d.saveInfo("Exporting to '*.html' (Suggested name: '"+mki3d.file.suggestedName.concat(".html")+"')");
 	mki3d.action.textSave(mki3d.file.suggestedName.concat(".html"));
     }
 
@@ -95,7 +95,7 @@ mki3d.file.exportCollada= function(){
     /* unique-sort elements of the model */
     mki3d.modelSortUnique();
     mki3d.html.textareaOutput.value= mki3d_collada_export();
-    mki3d.saveInfo("Exporting to COLLADA '*.dae'");
+    mki3d.saveInfo("Exporting to COLLADA '*.dae' (Suggested name: '"+mki3d.file.suggestedName.concat(".dae")+"')");
     mki3d.action.textSave(mki3d.file.suggestedName.concat(".dae"));
 }
 
@@ -134,7 +134,7 @@ mki3d.file.startSaving = function () {
 	// console.log(err);
 	// alert(err);
 	mki3d.html.textareaOutput.value= myObjectString;
-	mki3d.saveInfo("Saving to '*.mki3d'");
+	mki3d.saveInfo("Saving to '*.mki3d'. (Suggested name: '"+mki3d.file.suggestedName.concat(".mki3d")+"')");
 	mki3d.action.textSave(mki3d.file.suggestedName.concat(".mki3d"));
     }
 
