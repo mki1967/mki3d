@@ -3,7 +3,8 @@ mki3d.ply={}
 
 
 mki3d_ply= function() {
-    mki3d_ply_indexVertices();
+    
+    mki3d_ply_indexVertices(); // append idx attribute to each endpoint
 
     var outString=""+
 	"ply\n" +
@@ -13,11 +14,16 @@ mki3d_ply= function() {
 
     // header
     outString += mki3d_ply_vertexHeader();
+    outString += mki3d_ply_edgeHeader();
+    outString += mki3d_ply_faceHeader();
     // ...
     outString += "end_header\n";
-
+    // contents
+    outString += mki3d_ply_vertices();
+    outString +=mki3d_ply_edgesAndFaces();
+    // cleanup
     mki3d_ply_deleteIdx(); // clean ply idx
-    return outString;
+    return outString+"\n";
 }
 
 
@@ -64,6 +70,67 @@ mki3d_ply_deleteIdx= function() {  // removes ply indexes
 }
 
 
+/* content lines */
+
+
+// vertices
+mki3d_ply_elementsVertices= function( elements ) { // output elements' endpoints as vertices lines
+    outString="";
+    var i,j;
+    for( i=0; i< elements.length; i++) {
+	for( j=0; j<elements[i].length; j++) {
+	    outString+= elements[i][j].position[0]+" ";
+	    outString+= elements[i][j].position[2]+" ";
+	    outString+= elements[i][j].position[1]+" "; // Y is vertical in MKI3D
+	    /*
+	    outString+= elements[i][j].color[0]+" ";
+	    outString+= elements[i][j].color[1]+" ";
+	    outString+= elements[i][j].color[2]+" ";
+	    */
+	    outString+= Math.floor(255*elements[i][j].color[0])+" ";
+	    outString+= Math.floor(255*elements[i][j].color[1])+" ";
+	    outString+= Math.floor(255*elements[i][j].color[2])+" ";
+	    
+	    outString+="\n"
+	}
+    }
+
+    return outString;
+}
+
+mki3d_ply_vertices= function( elements ) { // output elements' endpoints as vertices lines
+    var model= mki3d.data.model;
+    return ""+
+	mki3d_ply_elementsVertices(model.segments)+
+	mki3d_ply_elementsVertices(model.triangles);
+}
+
+// indexed elements
+mki3d_ply_elements= function( elements, isList ) { // increases mki3d.idx.current
+    outString="";
+    var i,j;
+    for( i=0; i< elements.length; i++) {
+	if( isList ) outString+= elements[i].length+" "; // faces can be lists -- not tuples
+	for( j=0; j<elements[i].length; j++) {
+	    outString+= elements[i][j].idx+" ";
+	}
+	 outString+= "\n"
+    }
+    return outString;
+
+}
+
+mki3d_ply_edgesAndFaces= function( elements ) { // output edges and faces
+    var model= mki3d.data.model;
+    return ""+
+	mki3d_ply_elements(model.segments, false)+
+	mki3d_ply_elements(model.triangles, true );
+}
+
+
+
+// header lines
+
 mki3d_ply_vertexHeader= function(){ // run after mki3d_ply_indexVertices()
     var model= mki3d.data.model;
     var outString =""+
@@ -72,9 +139,39 @@ mki3d_ply_vertexHeader= function(){ // run after mki3d_ply_indexVertices()
 	"property float x\n"+
 	"property float y\n"+
 	"property float z\n"+
+	"property uchar red\n"+
+	"property uchar green\n"+
+	"property uchar blue\n"
+    /*
 	"property float red\n"+
 	"property float green\n"+
 	"property float blue\n"
-    
+    */
     return outString;
 }
+
+mki3d_ply_edgeHeader= function(){
+    var model= mki3d.data.model;
+    var outString =""+
+	"element edge "+model.segments.length+"\n"+
+	"property int vertex1\n"+
+	"property int vertex2\n"
+    return outString;
+	
+}
+
+mki3d_ply_faceHeader= function(){
+    var model= mki3d.data.model;
+    var outString =""+
+	"element face "+model.triangles.length+"\n"+
+	"property list uchar int vertex_index\n"
+    /*
+	"element triangle "+model.triangles.length+"\n"+
+	"property int vertex1\n"+
+	"property int vertex2\n"+
+	"property int vertex3\n"
+    */
+    return outString;
+	
+}
+
