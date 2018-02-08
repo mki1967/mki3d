@@ -378,6 +378,10 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 	// COLLADA EXPORT
         mki3d.file.exportCollada();
 	break;
+	case 80: // P
+	// PLY EXPORT
+        mki3d.file.exportPly();
+	break;
 	
 	default:
 	mki3d.action.escapeToCanvas();

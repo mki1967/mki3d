@@ -17,6 +17,7 @@
 "js/mki3d_html.js",
 "js/mki3d_idb.js",
 "js/mki3d.js",
+"js/mki3d_ply.js",
 "js/mki3d_points.js",
 "js/mki3d_set.js",
 "js/mki3d_stereo.js",

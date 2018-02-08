@@ -99,6 +99,17 @@ mki3d.file.exportCollada= function(){
     mki3d.action.textSave(mki3d.file.suggestedName.concat(".dae"));
 }
 
+/** PLY **/
+mki3d.file.exportPly= function(){
+    /* clean data from temporratry markers */
+    mki3d.action.cancelSelection();
+    /* unique-sort elements of the model */
+    mki3d.modelSortUnique();
+    mki3d.html.textareaOutput.value= mki3d_ply();
+    mki3d.saveInfo("Exporting to PLY '*.ply' (Suggested name: '"+mki3d.file.suggestedName.concat(".ply")+"')");
+    mki3d.action.textSave(mki3d.file.suggestedName.concat(".ply"));
+}
+
 
 /** SAVING **/
 
