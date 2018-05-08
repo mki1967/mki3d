@@ -203,8 +203,13 @@ mki3d.callback.textSaveOnKeyDown = function (e){
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend( actionMessage );
 	break;
+	case 78: // N
+	document.querySelector("#saveName").select();
+	document.execCommand("Copy");
+	break;
 	case 65: // A
 	mki3d.html.textareaOutput.select();
+	document.execCommand("Copy");
 	break;
 	
     }

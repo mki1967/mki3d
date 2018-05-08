@@ -30,6 +30,11 @@ mki3d.saveInfo=function(string) {
     document.querySelector("#saveInfo").innerHTML=string;
 }
 
+mki3d.saveName=function(string) {
+    document.querySelector("#saveName").value = string;
+    document.querySelector("#saveName").readOnly = true;
+}
+
 mki3d.loadInfo=function(string) {
     document.querySelector("#loadInfo").innerHTML=string;
 }
