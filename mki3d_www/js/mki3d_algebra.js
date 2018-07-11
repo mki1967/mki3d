@@ -197,7 +197,7 @@ mki3d.matrixRotatedYZ= function(matrix, alpha ){
 };
 
 
-/** 4-dimmensional vectors and matrices **/
+/** 4-dimensional vectors and matrices **/
 
 mki3d.scalarProduct4= function( v, w ) {
     return v[0]*w[0]+v[1]*w[1]+v[2]*w[2]+v[3]*w[3];

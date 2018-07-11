@@ -61,7 +61,7 @@ const MKI3D_CURSOR_SHAPE = [
 
 ];
 
-/* marks dimmensions corresponding to arrow keys */
+/* marks dimensions corresponding to arrow keys */
 const MKI3D_PLANE_MARKER = [
     [[0.5, 0, 0], [-0.1, 0.6, 0]]
 ];
