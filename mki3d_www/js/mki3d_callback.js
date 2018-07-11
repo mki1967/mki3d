@@ -1040,9 +1040,8 @@ mki3d.callback.canvasOnKeyDown = function (e){
 };
 
 
-mki3d.callback.onWindowResize = function () {
-    var wth = parseInt(window.innerWidth)-30;
-    var hth = parseInt(window.innerHeight)-30;
+
+mki3d.setCanvasSize= function( wth, hth ){
     var canvas = mki3d.html.canvas;
     var gl = mki3d.gl.context;
     canvas.setAttribute("width", ''+wth);
@@ -1055,5 +1054,11 @@ mki3d.callback.onWindowResize = function () {
     mki3d.setModelViewMatrix();
 
     mki3d.redraw();
+}
+
+mki3d.callback.onWindowResize = function () {
+    var wth = parseInt(window.innerWidth)-30;
+    var hth = parseInt(window.innerHeight)-30;
+    mki3d.setCanvasSize( wth, hth );
 };
 

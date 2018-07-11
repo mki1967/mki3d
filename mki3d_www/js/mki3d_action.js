@@ -1152,7 +1152,8 @@ mki3d.action.inputs = function(){
     mki3d.html.inputPolygonNumberOfVertices.value= mki3d.constructive.polygonNumberOfVertices;
     mki3d.html.inputCurrentName.value= mki3d.file.suggestedName;
 
-
+    document.querySelector("#inputCanvasWidth").value= document.querySelector("#canvasId").getAttribute("width");
+    document.querySelector("#inputCanvasHeight").value= document.querySelector("#canvasId").getAttribute("height");
 
     /* display inputs page */
     mki3d.html.hideAllDivs();
@@ -1296,7 +1297,17 @@ mki3d.action.inputsEnter= function(){
 	mki3d.file.suggestedName=value;
 	msg+="<br>NEW CURRENT NAME: '"+value+"'";
     }
-    // console.log(value);
-    // console.log(mki3d.html.inputCursorX);
+
+
+    mki3d.setCanvasSize( document.querySelector("#inputCanvasWidth").value,
+			 document.querySelector("#inputCanvasHeight").value
+		       );
+
     return msg;
+}
+
+
+setDefaultCanvasInput= function() {
+    document.querySelector('#inputCanvasWidth').value= parseInt(window.innerWidth)-30;
+    document.querySelector('#inputCanvasHeight').value= parseInt(window.innerHeight)-30;
 }
