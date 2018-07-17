@@ -23,7 +23,16 @@ window.onload= function(){
     if(!isChromeApp) window.onbeforeunload= function(){
 	return "Do not forget to save your data!\n";
     }
+    
     window.onkeydown=mki3d.callback.canvasOnKeyDown;
+    
+    let params = (new URL(document.location)).searchParams;
+    let input=params.get("input")
+    console.log(input)
+    if(input) {
+	// mki3d.url.load("https://raw.githubusercontent.com/mki1967/mki3dgame/master/assets/stages/stage1.mki3d"); /// tests
+	mki3d.url.load(input); /// tests
+    }
 }
 
 
