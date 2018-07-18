@@ -26,7 +26,13 @@ window.onload= function(){
     
     window.onkeydown=mki3d.callback.canvasOnKeyDown;
     
+    mki3d.url.base=document.referrer; // Use referrer as the default base
     let params = (new URL(document.location)).searchParams;
+    let base = params.get("base")
+    if( base ){ // parameter 'base' overrides old value of 'mki3d.url.base'
+	// tested by opening: http://localhost:8000/mki3d_www/mki3d.html?input=ex3-expanded.mki3d&base=http://mki1967.github.io/mki3d/docs/examples/mki3d-data/
+	mki3d.url.base= base;
+    }
     let input=params.get("input")
     console.log(input)
     if(input) {
