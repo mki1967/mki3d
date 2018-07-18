@@ -3,7 +3,7 @@ mki3d.url={};
 mki3d.url.base=document.referrer;
 
 mki3d.url.load = async function( input ) { // load from url 
-    console.log(input); /// tests
+    // console.log(input); /// tests
     let backup= mki3d.data;
     let url;
     try{
@@ -11,12 +11,12 @@ mki3d.url.load = async function( input ) { // load from url
 	    url=new URL(input, mki3d.url.base );
 	else
 	    url=new URL(input); 
-	console.log(url);
+	// console.log(url); /// tests
 	mki3d.message("LOADING FROM "+url+" ...");
 	let response=await fetch(url, {cache: 'no-cache', mode: 'cors'} );
-	console.log( response );   
+	// console.log( response );   
 	let result= await response.json();
-	console.log(result); /// tests
+	// console.log(result); /// tests
 	
 	mki3d.data=result; /// !!!
 	mki3d.tmpCancel();
@@ -39,5 +39,5 @@ mki3d.url.load = async function( input ) { // load from url
 	mki3d.backup();
 	mki3d.redraw();
     }
-    console.log(mki3d.data); /// tests
+    // console.log(mki3d.data); /// tests
 }

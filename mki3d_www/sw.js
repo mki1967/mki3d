@@ -3,14 +3,13 @@
 */
 
 var appName = 'mki3d';
-var version = '0.19';
+var version = '0.20';
 var currentCacheName= appName+'_'+version;   // e.g.: 'mki3d_0.0.1';
 
 self.addEventListener('install', e => {
     e.waitUntil(
-	caches.open(currentCacheName).then(cache => 
+	caches.open(currentCacheName).then(cache =>
 				       {
-					   
 					   return fetch('files-to-cache.json').then(response => {
 					       return response.json();
 					   } ).then( files => {

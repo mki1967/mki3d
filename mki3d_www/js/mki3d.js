@@ -34,10 +34,10 @@ window.onload= function(){
 	mki3d.url.base= base;
     }
     let input=params.get("input")
-    console.log(input)
+    // console.log(input) /// tests
     if(input) {
 	// mki3d.url.load("https://raw.githubusercontent.com/mki1967/mki3dgame/master/assets/stages/stage1.mki3d"); /// tests
-	mki3d.url.load(input); /// tests
+	mki3d.url.load(input);
     }
 }
 
