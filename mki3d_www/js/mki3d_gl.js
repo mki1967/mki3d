@@ -41,11 +41,11 @@ mki3d.gl.initGL= function(canvas) {
     gl.viewportHeight = canvas.height;
     // console.log(gl); // tests
     mki3d.gl.context = gl;
-    mki3d.gl.buffers.cursor = mki3d.gl.newBuffers( MKI3D_CURSOR_MAX_SEGMENTS , MKI3D_CURSOR_MAX_TRIANGLES );
-    mki3d.gl.buffers.model = mki3d.gl.newBuffers( MKI3D_MODEL_MAX_SEGMENTS , MKI3D_MODEL_MAX_TRIANGLES );
+    mki3d.gl.buffers.cursor = mki3d.gl.newBuffers(); // ( MKI3D_CURSOR_MAX_SEGMENTS , MKI3D_CURSOR_MAX_TRIANGLES );
+    mki3d.gl.buffers.model = mki3d.gl.newBuffers(); //  ( MKI3D_MODEL_MAX_SEGMENTS , MKI3D_MODEL_MAX_TRIANGLES );
     /* special point shapes */
-    mki3d.gl.buffers.selectedPoint = mki3d.gl.newBuffers( MKI3D_SELECTED_POINT.length ,  0 /* not used */);
-    mki3d.gl.buffers.bookmarkedPoint = mki3d.gl.newBuffers( MKI3D_BOOKMARKED_POINT.length ,  0 /* not used */);
+    mki3d.gl.buffers.selectedPoint = mki3d.gl.newBuffers(); // ( MKI3D_SELECTED_POINT.length ,  0 /* not used */);
+    mki3d.gl.buffers.bookmarkedPoint = mki3d.gl.newBuffers(); // ( MKI3D_BOOKMARKED_POINT.length ,  0 /* not used */);
     mki3d.gl.initShaderProgram();
     mki3d.loadCursor();
 }
@@ -54,25 +54,25 @@ mki3d.gl.initGL= function(canvas) {
 /* object for storing  ids of GL buffers */
 mki3d.gl.buffers = {};
 
-mki3d.gl.newBuffers= function ( maxSegments, maxTriangles ) {
+mki3d.gl.newBuffers= function (/* maxSegments, maxTriangles */) {
     var gl = mki3d.gl.context;
     var buf = {}; 
 
     buf.segments = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 2*MKI3D_VERTEX_POSITION_SIZE*maxSegments ), gl.DYNAMIC_DRAW );
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 2*MKI3D_VERTEX_POSITION_SIZE*maxSegments ), gl.DYNAMIC_DRAW );
 
     buf.segmentsColors = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 2*MKI3D_VERTEX_COLOR_SIZE*maxSegments ), gl.DYNAMIC_DRAW );
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 2*MKI3D_VERTEX_COLOR_SIZE*maxSegments ), gl.DYNAMIC_DRAW );
 
     buf.triangles = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 3*MKI3D_VERTEX_POSITION_SIZE*maxTriangles ), gl.DYNAMIC_DRAW );
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 3*MKI3D_VERTEX_POSITION_SIZE*maxTriangles ), gl.DYNAMIC_DRAW );
 
     buf.trianglesColors = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.trianglesColors);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 3*MKI3D_VERTEX_COLOR_SIZE*maxTriangles ), gl.DYNAMIC_DRAW );
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( 3*MKI3D_VERTEX_COLOR_SIZE*maxTriangles ), gl.DYNAMIC_DRAW );
 
     buf.nrOfSegments = 0;
     buf.nrOfTriangles = 0;
