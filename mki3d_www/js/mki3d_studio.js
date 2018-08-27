@@ -148,20 +148,25 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
 
 /* load model to its GL buffer */
 
+
 mki3d.loadModel= function (){
-    var gl = mki3d.gl.context;
     var buf = mki3d.gl.buffers.model;
 
     mki3d.tmpRefreshDisplayModel();
-    // var model = mki3d.data.model;
-    var model = mki3d.tmp.display.model;
+    var stereoMode= mki3d.stereo.mode;
+    var gl = mki3d.gl.context;
+    
+    mki3d.tmp.exported= mki3d.loadDataToBuf(gl, mki3d.data , buf, stereoMode);
+}
+
+mki3d.loadDataToBuf= function(gl, data, buf, stereoMode ) { // returns exported for export to HTML
+    var model = data.model;
 
     var elements = [];
     var elementsColors = [];
 
     var red= mki3d.stereo.red;
     var blue=mki3d.stereo.blue;
-    var stereoMode= mki3d.stereo.mode;
 
     var i,j;
     for(i=0; i<model.segments.length; i++){
@@ -183,13 +188,13 @@ mki3d.loadModel= function (){
 
     // load segments and colors to GL buffers
     /* for export */
-    mki3d.tmp.exported={};
-    mki3d.tmp.exported.segments= elements;
-    mki3d.tmp.exported.segmentsColors= elementsColors;
+    exported={};
+    exported.segments= elements;
+    exported.segmentsColors= elementsColors;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elementsColors ), gl.DYNAMIC_DRAW );
 
@@ -204,11 +209,11 @@ mki3d.loadModel= function (){
     /* scale down red and blue coefficients */
     red= red/3;
     blue=blue/3;
-    
+
     for(i=0; i<model.triangles.length; i++){
 	var triangle=model.triangles[i];
 	if(!triangle.shade) 
-	    triangle.shade = mki3d.shadeFactor( triangle, mki3d.data.light);
+	    triangle.shade = mki3d.shadeFactor( triangle, data.light);
 	for(j=0; j<3; j++){
 	    elements.push(triangle[j].position[0]);
 	    elements.push(triangle[j].position[1]);
@@ -229,16 +234,18 @@ mki3d.loadModel= function (){
     // load segments and colors to GL buffers
 
     /* for export */
-    mki3d.tmp.exported.triangles= elements;
-    mki3d.tmp.exported.trianglesColors= elementsColors;
+    exported.triangles= elements;
+    exported.trianglesColors= elementsColors;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.triangles);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elements ), gl.DYNAMIC_DRAW );
-    
+
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.trianglesColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( elementsColors ), gl.DYNAMIC_DRAW );
 
-    buf.nrOfTriangles =  elements.length/(3*MKI3D_VERTEX_POSITION_SIZE); 
+    buf.nrOfTriangles =  elements.length/(3*MKI3D_VERTEX_POSITION_SIZE);
+
+    return exported;
 }
 
 /* load cursor to its GL buffer */
