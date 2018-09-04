@@ -143,6 +143,8 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
 
 
 
+    // mki3d.drawGraph( mki3d.gl.buffers.url ); /// test
+    mki3d.drawGraph( mki3d.gl.buffers.urlStereo ); /// test
     mki3d.text.redraw( projectionMatrixGL ); /// tests
 }
 

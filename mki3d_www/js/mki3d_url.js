@@ -2,6 +2,11 @@ mki3d.url={};
 
 mki3d.url.base=document.referrer;
 
+mki3d.url.symbol = {"model":{"segments":[[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,-1,0],"color":[0,0,1],"set":0}],[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,1,0],"color":[0,0,1],"set":0}],[{"position":[0,-1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}],[{"position":[0,1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}]],"triangles":[[{"position":[-1,0,0],"color":[1,1,1],"set":0},{"position":[0,-1,0],"color":[1,1,1],"set":0},{"position":[0,0,0],"color":[1,1,1],"set":0}],[{"position":[-1,0,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[0,1,0],"color":[1,0,0],"set":0}],[{"position":[0,-1,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[1,0,0],"color":[1,0,0],"set":0}],[{"position":[0,0,0],"color":[1,1,1],"set":0},{"position":[0,1,0],"color":[1,1,1],"set":0},{"position":[1,0,0],"color":[1,1,1],"set":0}]]},"view":{"focusPoint":[0,0,0],"rotationMatrix":[[1,0,0],[0,1,0],[0,0,1]],"scale":2,"screenShift":[0,0,60]},"projection":{"zNear":0.25,"zFar":300,"zoomY":4},"backgroundColor":[0,1,1],"cursor":{"position":[0,0,0],"marker1":null,"marker2":null,"color":[0,0,1],"step":0.5},"clipMaxVector":[100000000000000000000,100000000000000000000,100000000000000000000],"clipMinVector":[-100000000000000000000,-100000000000000000000,-100000000000000000000],"light":{"vector":[0,0,1],"ambientFraction":0.2},"set":{"current":0}};
+
+
+
+
 mki3d.url.load = async function( input ) { // load from url 
     // console.log(input); /// tests
     let backup= mki3d.data;
@@ -26,8 +31,8 @@ mki3d.url.load = async function( input ) { // load from url
 	// let filename = url.substring(url.lastIndexOf('/')+1);
 	let pathname = url.pathname;
 	let filename = pathname.substring(pathname.lastIndexOf('/')+1);
-	 mki3d.file.suggestedName= mki3d.file.withoutExtension(filename);
-	
+	mki3d.file.suggestedName= mki3d.file.withoutExtension(filename);
+	mki3d.url.base= url; // new base for next load
 	mki3d.message("LOADED FROM "+url+".");
     }
     catch( err ) {
