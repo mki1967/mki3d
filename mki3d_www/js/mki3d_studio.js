@@ -144,7 +144,7 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
 
 
     // mki3d.drawGraph( mki3d.gl.buffers.url ); /// test
-    mki3d.drawGraph( mki3d.gl.buffers.urlStereo ); /// test
+    // mki3d.drawGraph( mki3d.gl.buffers.urlStereo ); /// test
     mki3d.text.redraw( projectionMatrixGL ); /// tests
 }
 
@@ -519,7 +519,7 @@ mki3d.drawGraph = function (graph) {
 }
 
 
-// ...
+// old and bad ...
 mki3d.drawPoints = function( pointShape, points, buf ) {
     if( !points || points.length == 0) return; 
     var gl = mki3d.gl.context;
@@ -546,41 +546,53 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 	}
     }
 
+    /*
     var colors = [];
     for( i=0 ; i < 2*(pointShape.length); i++) {
         colors.push(cCol[0]);
         colors.push(cCol[1]);
         colors.push(cCol[2]);
     }
+    */
     
     /* draw each point -- segments moved by point position */
+    var movedShape=[];
     for(i=0; i<points.length; i++) {
 	var pos= points[i].position;
-        var movedShape=[];
         for(j=0; j<segments.length; j++) {
 	    movedShape.push(segments[j]+pos[ j%3 ] );
 	}
-
-	// load movedShape and colors to GL buffers
-
-
-	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( movedShape ), gl.DYNAMIC_DRAW );
-	
-	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
-
-	buf.nrOfSegments =  segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
-
-
-	// draw lines only
-	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments );
-	gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
-	gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
-	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
-	gl.drawArrays(gl.LINES, 0, 2*buf.nrOfSegments);
-	
     }
+
+    // console.log( movedShape ); // test
+    // load movedShape and colors to GL buffers
+
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( movedShape ), gl.DYNAMIC_DRAW );
+
+    /*
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
+    */
+
+    
+    buf.nrOfSegments =  points.length*segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
+
+
+    // draw lines only
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments );
+    gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
+
+    /*
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
+      gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
+    */
+    gl.disableVertexAttribArray(shaderProgram.aVertexColor); ///
+    gl.vertexAttrib3fv(shaderProgram.aVertexColor, cCol);
+    gl.drawArrays(gl.LINES, 0, 2*buf.nrOfSegments);
+    gl.enableVertexAttribArray(shaderProgram.aVertexColor); ///
+    
     
     // ...
 }
