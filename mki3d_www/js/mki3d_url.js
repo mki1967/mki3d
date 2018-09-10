@@ -46,3 +46,22 @@ mki3d.url.load = async function( input ) { // load from url
     }
     // console.log(mki3d.data); /// tests
 }
+
+mki3d.url.newLink= function(){
+    return {
+	label:"",
+	opener:"",
+	url:""
+    }
+}
+
+
+mki3d.url.addLink= function(link ){
+    if( ! mki3d.data.links ) {
+	mki3d.data.links=[]
+    }
+    
+    mki3d.data.links.push( link );
+    
+}
+
