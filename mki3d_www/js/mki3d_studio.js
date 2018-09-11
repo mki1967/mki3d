@@ -142,6 +142,7 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
 	mki3d.drawPoints( MKI3D_BOOKMARKED_POINT, mki3d.tmp.bookmarked, mki3d.gl.buffers.bookmarkedPoint );
 
 
+    mki3d.drawPoints( MKI3D_URL_POINT, [{ position: [0,0,0]}, { position: [2,2,0] }] , mki3d.gl.buffers.url );
 
     // mki3d.drawGraph( mki3d.gl.buffers.url ); /// test
     // mki3d.drawGraph( mki3d.gl.buffers.urlStereo ); /// test
