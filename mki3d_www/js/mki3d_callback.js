@@ -320,6 +320,10 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
         mki3d.action.indexedDBMenu();
 	break;
 	
+	case 85: // u
+        mki3d.action.urlMenu();
+	break;
+	
 	default:
 	mki3d.action.escapeToCanvas();
 	// temporary escape to canvas
@@ -347,6 +351,27 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	case 83: // S
 	var endpoints= mki3d.tmp.selected;
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
+	break;
+	case 85: // U
+	if(mki3d.data.links)
+	    actionMessage=mki3d.action.cursorMoveToNearestEndpoint(mki3d.data.links);
+	break;
+    };
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br>"+actionMessage);
+}
+
+mki3d.callback.urlMenuOnKeyDown = function (e){
+    var actionMessage="";
+    var code= e.which || e.keyCode;
+    // TO DO
+    switch(code)
+    {
+	
+	case 65: // A
+	let link= mki3d.url.newLink() ;
+	link.position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
+	actionMessage= mki3d.url.addLink( link );
 	break;
     };
     mki3d.action.escapeToCanvas();

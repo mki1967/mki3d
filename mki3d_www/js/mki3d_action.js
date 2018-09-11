@@ -909,6 +909,11 @@ mki3d.action.cursorMenu = function(){
     window.onkeydown = mki3d.callback.cursorMenuOnKeyDown;
 }
 
+mki3d.action.urlMenu = function(){
+    mki3d.message( document.querySelector("#divURLMenu").innerHTML );
+    window.onkeydown = mki3d.callback.urlMenuOnKeyDown;
+}
+
 mki3d.action.fileMenu = function(){
     mki3d.html.spanCurrentName.innerHTML=mki3d.file.suggestedName;
     mki3d.message( mki3d.html.divFileMenu.innerHTML );

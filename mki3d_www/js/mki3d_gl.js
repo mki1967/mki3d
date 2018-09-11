@@ -44,9 +44,9 @@ mki3d.gl.initGL= function(canvas) {
     mki3d.gl.buffers.cursor = mki3d.gl.newBuffers(); // ( MKI3D_CURSOR_MAX_SEGMENTS , MKI3D_CURSOR_MAX_TRIANGLES );
     mki3d.gl.buffers.model = mki3d.gl.newBuffers(); //  ( MKI3D_MODEL_MAX_SEGMENTS , MKI3D_MODEL_MAX_TRIANGLES );
     mki3d.gl.buffers.url = mki3d.gl.newBuffers(); // URL link symbol
-    mki3d.loadDataToBuf(gl, mki3d.url.symbol,mki3d.gl.buffers.url , false /* stereoMode */ )
-    mki3d.gl.buffers.urlStereo = mki3d.gl.newBuffers(); // URL link symbol
-    mki3d.loadDataToBuf(gl, mki3d.url.symbol,mki3d.gl.buffers.urlStereo , true /* stereoMode */ )
+    // mki3d.loadDataToBuf(gl, mki3d.url.symbol,mki3d.gl.buffers.url , false /* stereoMode */ )
+    // mki3d.gl.buffers.urlStereo = mki3d.gl.newBuffers(); // URL link symbol
+    // mki3d.loadDataToBuf(gl, mki3d.url.symbol,mki3d.gl.buffers.urlStereo , true /* stereoMode */ )
     /* special point shapes */
     mki3d.gl.buffers.selectedPoint = mki3d.gl.newBuffers(); // ( MKI3D_SELECTED_POINT.length ,  0 /* not used */);
     mki3d.gl.buffers.bookmarkedPoint = mki3d.gl.newBuffers(); // ( MKI3D_BOOKMARKED_POINT.length ,  0 /* not used */);
