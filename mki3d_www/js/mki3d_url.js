@@ -6,6 +6,8 @@ mki3d.url.minDistance=1; // minimal distance between link positions
 
 mki3d.drawLinks= true; // draw the links
 
+mki3d.url.editedIdx=null; // index of the edited link
+
 // mki3d.url.symbol = {"model":{"segments":[[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,-1,0],"color":[0,0,1],"set":0}],[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,1,0],"color":[0,0,1],"set":0}],[{"position":[0,-1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}],[{"position":[0,1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}]],"triangles":[[{"position":[-1,0,0],"color":[1,1,1],"set":0},{"position":[0,-1,0],"color":[1,1,1],"set":0},{"position":[0,0,0],"color":[1,1,1],"set":0}],[{"position":[-1,0,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[0,1,0],"color":[1,0,0],"set":0}],[{"position":[0,-1,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[1,0,0],"color":[1,0,0],"set":0}],[{"position":[0,0,0],"color":[1,1,1],"set":0},{"position":[0,1,0],"color":[1,1,1],"set":0},{"position":[1,0,0],"color":[1,1,1],"set":0}]]},"view":{"focusPoint":[0,0,0],"rotationMatrix":[[1,0,0],[0,1,0],[0,0,1]],"scale":2,"screenShift":[0,0,60]},"projection":{"zNear":0.25,"zFar":300,"zoomY":4},"backgroundColor":[0,1,1],"cursor":{"position":[0,0,0],"marker1":null,"marker2":null,"color":[0,0,1],"step":0.5},"clipMaxVector":[100000000000000000000,100000000000000000000,100000000000000000000],"clipMinVector":[-100000000000000000000,-100000000000000000000,-100000000000000000000],"light":{"vector":[0,0,1],"ambientFraction":0.2},"set":{"current":0}};
 
 
@@ -72,6 +74,19 @@ mki3d.url.addLink= function(link ){
     }
 
     return "ADDING NEW LINK FAILED !!!<br>(TOO CLOSE TO ANOTHER LINK; MIN_URL_DISTANCE="+mki3d.url.minDistance+")"; 
+    
+}
+
+mki3d.url.linkIdxAtPosition= function(position ){
+    if( ! mki3d.data.links ) {
+	return null; // "THERE ARE NO LINKS"
+    }
+    nearestIdx=mki3d.findNearestEndpointIdx( position, mki3d.data.links  );
+    if( nearestIdx === null || mki3d.distanceSquare(mki3d.data.links[nearestIdx].position, position) > 0 ) {
+	return null; // "THERE IS NO LINK AT "+JSON.stringify(position)+" !";
+    }
+
+    return nearestIdx ; 
     
 }
 

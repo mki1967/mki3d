@@ -373,10 +373,43 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 	link.position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
 	actionMessage= mki3d.url.addLink( link );
 	break;
+	case 69: // E
+	let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
+	mki3d.url.editedIdx=mki3d.url.linkIdxAtPosition(position );
+
+	if(mki3d.url.editedIdx === null ) {
+	    actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
+	} else {
+	    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divURLEdit").innerHTML ;
+	    window.onkeydown = mki3d.callback.urlEditMenuOnKeyDown;
+	    return; // go to sub-menu 
+	}
+	break;
     };
     mki3d.action.escapeToCanvas();
     mki3d.messageAppend("<br>"+actionMessage);
 }
+
+mki3d.callback.urlEditMenuOnKeyDown = function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    switch(code)
+    {
+	case 27: // Esc
+	//
+	break;
+	case 13: // Enter
+	// read data to link
+	///  ...
+	break;
+    }
+    mki3d.action.escapeToCanvas();
+    mki3d.messageAppend("<br>"+actionMessage);
+}
+
+
+
+
 
 mki3d.callback.fileMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
