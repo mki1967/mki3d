@@ -377,7 +377,7 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 	let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
 	mki3d.url.editedIdx=mki3d.url.linkIdxAtPosition(position );
 
-	if(mki3d.url.editedIdx === null ) {
+	if(mki3d.url.editedIdx === -1 ) {
 	    actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
 	} else {
 	    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divURLEdit").innerHTML ;
@@ -393,18 +393,31 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 mki3d.callback.urlEditMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
+    let exit=false;
     switch(code)
     {
 	case 27: // Esc
 	//
+	exit=true;
 	break;
 	case 13: // Enter
 	// read data to link
-	///  ...
+	// mki3d.data.links[mki3d.url.editedIdx]= ...
+	// ...
+	exit=true;
+	break;
+	case 9: // Tab
+	// test link
+	let opener=document.querySelector("#inputURLOpener").value;
+	let input=document.querySelector("#inputURL").value;
+	window.open(mki3d.url.completeLink( opener, input), "_blank");
 	break;
     }
-    mki3d.action.escapeToCanvas();
-    mki3d.messageAppend("<br>"+actionMessage);
+    console.log(code); /// test
+    if (exit) {
+	mki3d.action.escapeToCanvas();
+	mki3d.messageAppend("<br>"+actionMessage);
+    }
 }
 
 

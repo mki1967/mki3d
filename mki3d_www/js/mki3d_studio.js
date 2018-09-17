@@ -9,8 +9,8 @@ mki3d.modelChange = function() {
 /* New version: For position pos find nearest endpoint from array of endpoints */
 
 mki3d.findNearestEndpointIdx = function( pos, endpoints ) {
-    if(!endpoints) return null;
-    if(endpoints.length == 0) return null;
+    if(!endpoints) return -1;
+    if(endpoints.length == 0) return -1;
     var found=0;
     var minDist = mki3d.distanceSquare(pos, endpoints[found].position);
     var i;
@@ -27,7 +27,7 @@ mki3d.findNearestEndpointIdx = function( pos, endpoints ) {
 
 mki3d.findNearestEndpoint = function( pos, endpoints ) {
     let idx = mki3d.findNearestEndpointIdx( pos, endpoints );
-    if( idx === null ) return null; //nothing found
+    if( idx === -1 ) return null; //nothing found
     return endpoints[idx];
     
 }
