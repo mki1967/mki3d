@@ -101,5 +101,8 @@ mki3d.url.completeLink= function ( opener, input) {
 	url=new URL(input);
     if( !opener ) return url;
 
+    let openerURL= new URL(opener, window.location.href ); // if opener is relative URL we take the base of current window
     // add code for opener ...
+
+    return String(openerURL)+encodeURI(String(url)); // the url as encoded parameter
 }
