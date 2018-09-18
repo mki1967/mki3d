@@ -381,6 +381,10 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 	    actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
 	} else {
 	    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divURLEdit").innerHTML ;
+	    	    
+	    document.querySelector("#inputURLLabel").value=mki3d.data.links[mki3d.url.editedIdx].label;
+	    document.querySelector("#inputURLOpener").value=mki3d.data.links[mki3d.url.editedIdx].opener;
+	    document.querySelector("#inputURL").value=mki3d.data.links[mki3d.url.editedIdx].url;
 	    window.onkeydown = mki3d.callback.urlEditMenuOnKeyDown;
 	    return; // go to sub-menu 
 	}
@@ -403,7 +407,9 @@ mki3d.callback.urlEditMenuOnKeyDown = function (e){
 	case 13: // Enter
 	// read data to link
 	// mki3d.data.links[mki3d.url.editedIdx]= ...
-	// ...
+	mki3d.data.links[mki3d.url.editedIdx].label=document.querySelector("#inputURLLabel").value;
+	mki3d.data.links[mki3d.url.editedIdx].opener=document.querySelector("#inputURLOpener").value;
+	mki3d.data.links[mki3d.url.editedIdx].url=document.querySelector("#inputURL").value;
 	exit=true;
 	break;
 	case 9: // Tab
