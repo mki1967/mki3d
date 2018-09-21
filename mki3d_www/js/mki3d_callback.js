@@ -373,20 +373,42 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 	link.position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
 	actionMessage= mki3d.url.addLink( link );
 	break;
+	case 88: // X
+	{
+	    let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
+	    let idx=mki3d.url.linkIdxAtPosition(position );
+	    
+	    if(idx === -1 ) {
+		actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
+	    } else {
+		actionMessage= mki3d.url.cutLinkAtIdx(idx );
+	    }
+	}
+	break;
+	
+	case 86: // X
+	{
+	    let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
+	    actionMessage=mki3d.url.pasteLinkIdxAtPosition(position );
+	}
+	break;
+	
 	case 69: // E
-	let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
-	mki3d.url.editedIdx=mki3d.url.linkIdxAtPosition(position );
+	{
+	    let position= JSON.parse(JSON.stringify(mki3d.data.cursor.position)); // clone
+	    mki3d.url.editedIdx=mki3d.url.linkIdxAtPosition(position );
 
-	if(mki3d.url.editedIdx === -1 ) {
-	    actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
-	} else {
-	    mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divURLEdit").innerHTML ;
-	    	    
-	    document.querySelector("#inputURLLabel").value=mki3d.data.links[mki3d.url.editedIdx].label;
-	    document.querySelector("#inputURLOpener").value=mki3d.data.links[mki3d.url.editedIdx].opener;
-	    document.querySelector("#inputURL").value=mki3d.data.links[mki3d.url.editedIdx].url;
-	    window.onkeydown = mki3d.callback.urlEditMenuOnKeyDown;
-	    return; // go to sub-menu 
+	    if(mki3d.url.editedIdx === -1 ) {
+		actionMessage="THERE IS NO LINK AT CURSOR POSITION: "+JSON.stringify(position)+" !"+"<br>(USE 'QCU' TO JUMP TO EXISTING LINK)";
+	    } else {
+		mki3d.html.divUpperMessage.innerHTML =   document.querySelector("#divURLEdit").innerHTML ;
+	    	
+		document.querySelector("#inputURLLabel").value=mki3d.data.links[mki3d.url.editedIdx].label;
+		document.querySelector("#inputURLOpener").value=mki3d.data.links[mki3d.url.editedIdx].opener;
+		document.querySelector("#inputURL").value=mki3d.data.links[mki3d.url.editedIdx].url;
+		window.onkeydown = mki3d.callback.urlEditMenuOnKeyDown;
+		return; // go to sub-menu 
+	    }
 	}
 	break;
     };
@@ -419,7 +441,7 @@ mki3d.callback.urlEditMenuOnKeyDown = function (e){
 	window.open(mki3d.url.completeLink( opener, input), "_blank");
 	break;
     }
-    console.log(code); /// test
+    // console.log(code); /// test
     if (exit) {
 	mki3d.action.escapeToCanvas();
 	mki3d.messageAppend("<br>"+actionMessage);

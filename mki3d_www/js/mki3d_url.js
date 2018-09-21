@@ -8,6 +8,8 @@ mki3d.drawLinks= true; // draw the links
 
 mki3d.url.editedIdx=null; // index of the edited link
 
+mki3d.url.clipboard=null; // the cut or copied link
+
 // mki3d.url.symbol = {"model":{"segments":[[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,-1,0],"color":[0,0,1],"set":0}],[{"position":[-1,0,0],"color":[0,0,1],"set":0},{"position":[0,1,0],"color":[0,0,1],"set":0}],[{"position":[0,-1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}],[{"position":[0,1,0],"color":[0,0,1],"set":0},{"position":[1,0,0],"color":[0,0,1],"set":0}]],"triangles":[[{"position":[-1,0,0],"color":[1,1,1],"set":0},{"position":[0,-1,0],"color":[1,1,1],"set":0},{"position":[0,0,0],"color":[1,1,1],"set":0}],[{"position":[-1,0,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[0,1,0],"color":[1,0,0],"set":0}],[{"position":[0,-1,0],"color":[1,0,0],"set":0},{"position":[0,0,0],"color":[1,0,0],"set":0},{"position":[1,0,0],"color":[1,0,0],"set":0}],[{"position":[0,0,0],"color":[1,1,1],"set":0},{"position":[0,1,0],"color":[1,1,1],"set":0},{"position":[1,0,0],"color":[1,1,1],"set":0}]]},"view":{"focusPoint":[0,0,0],"rotationMatrix":[[1,0,0],[0,1,0],[0,0,1]],"scale":2,"screenShift":[0,0,60]},"projection":{"zNear":0.25,"zFar":300,"zoomY":4},"backgroundColor":[0,1,1],"cursor":{"position":[0,0,0],"marker1":null,"marker2":null,"color":[0,0,1],"step":0.5},"clipMaxVector":[100000000000000000000,100000000000000000000,100000000000000000000],"clipMinVector":[-100000000000000000000,-100000000000000000000,-100000000000000000000],"light":{"vector":[0,0,1],"ambientFraction":0.2},"set":{"current":0}};
 
 
@@ -77,6 +79,21 @@ mki3d.url.addLink= function(link ){
     
 }
 
+mki3d.url.cutLinkAtIdx= function(idx ){
+    if( !mki3d.data.links || idx<0 || idx > mki3d.data.links.length-1 ) return "NOTHING TO BE CUT !!!";
+    mki3d.url.clipboard= mki3d.data.links[ idx ];
+    mki3d.data.links[ idx ]= mki3d.data.links[ mki3d.data.links.length-1 ];
+    mki3d.data.links.pop();
+    return "CUT: <code>"+JSON.stringify(mki3d.url.clipboard)+"</code>";
+}
+
+mki3d.url.pasteLinkIdxAtPosition= function(position ){
+    if(mki3d.url.clipboard === null ) return "NOTHING IN THE LINK CLIPBOARD !!!";
+    link=JSON.parse(JSON.stringify(mki3d.url.clipboard)); //clone
+    link.position=JSON.parse(JSON.stringify(position));
+    return mki3d.url.addLink( link );
+}
+
 mki3d.url.linkIdxAtPosition= function(position ){
     if( ! mki3d.data.links ) {
 	return -1; // "THERE ARE NO LINKS"
@@ -106,3 +123,5 @@ mki3d.url.completeLink= function ( opener, input) {
 
     return String(openerURL)+encodeURI(String(url)); // the url as encoded parameter
 }
+
+
