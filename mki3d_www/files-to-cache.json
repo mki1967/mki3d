@@ -26,4 +26,15 @@
 "js/mki3d_text.js",
 "js/mki3d_tmp.js",
 "js/mki3d_url.js",
-"js/pwa.js"]
+"js/pwa.js",
+"travel.html",
+"travel-manifest.json",
+"travel_js/animation.js",
+"travel_js/callbacks.js",
+"travel_js/global-data.js",
+"travel_js/math.js",
+"travel_js/message.js",
+"travel_js/mki3d.js",
+"travel_js/mki3d-travel.js",
+"travel_js/stage-functions.js",
+"travel_js/traveler.js"]
