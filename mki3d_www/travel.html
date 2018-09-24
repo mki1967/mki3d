@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <!-- Edit the files in 'html' subdirectory and rebuild 'index.html' and 'mkisg.html' and other files with 'make-files.bash' -->
+  <!--
+      MKI3D TRAVEL
+      Copyright (C) 2018  Marcin Kik mki1967@gmail.com 
+      The JavaScript code in this page is free software: you can
+      redistribute it and/or modify it under the terms of the GNU
+      General Public License (GNU GPL) as published by the Free Software
+      Foundation, either version 3 of the License, or (at your option)
+      any later version.  The code is distributed WITHOUT ANY WARRANTY;
+      without even the implied warranty of MERCHANTABILITY or FITNESS
+      FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+      As additional permission under GNU GPL version 3 section 7, you
+      may distribute non-source (e.g., minimized or compacted) forms of
+      that code without the copy of the GNU GPL normally required by
+      section 4, provided you include this license notice and a URL
+      through which recipients can access the Corresponding Source.
+    -->
+  <!-- On-line version (PWA) -->
+  <head>
+    <title>MKI3D TRAVEL</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="browse, 3D, WebGL, mki3d, stages">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="./travel_icons/mki3d-travel_16x16.png"/>
+    <!-- <link rel="manifest" href="./travel-manifest.json"> -->
+    <script>
+      /*
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52437368-3', 'auto');
+      ga('send', 'pageview');
+      */
+    </script>
+    <script>
+      /*
+      if('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered', reg))
+      .catch(err => console.error('Service Worker **not** registered', err));
+      }
+      else {
+      console.warn('Service Worker not supported in this browser');
+      } 
+      */   
+    </script>
+
+  </head>
+
+  <body>
+    <script src="travel_js/math.js"></script>
+    <script src="travel_js/global-data.js"></script>
+    <script src="travel_js/stage-functions.js"></script>
+    <script src="travel_js/message.js"></script>
+    <script src="travel_js/animation.js"></script>
+    <script src="travel_js/callbacks.js"></script>
+    <script src="travel_js/mki3d.js"></script>
+    <script src="travel_js/mki3d-travel.js"></script>
+    <script src="travel_js/traveler.js"></script>
+
+    <div id="canvasDiv" style="position: relative;">
+      <canvas id="canvasId" width="640" height="400"  style="border:0px; margin: 0px; padding: 0px;" >
+	Your browser does not support the canvas element.
+      </canvas>
+      <div id="messageDiv" style="position: absolute; top: 0px; left: 0px; color: black; background-color: white; display: none">
+	MESSAGE ...
+      </div>
+    </div>
+  </body>
+</html>
