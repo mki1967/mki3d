@@ -182,15 +182,18 @@ mki3d.loadModel= function (){
     var buf = mki3d.gl.buffers.model;
 
     mki3d.tmpRefreshDisplayModel();
+    var model = mki3d.tmp.display.model;
     var stereoMode= mki3d.stereo.mode;
     var gl = mki3d.gl.context;
     
-    mki3d.tmp.exported= mki3d.loadDataToBuf(gl, mki3d.data , buf, stereoMode);
+    mki3d.tmp.exported= mki3d.loadModelToBuf(gl, model , buf, stereoMode, mki3d.data.light);
 }
 
 mki3d.loadDataToBuf= function(gl, data, buf, stereoMode ) { // returns exported for export to HTML
-    var model = data.model;
+    return mki3d.loadModelToBuf(gl, data.model, buf, stereoMode, data.light );
+}
 
+mki3d.loadModelToBuf= function(gl, model, buf, stereoMode, light ) { // returns exported for export to HTML
     var elements = [];
     var elementsColors = [];
 
@@ -242,7 +245,7 @@ mki3d.loadDataToBuf= function(gl, data, buf, stereoMode ) { // returns exported 
     for(i=0; i<model.triangles.length; i++){
 	var triangle=model.triangles[i];
 	if(!triangle.shade) 
-	    triangle.shade = mki3d.shadeFactor( triangle, data.light);
+	    triangle.shade = mki3d.shadeFactor( triangle, light);
 	for(j=0; j<3; j++){
 	    elements.push(triangle[j].position[0]);
 	    elements.push(triangle[j].position[1]);
