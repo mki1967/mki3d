@@ -280,7 +280,7 @@ webGLStart=async function() {
 	    await mki3d.url.load(input);
 	}
 
-	if(!mki3d.url.base) mki3d.url.base=window.location.href; // base url if nothing was loaded
+	if(!mki3d.url.inputLoaded) mki3d.url.base=window.location.href; // base url if nothing was loaded 
 	///////
     }
 

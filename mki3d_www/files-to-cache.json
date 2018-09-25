@@ -28,6 +28,7 @@
 "js/mki3d_url.js",
 "js/pwa.js",
 "travel.html",
+"travel-index.html",
 "travel-manifest.json",
 "travel_js/animation.js",
 "travel_js/callbacks.js",
