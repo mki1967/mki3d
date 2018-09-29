@@ -250,7 +250,7 @@ function startTravel()
 
     
     showMessage(
-		"<div style='font-size:30px;'> Touch/click the screen sectors to navigate ! </div>"
+		"<div style='font-size:30px;'> Touch/click the screen sectors to navigate !<br>(Or press keys - 'H' for help.)</div>"
 	       );
     
     
