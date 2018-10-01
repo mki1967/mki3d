@@ -100,7 +100,7 @@ mki3d.url.linkIdxAtPosition= function(position ){
     }
     nearestIdx=mki3d.findNearestEndpointIdx( position, mki3d.data.links  );
     if( nearestIdx === -1 || mki3d.distanceSquare(mki3d.data.links[nearestIdx].position, position) > 0 ) {
-	return null; // "THERE IS NO LINK AT "+JSON.stringify(position)+" !";
+	return -1; // "THERE IS NO LINK AT "+JSON.stringify(position)+" !";
     }
 
     return nearestIdx ; 
