@@ -48,24 +48,28 @@ function onKeyDown(e){
 	animation.start( ru )
 	break;
 	case 73: // I
+	case 87: // W
 	animation.start( mu )
 	break;
 	case 40: // down
 	animation.start( rd )
 	break;
 	case 75: // K
+	case 83: // S
 	animation.start( md )
 	break;
 	case 37: // left
 	animation.start( rl )
 	break;
 	case 74:// J
+	case 65:// A
 	animation.start( ml )
 	break;
 	case 39:// right
 	animation.start( rr )
 	break;
 	case 76: // L
+	case 68: // D
 	animation.start( mr )
 	break;
 	case 70: // F
