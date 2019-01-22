@@ -222,14 +222,6 @@ function drawLinks()
 
 function drawGraph(graph) {
 
-    /* draw lines */
-    if(graph.nrOfLines>0) {
-	gl.bindBuffer(gl.ARRAY_BUFFER, graph.linesVerticesBuffer );
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, vertexPositionSize, gl.FLOAT, false, 0, 0);
-	gl.bindBuffer(gl.ARRAY_BUFFER, graph.linesColorsBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, vertexColorSize, gl.FLOAT, false, 0, 0);
-	gl.drawArrays(gl.LINES, 0, 2*graph.nrOfLines);
-    }
     /* draw triangles */
     if(graph.nrOfTriangles>0) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, graph.trianglesVerticesBuffer );
@@ -238,6 +230,15 @@ function drawGraph(graph) {
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, vertexColorSize, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.TRIANGLES, 0, 3*graph.nrOfTriangles);
     }
+    /* draw lines */
+    if(graph.nrOfLines>0) {
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.linesVerticesBuffer );
+	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, vertexPositionSize, gl.FLOAT, false, 0, 0);
+	gl.bindBuffer(gl.ARRAY_BUFFER, graph.linesColorsBuffer);
+	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, vertexColorSize, gl.FLOAT, false, 0, 0);
+	gl.drawArrays(gl.LINES, 0, 2*graph.nrOfLines);
+    }
+
 }
 
 
