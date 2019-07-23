@@ -958,9 +958,10 @@ mki3d.action.selectFile= function(){
 	mki3d.html.showDiv(mki3d.html.divTextLoad);
 	window.onkeydown = mki3d.callback.textLoadOnKeyDown;
     };
-    mki3d.html.hideAllDivs();
-    mki3d.html.showDiv(document.getElementById('divFileSelector'));
-    document.getElementById('files').focus();
+    // mki3d.html.hideAllDivs();
+    // mki3d.html.showDiv(document.getElementById('divFileSelector'));
+    // document.getElementById('files').focus();
+    document.getElementById('files').click();
 }
 
 mki3d.action.textLoad = function(file_extenstion){
