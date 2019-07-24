@@ -230,3 +230,50 @@ mki3d.matrix4Product = function( m1, m2){
 	[ sp(m1[3], col(m2, 0)) , sp(m1[3], col(m2, 1)),  sp(m1[3], col(m2, 2)),  sp(m1[3], col(m2, 3)) ] 
     ];
 };
+
+
+// returns transformation that rotates  vector v to align it with Z-plus axis
+mki3d.redirectionToZ = function( v ){
+
+    sqLen=mki3d.scalarProduct(v, v); // square of the length of v
+    if( sqLen == 0 ){ // no unique solution - return identity
+	return [
+	    [1,0,0],
+	    [0,1,0],
+	    [0,0,1]
+	];
+    }
+
+    let M1; // the rotation XZ around Y
+    let sqLenXZ= v[0]*v[0] + v[2]*v[2]; // square of the length of projection on XZ
+    let lenXZ= Math.sqrt(sqLenXZ); // length of XZ projection
+
+    // compute the first transformation M1
+    if(  sqLenXZ == 0 ) { // no need to rotate around Y
+	M1= [
+	    [1,0,0],
+	    [0,1,0],
+	    [0,0,1]
+	];
+    } else {
+	let s1= v[0] / lenXZ; // sin of the XZ rotation angle
+	let c1= v[2] / lenXZ; // cos of the XZ rotation angle
+	M1= [
+	    [ c1,  0,-s1],
+	    [  0,  1,  0],
+	    [ s1,  0, c1]
+	];
+    }
+
+    // compute the second transformation M2
+    let s2= v[1]/Math.sqrt( sqLen ); // sin of YZ rotation angle
+    let c2= Math.sqrt( sqLenXZ / sqLen ); // cos of YZ rotation angle ( should be more precise than lenXZ / Math.sqrt( sqLen ) )
+
+    let M2= [
+	[  1,  0,  0],
+	[  0, c2,-s2],
+	[  0, s2, c2]
+    ];
+
+    return mki3d.matrixProduct( M2, M1 );
+}
