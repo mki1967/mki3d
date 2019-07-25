@@ -290,3 +290,37 @@ mki3d.orientedToZYX= function( v ){
     if( v[0] < 0 ) return nv;
     return pv; // here: should be v=pv=nv=[0,0,0]
 }
+
+
+// returns an array of tree UV pairs of texture coordinates for the triangle
+mki3d.createTriangleUV= function( triangle ){
+    // A,B,C - endpoints of the triangle
+    let A= triangle[0].position;
+    let B= triangle[1].position;
+    let C= triangle[2].position;
+
+    let AB= [ B[0]-A[0], B[1]-A[1], B[2]-A[2] ];
+    let AC= [ C[0]-A[0], C[1]-A[1], C[2]-A[2] ];
+
+    let v= mki3d.vectorProduct( AB, AC );
+
+    if( mki3d.scalarProduct(v,v) == 0 ) { // degenerate triangle with area zero
+	return [ [0,0],[0,0],[0,0] ]; // return just something ...
+    }
+
+
+    let dir= mki3d.orientedToZYX( v ); // all parallel triangles are considered to have the same orientation
+
+    let M= mki3d.redirectionToZ( dir ); // alignment transformation
+
+    let A1= mki3d.matrixVectorProduct( M , A );
+    let B1= mki3d.matrixVectorProduct( M , B );
+    let C1= mki3d.matrixVectorProduct( M , C );
+
+    return [
+	[ A1[0],A1[1] ],
+	[ B1[0],B1[1] ],
+	[ C1[0],C1[1] ]
+    ];
+
+}
