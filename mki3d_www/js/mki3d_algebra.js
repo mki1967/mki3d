@@ -277,3 +277,16 @@ mki3d.redirectionToZ = function( v ){
 
     return mki3d.matrixProduct( M2, M1 );
 }
+
+// returns one of v or -v vectors that has positive (in decreasing order of preference) Z or Y or X coordinate
+mki3d.orientedToZYX= function( v ){
+    let pv=[v[0], v[1], v[2]]; // copy of v
+    let nv=[-v[0], -v[1], -v[2]]; // vector -v
+    if( v[2] > 0 ) return pv;
+    if( v[2] < 0 ) return nv;
+    if( v[1] > 0 ) return pv;
+    if( v[1] < 0 ) return nv;
+    if( v[0] > 0 ) return pv;
+    if( v[0] < 0 ) return nv;
+    return pv; // here: should be v=pv=nv=[0,0,0]
+}
