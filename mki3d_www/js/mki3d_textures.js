@@ -126,6 +126,9 @@ mki3d_texture.createTexture= function(
     let makeShaderProgramTool=mki3d.gl.compileAndLinkShaderProgram; // use the function from mki3d.gl
     
     mki3d_texture.renderTextureShaderProgram=  makeShaderProgramTool(gl, mki3d_texture.renderTextureVS(def) , mki3d_texture.renderTextureFS );
+    if( !mki3d_texture.renderTextureShaderProgram ){
+	return null; // there was some failure
+    }
     mki3d_texture.hLocation=gl.getAttribLocation(mki3d_texture.renderTextureShaderProgram, "h");
     mki3d_texture.vLocation=gl.getUniformLocation(mki3d_texture.renderTextureShaderProgram, "v");
 
