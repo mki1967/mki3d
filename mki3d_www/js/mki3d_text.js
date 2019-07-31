@@ -172,7 +172,8 @@ mki3d.text.prepareSymbolsTexture = function(gl, textureUnitNr, FONT_SIZE, FONT_F
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     return { 
-	unit: textureUnitNr, 
+	unit: textureUnitNr,
+	textureId: textTex,
 	scaleX:(symbolsImage.width/symbolsImage.height)*SYMBOLS.length,
 	SYMBOLS: SYMBOLS
     };  
@@ -203,6 +204,10 @@ mki3d.text.redraw= function(projectionMatrixGL){
     var gl = mki3d.gl.context;
     gl.useProgram(mki3d.text.shaderProgram);
     var shaderProgram=mki3d.text.shaderProgram;
+
+    // bind the texture to the texture unit used in the shader program
+    gl.activeTexture(gl.TEXTURE0+mki3d.text.symTexParams.unit); // texture unit textureUnitNr
+    gl.bindTexture(gl.TEXTURE_2D, mki3d.text.symTexParams.textureId );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, mki3d.text.bufferPos);
     gl.vertexAttribPointer(shaderProgram.aPosition, 3, gl.FLOAT, false, 0, 0);

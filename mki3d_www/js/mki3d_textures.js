@@ -43,11 +43,12 @@ mki3d_texture.renderTextureFS=""+
 mki3d_texture.drawTextureVS=""+
     "attribute vec3 posAttr;\n"+
     "attribute vec2 texAttr;\n"+
+    "uniform vec2 sxy;\n"+
     "varying vec2 texCoords;\n"+
     "void main()\n"+
     "{\n"+
     "    gl_Position = vec4(posAttr.xyz, 1.0);\n"+
-    "    texCoords = texAttr;\n"+
+    "    texCoords = texAttr*sxy;\n"+
     "}\n";
 
 mki3d_texture.drawTextureFS=""+
@@ -166,6 +167,7 @@ mki3d_texture.drawTexture= function(gl, textureId){
 	mki3d_texture.posAttr=gl.getAttribLocation(mki3d_texture.drawTextureShaderProgram, "posAttr");
 	mki3d_texture.texAttr=gl.getAttribLocation(mki3d_texture.drawTextureShaderProgram, "texAttr");
 	mki3d_texture.texSampler=gl.getUniformLocation(mki3d_texture.drawTextureShaderProgram, "texSampler");
+	mki3d_texture.sxy=gl.getUniformLocation(mki3d_texture.drawTextureShaderProgram, "sxy");
 	// create and load data buffers
 	mki3d_texture.posAttrBufferId= gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, mki3d_texture.posAttrBufferId );
@@ -189,11 +191,13 @@ mki3d_texture.drawTexture= function(gl, textureId){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, textureId );
     gl.uniform1i(mki3d_texture.texSampler, 0 );
+    let viewport=gl.getParameter(gl.VIEWPORT);
+    gl.uniform2f(mki3d_texture.sxy, viewport[2]/mki3d_texture.texSize, viewport[3]/mki3d_texture.texSize ); // scale to have natural size and propoprtions of the texture
 
     gl.clearColor( 0,0,0,1 );
     gl.clear(gl.COLOR_BUFFER_BIT );
     gl.drawArrays(gl.TRIANGLES, 0, 6 );
- 
+    gl.useProgram( mki3d.gl.shaderProgram );
 }
 
 mki3d_texture.debugTest=function(){
