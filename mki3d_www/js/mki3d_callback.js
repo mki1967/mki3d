@@ -2,6 +2,25 @@
 
 mki3d.callback = {};
 
+mki3d.callback.textureMenuOnKeyDown = async function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    switch(code)
+    {
+	case 68: // D
+        await mki3d_texture.debugTest();
+	return; // submenu - do not escape to canvas 
+	break;
+	case 27: // Esc
+	mki3d.action.escapeToCanvas();
+	break;
+    };
+    // mki3d.action.escapeToCanvas();
+    // mki3d.messageAppend( actionMessage );
+    // mki3d.backup();
+}
+
 mki3d.callback.IDBFiltersOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -297,8 +316,13 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 	case 88: // X
 	mki3d.action.clipMenu(); /// for tests ...
 	break;
+
 	case 83: // S
 	mki3d.action.selectionMenu();
+	break;
+
+	case 84: // T
+	mki3d.action.textureMenu();
 	break;
 
 	case 86: // V
