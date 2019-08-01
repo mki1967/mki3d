@@ -203,7 +203,40 @@ mki3d_texture.drawTexture= function(gl, textureId){
     gl.useProgram( mki3d.gl.shaderProgram );
 }
 
-mki3d_texture.debugTest=function(){
+mki3d_texture.load= async function(){ // usage:  data= await mki3d_texture.load()
+    JSONLoadPromise=new Promise( function(resolve, reject){
+	var input = document.createElement('input');
+	input.type = 'file';
+	input.accept='.texturion';
+
+	input.onchange = e => {
+
+	    // getting a hold of the file reference
+	    let file = e.target.files[0];
+
+	    // setting up the reader
+	    let reader = new FileReader();
+	    reader.readAsText(file,'UTF-8');
+
+	    // here we tell the reader what to do when it's done reading...
+	    reader.onload = readerEvent => {
+		let content = readerEvent.target.result; // this is the content!
+		resolve(content);  /// ONLY THIS UPDATED !!!
+	    }
+
+	}
+
+	input.click();
+    });
+
+    let out= await JSONLoadPromise.then( (x) => x , (err)=>{ console.log(err); }) ;
+    // console.log(out);
+    return JSON.parse(out);
+}
+
+
+
+mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_texture.debugTest()
     let def={};
     def.label="myTexture";
     def.R="0.5*(1.0+sin(2.0*PI*y))";
@@ -211,9 +244,18 @@ mki3d_texture.debugTest=function(){
     def.B="G(x,y)";
     def.A="1.0";
 
-    let texID= mki3d_texture.createTexture(mki3d.gl.context, def );
+    let texID = mki3d_texture.createTexture(mki3d.gl.context, def );
 
     mki3d_texture.drawTexture( mki3d.gl.context, texID );
 
-    
+    mki3d.gl.context.deleteTexture( texID );
+
+    let def2= await  mki3d_texture.load();
+
+    console.log( def2 );
+
+    texID = mki3d_texture.createTexture(mki3d.gl.context, def2 );
+
+   mki3d_texture.drawTexture( mki3d.gl.context, texID );
+
 }
