@@ -8,6 +8,14 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
     // TO DO
     switch(code)
     {
+	case 76: // L
+        await mki3d_texture.load();
+	if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
+	    let t= mki3d.data.texture ;
+	    mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
+	}
+	return; // submenu - do not escape to canvas 
+	break;
 	case 68: // D
         await mki3d_texture.debugTest();
 	return; // submenu - do not escape to canvas 

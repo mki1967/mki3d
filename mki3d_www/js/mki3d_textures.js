@@ -203,7 +203,7 @@ mki3d_texture.drawTexture= function(gl, textureId){
     gl.useProgram( mki3d.gl.shaderProgram );
 }
 
-mki3d_texture.load= async function(){ // usage:  data= await mki3d_texture.load()
+mki3d_texture.loadDef= async function(){ // usage:  data= await mki3d_texture.loadDef()
     JSONLoadPromise=new Promise( function(resolve, reject){
 	var input = document.createElement('input');
 	input.type = 'file';
@@ -234,6 +234,68 @@ mki3d_texture.load= async function(){ // usage:  data= await mki3d_texture.load(
     return JSON.parse(out);
 }
 
+// temporary test
+mki3d_texture.load=  async function(){ // loads texture definition, if new then adds the texture element, updates the index of the current element
+    let data=  mki3d.data;
+    let def=  await mki3d_texture.loadDef();
+    if( data.texture ) {
+	for( let i=0; i< data.texture.elements.length; i++) {
+	    if( mki3d_texture.equalDefs( data.texture.elements[i].def, def) ) { // found !
+		data.texture.index=i;
+		return;
+	    }
+	}
+    }
+
+    let element= mki3d_texture.createElement( def ); // try to create new element ...
+
+    if( element === null ) return ; // could not create element from def
+
+    mki3d_texture.pushElement( element ); // pushing updates the index
+}
+
+
+// Create an object that conatins texture and the triangles textured with this texture
+mki3d_texture.createElement= function( def ){
+    let texID = mki3d_texture.createTexture(mki3d.gl.context, def ); // try to generate the texture
+
+    if( !texID ) return null; // there was some problem
+
+    let element={};
+    element.def=def; // store the texturion definition for comparison
+    element.glTextureId = texID; // temporary GL ID (to be removed while saving the data)
+    element.texturedTriangles= []; // initially empty array of the textured triangles
+
+    return element;
+}
+
+// check if two texturion definitions are identical
+mki3d_texture.equalDefs= function( def1, def2 ){
+    if( def1 == def2 ) return true;
+    if(
+	def1.label === def2.label  &&
+	    def1.R === def2.R  &&
+	    def1.G === def2.G  &&
+	    def1.B === def2.B  &&
+	    def1.A === def2.A
+    ) { // all fields have the same values
+	return true;
+    };
+
+    return false;
+}
+
+mki3d_texture.pushElement=function( element ){
+    let data=mki3d.data;
+    if( !data.texture ) { // This is the first texture. Create 'texture' sub-object.
+	data.texture={};
+	data.texture.elements=[];
+	data.texture.index=-1; // not valid index
+    }
+
+    data.texture.index=data.texture.elements.length;
+    data.texture.elements.push( element );
+}
 
 
 mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_texture.debugTest()
@@ -250,7 +312,7 @@ mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_t
 
     mki3d.gl.context.deleteTexture( texID );
 
-    let def2= await  mki3d_texture.load();
+    let def2= await  mki3d_texture.loadDef();
 
     console.log( def2 );
 
