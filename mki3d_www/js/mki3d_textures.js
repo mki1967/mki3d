@@ -302,7 +302,9 @@ mki3d_texture.display= function(){
     if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
 	let t= mki3d.data.texture ;
 	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
-	document.querySelector("#textureSpan").innerHTML=t.elements[t.index].def.label+' ('+t.index+'/'+t.elements.length+')';
+	document.querySelector("#textureSpan").innerHTML=t.elements[t.index].def.label+
+	    ' ('+t.index+'/'+t.elements.length+'): '+
+	    t.elements[t.index].texturedTriangles.length+' TRIANGLES';
     } else {
 	document.querySelector("#textureSpan").innerHTML="";
     }
