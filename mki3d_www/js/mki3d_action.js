@@ -916,11 +916,7 @@ mki3d.action.urlMenu = function(){
 
 mki3d.action.textureMenu = function(){
     mki3d.html.divUpperMessage.innerHTML = document.querySelector("#divTextureMenu").innerHTML;
-    if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
-	let t= mki3d.data.texture ;
-	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
-    }
-
+    mki3d_texture.display();
     window.onkeydown = mki3d.callback.textureMenuOnKeyDown;
 }
 

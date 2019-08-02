@@ -298,6 +298,17 @@ mki3d_texture.pushElement=function( element ){
 }
 
 
+mki3d_texture.display= function(){
+    if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
+	let t= mki3d.data.texture ;
+	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
+	document.querySelector("#textureSpan").innerHTML=t.elements[t.index].def.label+' ('+t.index+'/'+t.elements.length+')';
+    } else {
+	document.querySelector("#textureSpan").innerHTML="";
+    }
+
+}
+
 mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_texture.debugTest()
     let def={};
     def.label="myTexture";

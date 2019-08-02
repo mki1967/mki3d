@@ -8,13 +8,36 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
     // TO DO
     switch(code)
     {
+	// case 80: // P
+	case 37: // Left
+	case 38: // Up
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    let t=mki3d.data.texture;
+	    t.index = (t.index + t.elements.length - 1) % t.elements.length;
+	    mki3d_texture.display();
+	}
+	break;
+
+	// case 78: // N
+	case 39: // Right
+	case 40: // Down
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    let t=mki3d.data.texture;
+	    t.index = (t.index + 1) % t.elements.length;
+	    mki3d_texture.display();
+	}
+	break;
+
 	case 76: // L
         await mki3d_texture.load();
-	if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
-	    let t= mki3d.data.texture ;
-	    mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
-	}
+	mki3d_texture.display();
 	return; // submenu - do not escape to canvas 
+	break;
+	case 86: // V
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    mki3d.callback.setDisplayMode();
+	    mki3d_texture.display();
+	}
 	break;
 	case 68: // D
         await mki3d_texture.debugTest();
