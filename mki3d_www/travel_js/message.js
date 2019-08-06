@@ -52,8 +52,9 @@ var helpMessage = `
 var messageCanceledByAction=true;
 
 var globalGotoURL=""; // where to go after pressing 'GO TO' button
-var gotoMessageButton = `
+var gotoMessageButtons = `
 <div align="center">
-    <button onclick="window.open( globalGotoURL, '_self')"  style="font-size:50px;">GO TO</button>
+    <button onclick="hideMessage()"  style="font-size:30px;float:left;">CANCEL</button>
+    <button onclick="window.open( globalGotoURL, '_self')"  style="font-size:30px;float:right;font-weight: bold;">GO TO ...</button>
 </div>
 `
