@@ -52,7 +52,7 @@ function checkLinks() {
 	    showMessage(
 		"<div style='font-size:30px;'>"+link.label
 		    +"</div><div style='font-size:20px;'><a href='"+url+"'><code>"+url+"</code></a></div>"
-		    + gotoMessageButton
+		    + gotoMessageButtons
 	    );
 	    link.ignored=true;
 

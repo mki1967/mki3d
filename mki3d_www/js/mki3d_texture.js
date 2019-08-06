@@ -32,6 +32,9 @@ mki3d_texture.renderTextureVS= function(def){
 	"}\n";
 }
 
+
+
+/* draw defined pixels on the texture */
 mki3d_texture.renderTextureFS=""+
     "precision mediump float;\n"+
     "varying vec4 color;\n"+
@@ -40,6 +43,8 @@ mki3d_texture.renderTextureFS=""+
     "  gl_FragColor= color;\n"+
     "}\n";
 
+
+/* draw texure on full viewport */
 mki3d_texture.drawTextureVS=""+
     "attribute vec3 posAttr;\n"+
     "attribute vec2 texAttr;\n"+
@@ -78,6 +83,32 @@ mki3d_texture.texAttrFloat32Array= new Float32Array( [
     0,  0 
 ] );
 
+
+
+
+/* draw texured elements */
+mki3d_texture.drawElementsVS=""+
+    "attribute vec3 posAttr;\n"+
+    "attribute vec2 texAttr;\n"+
+    "uniform vec2 sxy;\n"+
+    "varying vec2 texCoords;\n"+
+    "void main()\n"+
+    "{\n"+
+    "    gl_Position = vec4(posAttr.xyz, 1.0);\n"+
+    "    texCoords = texAttr*sxy;\n"+
+    "}\n";
+
+mki3d_texture.drawElementsFS= function(gl){
+    return ""+
+    "precision mediump float;\n"+
+    "varying vec2 texCoords;\n"+
+    "uniform sampler2D texSampler["+gl.MAX_TEXTURE_IMAGE_UNITS+"];\n"+
+    "void main()\n"+
+    "{\n"+
+    "    gl_FragColor = texture2D(texSampler[samplerIndex], texCoords);\n"+
+    "}\n";
+
+}
 
 // returns the id of the new defined texture
 mki3d_texture.createTexture= function(
@@ -311,6 +342,12 @@ mki3d_texture.display= function(){
 
 }
 
+
+
+
+
+
+/// debug
 mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_texture.debugTest()
     let def={};
     def.label="myTexture";
