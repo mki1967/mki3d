@@ -87,25 +87,37 @@ mki3d_texture.texAttrFloat32Array= new Float32Array( [
 
 
 /* draw texured elements */
-mki3d_texture.drawElementsVS=""+
+mki3d_texture.drawElementVS=""+
     "attribute vec3 posAttr;\n"+
-    "attribute vec2 texAttr;\n"+
-    "uniform vec2 sxy;\n"+
-    "varying vec2 texCoords;\n"+
+    "attribute vec3 texAttr;\n"+ // (u,v,shade)
+    "uniform mat4 uMVMatrix; "+
+    "uniform mat4 uPMatrix; "+
+    "varying vec3 vPosition;"+
+    "varying vec3 texUVS;\n"+
     "void main()\n"+
     "{\n"+
-    "    gl_Position = vec4(posAttr.xyz, 1.0);\n"+
-    "    texCoords = texAttr*sxy;\n"+
+    "    gl_Position =   uPMatrix*uMVMatrix*vec4(posAttr, 1.0); "+
+    "    texUVS = texAttr;\n"+
+    "    vPosition = posAttr; "+
     "}\n";
 
-mki3d_texture.drawElementsFS= function(gl){
+mki3d_texture.drawElementFS= function(gl){
     return ""+
     "precision mediump float;\n"+
-    "varying vec2 texCoords;\n"+
-    "uniform sampler2D texSampler["+gl.MAX_TEXTURE_IMAGE_UNITS+"];\n"+
+    "varying vec2 texUVS;\n"+
+    "varying vec3 vPosition;"+
+    "uniform vec3 uClipMax; "+
+    "uniform vec3 uClipMin; "+
+    "uniform sampler2D texSampler;\n"+
     "void main()\n"+
     "{\n"+
-    "    gl_FragColor = texture2D(texSampler[samplerIndex], texCoords);\n"+
+    "    if( vPosition.x > uClipMax.x ) discard; "+
+    "    if( vPosition.y > uClipMax.y ) discard; "+
+    "    if( vPosition.z > uClipMax.z ) discard; "+
+    "    if( vPosition.x < uClipMin.x ) discard; "+
+    "    if( vPosition.y < uClipMin.y ) discard; "+
+    "    if( vPosition.z < uClipMin.z ) discard; "+
+    "    gl_FragColor = texture2D(texSampler[samplerIndex], texUVS.xy)*texUVS.z;\n"+ // color of texel scaled by shade
     "}\n";
 
 }
@@ -288,13 +300,17 @@ mki3d_texture.load=  async function(){ // loads texture definition, if new then 
 
 // Create an object that conatins texture and the triangles textured with this texture
 mki3d_texture.createElement= function( def ){
-    let texID = mki3d_texture.createTexture(mki3d.gl.context, def ); // try to generate the texture
+    let gl=mki3d.gl.context;
+    let texID = mki3d_texture.createTexture(gl, def ); // try to generate the texture
 
     if( !texID ) return null; // there was some problem
 
     let element={};
     element.def=def; // store the texturion definition for comparison
-    element.glTextureId = texID; // temporary GL ID (to be removed while saving the data)
+    element.gl={}; // temporary data with GL IDs
+    element.gl.TextureId = texID; // temporary GL ID (to be removed while saving the data)
+    element.gl.posAttrBuffer=gl.createBuffer();
+    element.gl.texAttrBuffer=gl.createBuffer();
     element.texturedTriangles= []; // initially empty array of the textured triangles
 
     return element;
@@ -332,7 +348,7 @@ mki3d_texture.pushElement=function( element ){
 mki3d_texture.display= function(){
     if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
 	let t= mki3d.data.texture ;
-	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].glTextureId );
+	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].gl.TextureId );
 	document.querySelector("#textureSpan").innerHTML=t.elements[t.index].def.label+
 	    ' ('+t.index+'/'+t.elements.length+'): '+
 	    t.elements[t.index].texturedTriangles.length+' TRIANGLES';
