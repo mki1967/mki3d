@@ -28,6 +28,13 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	}
 	break;
 
+	case 82: // R
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    mki3d_texture.deleteCurrentElement();
+	    mki3d_texture.display();
+	}
+	break;
+
 	case 76: // L
         await mki3d_texture.load();
 	mki3d_texture.display();

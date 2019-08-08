@@ -305,7 +305,7 @@ mki3d.createTriangleUV= function( triangle ){
     let v= mki3d.vectorProduct( AB, AC );
 
     if( mki3d.scalarProduct(v,v) == 0 ) { // degenerate triangle with area zero
-	return [ [0,0],[0,0],[0,0] ]; // return just something ...
+	return null; // return nul for degenerate triangle
     }
 
 
