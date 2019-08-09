@@ -28,6 +28,13 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	}
 	break;
 
+	case 84: // T
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    mki3d_texture.textureSelectedTriangles();
+	    mki3d.redraw();
+	}
+	break;
+
 	case 82: // R
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
 	    mki3d_texture.deleteCurrentElement();

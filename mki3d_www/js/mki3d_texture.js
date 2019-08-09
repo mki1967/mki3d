@@ -101,10 +101,9 @@ mki3d_texture.drawElementVS=""+
     "    vPosition = posAttr; "+
     "}\n";
 
-mki3d_texture.drawElementFS= function(gl){
-    return ""+
+mki3d_texture.drawElementFS= ""+
     "precision mediump float;\n"+
-    "varying vec2 texUVS;\n"+
+    "varying vec3 texUVS;\n"+
     "varying vec3 vPosition;"+
     "uniform vec3 uClipMax; "+
     "uniform vec3 uClipMin; "+
@@ -117,10 +116,10 @@ mki3d_texture.drawElementFS= function(gl){
     "    if( vPosition.x < uClipMin.x ) discard; "+
     "    if( vPosition.y < uClipMin.y ) discard; "+
     "    if( vPosition.z < uClipMin.z ) discard; "+
-    "    gl_FragColor = texture2D(texSampler[samplerIndex], texUVS.xy)*texUVS.z;\n"+ // color of texel scaled by shade
+    // "    gl_FragColor = texture2D(texSampler, texUVS.xy)*texUVS.z;\n"+ // color of texel scaled by shade
+    "    gl_FragColor = texture2D(texSampler, texUVS.xy);\n"+ // color of texel scaled by shade
     "}\n";
 
-}
 
 // returns the id of the new defined texture
 mki3d_texture.createTexture= function(
@@ -308,7 +307,7 @@ mki3d_texture.createElement= function( def ){
     let element={};
     element.def=def; // store the texturion definition for comparison
     element.gl={}; // temporary data with GL IDs
-    element.gl.TextureId = texID; // temporary GL ID (to be removed while saving the data)
+    element.gl.textureId = texID; // temporary GL ID (to be removed while saving the data)
     element.gl.posAttrBuffer=gl.createBuffer();
     element.gl.texAttrBuffer=gl.createBuffer();
     element.texturedTriangles= []; // initially empty array of the textured triangles
@@ -368,7 +367,7 @@ mki3d_texture.pushElement=function( element ){
 mki3d_texture.display= function(){
     if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
 	let t= mki3d.data.texture ;
-	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].gl.TextureId );
+	mki3d_texture.drawTexture( mki3d.gl.context, t.elements[t.index].gl.textureId );
 	document.querySelector("#textureSpan").innerHTML=t.elements[t.index].def.label+
 	    ' ('+t.index+'/'+t.elements.length+'): '+
 	    t.elements[t.index].texturedTriangles.length+' TRIANGLES';
@@ -382,6 +381,28 @@ mki3d_texture.display= function(){
 
 
 // textured triangles
+
+mki3d_texture.textureSelectedTriangles= function(){
+    if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
+	let t= mki3d.data.texture ;
+	let element= t.elements[t.index];
+	let selected=mki3d.getSelectedElements( mki3d.data.model.triangles );
+	mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles ); // remove the triangles to be textured
+
+	for ( let i=0; i< selected.length; i++ ){
+	    let textured=mki3d_texture.makeTexturedTriangle( selected[i] );
+	    if ( textured === null ) {
+		mki3d.data.model.triangles.push( selected[i] ); // give back degenerate triangle
+	    } else {
+		mki3d_texture.addTexturedTriangleToElement( textured, element );
+	    }
+	}
+
+	mki3d_texture.loadElementGlBuffers( element ); // update GL buffers
+    }
+}
+
+
 
 // mki3d_texture.makeTexturedTriangle returns a structure with a reference to the triangle with an uvTriangle of its endpoints' texture coordinades.
 // If the triangle is degenerated, then null is returned.
@@ -402,7 +423,7 @@ mki3d_texture.makeTexturedTriangle= function( triangle ){
 // Adds the new textured triangle to the texture element and updates GL buffers of the element
 mki3d_texture.addTexturedTriangleToElement= function( texturedTriangle, element ){
     element.texturedTriangles.push( texturedTriangle ); // add the textured triangle
-    mki3d_texture.loadElementGlBuffers( element ); // update GL buffers
+    // mki3d_texture.loadElementGlBuffers( element ); // don't forget to update GL buffers
 }
 
 
@@ -429,7 +450,7 @@ mki3d_texture.getNotSelectedTexturedTriangles= function( texturedTriangles ){
 }
 
 // get array of triangles from array of textured triangles
-mki3d_texture.untexteredTriangles( texturedTrinagles ){
+mki3d_texture.untexteredTriangles= function( texturedTrinagles ){
     return texturedTrinagles.map( function( texturedTriangle ){ return texturedTriangle.triangle } );
 }
 
@@ -451,7 +472,7 @@ mki3d_texture.getArrayOfNonEmptyElements= function(){
     let array=[];
     for( let i=0; i<mki3d.data.texture.elements.length; i++ ) {
 	if( mki3d.data.texture.elements[i].texturedTriangles.length > 0 ){
-	    array.push. mki3d.data.texture.elements[i];
+	    array.push( mki3d.data.texture.elements[i] );
 	}
     }
     return array;
@@ -464,12 +485,12 @@ mki3d_texture.loadElementGlBuffers= function( element ){
     {
 	// load positions
 	let pos=[]; // positions floating array
-	for(i=0; i<element.texturedTriangles.length; i++){
+	for(let i=0; i<element.texturedTriangles.length; i++){
 	    let triangle=element.texturedTriangles[i].triangle;
-	    if(!triangle.shade) {
+	    if(!triangle.shade) { // ensure that shade is computed in the next phase
 		triangle.shade = mki3d.shadeFactor( triangle, light);
 	    }
-	    for(j=0; j<3; j++){
+	    for(let j=0; j<3; j++){
 		pos.push(triangle[j].position[0]);
 		pos.push(triangle[j].position[1]);
 		pos.push(triangle[j].position[2]);
@@ -477,26 +498,82 @@ mki3d_texture.loadElementGlBuffers= function( element ){
 	}
 	gl.bindBuffer(gl.ARRAY_BUFFER, element.gl.posAttrBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( pos ), gl.DYNAMIC_DRAW );
+	console.log(pos); /// test
     }
 
     {
 	// load (u,v, shade) parameters
 	let tex=[]; // positions floating array
-	for(i=0; i<element.texturedTriangles.length; i++){
-	    let triangle=element.texturedTriangles[i].triangle;
-	    if(!triangle.shade) {
-		triangle.shade = mki3d.shadeFactor( triangle, light);
-	    }
-	    for(j=0; j<3; j++){
-		tex.push(triangle[j].position[0]);
-		tex.push(triangle[j].position[1]);
-		tex.push(triangle[j].position[2]);
+	for(let i=0; i<element.texturedTriangles.length; i++){
+	    let shade=element.texturedTriangles[i].triangle.shade; // shade must exist here
+	    let triangleUV=element.texturedTriangles[i].triangleUV;
+	    for(let j=0; j<3; j++){
+		tex.push(triangleUV[j][0]);
+		tex.push(triangleUV[j][1]);
+		tex.push(shade);
 	    }
 	}
 	gl.bindBuffer(gl.ARRAY_BUFFER, element.gl.texAttrBuffer);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( tex ), gl.DYNAMIC_DRAW );
+	console.log(tex); /// test
     }
 }
+
+
+mki3d_texture.redraw=function(){
+
+    let gl= mki3d.gl.context;
+    // build the object with drawing program and references, if needed
+    if ( !mki3d_texture.drawElement ) {
+	mki3d_texture.drawElement= {};
+	let makeShaderProgramTool=mki3d.gl.compileAndLinkShaderProgram; // use the function from mki3d.gl
+
+	mki3d_texture.drawElement.shaderProgram=  makeShaderProgramTool(gl, mki3d_texture.drawElementVS , mki3d_texture.drawElementFS );
+	let shaderProgram= mki3d_texture.drawElement.shaderProgram;
+
+	mki3d_texture.drawElement.posAttr=gl.getAttribLocation(shaderProgram, "posAttr");
+	mki3d_texture.drawElement.texAttr=gl.getAttribLocation(shaderProgram, "texAttr");
+	mki3d_texture.drawElement.texSampler=gl.getUniformLocation(shaderProgram, "texSampler");
+
+	mki3d_texture.drawElement.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
+	mki3d_texture.drawElement.uMVMatrix = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+	mki3d_texture.drawElement.uClipMax = gl.getUniformLocation(shaderProgram, "uClipMax");
+	mki3d_texture.drawElement.uClipMin = gl.getUniformLocation(shaderProgram, "uClipMin");
+	gl.useProgram( shaderProgram );
+	gl.uniform1i(mki3d_texture.drawElement.texSampler, 0 );  // use the same texture unit: 0
+    }
+
+    let shaderProgram= mki3d_texture.drawElement.shaderProgram;
+    gl.useProgram( shaderProgram );
+    gl.uniformMatrix4fv(mki3d_texture.drawElement.uMVMatrix, false,
+			mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()) );  // to be optimised ...
+    gl.uniformMatrix4fv(mki3d_texture.drawElement.uPMatrix, false,   mki3d.monoProjectionGL );
+    let v= mki3d.data.clipMaxVector;
+    gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
+    gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
+
+    gl.enableVertexAttribArray(mki3d_texture.drawElement.posAttr);
+    gl.enableVertexAttribArray(mki3d_texture.drawElement.texAttr);
+
+    let elements=mki3d_texture.getArrayOfNonEmptyElements();
+    for ( let i=0; i< elements.length; i++) { // for each element
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );
+
+	// assume that input buffers are up to date
+	gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.posAttrBuffer );
+	gl.vertexAttribPointer( mki3d_texture.drawElement.posAttr, 3, gl.FLOAT, false, 0, 0);
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.texAttrBuffer );
+	gl.vertexAttribPointer( mki3d_texture.drawElement.texAttr, 3, gl.FLOAT, false, 0, 0);
+
+	gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].texturedTriangles.length);
+    }
+    gl.useProgram( mki3d.gl.shaderProgram ); // default shader
+}
+
+
 
 /// debug
 mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_texture.debugTest()

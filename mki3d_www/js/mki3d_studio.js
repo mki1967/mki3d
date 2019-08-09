@@ -147,6 +147,9 @@ mki3d.redraw = function() {
 	mki3d.redrawProjection(mki3d.monoProjectionGL); // monoscopic view
     }
 
+    if( mki3d.data.texture ) {
+	mki3d_texture.redraw();
+    }
 }
 
 mki3d.redrawProjection = function( projectionMatrixGL ) {
