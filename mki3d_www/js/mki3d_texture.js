@@ -398,6 +398,42 @@ mki3d_texture.makeTexturedTriangle= function( triangle ){
     return obj;
 }
 
+
+// Adds the new textured triangle to the texture element and updates GL buffers of the element
+mki3d_texture.addTexturedTriangleToElement= function( texturedTriangle, element ){
+    element.texturedTriangles.push( texturedTriangle ); // add the textured triangle
+    mki3d_texture.loadElementGlBuffers( element ); // update GL buffers
+}
+
+
+// gets sub-array of selected textured triangles from the array of textured triangles
+mki3d_texture.getSelectedTexturedTriangles= function( texturedTriangles ){
+    let out=[];
+    for ( let i=0; i<texturedTriangles.length; i++){
+	if ( mki3d.elementSelected(texturedTriangles[i].triangle) ){
+	    out.push( texturedTriangles[i] );
+	}
+    }
+    return out;
+}
+
+// gets sub-array of not selected textured triangles from the array of textured triangles
+mki3d_texture.getNotSelectedTexturedTriangles= function( texturedTriangles ){
+    let out=[];
+    for ( let i=0; i<texturedTriangles.length; i++){
+	if ( !mki3d.elementSelected(texturedTriangles[i].triangle) ){
+	    out.push( texturedTriangles[i] );
+	}
+    }
+    return out;
+}
+
+// get array of triangles from array of textured triangles
+mki3d_texture.untexteredTriangles( texturedTrinagles ){
+    return texturedTrinagles.map( function( texturedTriangle ){ return texturedTriangle.triangle } );
+}
+
+
 // Global number of textured triangles
 mki3d_texture.numberOfTexturedTriangles= function(){
     if( !mki3d.data.texture || !mki3d.data.texture.elements ) return 0;
