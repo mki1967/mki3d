@@ -549,10 +549,13 @@ mki3d_texture.redraw=function(){
     gl.uniformMatrix4fv(mki3d_texture.drawElement.uMVMatrix, false,
 			mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()) );  // to be optimised ...
     gl.uniformMatrix4fv(mki3d_texture.drawElement.uPMatrix, false,   mki3d.monoProjectionGL );
-    let v= mki3d.data.clipMaxVector;
-    gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
-    gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
 
+    { // clipping
+	let v= mki3d.data.clipMaxVector;
+	gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
+	v= mki3d.data.clipMinVector;
+	gl.uniform3f(mki3d_texture.drawElement.uClipMin,  v[0], v[1], v[2] );
+    }
     gl.enableVertexAttribArray(mki3d_texture.drawElement.posAttr);
     gl.enableVertexAttribArray(mki3d_texture.drawElement.texAttr);
 
@@ -596,5 +599,5 @@ mki3d_texture.debugTest=async function(){ // usage in the console: await mki3d_t
 
     texID = mki3d_texture.createTexture(mki3d.gl.context, def2 );
 
-   mki3d_texture.drawTexture( mki3d.gl.context, texID );
+    mki3d_texture.drawTexture( mki3d.gl.context, texID );
 }
