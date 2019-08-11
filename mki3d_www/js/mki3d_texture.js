@@ -116,8 +116,8 @@ mki3d_texture.drawElementFS= ""+
     "    if( vPosition.x < uClipMin.x ) discard; "+
     "    if( vPosition.y < uClipMin.y ) discard; "+
     "    if( vPosition.z < uClipMin.z ) discard; "+
-    // "    gl_FragColor = texture2D(texSampler, texUVS.xy)*texUVS.z;\n"+ // color of texel scaled by shade
-    "    gl_FragColor = texture2D(texSampler, texUVS.xy);\n"+ // color of texel scaled by shade
+    "    gl_FragColor = vec4(texUVS.z*texture2D(texSampler, texUVS.xy).rgb, 1.0);\n"+ // color of texel scaled by shade
+    // "    gl_FragColor = texture2D(texSampler, texUVS.xy);\n"+ 
     "}\n";
 
 
