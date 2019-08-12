@@ -297,21 +297,26 @@ mki3d_texture.load=  async function(){ // loads texture definition, if new then 
 }
 
 
+// try to create and return object wit GL references for the element
+// with the texture defined by element.def
+mki3d_texture.createElementGlData= function( element ){
+    let gl=mki3d.gl.context;
+    let texID = mki3d_texture.createTexture(gl, element.def ); // try to generate the texture
+    if( !texID ) return null; // there was some problem
+    out={}; // temporary data with GL IDs
+    out.textureId = texID; // temporary GL ID (to be removed while saving the data)
+    out.posAttrBuffer=gl.createBuffer();
+    out.texAttrBuffer=gl.createBuffer();
+    return out;
+}
+
 // Create an object that conatins texture and the triangles textured with this texture
 mki3d_texture.createElement= function( def ){
-    let gl=mki3d.gl.context;
-    let texID = mki3d_texture.createTexture(gl, def ); // try to generate the texture
-
-    if( !texID ) return null; // there was some problem
-
     let element={};
     element.def=def; // store the texturion definition for comparison
-    element.gl={}; // temporary data with GL IDs
-    element.gl.textureId = texID; // temporary GL ID (to be removed while saving the data)
-    element.gl.posAttrBuffer=gl.createBuffer();
-    element.gl.texAttrBuffer=gl.createBuffer();
+    element.gl=mki3d_texture.createElementGlData( element );
+    if ( element.gl === null ) return null; // failed to create GL data 
     element.texturedTriangles= []; // initially empty array of the textured triangles
-
     return element;
 }
 
