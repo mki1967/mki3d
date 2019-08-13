@@ -503,29 +503,49 @@ mki3d_texture.untexteredTriangles= function( texturedTrinagles ){
 }
 
 
-// Global number of textured triangles
-mki3d_texture.numberOfTexturedTriangles= function(){
-    if( !mki3d.data.texture || !mki3d.data.texture.elements ) return 0;
+// Global number of data textured triangles
+mki3d_texture.numberOfTexturedTriangles= function(data){
+    if( !data.texture || !data.texture.elements ) return 0;
     let sum=0;
-    for( let i=0; i<mki3d.data.texture.elements.length; i++ ) {
-	sum= sum + mki3d.data.texture.elements[i].texturedTriangles.length;
+    for( let i=0; i<data.texture.elements.length; i++ ) {
+	sum= sum + data.texture.elements[i].texturedTriangles.length;
     }
     return sum;
 }
 
 
-// Get the array of texture elements that contain any textured triangles
-mki3d_texture.getArrayOfNonEmptyElements= function(){
-    if( !mki3d.data.texture || !mki3d.data.texture.elements ) return [];
+// Get the array of data.texture elements that contain any textured triangles
+mki3d_texture.getArrayOfNonEmptyElements= function(data){
+    if( !data.texture || !data.texture.elements ) return [];
     let array=[];
-    for( let i=0; i<mki3d.data.texture.elements.length; i++ ) {
-	if( mki3d.data.texture.elements[i].texturedTriangles.length > 0 ){
-	    array.push( mki3d.data.texture.elements[i] );
+    for( let i=0; i<data.texture.elements.length; i++ ) {
+	if( data.texture.elements[i].texturedTriangles.length > 0 ){
+	    array.push( data.texture.elements[i] );
 	}
     }
     return array;
 }
 
+// get array of all textured tringles from the elements array
+mki3d_texture.getTexturedTrianglesFromElements= function( elements ){
+    let out=[];
+    for( let i=0; i<elements.length; i++ ) {
+	out=out.concat(elements[i].texturedTriangles);
+    }
+
+    return out;
+}
+
+
+// reload GL buffers in all  data.texture.elements
+mki3d_texture.reloadAllGlBuffers= function( data ){
+    if( !data.texture ) return; // nothing textured
+    elements=data.texture.elements;
+    for(let i=0; i<elements.length; i++ ) {
+	mki3d_texture.loadElementGlBuffers( elements[i], data.light );
+    }
+    mki3d.gl.context.finish();
+}
 
 // mki3d_texture.loadElementGlBuffers loads the data buffer for the shader drawing texured triangles of the texture element
 mki3d_texture.loadElementGlBuffers= function(
@@ -610,7 +630,7 @@ mki3d_texture.redraw=function(){
     gl.enableVertexAttribArray(mki3d_texture.drawElement.posAttr);
     gl.enableVertexAttribArray(mki3d_texture.drawElement.texAttr);
 
-    let elements=mki3d_texture.getArrayOfNonEmptyElements();
+    let elements=mki3d_texture.getArrayOfNonEmptyElements(mki3d.data);
     for ( let i=0; i< elements.length; i++) { // for each element
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );

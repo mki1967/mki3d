@@ -69,12 +69,23 @@ mki3d.modelInsertElement = function(array, element) {
 
 
 /* shading */
+mki3d.cancelShadesInTriangles= function ( triangles ){
+    for(let i=0; i<triangles.length; i++)
+	triangles[i].shade=null;
+}
 
 mki3d.cancelShades = function() {
-    var triangles=mki3d.data.model.triangles;
-    var i;
-    for(i=0; i<triangles.length; i++)
-	triangles[i].shade=null;
+    mki3d.cancelShadesInTriangles( mki3d.data.model.triangles );
+    if( mki3d.data.texture ) { // check for textured triangles
+	mki3d.cancelShadesInTriangles(
+	    mki3d_texture.untexteredTriangles(
+		mki3d_texture.getTexturedTrianglesFromElements(
+		    mki3d_texture.getArrayOfNonEmptyElements( mki3d.data )
+		)
+	    )
+	);	
+	mki3d_texture.reloadAllGlBuffers( mki3d.data ); // new shades are computed during reloading
+    }
 }
 
 /* shadeFactor is computed for triangles */
@@ -93,6 +104,7 @@ mki3d.setLight = function() {
     var l= mki3d.matrixVectorProduct(r, [0,0,1]); // basic light direction is [0,0,1]
     // console.log(l); ////////
     mki3d.data.light.vector = l; 
+    mki3d.cancelShades();
     var i;
     var triangles = mki3d.data.model.triangles;
     for( i=0 ; i<triangles.length; i++) 
