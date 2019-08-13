@@ -523,6 +523,7 @@ mki3d.modelViewMatrix= function () {
 }
 
 mki3d.setModelViewMatrix = function () {
+    mki3d.gl.context.useProgram(mki3d.gl.shaderProgram);
     mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false,
 				      mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()) );
 }

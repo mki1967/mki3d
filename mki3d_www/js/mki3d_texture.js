@@ -299,24 +299,25 @@ mki3d_texture.load=  async function(){ // loads texture definition, if new then 
 
 // try to create and return object wit GL references for the element
 // with the texture defined by element.def
-mki3d_texture.createElementGlData= function( element ){
+mki3d_texture.makeGlInElement= function( element, light ){
     let gl=mki3d.gl.context;
+    element.gl=null;
     let texID = mki3d_texture.createTexture(gl, element.def ); // try to generate the texture
-    if( !texID ) return null; // there was some problem
-    out={}; // temporary data with GL IDs
-    out.textureId = texID; // temporary GL ID (to be removed while saving the data)
-    out.posAttrBuffer=gl.createBuffer();
-    out.texAttrBuffer=gl.createBuffer();
-    return out;
+    if( !texID ) return; // there was some problem
+    element.gl={}; // temporary data with GL IDs
+    element.gl.textureId = texID; // temporary GL ID (to be removed while saving the data)
+    element.gl.posAttrBuffer=gl.createBuffer();
+    element.gl.texAttrBuffer=gl.createBuffer();
+    mki3d_texture.loadElementGlBuffers( element, light ); // update GL buffers
 }
 
 // Create an object that conatins texture and the triangles textured with this texture
 mki3d_texture.createElement= function( def ){
     let element={};
     element.def=def; // store the texturion definition for comparison
-    element.gl=mki3d_texture.createElementGlData( element );
-    if ( element.gl === null ) return null; // failed to create GL data 
     element.texturedTriangles= []; // initially empty array of the textured triangles
+    mki3d_texture.makeGlInElement( element, [0,0,1] /* light - not used */ );
+    if ( element.gl === null ) return null; // failed to create GL data
     return element;
 }
 
@@ -327,10 +328,7 @@ mki3d_texture.deleteCurrentElement= function( ){
     }
     let element=mki3d.data.texture.elements[ mki3d.data.texture.index ]; // the element to be removed
     // remove the GL objects
-    let gl=mki3d.gl.context;
-    gl.deleteTexture(  element.gl.TextureId );
-    gl.deleteBuffer(element.gl.posAttrBuffer);
-    gl.deleteBuffer(element.gl.texAttrBuffer);
+    mki3d_texture.deleteElementGlObjects( element ); // delete GL objects
     // untexture the triangles:
     for( let i=0; i < element.texturedTriangles.length; i++ ) {
 	mki3d.data.model.triangles.push(element.texturedTriangles[i].triangle);
@@ -339,6 +337,51 @@ mki3d_texture.deleteCurrentElement= function( ){
     mki3d.data.texture.elements.splice( mki3d.data.texture.index, 1 );
     mki3d.data.texture.index=  mki3d.data.texture.index % mki3d.data.texture.elements.length;
 }
+
+
+// delete the GL objecst referenced by the texture element
+mki3d_texture.deleteElementGlObjects= function( element ){
+    let gl=mki3d.gl.context;
+    gl.deleteTexture(  element.gl.textureId );
+    gl.deleteBuffer(element.gl.posAttrBuffer);
+    gl.deleteBuffer(element.gl.texAttrBuffer);
+}
+
+// release GL object used by the old data to be replaced after loading new data
+mki3d_texture.deleteTextureGlObjects= function( data ){
+    if( ! data.texture ) {
+	return; // no texture data
+    }
+
+    let elements=data.texture.elements;
+
+    for(let i=0; i<elements.length; i++) {
+	mki3d_texture.deleteElementGlObjects( elements[i] );
+    }
+}
+
+// clean gl reference from the texture element in the data copy to be saved
+mki3d_texture.cleanGlFromElements= function( data ){
+    if(! data.texture ) { // no textured data
+	return;
+    }
+    let elements= data.texture.elements;
+    for(let i=0; i< elements.length; i++){
+	delete elements[i].gl;
+    }
+}
+
+// rebuild GL objects in loaded data
+mki3d_texture.makeGlInTextures= function( data ){
+     if(! data.texture ) { // no textured data
+	return;
+    }
+    let elements= data.texture.elements;
+    for(let i=0; i< elements.length; i++){
+	mki3d_texture.makeGlInElement( elements[i], data.light );
+    }
+}
+
 
 // check if two texturion definitions are identical
 mki3d_texture.equalDefs= function( def1, def2 ){
@@ -403,7 +446,7 @@ mki3d_texture.textureSelectedTriangles= function(){
 	    }
 	}
 
-	mki3d_texture.loadElementGlBuffers( element ); // update GL buffers
+	mki3d_texture.loadElementGlBuffers( element, mki3d.data.light ); // update GL buffers
     }
 }
 
@@ -485,7 +528,10 @@ mki3d_texture.getArrayOfNonEmptyElements= function(){
 
 
 // mki3d_texture.loadElementGlBuffers loads the data buffer for the shader drawing texured triangles of the texture element
-mki3d_texture.loadElementGlBuffers= function( element ){
+mki3d_texture.loadElementGlBuffers= function(
+    element, // element where the GL buffers need to be reloaded
+    light  // light for the recomputation of the triangle's shades
+){
     let gl= mki3d.gl.context;
     {
 	// load positions

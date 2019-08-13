@@ -76,8 +76,9 @@ mki3d.file.startSaving = function () {
     mki3d.action.cancelSelection();
     /* unique-sort elements of the model */
     mki3d.modelSortUnique();
-
-    var myObjectString = JSON.stringify(mki3d.data);
+    let data= JSON.parse(JSON.stringify(mki3d.data)); // clone of data
+    mki3d_texture.cleanGlFromElements( data );
+    let myObjectString = JSON.stringify(data);
     mki3d.html.textareaOutput.value= myObjectString;
     mki3d.saveInfo("Saving to '*.mki3d'");
     mki3d.saveName(mki3d.file.suggestedName.concat(".mki3d"));
@@ -135,6 +136,8 @@ mki3d.file.startLoading = function ( ) {
     mki3d.textLoadConsume= function(){
 	var data= JSON.parse(mki3d.html.textareaInput.value);
 	// to do: test data consistency ...
+	mki3d_texture.makeGlInTextures(data); // make GL objects for loaded data
+	mki3d_texture.deleteTextureGlObjects( mki3d.data); // remove GL objects of old data
 	mki3d.data = data;
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
@@ -150,11 +153,13 @@ mki3d.file.startLoading = function ( ) {
 /** LOAD STRING **/
 
 
+// Import ET
 mki3d.file.startLoadingString = function ( ) {
     // set callback to consume textarea
     mki3d.textLoadConsume= function(){
 	var data= mki3d_et_getDataFromString(mki3d.html.textareaInput.value);
 	// to do: test data consistency ...
+	mki3d_texture.deleteTextureGlObjects( mki3d.data); // remove GL objects of old data
 	mki3d.data = data;
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
