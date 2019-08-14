@@ -30,6 +30,8 @@ mki3d.url.load = async function( input ) { // load from url
 	// console.log( response );   
 	let result= await response.json();
 	// console.log(result); /// tests
+	mki3d_texture.makeGlInTextures(result); // make GL objects for loaded data
+	mki3d_texture.deleteTextureGlObjects( mki3d.data); // remove GL objects of old data
 	
 	mki3d.data=result; /// !!!
 	mki3d.tmpCancel();
