@@ -160,7 +160,7 @@ mki3d.redraw = function() {
     }
 
     if( mki3d.data.texture ) {
-	mki3d_texture.redraw(gl, mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()), mki3d.monoProjectionGL , mki3d.data);
+	mki3d_texture.redraw(gl, mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()), mki3d.monoProjectionGL , mki3d.data, mki3d.gl.compileAndLinkShaderProgram);
     }
 }
 

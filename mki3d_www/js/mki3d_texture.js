@@ -536,14 +536,14 @@ mki3d_texture.loadElementGlBuffers= function(
 }
 
 
-mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data){
+mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, compileAndLinkShaderProgram){
 
     // let gl= mki3d.gl.context;
     let oldProgram= gl.getParameter( gl.CURRENT_PROGRAM );
     // build the object with drawing program and references, if needed
     if ( !mki3d_texture.drawElement ) {
 	mki3d_texture.drawElement= {};
-	let makeShaderProgramTool=mki3d.gl.compileAndLinkShaderProgram; // use the function from mki3d.gl
+	let makeShaderProgramTool= compileAndLinkShaderProgram; // use the function from mki3d.gl
 
 	mki3d_texture.drawElement.shaderProgram=  makeShaderProgramTool(gl, mki3d_texture.drawElementVS , mki3d_texture.drawElementFS );
 	let shaderProgram= mki3d_texture.drawElement.shaderProgram;
@@ -568,9 +568,9 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data){
     gl.uniformMatrix4fv(mki3d_texture.drawElement.uPMatrix, false,   monoProjectionGL );
 
     { // clipping
-	let v= mki3d.data.clipMaxVector;
+	let v= data.clipMaxVector;
 	gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
-	v= mki3d.data.clipMinVector;
+	v= data.clipMinVector;
 	gl.uniform3f(mki3d_texture.drawElement.uClipMin,  v[0], v[1], v[2] );
     }
     gl.enableVertexAttribArray(mki3d_texture.drawElement.posAttr);
