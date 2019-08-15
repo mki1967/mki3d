@@ -297,7 +297,7 @@ mki3d_texture.load=  async function(data, gl, compileAndLinkShaderProgram ){ // 
 
 // try to create and return object wit GL references for the element
 // with the texture defined by element.def
-mki3d_texture.makeGlInElement= function( element, light, gl, compileAndLinkShaderProgram ){
+mki3d_texture.makeGlInElement= function( element, light, shadeFactor, gl, compileAndLinkShaderProgram ){
     element.gl=null;
     let texID = mki3d_texture.createTexture(gl, element.def, compileAndLinkShaderProgram ); // try to generate the texture
     if( !texID ) return; // there was some problem
@@ -305,15 +305,15 @@ mki3d_texture.makeGlInElement= function( element, light, gl, compileAndLinkShade
     element.gl.textureId = texID; // temporary GL ID (to be removed while saving the data)
     element.gl.posAttrBuffer=gl.createBuffer();
     element.gl.texAttrBuffer=gl.createBuffer();
-    mki3d_texture.loadElementGlBuffers( element, light, gl ); // update GL buffers
+    mki3d_texture.loadElementGlBuffers( element, light, shadeFactor, gl ); // update GL buffers
 }
 
 // Create an object that conatins texture and the triangles textured with this texture
-mki3d_texture.createElement= function( def, gl, compileAndLinkShaderProgram){
+mki3d_texture.createElement= function( def, shadeFactor, gl, compileAndLinkShaderProgram){
     let element={};
     element.def=def; // store the texturion definition for comparison
     element.texturedTriangles= []; // initially empty array of the textured triangles
-    mki3d_texture.makeGlInElement( element, [0,0,1] /* light - not used */, gl, compileAndLinkShaderProgram );
+    mki3d_texture.makeGlInElement( element, [0,0,1] /* light - not used */, shadeFactor, gl, compileAndLinkShaderProgram );
     if ( element.gl === null ) return null; // failed to create GL data
     return element;
 }
@@ -353,13 +353,13 @@ mki3d_texture.cleanGlFromElements= function( data ){
 }
 
 // rebuild GL objects in loaded data
-mki3d_texture.makeGlInTextures= function( data, gl, compileAndLinkShaderProgram ){
+mki3d_texture.makeGlInTextures= function( data, shadeFactor, gl, compileAndLinkShaderProgram ){
      if(! data.texture ) { // no textured data
 	return;
     }
     let elements= data.texture.elements;
     for(let i=0; i< elements.length; i++){
-	mki3d_texture.makeGlInElement( elements[i], data.light, gl, compileAndLinkShaderProgram );
+	mki3d_texture.makeGlInElement( elements[i], data.light, shadeFactor, gl, compileAndLinkShaderProgram );
     }
 }
 
@@ -482,11 +482,11 @@ mki3d_texture.getTexturedTrianglesFromElements= function( elements ){
 
 
 // reload GL buffers in all  data.texture.elements
-mki3d_texture.reloadAllGlBuffers= function( data, gl ){
+mki3d_texture.reloadAllGlBuffers= function( data, shadeFactor, gl ){
     if( !data.texture ) return; // nothing textured
     elements=data.texture.elements;
     for(let i=0; i<elements.length; i++ ) {
-	mki3d_texture.loadElementGlBuffers( elements[i], data.light, gl );
+	mki3d_texture.loadElementGlBuffers( elements[i], data.light, shadeFactor, gl );
     }
 }
 
@@ -494,6 +494,7 @@ mki3d_texture.reloadAllGlBuffers= function( data, gl ){
 mki3d_texture.loadElementGlBuffers= function(
     element, // element where the GL buffers need to be reloaded
     light,  // light for the recomputation of the triangle's shades
+    shadeFactor, // function: shadeFactor( triangle, light)
     gl // gl context
 ){
     // let gl= mki3d.gl.context;
@@ -503,7 +504,7 @@ mki3d_texture.loadElementGlBuffers= function(
 	for(let i=0; i<element.texturedTriangles.length; i++){
 	    let triangle=element.texturedTriangles[i].triangle;
 	    if(!triangle.shade) { // ensure that shade is computed in the next phase
-		triangle.shade = mki3d.shadeFactor( triangle, light);
+		triangle.shade = shadeFactor( triangle, light);
 	    }
 	    for(let j=0; j<3; j++){
 		pos.push(triangle[j].position[0]);
@@ -536,7 +537,7 @@ mki3d_texture.loadElementGlBuffers= function(
 }
 
 
-mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, compileAndLinkShaderProgram){
+mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFactor, compileAndLinkShaderProgram){
 
     // let gl= mki3d.gl.context;
     let oldProgram= gl.getParameter( gl.CURRENT_PROGRAM );
@@ -579,7 +580,7 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, compileAn
     let elements=mki3d_texture.getArrayOfNonEmptyElements(data);
     for ( let i=0; i< elements.length; i++) { // for each element
 	if( !elements[i].gl.validBuffers ) { // refresh GL buffers
-	   mki3d_texture.loadElementGlBuffers( elements[i], data.light, gl );
+	    mki3d_texture.loadElementGlBuffers( elements[i], data.light, shadeFactor, gl );
 	}
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );
