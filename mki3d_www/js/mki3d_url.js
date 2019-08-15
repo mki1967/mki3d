@@ -28,12 +28,12 @@ mki3d.url.load = async function( input ) { // load from url
 	mki3d.message("LOADING FROM "+url+" ...");
 	let response=await fetch(url, {cache: 'no-cache', mode: 'cors'} );
 	// console.log( response );   
-	let result= await response.json();
+	let data= await response.json();
 	// console.log(result); /// tests
-	mki3d_texture.makeGlInTextures(result); // make GL objects for loaded data
-	mki3d_texture.deleteTextureGlObjects( mki3d.data); // remove GL objects of old data
+	mki3d_texture.makeGlInTextures(data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+	mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
 	
-	mki3d.data=result; /// !!!
+	mki3d.data=data; /// !!!
 	mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
 	mki3d.backup();

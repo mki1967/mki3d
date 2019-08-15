@@ -43,7 +43,7 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	break;
 
 	case 76: // L
-        await mki3d_texture.load();
+        await mki3d_texture.load( mki3d.data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram );
 	mki3d_texture.display();
 	return; // submenu - do not escape to canvas 
 	break;

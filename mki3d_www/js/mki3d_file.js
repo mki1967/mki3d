@@ -136,8 +136,8 @@ mki3d.file.startLoading = function ( ) {
     mki3d.textLoadConsume= function(){
 	var data= JSON.parse(mki3d.html.textareaInput.value);
 	// to do: test data consistency ...
-	mki3d_texture.makeGlInTextures(data); // make GL objects for loaded data
-	mki3d_texture.deleteTextureGlObjects( mki3d.data); // remove GL objects of old data
+	mki3d_texture.makeGlInTextures(data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+	mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
 	mki3d.data = data;
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
