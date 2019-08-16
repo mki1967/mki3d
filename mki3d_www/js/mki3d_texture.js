@@ -192,6 +192,7 @@ mki3d_texture.createTexture= function(
 	gl.vertexAttribPointer( mki3d_texture.hLocation, 1, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.POINTS, 0, texSize+4);
     }
+    gl.disableVertexAttribArray(mki3d_texture.hLocation);
     
     gl.bindTexture(gl.TEXTURE_2D, textureId);
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -286,7 +287,7 @@ mki3d_texture.load=  async function(data, gl, compileAndLinkShaderProgram ){ // 
 	}
     }
 
-    let element= mki3d_texture.createElement( def, gl, compileAndLinkShaderProgram ); // try to create new element ...
+    let element= mki3d_texture.createElement( def, null /* shadeFactor not used in empty element */, gl, compileAndLinkShaderProgram ); // try to create new element ...
 
     if( element === null ) return ; // could not create element from def
 
@@ -648,7 +649,7 @@ mki3d_texture.textureSelectedTriangles= function(){
 	    }
 	}
 
-	mki3d_texture.loadElementGlBuffers( element, mki3d.data.light, mki3d.gl.context ); // update GL buffers
+	mki3d_texture.loadElementGlBuffers( element, mki3d.data.light, mki3d.shadeFactor, mki3d.gl.context ); // update GL buffers
     }
 }
 

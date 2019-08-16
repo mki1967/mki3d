@@ -85,14 +85,10 @@ mki3d.text.initTexShaderProgram= function(){
 
     var shaderProgram= mki3d.gl.compileAndLinkShaderProgram(gl, mki3d.text.TEX_VERTEX_SHADER, mki3d.text.TEX_FRAGMENT_SHADER);
     
-    gl.useProgram(shaderProgram);
 
     // shaderProgram.aPosition = gl.getAttribLocation(shaderProgram, "a_position");
     shaderProgram.aPosition = gl.getAttribLocation(shaderProgram, "a_position");
-    gl.enableVertexAttribArray(shaderProgram.aPosition);
-
     shaderProgram.aTexCoord = gl.getAttribLocation(shaderProgram, "a_texcoord");
-    gl.enableVertexAttribArray(shaderProgram.aTexCoord);
 
     /* uniform variables  */
     shaderProgram.idxY = gl.getUniformLocation(shaderProgram, "idx_y");
@@ -182,10 +178,16 @@ mki3d.text.prepareSymbolsTexture = function(gl, textureUnitNr, FONT_SIZE, FONT_F
 mki3d.text.drawTextureSymbol= function( symbolIdx, pos ){
     // test version
     var gl=mki3d.gl.context;
+    let shaderProgram=mki3d.text.shaderProgram;
+    gl.useProgram(shaderProgram);
+    gl.enableVertexAttribArray(shaderProgram.aPosition);
+    gl.enableVertexAttribArray(shaderProgram.aTexCoord);
 
     gl.uniform3f(mki3d.text.shaderProgram.mov, pos[0], pos[1], pos[2]);
     gl.uniform1f(mki3d.text.shaderProgram.idxY, symbolIdx );
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+    gl.disableVertexAttribArray(shaderProgram.aPosition);
+    gl.disableVertexAttribArray(shaderProgram.aTexCoord);
 };
 
 mki3d.text.drawSymbols= function( symbols ) {

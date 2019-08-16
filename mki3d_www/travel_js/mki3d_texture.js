@@ -173,7 +173,6 @@ mki3d_texture.createTexture= function(
     gl.viewport(0,0,texSize,texSize);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textureId, 0); // assign the texture to the framebuffer
 
-    gl.disableVertexAttribArray(1); //////////////////// !!!!!!!!!!!!!!!
     gl.enableVertexAttribArray(mki3d_texture.hLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, mki3d_texture.hBufferId);
     for( j=0; j<texSize+4; j++) {
@@ -181,6 +180,7 @@ mki3d_texture.createTexture= function(
 	gl.vertexAttribPointer( mki3d_texture.hLocation, 1, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.POINTS, 0, texSize+4);
     }
+    gl.disableVertexAttribArray(mki3d_texture.hLocation);
     
     gl.bindTexture(gl.TEXTURE_2D, textureId);
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -417,6 +417,8 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 
 	gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].texturedTriangles.length);
     }
+    gl.disableVertexAttribArray(mki3d_texture.drawElement.posAttr);
+    gl.disableVertexAttribArray(mki3d_texture.drawElement.texAttr);
     gl.useProgram( oldProgram  );
 }
 

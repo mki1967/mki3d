@@ -72,14 +72,8 @@ function compileAndLinkShader( FRAGMENT_SHADER_STRING, VERTEX_SHADER_STRING) {
 function initShaders() { // compile and link shader programs and  init their atributes and variables 
 
     shaderProgram =  compileAndLinkShader( FRAGMENT_SHADER_STRING, VERTEX_SHADER_STRING);
-    gl.useProgram(shaderProgram);
-
     shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
     shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-    gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-
 
     shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
     shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
@@ -221,7 +215,10 @@ function drawLinks()
 
 
 function drawGraph(graph, modelViewGL, monoProjectionGL) {
+    gl.useProgram(shaderProgram);
 
+    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+    gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
     /* draw triangles */
     if(graph.nrOfTriangles>0) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, graph.trianglesVerticesBuffer );
@@ -238,6 +235,8 @@ function drawGraph(graph, modelViewGL, monoProjectionGL) {
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, vertexColorSize, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.LINES, 0, 2*graph.nrOfLines);
     }
+    gl.disableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+    gl.disableVertexAttribArray(shaderProgram.vertexColorAttribute);
 
     /* draw textured triangles */
 

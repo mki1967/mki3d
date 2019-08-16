@@ -43,7 +43,7 @@ mki3d.url.load = async function( input ) { // load from url
 	mki3d.url.base= url; // new base for next load
 	mki3d.message("<div style='font-size:30px;'>LOADED FROM "+url+".</div>");
 	mki3d.url.inputLoaded=true;
-	console.log( mki3d.data ); /// test
+	// console.log( mki3d.data ); /// test
     }
     catch( err ) {
 	console.log(err);

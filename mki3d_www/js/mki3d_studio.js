@@ -546,6 +546,10 @@ mki3d.drawGraph = function (graph) {
 
     var gl= mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
+    gl.useProgram(shaderProgram)
+    gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
+    gl.enableVertexAttribArray(shaderProgram.aVertexColor);
+    
     if(graph.triangles && graph.nrOfTriangles>0 ){
 	/* draw triangles */
 	gl.bindBuffer(gl.ARRAY_BUFFER, graph.triangles );
@@ -562,6 +566,10 @@ mki3d.drawGraph = function (graph) {
 	gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
 	gl.drawArrays(gl.LINES, 0, 2*graph.nrOfSegments);
     }
+
+    gl.disableVertexAttribArray(shaderProgram.aVertexPosition);
+    gl.disableVertexAttribArray(shaderProgram.aVertexColor);
+
 }
 
 
@@ -627,6 +635,7 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 
 
     // draw lines only
+    gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments );
     gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
 
@@ -634,13 +643,11 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
       gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
       gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
     */
+    gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
     gl.disableVertexAttribArray(shaderProgram.aVertexColor); ///
     gl.vertexAttrib3fv(shaderProgram.aVertexColor, cCol);
     gl.drawArrays(gl.LINES, 0, 2*buf.nrOfSegments);
-    gl.enableVertexAttribArray(shaderProgram.aVertexColor); ///
-    
-    
-    // ...
+    gl.disableVertexAttribArray(shaderProgram.aVertexPosition); /// now both are disabled
 }
 
 /* return array of endpoints of elements */
