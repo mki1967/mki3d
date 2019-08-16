@@ -164,6 +164,14 @@ function makeGraph (mki3dData, light){
     graph.trianglesVertices = new Float32Array( elements );
     graph.trianglesColors = new Float32Array( elementsColors )
 
+    // Textures
+    if( mki3dData.texture ) { // prepare textures
+	mki3dData.texture.elements=mki3d_texture.getArrayOfNonEmptyElements(mki3dData); // do not create unused textures
+	
+	mki3d_texture.makeGlInTextures( mki3dData , shadeFactor, gl, function(gl, vs,fs){return compileAndLinkShader(fs, vs); } /* unfortunate ! */ );
+	
+	graph.texture=mki3dData.texture;
+    }
 
     ////// 
     return graph;
@@ -252,7 +260,7 @@ function makeStage(mki3dData, mki3dToken) {
     stage.bgColor = mki3dData.backgroundColor;
     var light= mki3dData.light
     stage.scene = makeGraph (mki3dData, light) ////
-    stage.token = makeGraph (mki3dToken, mki3dToken.light)  ////
+    stage.token = makeGraph (mki3dToken, mki3dToken.light)  //// this token is URL symbol always lit from the front
     stage.frameBox= makeFrameBox(stage.traveler);
 
 

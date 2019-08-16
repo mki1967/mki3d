@@ -43,7 +43,40 @@ mki3d_texture.renderTextureFS=""+
     "  gl_FragColor= color;\n"+
     "}\n";
 
+var makeShaderProgramTool= function(gl, vertexShaderSource, fragmentShaderSource){
+    /* Parameters:
+       gl - WebGL context
+    */
 
+    var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertexShader, vertexShaderSource);
+    gl.compileShader(vertexShader);
+    if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+	console.log(gl.getShaderInfoLog(vertexShader));
+	console.log(vertexShaderSource);
+	return null;
+    }
+
+    var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fragmentShaderSource);
+    gl.compileShader(fragmentShader);
+    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+	console.log(gl.getShaderInfoLog(fragmentShader));
+	console.log(fragmentShaderSource);
+	return null;
+    }
+
+    var shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+	console.log("Could not initialise shaders");
+	return null;
+    }
+    // SUCCESS
+    return shaderProgram;
+};
 
 
 
@@ -66,27 +99,21 @@ mki3d_texture.drawElementFS= ""+
     "precision mediump float;\n"+
     "varying vec3 texUVS;\n"+
     "varying vec3 vPosition;"+
-    "uniform vec3 uClipMax; "+
-    "uniform vec3 uClipMin; "+
     "uniform sampler2D texSampler;\n"+
     "void main()\n"+
     "{\n"+
-    "    if( vPosition.x > uClipMax.x ) discard; "+
-    "    if( vPosition.y > uClipMax.y ) discard; "+
-    "    if( vPosition.z > uClipMax.z ) discard; "+
-    "    if( vPosition.x < uClipMin.x ) discard; "+
-    "    if( vPosition.y < uClipMin.y ) discard; "+
-    "    if( vPosition.z < uClipMin.z ) discard; "+
     "    gl_FragColor = vec4(texUVS.z*texture2D(texSampler, texUVS.xy).rgb, 1.0);\n"+ // color of texel scaled by shade
-    // "    gl_FragColor = texture2D(texSampler, texUVS.xy);\n"+ 
     "}\n";
+
+
+
 
 
 // returns the id of the new defined texture
 mki3d_texture.createTexture= function(
     gl, /* the GL context */
-    def, /* the Texturion definition */
-    makeShaderProgramTool /* the tool to make compiled and linked shader from vertex and fragment shaders */
+    def /* the Texturion definition */
+    // makeShaderProgramTool /* the tool to make compiled and linked shader from vertex and fragment shaders */
 ){
     let texSize= mki3d_texture.texSize;
     
@@ -146,6 +173,7 @@ mki3d_texture.createTexture= function(
     gl.viewport(0,0,texSize,texSize);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textureId, 0); // assign the texture to the framebuffer
 
+    gl.disableVertexAttribArray(1); //////////////////// !!!!!!!!!!!!!!!
     gl.enableVertexAttribArray(mki3d_texture.hLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, mki3d_texture.hBufferId);
     for( j=0; j<texSize+4; j++) {
@@ -163,6 +191,7 @@ mki3d_texture.createTexture= function(
     return textureId; // here return the id of the ready texture
     
 }
+
 
 
 // try to create and return object wit GL references for the element
@@ -358,8 +387,6 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 	mki3d_texture.drawElement.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");
 	mki3d_texture.drawElement.uMVMatrix = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 
-	mki3d_texture.drawElement.uClipMax = gl.getUniformLocation(shaderProgram, "uClipMax");
-	mki3d_texture.drawElement.uClipMin = gl.getUniformLocation(shaderProgram, "uClipMin");
 	gl.useProgram( shaderProgram );
 	gl.uniform1i(mki3d_texture.drawElement.texSampler, 0 );  // use the same texture unit: 0
     }
@@ -370,12 +397,6 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 			modelViewGL );  // to be optimised ...
     gl.uniformMatrix4fv(mki3d_texture.drawElement.uPMatrix, false,   monoProjectionGL );
 
-    { // clipping
-	let v= data.clipMaxVector;
-	gl.uniform3f(mki3d_texture.drawElement.uClipMax,  v[0], v[1], v[2] );
-	v= data.clipMinVector;
-	gl.uniform3f(mki3d_texture.drawElement.uClipMin,  v[0], v[1], v[2] );
-    }
     gl.enableVertexAttribArray(mki3d_texture.drawElement.posAttr);
     gl.enableVertexAttribArray(mki3d_texture.drawElement.texAttr);
 
