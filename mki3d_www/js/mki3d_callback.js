@@ -32,6 +32,8 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
 	    mki3d_texture.textureSelectedTriangles();
 	    mki3d.redraw();
+	    mki3d.action.escapeToCanvas();
+	     // mki3d.backup();
 	}
 	break;
 
