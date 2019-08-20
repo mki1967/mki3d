@@ -539,7 +539,7 @@ mki3d_texture.loadElementGlBuffers= function(
 
 
 mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFactor, compileAndLinkShaderProgram){
-
+    mki3d_texture.reloadAllGlBuffers( data, shadeFactor, gl ); /// Do it only in the mki3d editor. Dletete or comment this line in the programs, wher data is static.
     // let gl= mki3d.gl.context;
     let oldProgram= gl.getParameter( gl.CURRENT_PROGRAM );
     // build the object with drawing program and references, if needed
