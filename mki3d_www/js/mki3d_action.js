@@ -753,22 +753,16 @@ mki3d.action.selectByCursor= function(){
 
 mki3d.action.selectInClipBox= function(){
     if(!mki3d.tmp.selected) mki3d.tmp.selected=[];
-    var i;
     var points = mki3d.elementEndpointsInBox(
-	mki3d.data.model.segments,
+	mki3d.data.model.segments.concat(
+	    mki3d.data.model.triangles
+	).concat(
+	    mki3d_texture.triangles( mki3d.data )
+	),
 	mki3d.data.clipMinVector,
 	mki3d.data.clipMaxVector
     );
-    for(i=0; i<points.length; i++) points[i].selected=true;
-    // mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
-
-    points = mki3d.elementEndpointsInBox(
-	mki3d.data.model.triangles,
-	mki3d.data.clipMinVector,
-	mki3d.data.clipMaxVector
-    );
-    for(i=0; i<points.length; i++) points[i].selected=true;
-    // mki3d.tmp.selected=mki3d.tmp.selected.concat(points);
+    for(let i=0; i<points.length; i++) points[i].selected=true;
     mki3d.tmpRebuildSelected();
 }
 
