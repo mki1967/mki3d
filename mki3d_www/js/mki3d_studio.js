@@ -81,11 +81,7 @@ mki3d.setLight = function() {
     var l= mki3d.matrixVectorProduct(r, [0,0,1]); // basic light direction is [0,0,1]
     // console.log(l); ////////
     mki3d.data.light.vector = l; 
-    mki3d.cancelShades();
-    var i;
-    var triangles = mki3d.data.model.triangles;
-    for( i=0 ; i<triangles.length; i++) 
-	triangles[i].shade=mki3d.shadeFactor(triangles[i], mki3d.data.light); 
+    mki3d.cancelShades(); // redrawing recomputes shades
 }
 
 
@@ -577,14 +573,6 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 	}
     }
 
-    /*
-    var colors = [];
-    for( i=0 ; i < 2*(pointShape.length); i++) {
-        colors.push(cCol[0]);
-        colors.push(cCol[1]);
-        colors.push(cCol[2]);
-    }
-    */
     
     /* draw each point -- segments moved by point position */
     var movedShape=[];
