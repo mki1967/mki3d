@@ -768,7 +768,7 @@ mki3d.action.selectInClipBox= function(){
 
 mki3d.action.selectCurrentSet= function(){
     var model = mki3d.data.model;
-    var elements = model.segments.concat(model.triangles);
+    var elements = model.segments.concat( model.triangles ).concat( mki3d_texture.triangles( mki3d.data ) );
     var i,j;
     for(i=0; i<elements.length; i++) 
 	for(j=0; j<elements[i].length; j++){
