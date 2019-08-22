@@ -443,10 +443,18 @@ mki3d_texture.getNotSelectedTexturedTriangles= function( texturedTriangles ){
 }
 
 // get array of triangles from array of textured triangles
-mki3d_texture.untexteredTriangles= function( texturedTrinagles ){
+mki3d_texture.untexturedTriangles= function( texturedTrinagles ){
     return texturedTrinagles.map( function( texturedTriangle ){ return texturedTriangle.triangle } );
 }
 
+// get array of triangles from  textured triangles in data
+mki3d_texture.triangles=function( data ){
+    return mki3d_texture.untexturedTriangles(
+	mki3d_texture.getTexturedTrianglesFromElements(
+	    mki3d_texture.getArrayOfNonEmptyElements(  data )
+	)
+    )
+}
 
 // Global number of data textured triangles
 mki3d_texture.numberOfTexturedTriangles= function(data){

@@ -104,6 +104,7 @@ mki3d.tmpAddSelectedFromElements= function(elements){
 
 mki3d.tmpRebuildSelected = function(){
     mki3d.tmp.selected =[];
-    mki3d.tmpAddSelectedFromElements(mki3d.data.model.segments);
-    mki3d.tmpAddSelectedFromElements(mki3d.data.model.triangles);
+    mki3d.tmpAddSelectedFromElements( mki3d.data.model.segments );
+    mki3d.tmpAddSelectedFromElements( mki3d.data.model.triangles );
+    mki3d.tmpAddSelectedFromElements( mki3d_texture.triangles( mki3d.data ) );
 }

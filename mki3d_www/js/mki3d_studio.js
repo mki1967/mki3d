@@ -54,13 +54,7 @@ mki3d.cancelShadesInTriangles= function ( triangles ){
 mki3d.cancelShades = function() {
     mki3d.cancelShadesInTriangles( mki3d.data.model.triangles );
     if( mki3d.data.texture ) { // check for textured triangles
-	mki3d.cancelShadesInTriangles(
-	    mki3d_texture.untexteredTriangles(
-		mki3d_texture.getTexturedTrianglesFromElements(
-		    mki3d_texture.getArrayOfNonEmptyElements( mki3d.data )
-		)
-	    )
-	);	
+	mki3d.cancelShadesInTriangles( mki3d_texture.triangles( mki3d.data ) );
 	mki3d_texture.reloadAllGlBuffers( mki3d.data, mki3d.shadeFactor, mki3d.gl.context ); // new shades are computed during reloading
     }
 }

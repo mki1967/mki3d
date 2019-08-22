@@ -691,6 +691,7 @@ mki3d.action.setLight = function(){
 mki3d.action.cancelSelection= function(){
     mki3d.cleanElementEndpointsFromKey(mki3d.data.model.segments, 'selected');
     mki3d.cleanElementEndpointsFromKey(mki3d.data.model.triangles, 'selected');
+    mki3d.cleanElementEndpointsFromKey( mki3d_texture.triangles( mki3d.data ), 'selected');
     mki3d.tmp.selected=[];
 }
 
@@ -730,38 +731,22 @@ mki3d.action.extractSelectedToNewSet= function(){
 
 
 mki3d.action.selectByCursor= function(){
-    var i;
-    var cursor= mki3d.data.cursor;
+    let cursor= mki3d.data.cursor;
 
     if(!mki3d.tmp.selected) mki3d.tmp.selected=[];
-
-    var points = mki3d.elementEndpointsInBox(
-	mki3d.data.model.segments,
-	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
-	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
+    let points = mki3d.getElementsEndpoints(
+	mki3d.data.model.segments.concat(
+	    mki3d.data.model.triangles
+	).concat(
+	    mki3d_texture.triangles( mki3d.data )
+	)
     );
-    
-    for(i=0; i<points.length; i++) 
+    for(let i=0; i<points.length; i++)
 	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
             (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
             (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
 	  ) {
 	    points[i].selected=true;
-	    // mki3d.tmp.selected.push( points[i] );
-	}
-    points = mki3d.elementEndpointsInBox(
-	mki3d.data.model.triangles,
-	[-MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS, -MKI3D_MAX_CLIP_ABS],
-	[MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS, MKI3D_MAX_CLIP_ABS] 
-    );
-    
-    for(i=0; i<points.length; i++) 
-	if( mki3d.vectorCompare( points[i].position, cursor.position ) == 0 ||
-            (cursor.marker1 &&  mki3d.vectorCompare( points[i].position, cursor.marker1.position ) == 0) ||
-            (cursor.marker2 &&  mki3d.vectorCompare( points[i].position, cursor.marker2.position ) == 0) 
-	  ) {
-	    points[i].selected=true;
-	    // mki3d.tmp.selected.push( points[i] );
 	}
     mki3d.tmpRebuildSelected();
 }
