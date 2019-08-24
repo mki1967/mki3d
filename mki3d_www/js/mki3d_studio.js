@@ -150,10 +150,6 @@ mki3d.redrawProjection = function( projectionMatrixGL ) {
 
     if(mki3d.data.links &&  mki3d.drawLinks)
 	 mki3d.drawPoints( MKI3D_URL_POINT, mki3d.data.links , mki3d.gl.buffers.url );
-    // mki3d.drawPoints( MKI3D_URL_POINT, [{ position: [0,0,0]}, { position: [2,2,0] }] , mki3d.gl.buffers.url ); /// test
-
-    // mki3d.drawGraph( mki3d.gl.buffers.url ); /// test
-    // mki3d.drawGraph( mki3d.gl.buffers.urlStereo ); /// test
     mki3d.text.redraw( projectionMatrixGL ); /// tests
 }
 
@@ -440,13 +436,6 @@ mki3d.projectionMatrix = function(){
     var zz=  (projection.zFar+projection.zNear)/(projection.zFar-projection.zNear);
     var zw= 1;
     var wz= -2*projection.zFar*projection.zNear/(projection.zFar-projection.zNear);
-
-    /*
-      var pMatrix = mki3d.gl.matrix4( xx,  0,  0,  0,
-      0, yy,  0,  0,
-      0,  0, zz, wz,
-      0,  0, zw,  0 );
-    */
     
     var pMatrix = [
 	[xx,  0,  0,  0],
@@ -462,9 +451,7 @@ mki3d.projectionMatrix = function(){
 
 mki3d.setProjectionMatrix = function () {
     mki3d.setProjectionGLMatrices();
-    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,  mki3d.gl.matrix4toGL(mki3d.projectionMatrix()) );
     mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,   mki3d.monoProjectionGL );
-    // mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uPMatrix, false,    mki3d.stereo.rightProjectionGL );
 }
 
 /* load model view  to GL uMVMatrix */
@@ -482,14 +469,6 @@ mki3d.modelViewMatrix= function () {
     
     var scrSh= mki3d.data.view.screenShift;
     
-    /* 
-       var mvMatrix =  mki3d.gl.matrix4( 
-       rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0],
-       rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1],
-       rot[2][0], rot[2][1], rot[2][2], mki3d.scalarProduct(rot[2],mov)+scrSh[2],
-       0,                 0,         0,                                        1 
-       );
-    */
     var mvMatrix = [
 	[ rot[0][0], rot[0][1], rot[0][2], mki3d.scalarProduct(rot[0],mov)+scrSh[0] ],
 	[ rot[1][0], rot[1][1], rot[1][2], mki3d.scalarProduct(rot[1],mov)+scrSh[1] ],
@@ -545,8 +524,7 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
     if( !points || points.length == 0) return; 
     var gl = mki3d.gl.context;
     var shaderProgram = mki3d.gl.shaderProgram;
-    // var buf = mki3d.gl.buffers.cursor;
-
+ 
     var cPos = mki3d.vectorClone(mki3d.data.cursor.position);
     var step=  mki3d.data.cursor.step;
     var cCol = mki3d.data.cursor.color;
@@ -558,7 +536,6 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
     // load the shape of the point
     for( i=0 ; i<pointShape.length; i++) {
 	for(j=0; j<2; j++){
-	    // point = mki3d.vectorClone(pointShape[i][j]);
 	    point = mki3d.matrixVectorProduct(revMatrix, pointShape[i][j]);
 	    mki3d.vectorScale( point, step, step, step); /* points as scaled according to the cursor */
 	    segments.push(point[0]);
@@ -577,31 +554,19 @@ mki3d.drawPoints = function( pointShape, points, buf ) {
 	}
     }
 
-    // console.log( movedShape ); // test
     // load movedShape and colors to GL buffers
 
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( movedShape ), gl.DYNAMIC_DRAW );
-
-    /*
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array( colors ), gl.DYNAMIC_DRAW );
-    */
-
     
     buf.nrOfSegments =  points.length*segments.length/(2*MKI3D_VERTEX_POSITION_SIZE); // + ... markers
-
 
     // draw lines only
     gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
     gl.bindBuffer(gl.ARRAY_BUFFER, buf.segments );
     gl.vertexAttribPointer(shaderProgram.aVertexPosition, MKI3D_VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
 
-    /*
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf.segmentsColors);
-      gl.vertexAttribPointer(shaderProgram.aVertexColor, MKI3D_VERTEX_COLOR_SIZE, gl.FLOAT, false, 0, 0);
-    */
     gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
     gl.disableVertexAttribArray(shaderProgram.aVertexColor); ///
     gl.vertexAttrib3fv(shaderProgram.aVertexColor, cCol);
