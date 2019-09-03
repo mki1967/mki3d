@@ -791,33 +791,48 @@ mki3d.action.extendSelectionByIncident= function(elements){
 /* view */
 
 mki3d.action.cancelVisibilityRestrictions= function() {
-    mki3d.tmpResetDisplayModel();
+    mki3d.tmpResetDisplayModel(); /// ???
+    mki3d.unblockElements( mki3d.data.model.segments.
+		   concat( mki3d.data.model.triangles ).
+		   concat( mki3d_texture.triangles( mki3d.data ) )
+		 )
     mki3d.action.unclip(); // clipping is also a view restriction
     mki3d.redraw();
 }
 
 mki3d.action.viewSelectedElements = function() {
-    mki3d.tmp.display = {};
-    mki3d.tmp.display.model = {};
-    mki3d.tmp.display.model.segments = mki3d.getSelectedElements(mki3d.data.model.segments);
-    mki3d.tmp.display.model.triangles = mki3d.getSelectedElements(mki3d.data.model.triangles);
+    mki3d.action.cancelVisibilityRestrictions();
+    let allElements= mki3d.data.model.segments.
+	concat( mki3d.data.model.triangles ).
+	concat( mki3d_texture.triangles( mki3d.data ) )
+    let selectedElements=  mki3d.getSelectedElements( allElements );
+    mki3d.blockElements( allElements );
+    mki3d.unblockElements( selectedElements );
     mki3d.redraw();
 }
 
 
 mki3d.action.viewSelectedSegments = function() {
-    mki3d.tmp.display = {};
-    mki3d.tmp.display.model = {};
-    mki3d.tmp.display.model.segments = mki3d.getSelectedElements(mki3d.data.model.segments);
-    mki3d.tmp.display.model.triangles = [];
+    mki3d.action.cancelVisibilityRestrictions();
+    let allElements= mki3d.data.model.segments.
+	concat( mki3d.data.model.triangles ).
+	concat( mki3d_texture.triangles( mki3d.data ) )
+    let selectedElements=  mki3d.getSelectedElements( mki3d.data.model.segments );
+    mki3d.blockElements( allElements );
+    mki3d.unblockElements( selectedElements );
     mki3d.redraw();
 }
 
 mki3d.action.viewSelectedTriangles = function() {
-    mki3d.tmp.display = {};
-    mki3d.tmp.display.model = {};
-    mki3d.tmp.display.model.segments = [];
-    mki3d.tmp.display.model.triangles = mki3d.getSelectedElements(mki3d.data.model.triangles);
+    mki3d.action.cancelVisibilityRestrictions();
+    let allElements= mki3d.data.model.segments.
+	concat( mki3d.data.model.triangles ).
+	concat( mki3d_texture.triangles( mki3d.data ) )
+    let selectedElements=  mki3d.getSelectedElements(
+	mki3d.data.model.triangles.concat( mki3d_texture.triangles( mki3d.data ) )
+    );
+    mki3d.blockElements( allElements );
+    mki3d.unblockElements( selectedElements );
     mki3d.redraw();
 }
 

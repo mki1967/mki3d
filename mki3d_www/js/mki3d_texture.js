@@ -506,19 +506,23 @@ mki3d_texture.loadElementGlBuffers= function(
     shadeFactor, // function: shadeFactor( triangle, light)
     gl // gl context
 ){
+    element.unblocked=0; // temporary attribute used in mki3d_texture.redraw to be deleted before saving
     // let gl= mki3d.gl.context;
     {
 	// load positions
 	let pos=[]; // positions floating array
 	for(let i=0; i<element.texturedTriangles.length; i++){
 	    let triangle=element.texturedTriangles[i].triangle;
-	    if(!triangle.shade) { // ensure that shade is computed in the next phase
-		triangle.shade = shadeFactor( triangle, light);
-	    }
-	    for(let j=0; j<3; j++){
-		pos.push(triangle[j].position[0]);
-		pos.push(triangle[j].position[1]);
-		pos.push(triangle[j].position[2]);
+	    if( !triangle.blocked ){
+		element.unblocked++; // count unblocked
+		if(!triangle.shade) { // ensure that shade is computed in the next phase
+		    triangle.shade = shadeFactor( triangle, light);
+		}
+		for(let j=0; j<3; j++){
+		    pos.push(triangle[j].position[0]);
+		    pos.push(triangle[j].position[1]);
+		    pos.push(triangle[j].position[2]);
+		}
 	    }
 	}
 	gl.bindBuffer(gl.ARRAY_BUFFER, element.gl.posAttrBuffer);
@@ -530,12 +534,15 @@ mki3d_texture.loadElementGlBuffers= function(
 	// load (u,v, shade) parameters
 	let tex=[]; // positions floating array
 	for(let i=0; i<element.texturedTriangles.length; i++){
-	    let shade=element.texturedTriangles[i].triangle.shade; // shade must exist here
-	    let triangleUV=element.texturedTriangles[i].triangleUV;
-	    for(let j=0; j<3; j++){
-		tex.push(triangleUV[j][0]);
-		tex.push(triangleUV[j][1]);
-		tex.push(shade);
+	    let triangle=element.texturedTriangles[i].triangle;
+	    if( !triangle.blocked ){
+		let shade=triangle.shade; // shade must exist here
+		let triangleUV=element.texturedTriangles[i].triangleUV;
+		for(let j=0; j<3; j++){
+		    tex.push(triangleUV[j][0]);
+		    tex.push(triangleUV[j][1]);
+		    tex.push(shade);
+		}
 	    }
 	}
 	gl.bindBuffer(gl.ARRAY_BUFFER, element.gl.texAttrBuffer);
@@ -591,17 +598,20 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 	if( !elements[i].gl.validBuffers ) { // refresh GL buffers
 	    mki3d_texture.loadElementGlBuffers( elements[i], data.light, shadeFactor, gl );
 	}
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );
+	if( elements[i].unblocked > 0 ) {
+	    gl.activeTexture(gl.TEXTURE0);
+	    gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );
 
-	// assume that input buffers are up to date
-	gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.posAttrBuffer );
-	gl.vertexAttribPointer( mki3d_texture.drawElement.posAttr, 3, gl.FLOAT, false, 0, 0);
+	    // assume that input buffers are up to date
+	    gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.posAttrBuffer );
+	    gl.vertexAttribPointer( mki3d_texture.drawElement.posAttr, 3, gl.FLOAT, false, 0, 0);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.texAttrBuffer );
-	gl.vertexAttribPointer( mki3d_texture.drawElement.texAttr, 3, gl.FLOAT, false, 0, 0);
+	    gl.bindBuffer(gl.ARRAY_BUFFER, elements[i].gl.texAttrBuffer );
+	    gl.vertexAttribPointer( mki3d_texture.drawElement.texAttr, 3, gl.FLOAT, false, 0, 0);
 
-	gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].texturedTriangles.length);
+	    // gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].texturedTriangles.length);
+	    gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].unblocked);
+	}
     }
     // gl.useProgram( mki3d.gl.shaderProgram ); // default shader
     gl.useProgram( oldProgram  );

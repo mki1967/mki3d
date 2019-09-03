@@ -160,16 +160,19 @@ mki3d.loadModel= function (){
     var buf = mki3d.gl.buffers.model;
 
     mki3d.tmpRefreshDisplayModel();
-    var model = mki3d.tmp.display.model;
+    // var model = mki3d.tmp.display.model;
+    let  model = mki3d.data.model;
     var stereoMode= mki3d.stereo.mode;
     var gl = mki3d.gl.context;
     
     mki3d.tmp.exported= mki3d.loadModelToBuf(gl, model , buf, stereoMode, mki3d.data.light);
 }
 
+/* not used now ...
 mki3d.loadDataToBuf= function(gl, data, buf, stereoMode ) { // returns exported for export to HTML
     return mki3d.loadModelToBuf(gl, data.model, buf, stereoMode, data.light );
 }
+*/
 
 mki3d.loadModelToBuf= function(gl, model, buf, stereoMode, light ) { // returns exported for export to HTML
     var elements = [];
@@ -180,18 +183,20 @@ mki3d.loadModelToBuf= function(gl, model, buf, stereoMode, light ) { // returns 
 
     var i,j;
     for(i=0; i<model.segments.length; i++){
-	for(j=0; j<2; j++){
-	    elements.push(model.segments[i][j].position[0]);
-	    elements.push(model.segments[i][j].position[1]);
-	    elements.push(model.segments[i][j].position[2]);
-	    if(stereoMode) {
-		elementsColors.push(red);
-		elementsColors.push(0.0);
-		elementsColors.push(blue);
-	    } else {
-		elementsColors.push(model.segments[i][j].color[0]);
-		elementsColors.push(model.segments[i][j].color[1]);
-		elementsColors.push(model.segments[i][j].color[2]);
+	if( !model.segments[i].blocked ){
+	    for(j=0; j<2; j++){
+		elements.push(model.segments[i][j].position[0]);
+		elements.push(model.segments[i][j].position[1]);
+		elements.push(model.segments[i][j].position[2]);
+		if(stereoMode) {
+		    elementsColors.push(red);
+		    elementsColors.push(0.0);
+		    elementsColors.push(blue);
+		} else {
+		    elementsColors.push(model.segments[i][j].color[0]);
+		    elementsColors.push(model.segments[i][j].color[1]);
+		    elementsColors.push(model.segments[i][j].color[2]);
+		}
 	    }
 	}
     }
@@ -221,22 +226,24 @@ mki3d.loadModelToBuf= function(gl, model, buf, stereoMode, light ) { // returns 
     blue=blue/3;
 
     for(i=0; i<model.triangles.length; i++){
-	var triangle=model.triangles[i];
-	if(!triangle.shade) 
-	    triangle.shade = mki3d.shadeFactor( triangle, light);
-	for(j=0; j<3; j++){
-	    elements.push(triangle[j].position[0]);
-	    elements.push(triangle[j].position[1]);
-	    elements.push(triangle[j].position[2]);
-	    if( stereoMode ) {
-		var c= (triangle[j].color[0]+ triangle[j].color[1]+ triangle[j].color[2])*triangle.shade;
-		elementsColors.push(c*red);
-		elementsColors.push(0.0);
-		elementsColors.push(c*blue);		
-	    } else {
-		elementsColors.push(triangle[j].color[0]*triangle.shade);
-		elementsColors.push(triangle[j].color[1]*triangle.shade);
-		elementsColors.push(triangle[j].color[2]*triangle.shade);
+	let triangle=model.triangles[i];
+	if( !triangle.blocked ){
+	    if(!triangle.shade)
+		triangle.shade = mki3d.shadeFactor( triangle, light);
+	    for(j=0; j<3; j++){
+		elements.push(triangle[j].position[0]);
+		elements.push(triangle[j].position[1]);
+		elements.push(triangle[j].position[2]);
+		if( stereoMode ) {
+		    var c= (triangle[j].color[0]+ triangle[j].color[1]+ triangle[j].color[2])*triangle.shade;
+		    elementsColors.push(c*red);
+		    elementsColors.push(0.0);
+		    elementsColors.push(c*blue);
+		} else {
+		    elementsColors.push(triangle[j].color[0]*triangle.shade);
+		    elementsColors.push(triangle[j].color[1]*triangle.shade);
+		    elementsColors.push(triangle[j].color[2]*triangle.shade);
+		}
 	    }
 	}
     }

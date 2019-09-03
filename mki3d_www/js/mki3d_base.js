@@ -247,3 +247,17 @@ mki3d.uniqueSorted= function(array, compare){
     }
     return out;
 }
+
+/** block / unblock the elements **/
+
+mki3d.blockElements= function( elements ){
+    for( let i=0; i< elements.length; i++){
+	elements[i].blocked=true;
+    }
+}
+
+mki3d.unblockElements= function( elements ){
+    for( let i=0; i< elements.length; i++){
+	delete elements[i]['blocked'];
+    }
+}
