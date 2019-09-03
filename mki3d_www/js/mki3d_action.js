@@ -139,7 +139,7 @@ mki3d.action.init= function() {
 mki3d.action.nextSetIndex= function() {
     if(!mki3d.tmp.display.model.setRestriction){
 	mki3d.compressSetIndexes( mki3d.data );
-	var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+	var maxIdx = mki3d.getMaxSetIndex( mki3d.data );
 	mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
 	mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
 	mki3d.redraw();
@@ -651,7 +651,7 @@ mki3d.action.deleteSelectedTriangles = function(){
 
 mki3d.action.copySelected = function(){
     mki3d.compressSetIndexes(mki3d.data);
-    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data )+1; // empty set
 
     /* copy segments */
     var copy = mki3d.copyOfSelected( mki3d.data.model.segments, newIdx );
@@ -720,7 +720,7 @@ mki3d.action.extractSelectedToNewSet= function(){
     if(!mki3d.tmp.selected) {
 	return ("NOTHING SELECTED!");
     } 
-    var newIdx= mki3d.getMaxSetIndex( mki3d.data.model )+1;
+    var newIdx= mki3d.getMaxSetIndex( mki3d.data )+1;
     mki3d.data.set.current=newIdx;
     var i;
     for(i=0; i<mki3d.tmp.selected.length; i++)
@@ -1054,7 +1054,7 @@ mki3d.action.setMenu = function(){
     mki3d.action.cancelVisibilityRestrictions();
 
     mki3d.compressSetIndexes( mki3d.data );
-    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+    var maxIdx = mki3d.getMaxSetIndex( mki3d.data );
     // mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
 
     mki3d.html.spanSetMaxIdx.innerHTML= maxIdx;
@@ -1077,7 +1077,7 @@ mki3d.action.setIncidentView = function(){
 }
 
 mki3d.action.nextSetIdx= function(){
-    var maxIdx = mki3d.getMaxSetIndex( mki3d.data.model );
+    var maxIdx = mki3d.getMaxSetIndex( mki3d.data );
     mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
     return "<br> CURRENT SET INDEX IS: "+mki3d.data.set.current;
 }

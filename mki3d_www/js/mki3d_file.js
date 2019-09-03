@@ -95,7 +95,7 @@ mki3d_merge_data= function( data ) {
     mki3d.tmp.merged = data; // dangerous !!!
     mki3d.compressSetIndexes( mki3d.data );
     mki3d.compressSetIndexes( mki3d.tmp.merged );
-    var setIdxShift= mki3d.getMaxSetIndex(mki3d.data.model)+1;
+    var setIdxShift= mki3d.getMaxSetIndex(mki3d.data)+1;
     var mergedSegments= mki3d.tmp.merged.model.segments;
     var mergedTriangles= mki3d.tmp.merged.model.triangles;
     var mergedEndpoints=mki3d.getEndpointsOfElements( mergedSegments.concat( mergedTriangles ) );

@@ -1,6 +1,6 @@
 /* operations on the set indexes */
 
-/* get the sorted set of set indextes of elements' endpoints */
+/* get the sorted set of set indexes of elements' endpoints */
 mki3d.getSetIdxArray= function( elements ) {
     var array =[]
     var i,j;
@@ -17,9 +17,10 @@ mki3d.getSetIdxArray= function( elements ) {
 }
 
 /* get maximal set index in model.segments and model.triangles */
-mki3d.getMaxSetIndex= function( model ){
+mki3d.getMaxSetIndex= function( data ){
+    let model=data.model;
     var max = -1; // if the model is empty then -1
-    var elements = model.segments.concat(model.triangles);
+    var elements = model.segments.concat(model.triangles).concat(  mki3d_texture.triangles( data )  );
     var i,j;
     for(i=0; i<elements.length; i++) 
 	for(j=0; j<elements[i].length; j++){
@@ -31,7 +32,7 @@ mki3d.getMaxSetIndex= function( model ){
 
 /* comperss set of indexes, so that 0 ... maximal index become indexes of non-empty sets   */
 mki3d.compressSetIndexes= function( data ) {
-    var elements = data.model.segments.concat(data.model.triangles);
+    var elements = data.model.segments.concat(data.model.triangles).concat(  mki3d_texture.triangles( data )  );
     if(elements.length==0) return; // empty elements -- no indexes
     var idxSet = mki3d.getSetIdxArray(elements);
     if(idxSet[idxSet.length-1] == idxSet.length-1) return; // indexes already are compressed
@@ -69,7 +70,8 @@ mki3d.currentSetStatistics= function(data) {
     var msg = "CURRENT SET IDX: "+data.set.current;
     msg+= "<br> ENDPOINTS IN SEGMENTS: "+mki3d.numberOfEndpointsInSet(data.set.current, data.model.segments);
     msg+= "<br> ENDPOINTS IN TRIANGLES: "+mki3d.numberOfEndpointsInSet(data.set.current, data.model.triangles);
-    msg+= "<br> MAXIMAL NON-EMPTY SET INDEX IS: "+mki3d.getMaxSetIndex( data.model );
+    msg+= "<br> ENDPOINTS IN TEXTURED TRIANGLES: "+mki3d.numberOfEndpointsInSet(data.set.current, mki3d_texture.triangles(data) );
+    msg+= "<br> MAXIMAL NON-EMPTY SET INDEX IS: "+mki3d.getMaxSetIndex( data );
     return msg;
 }
 /* place all endpoints of element in set setIdx */

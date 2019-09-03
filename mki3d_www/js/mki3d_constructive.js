@@ -33,7 +33,7 @@ mki3d.polygonMakeVertex= function( vIdx ){
 
 mki3d.constructivePolygonInsert= function(){
     mki3d.compressSetIndexes(mki3d.data);
-    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data )+1; // empty set
     mki3d.data.set.current=newIdx; // insert polygon to a new set
 
     var c = mki3d.data.cursor.color;
@@ -59,7 +59,7 @@ mki3d.constructivePolygonInsert= function(){
 
 mki3d.constructivePolygonTriangles= function(){
     mki3d.compressSetIndexes(mki3d.data);
-    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data )+1; // empty set
     mki3d.data.set.current=newIdx; // insert polygon to a new set
 
     var c = mki3d.data.cursor.color;
@@ -965,7 +965,7 @@ mki3d.SelectedBookmarkedTriangleIntersection= function() {
 
 
     mki3d.compressSetIndexes(mki3d.data);
-    var newIdx = mki3d.getMaxSetIndex( mki3d.data.model )+1; // empty set
+    var newIdx = mki3d.getMaxSetIndex( mki3d.data )+1; // empty set
     mki3d.data.set.current=newIdx; // insert intersection segments to a new set
 
     var c = mki3d.data.cursor.color;
