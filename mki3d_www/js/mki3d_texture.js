@@ -343,6 +343,7 @@ mki3d_texture.deleteTextureGlObjects= function( data, gl ){
 }
 
 // clean gl reference from the texture element in the data copy to be saved
+// clean 'unblocked' attribute used by gl.DrawArrays
 mki3d_texture.cleanGlFromElements= function( data ){
     if(! data.texture ) { // no textured data
 	return;
@@ -506,7 +507,7 @@ mki3d_texture.loadElementGlBuffers= function(
     shadeFactor, // function: shadeFactor( triangle, light)
     gl // gl context
 ){
-    element.unblocked=0; // temporary attribute used in mki3d_texture.redraw to be deleted before saving
+    element.gl.unblocked=0; // temporary attribute used in mki3d_texture.redraw to be deleted before saving
     // let gl= mki3d.gl.context;
     {
 	// load positions
@@ -514,7 +515,7 @@ mki3d_texture.loadElementGlBuffers= function(
 	for(let i=0; i<element.texturedTriangles.length; i++){
 	    let triangle=element.texturedTriangles[i].triangle;
 	    if( !triangle.blocked ){
-		element.unblocked++; // count unblocked
+		element.gl.unblocked++; // count unblocked
 		if(!triangle.shade) { // ensure that shade is computed in the next phase
 		    triangle.shade = shadeFactor( triangle, light);
 		}
@@ -598,7 +599,7 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 	if( !elements[i].gl.validBuffers ) { // refresh GL buffers
 	    mki3d_texture.loadElementGlBuffers( elements[i], data.light, shadeFactor, gl );
 	}
-	if( elements[i].unblocked > 0 ) {
+	if( elements[i].gl.unblocked > 0 ) {
 	    gl.activeTexture(gl.TEXTURE0);
 	    gl.bindTexture(gl.TEXTURE_2D, elements[i].gl.textureId );
 
@@ -610,7 +611,7 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 	    gl.vertexAttribPointer( mki3d_texture.drawElement.texAttr, 3, gl.FLOAT, false, 0, 0);
 
 	    // gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].texturedTriangles.length);
-	    gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].unblocked);
+	    gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].gl.unblocked);
 	}
     }
     // gl.useProgram( mki3d.gl.shaderProgram ); // default shader

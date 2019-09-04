@@ -261,3 +261,17 @@ mki3d.unblockElements= function( elements ){
 	delete elements[i]['blocked'];
     }
 }
+
+
+/** preparing data for saving or usage **/
+
+// create JSON clean from temporary atributes for saving 
+mki3d.dataToJSON=function( origData ){
+    let data= JSON.parse( JSON.stringify ( origData ) );
+    mki3d_texture.cleanGlFromElements( data );
+    let segmentsAdnTriangles = data.model.segments.concat( data.model.triangles ).concat( mki3d_texture.triangles( data ) );
+    // clean selected from endpoints
+    mki3d.cleanElementEndpointsFromKey(segmentsAdnTriangles, 'selected');
+    
+
+}

@@ -137,20 +137,23 @@ mki3d.action.init= function() {
 
 /* action of switching the set index */
 mki3d.action.nextSetIndex= function() {
-    if(!mki3d.tmp.display.model.setRestriction){
+    if(mki3d.set.restriction==""){
 	mki3d.compressSetIndexes( mki3d.data );
 	var maxIdx = mki3d.getMaxSetIndex( mki3d.data );
 	mki3d.data.set.current = (mki3d.data.set.current + 1) % (maxIdx+2);
-	mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
+	mki3d.set.restriction="inSet";
+	mki3d.viewInSet(mki3d.data.set.current, mki3d.data);
 	mki3d.redraw();
 	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
 	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCLUDED ELEMENTS (PRESS 'N' AGAIN TO DISPLAY ALL INCIDENT ELEMENTS.)");
-    } else if(mki3d.tmp.display.model.setRestriction=="inSet") {
-	mki3d.tmp.display.model=mki3d.createIncidentToSetModel(mki3d.data.set.current);
+    } else if(mki3d.set.restriction=="inSet") {
+	mki3d.set.restriction="incidentToSet";
+	mki3d.viewIncidentToSet(mki3d.data.set.current, mki3d.data);
 	mki3d.redraw();
 	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
 	mki3d.messageAppend("<br>VIEW RESTRICTED TO INCIDENT ELEMENTS (PRESS 'N' AGAIN TO RESTORE PREVIOUS DISPLAY.)");
     } else {
+	mki3d.set.restriction="";
 	mki3d.action.cancelVisibilityRestrictions();
 	mki3d.message( mki3d.currentSetStatistics(mki3d.data) );
 	mki3d.messageAppend("<br>(PRESS 'N' AGAIN TO CHANGE CURRENT SET.)");
@@ -1065,13 +1068,13 @@ mki3d.action.setMenu = function(){
 }
 
 mki3d.action.setInculedView = function(){
-    mki3d.tmp.display.model=mki3d.createInSetModel(mki3d.data.set.current);
+    mki3d.viewInSet(mki3d.data.set.current, mki3d.data);
     mki3d.redraw();
     return "<br>VIEW RESTRICTED TO ELEMENTS INCLUDED IN SET: "+mki3d.data.set.current+". (PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS)";
 }
 
 mki3d.action.setIncidentView = function(){
-    mki3d.tmp.display.model=mki3d.createIncidentToSetModel(mki3d.data.set.current);
+    mki3d.viewIncidentToSet(mki3d.data.set.current, mki3d.data);
     mki3d.redraw();
     return "<br>VIEW RESTRICTED TO ELEMENTS INCIDENT TO SET: "+mki3d.data.set.current+". (PRESS 'QVC' TO CANCEL VIEW RESTRICTIONS)";
 }

@@ -1,5 +1,8 @@
 /* operations on the set indexes */
 
+mki3d.set={};
+mki3d.set.restriction=""; // one of: "", "inSet", "incidentToSet"
+
 /* get the sorted set of set indexes of elements' endpoints */
 mki3d.getSetIdxArray= function( elements ) {
     var array =[]
@@ -124,24 +127,27 @@ mki3d.elementsIncidentToSet = function( elements, setIdx) {
 }
 
 
-/* making models based on sets */
 
-mki3d.createInSetModel = function(setIdx){
-    var model={};
-    model.segments= mki3d.elementsInSet( mki3d.data.model.segments, setIdx);
-    model.triangles= mki3d.elementsInSet( mki3d.data.model.triangles, setIdx);
-    model.setRestriction="inSet";
-    return model;
-};
+mki3d.viewInSet= function(setIdx, data){
+    mki3d.action.cancelVisibilityRestrictions();
+    let allElements= data.model.segments.
+	concat( data.model.triangles ).
+	concat( mki3d_texture.triangles( data ) );
+    let selectedElements= mki3d.elementsInSet( allElements, setIdx );
+    mki3d.blockElements( allElements );
+    mki3d.unblockElements( selectedElements );
+}
 
+mki3d.viewIncidentToSet= function(setIdx, data){
+    mki3d.action.cancelVisibilityRestrictions();
 
-mki3d.createIncidentToSetModel = function(setIdx){
-    var model={};
-    model.segments= mki3d.elementsIncidentToSet( mki3d.data.model.segments, setIdx);
-    model.triangles= mki3d.elementsIncidentToSet( mki3d.data.model.triangles, setIdx);
-    model.setRestriction="incidentToSet";
-    return model;
-};
+    let allElements= data.model.segments.
+	concat( data.model.triangles ).
+	concat( mki3d_texture.triangles( data ) );
+    let selectedElements= mki3d.elementsIncidentToSet( allElements, setIdx );
+    mki3d.blockElements( allElements );
+    mki3d.unblockElements( selectedElements );
+}
 
 /* glue operations */
 
@@ -165,22 +171,11 @@ mki3d.glueTrianglesOfSegments = function( segments, setIdx ){
         var clone0= mki3d.pointClone(segments[i][0]);
 	clone0.set= setIdx;
 	out.push( mki3d.newTriangle(clone0 ,segments[i][0],segments[i][1]) ); // sorts endpoints
-	/* old - buggy - code 
-	   out.push( mki3d.newTriangle(segments[i][0],segments[i][0],segments[i][1]) ); // tutaj przestawia !!!
-	   out[out.length-1][0].set=setIdx; // one doubled endpoint in set setIdx
-	   out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-	*/
         clone0 = mki3d.pointClone(segments[i][0]); // another clone of segments[i][0]
         var clone1 = mki3d.pointClone(segments[i][1]); 
         clone0.set= setIdx;
 	clone1.set= setIdx;
 	out.push( mki3d.newTriangle(clone0,clone1,segments[i][1]) );// sorts endpoints
-        /* old - buggy - code 
-      	   out.push( mki3d.newTriangle(segments[i][0],segments[i][1],segments[i][1]) );// tutaj przestawia !!!
-	   out[out.length-1][0].set=setIdx; 
-	   out[out.length-1][1].set=setIdx; // two different endpoints in set setIdx
-	   out[out.length-1].sort(mki3d.pointCompare); // repair sorting
-	*/
     }
     return out;
 }
