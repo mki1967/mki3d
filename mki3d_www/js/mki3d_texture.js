@@ -638,6 +638,25 @@ mki3d_texture.copySelected= function( data, newSetIdx ){
     }
 }
 
+// delete textured selected triangles
+mki3d_texture.deleteSelectedTriangles = function(data){
+    if( !mki3d.data.texture) {
+	return;
+    }
+    let elements=data.texture.elements; // should always exist in texture
+    for(let i=0; i<elements.length; i++){
+	let texturedTriangles=elements[i].texturedTriangles;
+	let out=[];
+	{
+	    for ( let i=0; i<texturedTriangles.length; i++){
+		if ( ! mki3d.elementSelected(texturedTriangles[i].triangle) ){
+		    out.push( texturedTriangles[i] );
+		}
+	    }
+	}
+	elements[i].texturedTriangles=out;
+    }
+}
 
 
 /*** GLOBAL IN CALLBACKS ***/

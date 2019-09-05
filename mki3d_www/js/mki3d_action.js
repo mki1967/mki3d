@@ -646,6 +646,7 @@ mki3d.action.deleteSelectedSegments = function(){
 
 mki3d.action.deleteSelectedTriangles = function(){
     mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles );
+    mki3d_texture.deleteSelectedTriangles(mki3d.data);
     mki3d.action.cancelVisibilityRestrictions();
     mki3d.redraw();
 }
