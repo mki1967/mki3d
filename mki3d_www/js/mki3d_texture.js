@@ -619,6 +619,26 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 }
 
 
+// copying of textured triangles and placing them in the set newSetIdx
+mki3d_texture.copySelected= function( data, newSetIdx ){
+    if( !mki3d.data.texture) {
+	return;
+    }
+    let elements=data.texture.elements; // should always exist in texture
+    for(let i=0; i<elements.length; i++){
+	let selectedTexturedTrianglesClone = JSON.parse(
+	    JSON.stringify(
+		mki3d_texture.getSelectedTexturedTriangles( elements[i].texturedTriangles )
+	    )
+	)
+	for( let t=0; t<selectedTexturedTrianglesClone.length; t++){
+	    mki3d.elementPlaceInSet( selectedTexturedTrianglesClone[t].triangle, newSetIdx );
+	}
+	elements[i].texturedTriangles = elements[i].texturedTriangles.concat( selectedTexturedTrianglesClone );
+    }
+}
+
+
 
 /*** GLOBAL IN CALLBACKS ***/
 // Delete current element with its gl objects and untexture its triangles

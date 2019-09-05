@@ -663,6 +663,9 @@ mki3d.action.copySelected = function(){
     copy = mki3d.copyOfSelected( mki3d.data.model.triangles, newIdx );
     mki3d.data.model.triangles = mki3d.data.model.triangles.concat(copy);
 
+    /*copy textured triangles */
+    mki3d_texture.copySelected( mki3d.data, newIdx )
+
     mki3d.data.set.current=newIdx;
     mki3d.action.cancelVisibilityRestrictions();
 }
