@@ -621,7 +621,7 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 
 // copying of textured triangles and placing them in the set newSetIdx
 mki3d_texture.copySelected= function( data, newSetIdx ){
-    if( !mki3d.data.texture) {
+    if( !data.texture) {
 	return;
     }
     let elements=data.texture.elements; // should always exist in texture
@@ -640,7 +640,7 @@ mki3d_texture.copySelected= function( data, newSetIdx ){
 
 // delete textured selected triangles
 mki3d_texture.deleteSelectedTriangles = function(data){
-    if( !mki3d.data.texture) {
+    if( !data.texture) {
 	return;
     }
     let elements=data.texture.elements; // should always exist in texture
