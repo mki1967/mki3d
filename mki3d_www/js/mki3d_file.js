@@ -117,8 +117,13 @@ mki3d.file.startMerging = function ( ) {
     mki3d.textLoadConsume= function(){
 	var data= JSON.parse(mki3d.html.textareaInput.value);
 	// to do: test data consistency ...
-	mki3d_merge_data(data);
+	// mki3d_merge_data(data);
 	// console.log(data); /// for tests
+	mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
+	mki3d.mergeData(mki3d.data, data );
+	mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+	mki3d.tmpRebuildSelected();
+	////
 	mki3d.action.escapeToCanvas();
     }
     mki3d.loadInfo("Merging from '*.mki3d'");

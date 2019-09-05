@@ -61,7 +61,13 @@ mki3d.idb.mergeIndexed= function(onsuccess){
 		mki3d.setModelViewMatrix();
 		mki3d.setProjectionMatrix();
 		var data= JSON.parse( event.target.result.dataString);
-		mki3d_merge_data( data );
+		//// mki3d_merge_data( data ); ///
+		// new way of merging - TO BE TESTED ...
+		mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
+		mki3d.mergeData(mki3d.data, data );
+		mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+		mki3d.tmpRebuildSelected();
+		///
 		mki3d.action.escapeToCanvas();
 		mki3d.messageAppend("<br>MERGED '" +mki3d.idb.filesFound[mki3d.idb.filesIdx].name
 			     +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"') !!!");

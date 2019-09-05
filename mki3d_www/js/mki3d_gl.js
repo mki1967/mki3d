@@ -129,10 +129,7 @@ mki3d.gl.initShaderProgram= function(){
     gl.useProgram(shaderProgram);
 
     shaderProgram.aVertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
-
     shaderProgram.aVertexColor = gl.getAttribLocation(shaderProgram, "aVertexColor");
-    gl.enableVertexAttribArray(shaderProgram.aVertexColor);
 
 
     shaderProgram.uPMatrix = gl.getUniformLocation(shaderProgram, "uPMatrix");

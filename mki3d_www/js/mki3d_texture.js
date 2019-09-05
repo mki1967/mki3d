@@ -176,15 +176,11 @@ mki3d_texture.createTexture= function(
 
     /* render texture */
     gl.useProgram(mki3d_texture.renderTextureShaderProgram);
-    
     let defaultFBO = gl.getParameter(gl.FRAMEBUFFER_BINDING);
     let oldViewport=gl.getParameter(gl.VIEWPORT);
-    
     gl.bindFramebuffer(gl.FRAMEBUFFER, mki3d_texture.frameBufferId);
-
     gl.viewport(0,0,texSize,texSize);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textureId, 0); // assign the texture to the framebuffer
-
     gl.enableVertexAttribArray(mki3d_texture.hLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, mki3d_texture.hBufferId);
     for( j=0; j<texSize+4; j++) {
@@ -193,15 +189,11 @@ mki3d_texture.createTexture= function(
 	gl.drawArrays(gl.POINTS, 0, texSize+4);
     }
     gl.disableVertexAttribArray(mki3d_texture.hLocation);
-    
     gl.bindTexture(gl.TEXTURE_2D, textureId);
     gl.generateMipmap(gl.TEXTURE_2D);
-
     gl.bindFramebuffer(gl.FRAMEBUFFER, defaultFBO); // return to default screen FBO
     gl.viewport(0,0, oldViewport[2], oldViewport[3]); // restore old size
-    
     return textureId; // here return the id of the ready texture
-    
 }
 
 mki3d_texture.drawTexture= function(gl, textureId, makeShaderProgramTool){
@@ -241,6 +233,8 @@ mki3d_texture.drawTexture= function(gl, textureId, makeShaderProgramTool){
     gl.clearColor( 0,0,0,1 );
     gl.clear(gl.COLOR_BUFFER_BIT );
     gl.drawArrays(gl.TRIANGLES, 0, 6 );
+    gl.disableVertexAttribArray(mki3d_texture.posAttr);
+    gl.disableVertexAttribArray(mki3d_texture.texAttr);
     gl.useProgram( oldProgram  );
 }
 
@@ -614,7 +608,8 @@ mki3d_texture.redraw=function(gl, modelViewGL, monoProjectionGL, data, shadeFact
 	    gl.drawArrays(gl.TRIANGLES, 0, 3*elements[i].gl.unblocked);
 	}
     }
-    // gl.useProgram( mki3d.gl.shaderProgram ); // default shader
+    gl.disableVertexAttribArray(mki3d_texture.drawElement.posAttr);
+    gl.disableVertexAttribArray(mki3d_texture.drawElement.texAttr);
     gl.useProgram( oldProgram  );
 }
 
@@ -657,6 +652,36 @@ mki3d_texture.deleteSelectedTriangles = function(data){
 	elements[i].texturedTriangles=out;
     }
 }
+
+// Merge textures of newData to oldData.
+// Modifies oldData.
+mki3d_texture.mergeData= function(oldData, newData ) {
+    if( !newData.texture ) { // no textures to be merged
+	return;
+    }
+    if( !oldData.texture ) { // no textures existed in oldData
+	oldData.texture=newData.texture; // just copy new textures
+    } else { // we want to avoid duplicates of textures in the memory
+	let elements=newData.texture.elements;  // texture elements to be merged
+	let oldElements=oldData.texture.elements; // existing  texture elements
+	let newElements=[]; // here we collect the texture elements that do not have textures in oldData
+
+	for(let i=0; i<elements.length; i++){
+	    let def=elements[i].def;
+	    let found=false;
+	    // test if the def of texture is already in oldData
+	    for( let j=0; j< oldElements.length && !found; j++) {
+		if( mki3d_texture.equalDefs( oldElements[j].def, def) ) { // found !
+		    oldElements[j].texturedTriangles=oldElements[j].texturedTriangles.concat( elements[i].texturedTriangles );
+		    found=true;
+		}
+	    }
+	    if( !found ) newElements.push( elements[i] );
+	}
+	oldData.texture.elements=oldData.texture.elements.concat( newElements ); // append elements with new texture defs
+    }
+}
+
 
 
 /*** GLOBAL IN CALLBACKS ***/
