@@ -696,9 +696,7 @@ mki3d.action.setLight = function(){
 
 /* selections */
 mki3d.action.cancelSelection= function(){
-    mki3d.cleanElementEndpointsFromKey(mki3d.data.model.segments, 'selected');
-    mki3d.cleanElementEndpointsFromKey(mki3d.data.model.triangles, 'selected');
-    mki3d.cleanElementEndpointsFromKey( mki3d_texture.triangles( mki3d.data ), 'selected');
+    mki3d.cancelSelection( mki3d.data );
     mki3d.tmp.selected=[];
 }
 

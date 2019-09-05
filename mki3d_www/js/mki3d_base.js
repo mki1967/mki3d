@@ -179,6 +179,14 @@ mki3d.getSelectedElements= function( elements ){
     return out;
 }
 
+// remove 'selected' key from all endpoints in data
+mki3d.cancelSelection= function( data ){
+    mki3d.cleanElementEndpointsFromKey(data.model.segments, 'selected');
+    mki3d.cleanElementEndpointsFromKey(data.model.triangles, 'selected');
+    mki3d.cleanElementEndpointsFromKey( mki3d_texture.triangles( data ), 'selected');
+}
+
+
 /* get the not selected elements */
 
 mki3d.getNotSelectedElements= function( elements ) {
