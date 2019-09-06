@@ -85,7 +85,11 @@ mki3d.idb.loadIndexed= function(onsuccess){
 	    console.log( event );
 	    if(  event.target.result) {
 		mki3d.idb.restoreTmp();
+		/// changing mki3d.data
+		mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
 		mki3d.data= JSON.parse( event.target.result.dataString);
+		mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+		///
 		mki3d.tmpCancel();
 		mki3d.setModelViewMatrix();
 		mki3d.setProjectionMatrix();
@@ -101,12 +105,18 @@ mki3d.idb.loadIndexed= function(onsuccess){
 }
 
 mki3d.idb.tmpLoad = function( id ){
-    if(mki3d.idb.dataBackup == null) mki3d.idb.dataBackup=mki3d.data;
+    if(mki3d.idb.dataBackup == null) { // only once for the original edited data
+	mki3d.idb.dataBackup=mki3d.data;
+    }
     
     mki3d.idb.db.transaction(["files"]).objectStore("files").get(id).onsuccess = function(event) {
 	console.log( event );
 	if(  event.target.result) {
+	    /// changing mki3d.data
+	    mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
 	    mki3d.data= JSON.parse( event.target.result.dataString);
+	    mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+	    ///
             mki3d.tmpCancel();
 	    mki3d.setModelViewMatrix();
 	    mki3d.setProjectionMatrix();
@@ -123,7 +133,11 @@ mki3d.idb.tmpLoadIndexed = function() {
 
 mki3d.idb.restoreTmp = function() {
     if( mki3d.idb.dataBackup == null ) return; // nothing to be restored
+    /// changing mki3d.data
+    mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
     mki3d.data =  mki3d.idb.dataBackup;
+    mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+    ///
     mki3d.tmpCancel();
     mki3d.setModelViewMatrix();
     mki3d.setProjectionMatrix();
