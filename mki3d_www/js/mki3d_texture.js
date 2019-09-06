@@ -636,8 +636,8 @@ mki3d_texture.copySelected= function( data, newSetIdx ){
 // delete textured selected triangles
 // return the array of the deleted triangles
 mki3d_texture.getAndDeleteSelectedTriangles = function(data){
-    if( !data.texture) {
-	return;
+    if( !data.texture) { // no textures - return empty array
+	return [];
     }
     let elements=data.texture.elements; // should always exist in texture
     let deleted=[]
