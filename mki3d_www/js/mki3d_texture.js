@@ -634,11 +634,13 @@ mki3d_texture.copySelected= function( data, newSetIdx ){
 }
 
 // delete textured selected triangles
-mki3d_texture.deleteSelectedTriangles = function(data){
+// return the array of the deleted triangles
+mki3d_texture.getAndDeleteSelectedTriangles = function(data){
     if( !data.texture) {
 	return;
     }
     let elements=data.texture.elements; // should always exist in texture
+    let deleted=[]
     for(let i=0; i<elements.length; i++){
 	let texturedTriangles=elements[i].texturedTriangles;
 	let out=[];
@@ -646,11 +648,14 @@ mki3d_texture.deleteSelectedTriangles = function(data){
 	    for ( let i=0; i<texturedTriangles.length; i++){
 		if ( ! mki3d.elementSelected(texturedTriangles[i].triangle) ){
 		    out.push( texturedTriangles[i] );
+		} else {
+		    deleted.push( texturedTriangles[i].triangle )
 		}
 	    }
 	}
 	elements[i].texturedTriangles=out;
     }
+    return deleted;
 }
 
 // Merge textures of newData to oldData.
@@ -720,6 +725,7 @@ mki3d_texture.textureSelectedTriangles= function(){
     if( mki3d.data.texture &&  mki3d.data.texture.elements.length > 0 ){
 	let t= mki3d.data.texture ;
 	let element= t.elements[t.index];
+	mki3d.data.model.triangles=mki3d.data.model.triangles.concat( mki3d_texture.getAndDeleteSelectedTriangles(mki3d.data) ); // the selected textured triangles will get new texture
 	let selected=mki3d.getSelectedElements( mki3d.data.model.triangles );
 	mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles ); // remove the triangles to be textured
 

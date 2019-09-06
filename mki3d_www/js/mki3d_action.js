@@ -632,6 +632,7 @@ mki3d.action.paintSelectedSegments = function(){
 }
 
 mki3d.action.paintSelectedTriangles = function(){
+    mki3d.data.model.triangles=mki3d.data.model.triangles.concat( mki3d_texture.getAndDeleteSelectedTriangles(mki3d.data) );
     var sel = mki3d.getSelectedElements(mki3d.data.model.triangles);
     mki3d.paintElements( sel );
     mki3d.redraw();
@@ -646,7 +647,7 @@ mki3d.action.deleteSelectedSegments = function(){
 
 mki3d.action.deleteSelectedTriangles = function(){
     mki3d.data.model.triangles = mki3d.getNotSelectedElements( mki3d.data.model.triangles );
-    mki3d_texture.deleteSelectedTriangles(mki3d.data);
+    mki3d_texture.getAndDeleteSelectedTriangles(mki3d.data);
     mki3d.action.cancelVisibilityRestrictions();
     mki3d.redraw();
 }
