@@ -17,6 +17,7 @@
 "js/mki3d_html.js",
 "js/mki3d_idb.js",
 "js/mki3d.js",
+"js/mki3d_model.js",
 "js/mki3d_ply.js",
 "js/mki3d_points.js",
 "js/mki3d_set.js",
@@ -37,6 +38,7 @@
 "travel_js/math.js",
 "travel_js/message.js",
 "travel_js/mki3d.js",
+"travel_js/mki3d_texture.js",
 "travel_js/mki3d-travel.js",
 "travel_js/stage-functions.js",
 "travel_js/traveler.js"]

@@ -8,6 +8,10 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
     // TO DO
     switch(code)
     {
+	case 81: // Q
+	case 27: // Esc
+	mki3d.action.escapeToCanvas();
+	break;
 	// case 80: // P
 	case 37: // Left
 	case 38: // Up
@@ -58,9 +62,6 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	case 68: // D
         await mki3d_texture.debugTest();
 	return; // submenu - do not escape to canvas 
-	break;
-	case 27: // Esc
-	mki3d.action.escapeToCanvas();
 	break;
     };
     // mki3d.action.escapeToCanvas();
