@@ -37,7 +37,6 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	    mki3d_texture.textureSelectedTriangles();
 	    mki3d.redraw();
 	    mki3d.action.escapeToCanvas();
-	     // mki3d.backup();
 	}
 	break;
 
@@ -66,7 +65,6 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
     };
     // mki3d.action.escapeToCanvas();
     // mki3d.messageAppend( actionMessage );
-    // mki3d.backup();
 }
 
 mki3d.callback.IDBFiltersOnKeyDown = function (e){
@@ -616,7 +614,6 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
     };
     mki3d.action.escapeToCanvas();
     mki3d.messageAppend( actionMessage );
-    mki3d.backup();
 }
 
 
@@ -662,7 +659,6 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     };
     mki3d.action.escapeToCanvas();
     mki3d.messageAppend( actionMessage );
-    mki3d.backup();
 }
 
 mki3d.callback.clipMenuOnKeyDown =function (e){

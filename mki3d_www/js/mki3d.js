@@ -18,7 +18,6 @@ window.onload= function(){
     mki3d.action.init(); // mki3d.action requires initialization
     mki3d.html.divUpperMessage.innerHTML += "  (Use keyboard. Press 'H' for help.)";
     if( chromeMessage ) mki3d.html.divUpperMessage.innerHTML += chromeMessage;
-    mki3d.backup();// init backups
     mki3d.redraw();
     if(!isChromeApp) window.onbeforeunload= function(){
 	return "Do not forget to save your data!\n";

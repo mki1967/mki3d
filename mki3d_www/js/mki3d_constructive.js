@@ -51,7 +51,6 @@ mki3d.constructivePolygonInsert= function(){
 	var seg = mki3d.newSegment( pt1, pt2 );
 	mki3d.modelInsertElement( mki3d.data.model.segments, seg);
     }
-    mki3d.backup();
     return "<br>INSERTED REGULAR POLYGON SEGMENTS TO A NEW - CURRENT - SET."+
 	" (CAN BE SELECTED WITH 'QSS')"+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
@@ -82,7 +81,6 @@ mki3d.constructivePolygonTriangles= function(){
 	var tr = mki3d.newTriangle( pt1, pt2, pt3 );
 	mki3d.modelInsertElement( mki3d.data.model.triangles, tr);
     }
-    mki3d.backup();
     return "<br>INSERTED REGULAR POLYGON TRIANGLES TO A NEW - CURRENT - SET."+
 	" (CAN BE SELECTED WITH 'QSS')"+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
@@ -112,7 +110,6 @@ mki3d.constructiveMoveAB= function(){
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
     var pA= mki3d.points.point.A.pos;
     var pB= mki3d.points.point.B.pos;
@@ -123,7 +120,6 @@ mki3d.constructiveMoveAB= function(){
 	pos[1]+=pB[1]-pA[1];
 	pos[2]+=pB[2]-pA[2];
     }
-    mki3d.backup();
     mki3d.redraw();
     return "<br>MOVED SELECTED ENDPOINTS BY THE VECTOR AB.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
@@ -149,14 +145,11 @@ mki3d.constructiveMoveInDirABLenCD= function(){
     var dv= AB;
     mki3d.vectorScale(dv, s,s,s);
 
-    mki3d.backup();
-    
     var selected=mki3d.tmp.selected;
     var i;
     for( i=0; i< selected.length; i++) {
 	mki3d.vectorMove(selected[i].position, dv[0], dv[1], dv[2]);
     }
-    mki3d.backup();
     mki3d.redraw();
     return "<br>MOVED SELECTED ENDPOINTS IN DIRECTION AB BY THE LENGTH |CD|.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
@@ -200,7 +193,6 @@ mki3d.constructiveScaleWithFixedPointO= function(){
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
     var pO= mki3d.points.point.O.pos;
     var i;
@@ -209,7 +201,6 @@ mki3d.constructiveScaleWithFixedPointO= function(){
 	var s= mki3d.constructive.scalingFactor
 	mki3d.scaleWithFixedPoint(selected[i].position, s,s,s , pO);
     }
-    mki3d.backup();
     mki3d.redraw();
     return "<br>SELECTED POINTS SCALED BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
@@ -220,7 +211,6 @@ mki3d.constructiveScaleByABOverCD= function(){
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
     var pO= mki3d.points.point.O.pos;
     var A= mki3d.points.point.A.pos;
@@ -241,7 +231,6 @@ mki3d.constructiveScaleByABOverCD= function(){
 	var pos= selected[i].position; // reference to position
 	mki3d.scaleWithFixedPoint(selected[i].position, s,s,s , pO);
     }
-    mki3d.backup();
     mki3d.redraw();
     var warning="";
     if(s==0) warning="<br> WARNING: |AB|/|CD| WAS ZERO !"
@@ -254,16 +243,12 @@ mki3d.constructiveScaleOrthogonalToEF= function(){
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    mki3d.backup();
     var s= mki3d.constructive.scalingFactor;
     if(s==0) return "SCALE ORTHOGONAL TO 'EF' WITH SCALING FACTOR ZERO: NOT IMPLEMENTED YET ..."
-    mki3d.backup.forbidden=true; // do not do internal backups
     mki3d.constructiveScaleWithFixedPointO();
     mki3d.constructive.scalingFactor=1/s; // temporary ..
     mki3d.constructiveScaleInDirectionEF();
-    mki3d.backup.forbidden=false; // restore default
     mki3d.constructive.scalingFactor=s; // restoring ...
-    mki3d.backup();
     return "<br>SELECTED POINTS SCALED ORTHOGONAL TO 'EF' BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 }
 
@@ -273,7 +258,6 @@ mki3d.constructiveScaleInDirectionEF= function(){
     var check= mki3d.checkConstructivePoints( methodName, neededPoints );
     if( check != "") return check;
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
     var pO= mki3d.points.point.O.pos;
     var E= mki3d.points.point.E.pos;
@@ -295,11 +279,8 @@ mki3d.constructiveScaleInDirectionEF= function(){
 	var dV1=[ds*N[0], ds*N[1], ds*N[2]]; // delta in direction N
 	mki3d.vectorMove(selected[i].position, dV1[0], dV1[1], dV1[2]); // add delta to position
     }
-    mki3d.backup();
     mki3d.redraw();
-    return "<br>SELECTED POINTS SCALED IN DIRECTION 'EF' BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
-
-    
+    return "<br>SELECTED POINTS SCALED IN DIRECTION 'EF' BY SCALING FACTOR WITH FIXED POINT 'O'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";    
 }
 
 
@@ -538,7 +519,6 @@ mki3d.constructiveThreePointTransformation= function(){
 	pos[1]=v[1];
 	pos[2]=v[2];
     }
-    mki3d.backup();
     mki3d.cancelShades(); // some triangles could be rotated
     mki3d.redraw();
     return "<br>THREE-POINT TRANFORMATION 'ABC' TO 'DEF' HAS BEEN DONE. <br> (USE 'U' FOR SINGLE STEP UNDO.)";
@@ -797,7 +777,6 @@ mki3d.constructiveFolding= function(){
 	    pos[2]=v[2];
 	}
 
-    mki3d.backup();
     mki3d.cancelShades(); // some triangles could be rotated
     mki3d.redraw();
     return "<br>FOLDING OF SELECTED AROUND 'AB' AND OF BOOKARKED AROUND 'AC' HAS BEEN DONE."+
@@ -990,7 +969,6 @@ mki3d.SelectedBookmarkedTriangleIntersection= function() {
 		count++;
 	    }
 	}
-    mki3d.backup();
     mki3d.redraw();
     return "<br> INSERTED "+count+" SEGMENTS OF THE INTERSECTION TO THE NEW CURRENT SET: "+mki3d.data.set.current+
 	"<br> (USE 'U' FOR SINGLE STEP UNDO.)";
@@ -1016,7 +994,6 @@ mki3d.parallelProjection_AB_CDE= function(){
 
     if( !mki3d.tmp.selected || mki3d.tmp.selected.length==0 ) return "<br>NO SELECTED ENDPOINTS !!!";
 
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
 
     var d=[B[0]-A[0], B[1]-A[1], B[2]-D[2]]; // direction
@@ -1027,7 +1004,6 @@ mki3d.parallelProjection_AB_CDE= function(){
 	var PB= [PA[0]+d[0], PA[1]+d[1], PA[2]+d[2]];
 	selected[i].position =  mki3d.lineABplaneCDEintersection( PA, PB, C,D,E ); // project on plane CDE
     }
-    mki3d.backup();
     mki3d.redraw();
     return "<br>PROJECTED THE SELECTED ENDPOINTS BY THE VECTOR 'AB' ON THE PLANE 'CDE'.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
     
@@ -1046,7 +1022,6 @@ mki3d.sphereProjection_O_AB= function(){
     var AB=[B[0]-A[0], B[1]-A[1], B[2]-A[2]];
     var lenAB=mki3d.vectorLength(AB); // radius
     // if( lenAB==0 ) return "LENGTH |AB| IS ZERO!";
-    mki3d.backup();
     var selected=mki3d.tmp.selected;
     var i;
     for( i=0; i< selected.length; i++) {
@@ -1058,7 +1033,6 @@ mki3d.sphereProjection_O_AB= function(){
 	    selected[i].position = [ O[0]+OP[0]*s, O[1]+OP[1]*s, O[2]+OP[2]*s] ; // project on a sphere (O, |AB|)
 	}
     }
-    mki3d.backup();
     mki3d.redraw();
     return "<br>PROJECTED THE SELECTED ENDPOINTS ON THE SPHERE CENTERED AT 'O' WITH RADIUS LENGTH |AB|.<br> (USE 'U' FOR SINGLE STEP UNDO.)";
 

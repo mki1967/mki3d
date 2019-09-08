@@ -36,7 +36,6 @@ mki3d.url.load = async function( input ) { // load from url
 	mki3d.data=data; /// !!!
 	mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
-	mki3d.backup();
 	mki3d.redraw();
 	// let filename = url.substring(url.lastIndexOf('/')+1);
 	let pathname = url.pathname;
@@ -51,7 +50,6 @@ mki3d.url.load = async function( input ) { // load from url
 	mki3d.data= backup;
 	mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
-	mki3d.backup();
 	mki3d.redraw();
     }
     // console.log(mki3d.data); /// tests

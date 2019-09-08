@@ -108,7 +108,6 @@ mki3d_merge_data= function( data ) {
     mki3d.data.model.triangles = mki3d.data.model.triangles.concat( mergedTriangles );
     mki3d.tmpRebuildSelected();
     mki3d.setModelViewMatrix(); // ?
-    mki3d.backup();
 }
 
 
@@ -146,7 +145,6 @@ mki3d.file.startLoading = function ( ) {
 	mki3d.data = data;
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
-	mki3d.backup();
 	mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
 	// console.log(data); /// for tests
     }
@@ -168,7 +166,6 @@ mki3d.file.startLoadingString = function ( ) {
 	mki3d.data = data;
         mki3d.tmpCancel();
 	mki3d.setModelViewMatrix();
-	mki3d.backup();
 	mki3d.file.suggestedName= mki3d.file.withoutExtension(mki3d.file.selectedName);
 	// console.log(data); /// for tests
     }

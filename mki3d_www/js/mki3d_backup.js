@@ -1,66 +1,44 @@
-/* backup operations (undo) for mki3d */
+/* single step backup / undo operations for mki3d */
 
 mki3d.backup={};
 
-/* make string representing clean data for backups */
-mki3d.dataModelString= function(){
-    mki3d.tmpRebuildSelected(); 
-    var selected= mki3d.tmp.selected;
-    mki3d.action.cancelSelection(); // remove the field "selected" from all endpoints
-    mki3d.cancelShades(); // shades will be rebuilt by redraw
-    var outString = JSON.stringify(mki3d.data.model); // make clean data model string
-    /* restore selections */
-    var i;
-    for(i=0; i<selected.length; i++) {
-	selected[i].selected=true;
+mki3d.backup.backupDataString=null; // backuped data  (initially no backup)
+
+mki3d.backup.preDataString=null;  // stringified data before the action to be backuped if the action changes the data
+
+// use this function before the action that can cause the backup if data is changed
+mki3d.backup.prepareForBackup= function(){
+    mki3d.backup.preDataString= JSON.stringify( mki3d.data );
+}
+
+// use this function after the action that can cause the backup if data is changed
+mki3d.backup.commitForBackup= function(){
+    let tmp=JSON.stringify( mki3d.data );
+    if( mki3d.backup.preDataString === null ){
+	console.log( "'mki3d.backup.commitForBackup' not peceded with 'mki3d.backup.prepareForBackup' !!!" );
+	return;
     }
-    mki3d.tmpRebuildSelected(); 
-
-    return outString; // returns clean data model string
+    if( tmp.localeCompare(mki3d.backup.preDataString) == 0 ) {
+	// no change in data - no backup
+	return;
+    }
+    // do backup of preData
+    mki3d.backup.backupDataString=mki3d.backup.preDataString;
+    mki3d.backup.preDataString=null;
 }
 
-
-/* check and set initial autosave and backup */
-mki3d.backupCheck= function(){
-    if (!mki3d.backup.currentModelString) 
-	mki3d.backup.currentModelString = mki3d.dataModelString();
-    if(!mki3d.backup.oldModelString)
-	mki3d.backup.oldModelString=mki3d.backup.currentModelString;
-
-}
-
-mki3d.backup.forbidden=false; // use to forbid backup ...
-
-mki3d.backup= function(){
-    if(mki3d.backup.forbidden) return "";
-    mki3d.backupCheck();
-    /* test for a change */
-    var tmp= mki3d.dataModelString();
-    if( tmp.localeCompare(mki3d.backup.currentModelString) == 0 ) return ""; // no change in the model
-    /* here: the model has changed */
-    mki3d.backup.oldModelString=mki3d.backup.currentModelString;
-    mki3d.backup.currentModelString=tmp;
-    return "<br> MODEL HAS CHANGED";
-}
-
-mki3d.restoreCurrentModel= function(){
-    mki3d.data.model=JSON.parse(mki3d.backup.currentModelString);
-    mki3d.tmpResetDisplayModel();
-    mki3d.cancelShades();
-    mki3d.action.cancelVisibilityRestrictions();
-    mki3d.action.cancelSelection();
-    mki3d.tmp.bookmarked=null;
-    mki3d.redraw();
-}
-
-/* swap backup and autosave and restore from autosave */
+/* swap backup data and current mki3d.data */
 mki3d.undo= function(){
-    mki3d.backupCheck();
-
-    var tmp= mki3d.backup.currentModelString;
-    mki3d.backup.currentModelString=mki3d.backup.oldModelString;
-    mki3d.backup.oldModelString=tmp;
-    mki3d.restoreCurrentModel();
+    if( mki3d.backup.backupDataString === null){
+	mki3d.message( "No backup data !!!");
+	return;
+    }
+    let tmp= JSON.stringify( mki3d.data );
+    mki3d_texture.deleteTextureGlObjects( mki3d.data, mki3d.gl.context ); // remove GL objects of old data
+    mki3d.data= JSON.parse(  mki3d.backup.backupDataString );
+    mki3d_texture.makeGlInTextures(mki3d.data, mki3d.shadeFactor, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram ); // make GL objects for loaded data
+    mki3d.tmpRebuildSelected();
+    mki3d.backup.backupDataString=tmp; // swaped
+    mki3d.redraw();
     mki3d.message("UNDO");
 }
-
