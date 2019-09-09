@@ -97,6 +97,10 @@ mki3d.unsetClipping= function () {
 /* general redraw function */
 
 mki3d.redraw = function() {
+    let modelViewGL= mki3d.gl.matrix4toGL(mki3d.modelViewMatrix());// recompute GL model-view matrix
+    // set the model-view matrix for default shader
+    mki3d.gl.context.useProgram( mki3d.gl.shaderProgram ); 
+    mki3d.gl.context.uniformMatrix4fv(mki3d.gl.shaderProgram.uMVMatrix, false, modelViewGL);
     mki3d.loadModel();
     mki3d.loadCursor();
     
@@ -127,7 +131,7 @@ mki3d.redraw = function() {
     }
 
     if( mki3d.data.texture ) {
-	mki3d_texture.redraw(gl, mki3d.gl.matrix4toGL(mki3d.modelViewMatrix()), mki3d.monoProjectionGL , mki3d.data, mki3d.shadeFactor, mki3d.gl.compileAndLinkShaderProgram);
+	mki3d_texture.redraw(gl, modelViewGL, mki3d.monoProjectionGL , mki3d.data, mki3d.shadeFactor, mki3d.gl.compileAndLinkShaderProgram);
     }
 }
 
