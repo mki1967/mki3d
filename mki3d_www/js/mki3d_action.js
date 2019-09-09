@@ -873,6 +873,7 @@ mki3d.action.escapeToCanvas = function(){
     mki3d.html.hideAllDivs();
     mki3d.html.showDiv(mki3d.html.divCanvas);
     mki3d.action.setModeActions(); // reset current mode and message
+    mki3d.backup.commit(); // if the backup was prepared in the menu then commit it now
     mki3d.redraw();
     window.onkeydown = mki3d.callback.canvasOnKeyDown;
 }

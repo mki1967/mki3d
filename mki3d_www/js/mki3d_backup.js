@@ -14,7 +14,7 @@ mki3d.backup.prepare= function(){
 // use this function after the action that can cause the backup if data is changed
 mki3d.backup.commit= function(){
     if( mki3d.backup.preDataString === null ){
-	console.log( "'mki3d.backup.commit()' not peceded with 'mki3d.backup.prepare()' !!!" );
+	// console.log( "'mki3d.backup.commit()' not peceded with 'mki3d.backup.prepare()' !!!" );
 	return;
     }
     { // compare relevant data fragments

@@ -119,8 +119,9 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
 	    /// LOAD ENTRY ...
 	    var yesAction = function(){
-		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
 		    mki3d.idb.loadIndexed(); // merge the indexed entry
+		}
 	    }
 	    mki3d.action.confirm("LOAD ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
 				 +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
@@ -131,8 +132,9 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 	if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
 	    /// MERGE ENTRY ...
 	    var yesAction = function(){
-		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length)
+		if( mki3d.idb.filesIdx >= 0 &&  mki3d.idb.filesIdx< mki3d.idb.filesFound.length){
 		    mki3d.idb.mergeIndexed(); // merge the indexed entry
+		}
 	    }
 	    mki3d.action.confirm("MERGE ENTRY: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].name
 				 +"' (DATE: '"+mki3d.idb.filesFound[mki3d.idb.filesIdx].date+"')?", yesAction);
@@ -175,6 +177,7 @@ mki3d.callback.indexedDBMenuOnKeyDown = function (e){
 	mki3d.action.escapeToCanvas();
 	break;
 	case 73: // I
+	mki3d.backup.prepare(); // mki3d.action.inspectIDBMenu() may change mki3d.data and escape to canvas
 	mki3d.action.inspectIDBMenu();
 	break;
 	case 65: // A
