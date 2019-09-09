@@ -34,9 +34,9 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 
 	case 84: // T
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
-	    mki3d.backup.prepareForBackup();
+	    mki3d.backup.prepare();
 	    mki3d_texture.textureSelectedTriangles();
-	    mki3d.backup.commitForBackup();
+	    mki3d.backup.commit();
 	    mki3d.redraw();
 	    mki3d.action.escapeToCanvas();
 	}
@@ -1115,7 +1115,9 @@ mki3d.callback.canvasOnKeyDown = function (e){
 	mki3d.callback.setDisplayMode();
 	break;
 	case 13: // enter
+	mki3d.backup.prepare();
         mki3d.action.enter();
+	mki3d.backup.commit();
 	break;
 	case 27: // escape
 	case 67: // C

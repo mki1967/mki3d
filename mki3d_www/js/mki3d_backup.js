@@ -7,24 +7,29 @@ mki3d.backup.backupDataString=null; // backuped data  (initially no backup)
 mki3d.backup.preDataString=null;  // stringified data before the action to be backuped if the action changes the data
 
 // use this function before the action that can cause the backup if data is changed
-mki3d.backup.prepareForBackup= function(){
+mki3d.backup.prepare= function(){
     mki3d.backup.preDataString= JSON.stringify( mki3d.data );
 }
 
 // use this function after the action that can cause the backup if data is changed
-mki3d.backup.commitForBackup= function(){
-    let tmp=JSON.stringify( mki3d.data );
+mki3d.backup.commit= function(){
     if( mki3d.backup.preDataString === null ){
-	console.log( "'mki3d.backup.commitForBackup' not peceded with 'mki3d.backup.prepareForBackup' !!!" );
+	console.log( "'mki3d.backup.commit()' not peceded with 'mki3d.backup.prepare()' !!!" );
 	return;
     }
-    if( tmp.localeCompare(mki3d.backup.preDataString) == 0 ) {
-	// no change in data - no backup
-	return;
+    { // compare relevant data fragments
+	let tmp=JSON.stringify( mki3d.data.model ).concat( mki3d.data.texture );
+	let d=JSON.parse( mki3d.backup.preDataString );
+	let tmp2=JSON.stringify( d.model ).concat( d.texture );
+	if( tmp.localeCompare(tmp2) == 0 ) {
+	    // no change in data - no backup
+	    mki3d.backup.preDataString=null; // always null after commit
+	    return;
+	}
     }
     // do backup of preData
-    mki3d.backup.backupDataString=mki3d.backup.preDataString;
-    mki3d.backup.preDataString=null;
+    mki3d.backup.backupDataString=mki3d.backup.preDataString; // old backup is lost !
+    mki3d.backup.preDataString=null; // always null after commit
 }
 
 /* swap backup data and current mki3d.data */
