@@ -234,6 +234,7 @@ mki3d.callback.textLoadOnKeyDown = function (e){
 	mki3d.action.escapeToCanvas();
 	break;
 	case 13: // Enter
+	mki3d.backup.prepare(); // new data can be loaded or merged
 	mki3d.html.html.style.overflowY="";
 	// actionMessage=mki3d.action.inputsEnter();
 	try{
@@ -571,7 +572,7 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 mki3d.callback.dataCopyMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
-    // TO DO
+    mki3d.backup.prepare(); // copying may change data
     switch(code)
     {
 	case 48: // 0
@@ -622,6 +623,7 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
     // TO DO
+    mki3d.backup.prepare();
     switch(code)
     {
 	case 48: //0 

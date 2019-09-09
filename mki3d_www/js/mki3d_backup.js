@@ -18,9 +18,9 @@ mki3d.backup.commit= function(){
 	return;
     }
     { // compare relevant data fragments
-	let tmp=JSON.stringify( mki3d.data.model ).concat( mki3d.data.texture );
+	let tmp=JSON.stringify( mki3d.data.model ).concat( JSON.stringify( mki3d.data.texture ) );
 	let d=JSON.parse( mki3d.backup.preDataString );
-	let tmp2=JSON.stringify( d.model ).concat( d.texture );
+	let tmp2=JSON.stringify( d.model ).concat( JSON.stringify( d.texture ) );
 	if( tmp.localeCompare(tmp2) == 0 ) {
 	    // no change in data - no backup
 	    mki3d.backup.preDataString=null; // always null after commit
