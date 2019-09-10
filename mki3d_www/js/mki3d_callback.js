@@ -419,7 +419,7 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 	
 	case 74: // J
 	var endpoints= mki3d.getEndpointsOfElements( 
-	    mki3d.data.model.segments.concat(mki3d.data.model.triangles)
+	    mki3d.data.model.segments.concat(mki3d.data.model.triangles).concat( mki3d_texture.triangles( mki3d.data ) )
 	);
 	actionMessage=mki3d.action.cursorMoveToNearestEndpoint(endpoints);
 	break;
@@ -980,6 +980,7 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
     // TO DO
+    mki3d.backup.prepare();
     switch(code)
     {
 	case 77: // M
