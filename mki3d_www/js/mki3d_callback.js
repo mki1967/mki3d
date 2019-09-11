@@ -2,6 +2,40 @@
 
 mki3d.callback = {};
 
+mki3d.callback.textureUVMenuOnKeyDown = async function (e){
+    var code= e.which || e.keyCode;
+    var actionMessage="";
+    // TO DO
+    // mki3d.backup.prepare(); // submenu ...
+    switch(code)
+    {
+	case 81: // Q
+	case 27: // Esc
+	mki3d.action.escapeToCanvas();
+	break;
+	case 83: // S
+	// scale
+	break;
+	case 77: // M
+	{   // move
+	    let uv = [
+		Number(document.getElementById('texMoveU').value),
+		Number(document.getElementById('texMoveV').value)
+	    ];
+	    mki3d_texture.moveSelected( uv, mki3d.data );
+	    mki3d.redraw();
+	    return;
+	}
+	break;
+	case 88: // X
+	// swap U with V
+	break;
+	case 82: // R
+	// reset default
+	break;
+    }
+}
+
 mki3d.callback.textureMenuOnKeyDown = async function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
@@ -79,6 +113,10 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	    mki3d.callback.setDisplayMode();
 	    mki3d_texture.display();
 	}
+	break;
+	case 77: // M
+	mki3d.redraw();
+	mki3d.action.textureUVMenu();
 	break;
     };
     // mki3d.action.escapeToCanvas();

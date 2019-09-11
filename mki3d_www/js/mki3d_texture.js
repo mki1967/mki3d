@@ -703,6 +703,25 @@ mki3d_texture.mergeData= function(oldData, newData ) {
 }
 
 
+/** manipulate UV coordinates in selected triangles */
+
+// move UV coordinates by the vector uv
+mki3d_texture.moveSelected= function( uv, data ){
+    if( !data.texture ){
+	return;
+    }
+    let theSelected = mki3d_texture.getTexturedTrianglesFromElements(
+	mki3d_texture.getArrayOfNonEmptyElements(  data )
+    );
+    for( let i=0; i< theSelected.length; i++) {
+	let tUV=theSelected[i].triangleUV;
+	for( let j=0; j<tUV.length; j++) {
+	    tUV[j]= [ tUV[j][0]+uv[0], tUV[j][1]+uv[1] ]
+	}
+    }
+}
+
+
 
 /*** GLOBAL IN CALLBACKS ***/
 // Delete current element with its gl objects and untexture its triangles

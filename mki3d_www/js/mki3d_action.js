@@ -919,6 +919,11 @@ mki3d.action.textureMenu = function(){
     window.onkeydown = mki3d.callback.textureMenuOnKeyDown;
 }
 
+mki3d.action.textureUVMenu = function(){
+    mki3d.html.divUpperMessage.innerHTML = document.querySelector("#divTextureUVMenu").innerHTML;
+    window.onkeydown = mki3d.callback.textureUVMenuOnKeyDown;
+}
+
 mki3d.action.fileMenu = function(){
     mki3d.html.spanCurrentName.innerHTML=mki3d.file.suggestedName;
     mki3d.message( mki3d.html.divFileMenu.innerHTML );
