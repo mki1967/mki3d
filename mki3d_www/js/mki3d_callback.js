@@ -14,7 +14,15 @@ mki3d.callback.textureUVMenuOnKeyDown = async function (e){
 	mki3d.action.escapeToCanvas();
 	break;
 	case 83: // S
-	// scale
+	{  // scale
+	    let uv = [
+		Number(document.getElementById('texScaleU').value),
+		Number(document.getElementById('texScaleV').value)
+	    ];
+	    mki3d_texture.scaleSelected( uv, mki3d.data );
+	    mki3d.redraw();
+	    return;
+	}
 	break;
 	case 77: // M
 	{   // move
