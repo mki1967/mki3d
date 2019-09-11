@@ -6,6 +6,7 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
     var code= e.which || e.keyCode;
     var actionMessage="";
     // TO DO
+    mki3d.backup.prepare();
     switch(code)
     {
 	case 81: // Q
@@ -33,9 +34,17 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 
 	case 84: // T
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
-	    mki3d.backup.prepare();
 	    mki3d_texture.textureSelectedTriangles();
-	    mki3d.backup.commit();
+	    mki3d.redraw();
+	    mki3d.action.escapeToCanvas();
+	}
+	break;
+
+	case 85: // U
+	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
+	    mki3d.data.model.triangles=  mki3d.data.model.triangles.concat(
+		mki3d_texture.getAndDeleteSelectedTriangles( mki3d.data )
+	    );
 	    mki3d.redraw();
 	    mki3d.action.escapeToCanvas();
 	}
