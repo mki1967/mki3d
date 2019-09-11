@@ -13,6 +13,14 @@ mki3d.callback.textureUVMenuOnKeyDown = async function (e){
 	case 27: // Esc
 	mki3d.action.escapeToCanvas();
 	break;
+	case 73: // I
+	document.getElementById('texScaleU').value=1.0;
+	document.getElementById('texScaleV').value=1.0;
+	document.getElementById('texMoveU').value= 0.0;
+	document.getElementById('texMoveV').value= 0.0;
+	mki3d.html.divUpperMessage.innerHTML = document.querySelector("#divTextureUVMenu").innerHTML;
+	mki3d.redraw();
+	return;
 	case 83: // S
 	{  // scale
 	    let uv = [
@@ -37,9 +45,19 @@ mki3d.callback.textureUVMenuOnKeyDown = async function (e){
 	break;
 	case 88: // X
 	// swap U with V
+	mki3d_texture.swapUVSelected( mki3d.data );
+	mki3d.redraw();
+	return;
 	break;
 	case 82: // R
 	// reset default
+	mki3d_texture.resetUVSelected( mki3d.data );
+	mki3d.redraw();
+	return;
+	case 86: // V
+	mki3d.callback.setDisplayMode();
+	mki3d.redraw();
+	return;
 	break;
     }
 }

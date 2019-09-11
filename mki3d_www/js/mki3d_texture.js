@@ -710,8 +710,10 @@ mki3d_texture.moveSelected= function( uv, data ){
     if( !data.texture ){
 	return;
     }
-    let theSelected = mki3d_texture.getTexturedTrianglesFromElements(
+    let theSelected = mki3d_texture.getSelectedTexturedTriangles(
+	mki3d_texture.getTexturedTrianglesFromElements(
 	mki3d_texture.getArrayOfNonEmptyElements(  data )
+	)
     );
     for( let i=0; i< theSelected.length; i++) {
 	let tUV=theSelected[i].triangleUV;
@@ -726,14 +728,52 @@ mki3d_texture.scaleSelected= function( uv, data ){
     if( !data.texture ){
 	return;
     }
-    let theSelected = mki3d_texture.getTexturedTrianglesFromElements(
+    let theSelected = mki3d_texture.getSelectedTexturedTriangles(
+	mki3d_texture.getTexturedTrianglesFromElements(
 	mki3d_texture.getArrayOfNonEmptyElements(  data )
+	)
     );
     for( let i=0; i< theSelected.length; i++) {
 	let tUV=theSelected[i].triangleUV;
 	for( let j=0; j<tUV.length; j++) {
 	    tUV[j]= [ tUV[j][0]*uv[0], tUV[j][1]*uv[1] ]
 	}
+    }
+}
+
+// swap UV coordinates
+mki3d_texture.swapUVSelected= function(data ){
+    if( !data.texture ){
+	return;
+    }
+    let theSelected =  mki3d_texture.getSelectedTexturedTriangles(
+	mki3d_texture.getTexturedTrianglesFromElements(
+	mki3d_texture.getArrayOfNonEmptyElements(  data )
+	)
+    );
+    for( let i=0; i< theSelected.length; i++) {
+	let tUV=theSelected[i].triangleUV;
+	for( let j=0; j<tUV.length; j++) {
+	    tUV[j]= [ tUV[j][1], tUV[j][0] ]
+	}
+    }
+}
+
+// reset default UV coordinates
+mki3d_texture.resetUVSelected= function(data ){
+    if( !data.texture ){
+	return;
+    }
+    let theSelected = mki3d_texture.getSelectedTexturedTriangles(
+	mki3d_texture.getTexturedTrianglesFromElements(
+	mki3d_texture.getArrayOfNonEmptyElements(  data )
+	)
+    );
+    for( let i=0; i< theSelected.length; i++) {
+	let triangleUV = mki3d.createTriangleUV( theSelected[i].triangle );
+	if ( triangleUV != null ) {
+	    theSelected[i].triangleUV=triangleUV;
+	} // else do not change the old one
     }
 }
 

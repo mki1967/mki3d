@@ -823,24 +823,36 @@
     </div>
 
     <div id="divTextureUVMenu" style="display: none;">
-      <h2>Texture UV Sub-menu:</h2>
+      <h2>Texture UV Menu:</h2>
       <p>
 	Actions on UV texture coordinates of selected triangles
       </p>
       <dl>
+	<dt>'I'</dt>
+	<dd>
+	  - INIT INPUTS WITH NEUTRAL VALUES
+	</dd>
 	<dt>'M'</dt>
 	<dd>
 	  - MOVE BY:  [
-	  <input id="texMoveU" type="number" value="0.0"> ,
-	  <input id="texMoveV" type="number" value="0.0">
+	  <input id="texMoveU" type="number" size="8" value="0.0"> ,
+	  <input id="texMoveV" type="number" size="8" value="0.0">
 	  ]
 	</dd>
 	<dt>'S'</dt>
 	<dd>
 	  - SCALE BY:  [
-	  <input id="texScaleU" type="number" value="1.0"> ,
-	  <input id="texScaleV" type="number" value="1.0">
+	  <input id="texScaleU" type="number" size="8" value="1.0"> ,
+	  <input id="texScaleV" type="number" size="8" value="1.0">
 	  ]
+	</dd>
+	<dt>'X'</dt>
+	<dd>
+	  - SWAP UV COORDINATES
+	</dd>
+	<dt>'R'</dt>
+	<dd>
+	  - RESET DEFAULT UV COORDINATES
 	</dd>
      </dl>
     </div>
