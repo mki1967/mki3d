@@ -272,6 +272,23 @@ mki3d_texture.loadDef= async function(){ // usage:  data= await mki3d_texture.lo
 // load new texture def and create texture 
 mki3d_texture.load=  async function(data, gl, compileAndLinkShaderProgram ){ // loads texture definition, if new then adds the texture element, updates the index of the current element
     let def=  await mki3d_texture.loadDef();
+    console.log( def ); /// test
+    mki3d_texture.insertNewDefined(def, data, gl, compileAndLinkShaderProgram );
+}
+
+// paste new texture def from Texturion and create texture
+mki3d_texture.paste=  async function(data, gl, compileAndLinkShaderProgram ){ // loads texture definition, if new then adds the texture element, updates the index of the current element
+    await navigator.clipboard.readText().then(
+	clipText => {
+	    def = JSON.parse(clipText);
+	    console.log( def ); /// test
+	    mki3d_texture.insertNewDefined(def, data, gl, compileAndLinkShaderProgram );
+	}
+    )
+}
+
+/// try to insert the def texture if it is new
+mki3d_texture.insertNewDefined= function(def, data, gl, compileAndLinkShaderProgram ){
     if( data.texture ) {
 	for( let i=0; i< data.texture.elements.length; i++) {
 	    if( mki3d_texture.equalDefs( data.texture.elements[i].def, def) ) { // found !
@@ -287,8 +304,6 @@ mki3d_texture.load=  async function(data, gl, compileAndLinkShaderProgram ){ // 
 
     mki3d_texture.pushElement( element, data ); // pushing updates the index
 }
-
-
 
 // try to create and return object wit GL references for the element
 // with the texture defined by element.def

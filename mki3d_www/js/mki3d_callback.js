@@ -12,7 +12,6 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	case 27: // Esc
 	mki3d.action.escapeToCanvas();
 	break;
-	// case 80: // P
 	case 37: // Left
 	case 38: // Up
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
@@ -50,10 +49,22 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 	break;
 
 	case 76: // L
-        await mki3d_texture.load( mki3d.data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram );
-	mki3d_texture.display();
+	try{
+            await mki3d_texture.load( mki3d.data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram );
+            mki3d_texture.display();
+	} catch (err) {
+	    console.log(err)
+	}
 	return; // submenu - do not escape to canvas 
 	break;
+	case 80: // P
+	try{
+            await mki3d_texture.paste( mki3d.data, mki3d.gl.context, mki3d.gl.compileAndLinkShaderProgram );
+	    mki3d_texture.display();
+	} catch (err) {
+	    console.log(err)
+	}
+	return; // submenu - do not escape to canvas
 	case 86: // V
 	if( mki3d.data.texture && mki3d.data.texture.elements.length > 0 ) {
 	    mki3d.callback.setDisplayMode();
