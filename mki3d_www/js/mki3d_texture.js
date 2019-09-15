@@ -794,7 +794,11 @@ mki3d_texture.deleteCurrentElement= function( ){
     }
     // remove the element and update the index:
     mki3d.data.texture.elements.splice( mki3d.data.texture.index, 1 );
-    mki3d.data.texture.index=  mki3d.data.texture.index % mki3d.data.texture.elements.length;
+    if( mki3d.data.texture.elements.length == 0 ){
+	mki3d.data.texture.index= -1;
+    } else {
+	mki3d.data.texture.index=  mki3d.data.texture.index % mki3d.data.texture.elements.length;
+    }
 }
 
 mki3d_texture.display= function(){
