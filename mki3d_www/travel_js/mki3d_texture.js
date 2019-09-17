@@ -6,6 +6,14 @@ mki3d_texture.texSize= 256; // the default size of the texture
 
 // def contains fields def.R, def.G, def.B, def.A with strings defining R,G,B,A dependencies on x,y coordinates
 mki3d_texture.renderTextureVS= function(def){
+    let test= def.R.concat( def.G ).concat( def.B ).concat( def.A );
+    if( test.includes(";") || test.includes("}") ) {
+	console.log("mki3d_texture.renderTextureVS WARNING of ';' or '}':");
+	console.log(def);
+	def.label=def.label.concat("!!! BAD !!!");
+	def.R=def.G=def.B="0.0";
+	def.A="1.0";
+    }
     return ""+
 	"const float PI = " + Math.PI +";\n"+
 	"const int texSize= "+mki3d_texture.texSize+";\n"+
