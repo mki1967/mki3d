@@ -827,13 +827,13 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
 	mki3d.action.extendSelectionByIncident(mki3d.data.model.segments);
 	break;
 	case 51: // 3
-	mki3d.action.extendSelectionByIncident(mki3d.data.model.triangles);
+	mki3d.action.extendSelectionByIncident(mki3d.data.model.triangles.concat( mki3d_texture.triangles( mki3d.data ) ));
 	break;
 	case 52: // 4
 	mki3d.action.unselect(mki3d.data.model.segments);
 	break;
 	case 53: // 5
-	mki3d.action.unselect(mki3d.data.model.triangles);
+	mki3d.action.unselect(mki3d.data.model.triangles.concat( mki3d_texture.triangles( mki3d.data ) ));
 	break;
 	// ... add remaining cases	
 	default:
