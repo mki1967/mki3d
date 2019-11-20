@@ -195,7 +195,7 @@ function drawLinks()
 	if(!mki3d.data.links[i].ignored){
 	    let position= mki3d.data.links[i].position;
             gl.uniform3f(shaderProgram.vMov, position[0], position[1], position[2] );
-            drawGraph(token); // test
+            drawGraph(linkSymbol); // test
 	} 
  
 
@@ -295,11 +295,13 @@ webGLStart=async function() {
     /// initBuffers(moveMsg);
     /// initBuffers(rotateMsg);
     buffersScene={};
-    buffersToken={};
+    // buffersToken={};
+    buffersLinkSymbol={};
     buffersFrameBox={};
     
     declareBuffers(buffersScene);
-    declareBuffers(buffersToken);
+    // declareBuffers(buffersToken);
+    declareBuffers(buffersLinkSymbol);
     declareBuffers(buffersFrameBox);
       
     gl.clearColor(bgColor[0], bgColor[1], bgColor[2], 1.0);

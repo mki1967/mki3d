@@ -6,11 +6,12 @@ stageArray[idx]={};
 stageArray[idx].bgColor=bgColor;
 stageArray[idx].scene=scene;
 stageArray[idx].traveler=traveler;
-stageArray[idx].token=token;
-frameBox= makeFrameBox(traveler);
+// stageArray[idx].token=token;
+    stageArray[idx].linkSymbol=linkSymbol;
+    frameBox= makeFrameBox(traveler);
 stageArray[idx].frameBox=frameBox;
 /*
-The GL buffers for the graphs: scene, trveler, token, framebox, must be initialised by initBuffers(...)
+The GL buffers for the graphs: scene, traveler, token, framebox, ...  must be initialised by initBuffers(...)
 This is done in webGLStart().
 */
 }
@@ -78,11 +79,13 @@ function restoreStage(stage)
     bgColor=stage.bgColor;
     scene=stage.scene;
     traveler=stage.traveler;
-    token=stage.token;
+    // token=stage.token;
+    linkSymbol=stage.linkSymbol;
     frameBox= stage.frameBox;
 
     loadBuffers( scene, buffersScene );
-    loadBuffers( token, buffersToken );
+    // loadBuffers( token, buffersToken );
+    loadBuffers( linkSymbol, buffersLinkSymbol );
     loadBuffers( frameBox, buffersFrameBox );
     
 }

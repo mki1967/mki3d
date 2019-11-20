@@ -82,7 +82,8 @@ mki3dIndex={}
 
 mki3dStage={}
 
-mki3dToken={}
+// mki3dToken={}
+mki3dLinkSymbol={}
 
 loadedStage={}
 
@@ -254,13 +255,13 @@ function makeTraveler(mki3dData) {
     return traveler ;
 }
 
-function makeStage(mki3dData, mki3dToken) {
+function makeStage(mki3dData, mki3dLinkSymbol) {
     var stage = {}
     stage.traveler = makeTraveler(mki3dData);
     stage.bgColor = mki3dData.backgroundColor;
     var light= mki3dData.light
     stage.scene = makeGraph (mki3dData, light) ////
-    stage.token = makeGraph (mki3dToken, mki3dToken.light)  //// this token is URL symbol always lit from the front
+    stage.linkSymbol = makeGraph (mki3dLinkSymbol, mki3dLinkSymbol.light)  ////  URL link symbol is always lit from the front
     stage.frameBox= makeFrameBox(stage.traveler);
 
 

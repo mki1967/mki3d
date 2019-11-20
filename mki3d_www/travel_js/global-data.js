@@ -42,6 +42,7 @@ var gl;
 // STAGE PARAMETERS
 var scene={} // the graph of stage
 var token={}  // token graph for the stage
+var linkSymbol={}  // link symbol graph for the stage
 var traveler= {}; // traveler position and orientation
 var bgColor=[0,0,0]; // background color
 var frameBox = {};  // framebox for better orientation 
