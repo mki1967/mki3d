@@ -1317,8 +1317,8 @@ mki3d.setCanvasSize= function( wth, hth ){
 }
 
 mki3d.callback.onWindowResize = function () {
-    var wth = parseInt(window.innerWidth)-30;
-    var hth = parseInt(window.innerHeight)-30;
+    var wth = parseInt(window.innerWidth); //-30;
+    var hth = parseInt(window.innerHeight); //-30;
     mki3d.setCanvasSize( wth, hth );
 };
 
