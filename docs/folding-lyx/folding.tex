@@ -1,0 +1,153 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[unicode=true]
+ {hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\newcommand{\lyxaddress}[1]{
+\par {\raggedright #1
+\vspace{1.4em}
+\noindent\par}
+}
+
+\makeatother
+
+\begin{document}
+
+\title{Folding Algorithm.}
+
+
+\author{Marcin Kik}
+
+\maketitle
+
+\lyxaddress{email: mki1967@gmail.com, www: \href{http://cs.pwr.edu.pl/kik/}{http://cs.pwr.edu.pl/kik/}}
+\begin{abstract}
+We present analysis underlying the folding algorithm implemented in
+\href{https://mki1967.github.io/mki3d/}{mki3d} and \href{https://mki1967.github.io/et-edit/}{et-editor}.
+\end{abstract}
+The input contains four vectors $A_{1}$, $A_{2}$, $B_{1}$, $B_{2}$
+from $\mathbb{R}^{3}$, such that their lengths $|A_{1}|=|A_{2}|=|B_{1}|=|B_{2}|=1$.
+Let $O=(0,0,0)\in\mathbb{\mathbb{R}}^{3}$. We want to find a point
+$V\in\mathbb{R}^{3}$ that is result of both: the rotation of the
+point $B_{1}$ around the line $OA_{1}$ and the rotation of the point
+$B_{2}$ around the line $OA_{2}$. Generally, we have three possible
+cases:
+\begin{enumerate}
+\item there is no such point, or
+\item there is only single such point (on the plane $OA_{1}A_{2}$), or
+\item there are two such points on both sides of the plane $OA_{1}A_{2}$.
+\end{enumerate}
+The input also contains a point $K\in\mathbb{R}^{3}$ that is outside
+the plane $OA_{1}A_{2}$. Point $K$ indicates on which side of the
+plane should be the point $V$. We present a sequence of equations
+that yield the method of computing $V$. 
+
+Assume, that we have input for which $V=(V_{x},V_{y},V_{z})=(x,y,z)$
+exists. We have to find the values of $x$, $y$, and $z$. First
+note that the length of $V$ is $|V|=1$ so we have scalar product
+$V\cdot V=1$. This implies: 
+\begin{equation}
+x^{2}+y^{2}+z^{2}=1.\label{eq:3}
+\end{equation}
+Since $V-B_{i}\bot A_{i}$ (i.e. $V-B_{i}$is orthogonal to $A_{i}$),
+we have: 
+\begin{equation}
+A_{i}\cdot(V-B_{i})=0.\label{eq:2}
+\end{equation}
+This implies that $A_{i}\cdot V=A_{i}B_{i}$ which is equivalent to
+\begin{equation}
+xA_{i,x}+yA_{i,y}+zA_{i,x}=A_{i}\cdot B_{i}.\label{eq:4}
+\end{equation}
+(We use notation $A_{i}=(A_{i,x},A_{i,y},A_{i,z})$.) Thus we have:
+\begin{equation}
+\begin{cases}
+xA_{1,x}A_{2,x}=(A_{1}B_{1}-yA_{1,y}-zA_{1,z})A_{2,x} & \mbox{, and}\\
+xA_{2,x}A_{1,x}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})A_{1,x} & .
+\end{cases}
+\end{equation}
+By equality of left sides: 
+\begin{equation}
+(A_{1}B_{1}-yA_{1,y}-zA_{1,z})A_{2,x}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})A_{1,x}.
+\end{equation}
+Let us multiply and group by $z$, $y$, and remaining components:
+\begin{equation}
+z(A_{2,z}A_{1,x}-A_{1,z}A_{2,x})=y(A_{1,y}A_{2,x}-A_{2,y}A_{1,x})+A_{2}B_{2}A_{1,x}-A_{1}B_{1}A_{2,x}.
+\end{equation}
+Now assume that $m=A_{2,z}A_{1,x}-A_{1,z}A_{2,x}\not=0$. (Otherwise,
+we could consider $\{x,y\}$or $\{x,z\}$ instead of $\{y,z\}$.)
+Then 
+\begin{equation}
+z=y\cdot p+q,\label{eq:7n}
+\end{equation}
+where 
+\begin{equation}
+p=\frac{A_{1,y}A_{2,x}-A_{2,y}A_{1,x}}{m}
+\end{equation}
+and 
+\begin{equation}
+q=\frac{A_{2}B_{2}A_{1,x}-A_{1}B_{1}A_{2,x}}{m}.
+\end{equation}
+By Equation~\ref{eq:3} we have $x^{2}=1-y^{2}-z^{2}$ and hence
+\begin{equation}
+x^{2}A_{2,x}^{2}=(1-y^{2}-z^{2})A_{2,x}^{2}.\label{eq:10n}
+\end{equation}
+ On the other side, by Equation~\ref{eq:4} for $i=2$: 
+\begin{equation}
+x^{2}A_{2,x}^{2}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})^{2}.\label{eq:11n}
+\end{equation}
+By \ref{eq:10n} and \ref{eq:11n} we have 
+\begin{equation}
+(1-y^{2}-z^{2})A_{2,x}^{2}=(A_{2}B_{2}-yA_{2,y}-zA_{2,z})^{2}.
+\end{equation}
+Using \ref{eq:7n} we rewrite it as a square equation on $y$: 
+\begin{eqnarray*}
+(1-y^{2}-(py+q)^{2})A_{2,x}^{2} & = & (A_{2}B_{2}-yA_{2,y}-(py+q)A_{2,z})^{2}\\
+(1-y^{2}-p^{2}y^{2}-2pqy-q^{2})A_{2,x}^{2} & = & (A_{2}B_{2}-qA_{2,z}-y(A_{2,y}+pA_{2,z}))^{2}\\
+(-(1+p^{2})y^{2}-2pqy+(1-q^{2}))A_{2,x}^{2} & = & (A_{2}B_{2}-qA_{2,z})^{2}\\
+ &  & -2(A_{2,y}+pA_{2,z})(A_{2}B_{2}-qA_{2,z})y\\
+ &  & +(A_{2,y}+pA_{2,z})^{2}y^{2}.
+\end{eqnarray*}
+Let us move everything on the right side:
+\begin{equation}
+0=ay^{2}+by+c,
+\end{equation}
+where 
+\begin{eqnarray*}
+a & = & ((1+p^{2})A_{2,x}^{2}+(A_{2,y}+pA_{2,z})^{2},\\
+b & = & (2pqA_{2,x}^{2}-2(A_{2,y}+pA_{2,z})(A_{2}B_{2}-qA_{2,z}),\\
+c & = & (q^{2}-1)A_{2,x}^{2}+(A_{2}B_{2}-qA_{2,z})^{2}.
+\end{eqnarray*}
+Now we can solve it. First compute $\Delta=b^{2}-4ac$. If $\Delta<0$
+then there is no solution. Otherwise, let: 
+\begin{eqnarray*}
+y_{1} & = & \frac{-b-\sqrt{\Delta}}{2a},\\
+y_{2} & = & \frac{-b+\sqrt{\Delta}}{2a}.
+\end{eqnarray*}
+By \ref{eq:7n} we can compute, for each $y_{j}$, the corresponding
+$z_{j}$. The assumption $m\not=0$ excludes the case $A_{1,x}=A_{2,x}=0$.
+Thus, by \ref{eq:4}, we have at least one $i\in\{1,2\}$ that we
+can use for computing the corresponding $x_{j}$: 
+\begin{equation}
+x_{j}=\frac{A_{i}\cdot B_{i}-y_{j}A_{i,y}-z_{j}A_{i,z}}{A_{i,x}}.
+\end{equation}
+Let $V_{j}=(x_{j},y_{j},x_{j})$. Finally, if $V_{1}\not=V_{2}$,
+we have to decide, which solution should be selected. Recall that
+we have the input point $K$ that should be used for this purpose.
+$V_{1}$and $V_{2}$ should be on different sides of the plane $OA_{1}A_{2}$.
+Let $\det[W_{1},W_{2},W_{3}]$ denote the determinant of the matrix
+with the columns $W_{1}$, $W_{2}$, $W_{3}$. We should select $V=V_{i}$,
+such that $\det[A_{1},A_{2},K]\cdot\det[A_{1},A_{2},V_{i}]>0$.
+
+The working JavaScript implementation of the folding algorithm can
+be found in the file \href{https://github.com/mki1967/mki3d/blob/master/mki3d_www/js/mki3d_constructive.js}{mki3d\_{}constructive.js}.
+The method described in this document is implemented in the function
+named \texttt{mki3d.findCenteredFolding}. 
+\end{document}
