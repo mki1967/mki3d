@@ -982,6 +982,24 @@ mki3d.action.textLoad = function(file_extenstion){
     myFileInput.accept=file_extenstion;
 
     var handleFileSelect= function(evt) {
+	var file = evt.target.files[0]; // select only one
+	var reader = new FileReader();
+	reader.readAsText(file,'UTF-8');
+	
+	reader.onload = readerEvent => {
+	    var content = readerEvent.target.result; // this is the content!
+            mki3d.html.textareaInput.value=content;
+	    mki3d.file.selectedName=escape(file.name);
+	    mki3d.html.hideAllDivs();
+	    mki3d.html.showDiv(mki3d.html.divTextLoad);
+	    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+	    myFileInput.value='';
+	} 
+    }
+
+    /*
+    
+    var handleFileSelect= function(evt) {
 	var files = evt.target.files;
 	// document.getElementById('files').blur();
 	for (var i = 0, f; f = files[i]; i++) { // only once
@@ -1000,10 +1018,13 @@ mki3d.action.textLoad = function(file_extenstion){
 	    reader.readAsText(f);
 	}
     }
-
-    myFileInput.addEventListener('change', handleFileSelect, false);
+    */
+    myFileInput.onchange=handleFileSelect;    
+    // myFileInput.addEventListener('change', handleFileSelect, false);
     // myFileInput.addEventListener('submit', handleFileSelect, false);
 
+    myFileInput.click();
+    
     mki3d.html.showDiv(mki3d.html.divTextLoad);
     window.onkeydown = mki3d.callback.textLoadOnKeyDown;
 }
