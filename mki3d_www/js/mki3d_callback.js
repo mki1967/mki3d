@@ -348,14 +348,13 @@ mki3d.callback.textSaveOnKeyDown = function (e){
 	mki3d.html.html.style.overflowY="";
 	mki3d.action.escapeToCanvas();
 	break;
-	case 13: // Enter
+	case 13: // Enter // the same as Q or Esc
 	mki3d.html.html.style.overflowY="";
-	// actionMessage=mki3d.action.inputsEnter();
 	mki3d.action.escapeToCanvas();
-	mki3d.messageAppend( actionMessage );
 	break;
 	case 83: // S
 	document.getElementById("aDownload").click();
+	mki3d.action.escapeToCanvas(); // prevent click-loop ???
 	break;
 	case 78: // N
 	document.querySelector("#saveName").select();

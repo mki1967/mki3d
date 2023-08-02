@@ -797,9 +797,9 @@ mki3d.action.extendSelectionByIncident= function(elements){
 mki3d.action.cancelVisibilityRestrictions= function() {
     mki3d.tmpResetDisplayModel(); /// ???
     mki3d.unblockElements( mki3d.data.model.segments.
-		   concat( mki3d.data.model.triangles ).
-		   concat( mki3d_texture.triangles( mki3d.data ) )
-		 )
+			   concat( mki3d.data.model.triangles ).
+			   concat( mki3d_texture.triangles( mki3d.data ) )
+			 )
     mki3d.action.unclip(); // clipping is also a view restriction
     mki3d.redraw();
 }
@@ -891,10 +891,10 @@ mki3d.action.colorMenu = function(){
 	    mki3d.tmp.selectedColors.push(mki3d.tmp.selected[i].color);
     mki3d.tmp.selectedColors= mki3d.uniqueSorted(mki3d.tmp.selectedColors, mki3d.vectorCompare);
     mki3d.tmp.selectedColors.index=mki3d.tmp.selectedColors.length;
-/*
-    mki3d.message( mki3d.html.divColorMenu.innerHTML );
-    mki3d.messageAppend( '<p> RGB= <span id="spanRGB"></span></p>' );
-*/
+    /*
+      mki3d.message( mki3d.html.divColorMenu.innerHTML );
+      mki3d.messageAppend( '<p> RGB= <span id="spanRGB"></span></p>' );
+    */
     mki3d.html.divUpperMessage.innerHTML =  mki3d.html.divColorMenu.innerHTML;
     if(mki3d.tmp.colorMenuOutput!== null){
 	document.querySelector("#spanRGB").innerHTML=JSON.stringify(mki3d.tmp.colorMenuOutput);
@@ -998,26 +998,26 @@ mki3d.action.textLoad = function(file_extenstion){
     }
 
     /*
-    
-    var handleFileSelect= function(evt) {
-	var files = evt.target.files;
-	// document.getElementById('files').blur();
-	for (var i = 0, f; f = files[i]; i++) { // only once
-	    var reader = new FileReader();
-	    reader.onload = (function(theFile) {
-		return function(e) {
-		    mki3d.html.textareaInput.value=e.target.result;
-		    // do something with   escape(theFile.name)
-		    mki3d.file.selectedName=escape(theFile.name);
-		    mki3d.html.hideAllDivs();
-		    mki3d.html.showDiv(mki3d.html.divTextLoad);
-		    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
-		    myFileInput.value='';
-		};
-	    })(f);
-	    reader.readAsText(f);
-	}
-    }
+      
+      var handleFileSelect= function(evt) {
+      var files = evt.target.files;
+      // document.getElementById('files').blur();
+      for (var i = 0, f; f = files[i]; i++) { // only once
+      var reader = new FileReader();
+      reader.onload = (function(theFile) {
+      return function(e) {
+      mki3d.html.textareaInput.value=e.target.result;
+      // do something with   escape(theFile.name)
+      mki3d.file.selectedName=escape(theFile.name);
+      mki3d.html.hideAllDivs();
+      mki3d.html.showDiv(mki3d.html.divTextLoad);
+      window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+      myFileInput.value='';
+      };
+      })(f);
+      reader.readAsText(f);
+      }
+      }
     */
     myFileInput.onchange=handleFileSelect;    
     // myFileInput.addEventListener('change', handleFileSelect, false);
@@ -1031,11 +1031,11 @@ mki3d.action.textLoad = function(file_extenstion){
 
 mki3d.action.textSave = function(name){
     // mki3d.message( mki3d.html.divTextSave.innerHTML );
-          var a = document.getElementById("aDownload");
+    var a = document.getElementById("aDownload");
 
-      var file = new Blob([mki3d.html.textareaOutput.value], {type:'text/plain'});
+    var file = new Blob([mki3d.html.textareaOutput.value], {type:'text/plain'});
 
-      a.href = URL.createObjectURL(file);
+    a.href = URL.createObjectURL(file);
 
     a.download = name;
     
@@ -1043,7 +1043,7 @@ mki3d.action.textSave = function(name){
     mki3d.html.html.style.overflowY="auto";
     mki3d.html.showDiv(mki3d.html.divTextSave);
     mki3d.html.textareaOutput.select();
-    a.focus();
+    // a.focus();
     window.onkeydown = mki3d.callback.textSaveOnKeyDown;
 }
 
@@ -1258,7 +1258,7 @@ mki3d.action.inputsEnter= function(){
 	} else {
 	    msg+="<br>SCREEN Z CAN NOT BE "+value+" (outside ["+MKI3D_MIN_SCREEN_Z+","+MKI3D_MAX_SCREEN_Z+"])";
 	}
-   
+    
     oldValue=mki3d.stereo.red;
     value=Number(mki3d.html.inputStereoRed.value);
     if( value != oldValue)
@@ -1268,7 +1268,7 @@ mki3d.action.inputsEnter= function(){
 	} else {
 	    msg+="<br>STEREO RED CAN NOT BE "+value+" (outside ["+0+","+1+"])";
 	}
-   
+    
     oldValue=mki3d.stereo.blue;
     value=Number(mki3d.html.inputStereoBlue.value);
     if( value != oldValue)
@@ -1278,7 +1278,7 @@ mki3d.action.inputsEnter= function(){
 	} else {
 	    msg+="<br>STEREO BLUE CAN NOT BE "+value+" (outside ["+0+","+1+"])";
 	}
-   
+    
     oldValue=mki3d.stereo.eyeShift;
     value=Number(mki3d.html.inputStereoEyeShift.value);
     if( value != oldValue)
@@ -1289,7 +1289,7 @@ mki3d.action.inputsEnter= function(){
 	} else {
 	    msg+="<br>STEREO EYE SHIFT CAN NOT BE "+value+" (outside ["+0+","+10+"])";
 	}
-   
+    
     oldValue=mki3d.data.projection.zoomY;
     value=Number(mki3d.html.inputZoom.value);
     if( value != oldValue)
@@ -1301,7 +1301,7 @@ mki3d.action.inputsEnter= function(){
 	} else {
 	    msg+="<br>ZOOM CAN NOT BE "+value+" (outside ["+MKI3D_MIN_ZOOM+","+MKI3D_MAX_ZOOM+"])";
 	}
-   
+    
 
 
 
