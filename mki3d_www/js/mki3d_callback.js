@@ -3,7 +3,7 @@
 mki3d.callback = {};
 
 mki3d.callback.textureUVMenuOnKeyDown = async function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     // mki3d.backup.prepare(); // submenu ...
@@ -63,7 +63,7 @@ mki3d.callback.textureUVMenuOnKeyDown = async function (e){
 }
 
 mki3d.callback.textureMenuOnKeyDown = async function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     mki3d.backup.prepare();
@@ -150,7 +150,7 @@ mki3d.callback.textureMenuOnKeyDown = async function (e){
 }
 
 mki3d.callback.IDBFiltersOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     switch(code)
     {
@@ -168,7 +168,7 @@ mki3d.callback.IDBFiltersOnKeyDown = function (e){
 
 
 mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     switch(code)
     {
 	case 27: // Esc
@@ -252,7 +252,7 @@ mki3d.callback.inspectIDBMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.indexedDBMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var msg="";
     switch(code)
     {
@@ -274,7 +274,7 @@ mki3d.callback.indexedDBMenuOnKeyDown = function (e){
 
 
 mki3d.callback.helpOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     switch(code)
     {
 	case 27: // Esc
@@ -286,7 +286,7 @@ mki3d.callback.helpOnKeyDown = function (e){
 }
 
 mki3d.callback.inputsOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     switch(code)
     {
@@ -307,7 +307,7 @@ mki3d.callback.inputsOnKeyDown = function (e){
 mki3d.textLoadConsume=null; 
 
 mki3d.callback.textLoadOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     document.getElementById('files').blur();
     switch(code)
@@ -339,7 +339,7 @@ mki3d.callback.textLoadOnKeyDown = function (e){
 }
 
 mki3d.callback.textSaveOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     switch(code)
     {
@@ -373,7 +373,7 @@ mki3d.callback.textSaveOnKeyDown = function (e){
 mki3d.callback.colorMenuOnKeyDown = function (e){
     var actionMessage="";
     var color = null;
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     if( "0".charCodeAt(0) <= code && code <= "7".charCodeAt(0)) { 
 	var id = "#ddColor"+String.fromCharCode( code );
 	var ddColor = document.querySelector(id);
@@ -431,7 +431,7 @@ mki3d.callback.colorMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.mainMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -491,7 +491,7 @@ mki3d.callback.mainMenuOnKeyDown = function (e){
 
 mki3d.callback.cursorMenuOnKeyDown = function (e){
     var actionMessage="";
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -522,7 +522,7 @@ mki3d.callback.cursorMenuOnKeyDown = function (e){
 
 mki3d.callback.urlMenuOnKeyDown = function (e){
     var actionMessage="";
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -576,7 +576,7 @@ mki3d.callback.urlMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.urlEditMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     let exit=false;
     switch(code)
@@ -612,7 +612,7 @@ mki3d.callback.urlEditMenuOnKeyDown = function (e){
 
 
 mki3d.callback.fileMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -654,7 +654,7 @@ mki3d.callback.fileMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.dataCopyMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     mki3d.backup.prepare(); // copying may change data
     switch(code)
@@ -704,7 +704,7 @@ mki3d.callback.dataCopyMenuOnKeyDown = function (e){
 
 
 mki3d.callback.dataMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     mki3d.backup.prepare();
@@ -749,7 +749,7 @@ mki3d.callback.dataMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.clipMenuOnKeyDown =function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -797,7 +797,7 @@ mki3d.callback.clipMenuOnKeyDown =function (e){
 
 /* selection */
 mki3d.callback.selectionMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -847,7 +847,7 @@ mki3d.callback.selectionMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.viewMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -901,7 +901,7 @@ mki3d.callback.viewMenuOnKeyDown = function (e){
 
 
 mki3d.callback.pointsMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -941,7 +941,7 @@ mki3d.callback.pointsMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     if( "A".charCodeAt(0)<= code && code<= "Z".charCodeAt(0) ){
 	actionMessage=mki3d.tmp.afterPointsSelect( String.fromCharCode(code) ); 
@@ -955,7 +955,7 @@ mki3d.callback.pointsSelectMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.constructiveCursorMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -976,7 +976,7 @@ mki3d.callback.constructiveCursorMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -994,7 +994,7 @@ mki3d.callback.constructiveMovingMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.projectionsMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -1012,7 +1012,7 @@ mki3d.callback.projectionsMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -1039,7 +1039,7 @@ mki3d.callback.constructiveScalingMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.constructiveInsertingMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -1061,7 +1061,7 @@ mki3d.callback.constructiveInsertingMenuOnKeyDown = function (e){
 
 
 mki3d.callback.constructiveMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     mki3d.backup.prepare();
@@ -1099,7 +1099,7 @@ mki3d.callback.constructiveMenuOnKeyDown = function (e){
 }
 
 mki3d.callback.setMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     var actionMessage="";
     // TO DO
     switch(code)
@@ -1123,7 +1123,7 @@ mki3d.callback.setMenuOnKeyDown = function (e){
 
 
 mki3d.callback.actionMenuOnKeyDown = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     // TO DO
     switch(code)
     {
@@ -1152,7 +1152,7 @@ mki3d.callback.actionMenuOnKeyDown = function (e){
 /* CANVAS */
 
 mki3d.callback.canvasOnKeyUp = function (e){
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     switch(code)
     {
 	case 16: // shift
@@ -1192,7 +1192,7 @@ mki3d.callback.setDisplayMode = function(){
 mki3d.callback.canvasOnKeyDown = function (e){
     // var code=e.keyCode? e.keyCode : e.charCode;
     const rotStep = Math.PI / 36; // 5 degrees 
-    var code= e.which || e.keyCode;
+    var code= e.keyCode;
     switch(code)
     {
 	case 16: // shift

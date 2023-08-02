@@ -22,7 +22,7 @@ mki3d.action.confirm = function( actionMsg, yesAction ){
 
     mki3d.message(""+actionMsg+" (PRESS 'Y' TO CONFIRM.)")
     window.onkeydown = function(e){
-	var code= e.which || e.keyCode;
+	var code= e.keyCode;
 	window.onkeydown =  mki3d.action.previousOnKeyDown;
 	mki3d.html.divUpperMessage.innerHTML= mki3d.action.previousMsg;
 	if( code == 89 ) yesAction(); // perform the action on code 'Y'
@@ -962,7 +962,7 @@ mki3d.action.inspectIDBMenu = function(){
 
 mki3d.action.selectFile= function(){
     window.onkeydown = function(e){
-	var code= e.whiqfch || e.keyCode;
+	var code= e.keyCode;
 	if(code == 13) return; // reader.onload will do ...?
 	mki3d.html.hideAllDivs();
 	mki3d.html.showDiv(mki3d.html.divTextLoad);
