@@ -357,8 +357,9 @@ mki3d.callback.textSaveOnKeyDown = function (e){
 	mki3d.action.escapeToCanvas();
 	break;
 	case 83: // S
-	document.getElementById("aDownload").click();
-	mki3d.action.escapeToCanvas(); // prevent click-loop ???
+	mki3d.action.selectFileSave();
+	
+	// mki3d.action.escapeToCanvas(); // prevent click-loop ???
 	break;
 	case 78: // N
 	document.querySelector("#saveName").select();

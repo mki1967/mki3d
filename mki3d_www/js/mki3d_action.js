@@ -960,6 +960,25 @@ mki3d.action.inspectIDBMenu = function(){
 
 ///---
 
+    // FROM: https://dirask.com/posts/JavaScript-input-file-dialog-closed-event-pYkrR1
+    
+    function addDialogClosedListener(input, callback) {
+        var onFocus = function() {
+            window.removeEventListener('focus', onFocus);
+			callback();
+        };
+        var onClick = function() {
+            window.addEventListener('focus', onFocus);
+        };
+        input.addEventListener('click', onClick);
+        return function() {
+            input.removeEventListener('click', onClick);
+            window.removeEventListener('focus', onFocus);
+        };
+    }
+
+
+
 mki3d.action.selectFile= function(){
     window.onkeydown = null; // stop serving key events
     var input = document.createElement('input');
@@ -974,11 +993,17 @@ mki3d.action.selectFile= function(){
 	    var content = readerEvent.target.result; // this is the content!
 	    mki3d.html.textareaInput.value=content;
 	    mki3d.file.selectedName=escape(file.name);
-	    mki3d.html.hideAllDivs();
-	    mki3d.html.showDiv(mki3d.html.divTextLoad);
-	    window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+	    // mki3d.html.hideAllDivs();
+	    // mki3d.html.showDiv(mki3d.html.divTextLoad);
+	    // window.onkeydown = mki3d.callback.textLoadOnKeyDown;
 	} 
     }
+
+    addDialogClosedListener(input, function() {
+        // console.log('File-LOAD dialog closed!');
+	window.onkeydown = mki3d.callback.textLoadOnKeyDown;
+    });
+
     input.click();
 }
 
@@ -990,21 +1015,32 @@ mki3d.action.textLoad = function(file_extension){
     window.onkeydown = mki3d.callback.textLoadOnKeyDown;
 }
 
+
+mki3d.action.selectFileSave= function(){
+    window.onkeydown = null; // stop serving key events
+    let a=document.createElement('a');
+    var file = new Blob([mki3d.html.textareaOutput.value], {type:'text/plain'});
+    a.href = URL.createObjectURL(file);
+    a.download = mki3d.file.suggestedSaveName;
+
+    addDialogClosedListener(a, function() {
+        // console.log('File-SAVE dialog closed!');
+	window.onkeydown = mki3d.callback.textSaveOnKeyDown;
+    });
+
+    
+    a.click();
+    
+} 
+
+
 mki3d.action.textSave = function(name){
     // mki3d.message( mki3d.html.divTextSave.innerHTML );
-    var a = document.getElementById("aDownload");
-
-    var file = new Blob([mki3d.html.textareaOutput.value], {type:'text/plain'});
-
-    a.href = URL.createObjectURL(file);
-
-    a.download = name;
-    
+    mki3d.file.suggestedSaveName = name;
     mki3d.html.hideAllDivs();
     mki3d.html.html.style.overflowY="auto";
     mki3d.html.showDiv(mki3d.html.divTextSave);
     mki3d.html.textareaOutput.select();
-    a.focus();
     window.onkeydown = mki3d.callback.textSaveOnKeyDown;
 }
 

@@ -7,6 +7,10 @@ mki3d.file = {};
 /* default suggested name for data saving */
 mki3d.file.suggestedName = "noname";
 
+/* suggested name for data saving with extension */
+mki3d.file.suggestedSaveName = "noname.mki3d";                                                                                                              
+
+
 /* next suggested name from file chooser after loading to text area */
 mki3d.file.selectedName="noname";
 
