@@ -308,6 +308,9 @@ mki3d.textLoadConsume=null;
 
 mki3d.callback.textLoadOnKeyDown = function (e){
     var code= e.keyCode;
+    // e.stopPropagation();  ///
+    // console.log("TEST");
+
     var actionMessage="";
     document.getElementById('files').blur();
     switch(code)
@@ -333,6 +336,7 @@ mki3d.callback.textLoadOnKeyDown = function (e){
 	mki3d.html.textareaInput.value="";
 	break;
 	case 70: // F
+	//console.log("test");
 	mki3d.action.selectFile();
 	break;
     }

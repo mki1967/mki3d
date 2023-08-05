@@ -10,6 +10,10 @@ mki3d.file.suggestedName = "noname";
 /* next suggested name from file chooser after loading to text area */
 mki3d.file.selectedName="noname";
 
+/* current file name extension for the loading file-selector */
+mki3d.file.fileExtension= '.mki3d';
+
+
 /* get the name without extension */
 mki3d.file.withoutExtension= function( name ){
     var lastIdx = name.lastIndexOf(".");
